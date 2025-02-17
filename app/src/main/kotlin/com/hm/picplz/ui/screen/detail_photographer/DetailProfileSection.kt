@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.R
+import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
@@ -40,13 +41,20 @@ fun DetailProfileSection(modifier: Modifier) {
     ) {
         Text(text = "128")
         Spacer(modifier = Modifier.width(6.dp))
-        Button(
-            onClick = { /*TODO*/ }, modifier = Modifier
-                .width(56.dp)
-                .height(21.dp)
-        ) {
-            Text(text = "팔로우 +")
-        }
+        CommonIconButton(
+            label = "팔로우",
+            backgroundColor = MainThemeColor.Gray2,
+            textColor = MainThemeColor.Gray4,
+            iconResId = R.drawable.follow,
+            location = "right"
+        )
+//        Button(
+//            onClick = { /*TODO*/ }, modifier = Modifier
+//                .width(56.dp)
+//                .height(21.dp)
+//        ) {
+//            Text(text = "팔로우 +")
+//        }
     }
 
     Row(
