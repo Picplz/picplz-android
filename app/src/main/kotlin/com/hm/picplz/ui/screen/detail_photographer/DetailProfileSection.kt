@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,24 +15,24 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hm.picplz.R
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun DetailProfileSection(modifier: Modifier) {
+    val uriHandler = LocalUriHandler.current
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
@@ -75,10 +74,13 @@ fun DetailProfileSection(modifier: Modifier) {
                 ClickableText(
                     text = AnnotatedString("Gayoung"),
                     style = pretendardTypography.bodySmall.copy(
-                        color = MainThemeColor.Gray3,
+                        color = MainThemeColor.Black,
                         textDecoration = TextDecoration.Underline
                     ),
-                    onClick = {}
+                    onClick = {
+//                        TODO: 인스타그램 링크 연결
+                        uriHandler.openUri("https://www.instagram.com/travelkorea.official/")
+                    }
                 )
             }
 
