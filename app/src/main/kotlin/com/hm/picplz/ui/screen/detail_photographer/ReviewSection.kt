@@ -99,7 +99,7 @@ fun ReviewSection(modifier: Modifier) {
                     modifier = Modifier
                         .width((item.value * 10).dp) // value에 따라 width 계산 (예: 14 * 10dp)
                         .height(39.dp)
-                        .background(MainThemeColor.Black, RoundedCornerShape(5.dp))
+                        .background(MainThemeColor.Olive, RoundedCornerShape(5.dp))
                 )
 
                 Image(
@@ -113,7 +113,7 @@ fun ReviewSection(modifier: Modifier) {
 
                 Text(
                     text = item.label,
-                    color = MainThemeColor.White,
+                    color = MainThemeColor.Black,
                     style = pretendardTypography.bodyMedium,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
@@ -132,11 +132,22 @@ fun ReviewSection(modifier: Modifier) {
             Spacer(modifier = Modifier.height(10.dp))
         }
 
-        Text(
-            "전체 리뷰 보러가기 () >",
-            modifier = modifier
-                .align(Alignment.End)
-                .clickable { },
-        )
+        Row(modifier = modifier
+            .clickable { }
+            .align(Alignment.End)
+        ) {
+            Text(
+                "전체 리뷰 보러가기 (00)",
+                style = pretendardTypography.bodyMedium.copy(
+                    color = MainThemeColor.Gray4
+                )
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Image(
+                painter = painterResource(id = R.drawable.depth_arrow),
+                contentDescription = "depth_arrow",
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
     }
 }
