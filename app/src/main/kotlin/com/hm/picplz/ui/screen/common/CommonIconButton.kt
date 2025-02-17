@@ -2,7 +2,6 @@ package com.hm.picplz.ui.screen.common.common_chip
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -47,7 +46,8 @@ fun CommonIconButton(
     ) {
 
         if (location == "left" && iconResId != null) {
-            Image(painter = painterResource(id = iconResId),
+            Image(
+                painter = painterResource(id = iconResId),
                 contentDescription = "icon Button iamge",
                 contentScale = ContentScale.Fit,
             )
@@ -63,7 +63,8 @@ fun CommonIconButton(
         if (location == "right" && iconResId != null) {
             Spacer(modifier = Modifier.width(gap))
 
-            Image(painter = painterResource(id = iconResId),
+            Image(
+                painter = painterResource(id = iconResId),
                 contentDescription = "icon Button iamge",
                 contentScale = ContentScale.Fit,
             )

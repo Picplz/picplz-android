@@ -14,8 +14,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 @Composable
 fun DetailProfileSection(modifier: Modifier) {
     val uriHandler = LocalUriHandler.current
+    var followStatus by remember { mutableStateOf("follow") }
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -42,19 +46,18 @@ fun DetailProfileSection(modifier: Modifier) {
         Text(text = "128")
         Spacer(modifier = Modifier.width(6.dp))
         CommonIconButton(
-            label = "팔로우",
-            backgroundColor = MainThemeColor.Gray2,
-            textColor = MainThemeColor.Gray4,
-            iconResId = R.drawable.follow,
-            location = "right"
+            label = if (followStatus == "follow") "팔로우" else "팔로잉",
+            backgroundColor = if (followStatus == "follow") MainThemeColor.Gray2 else MainThemeColor.Black,
+            textColor = if (followStatus == "follow") MainThemeColor.Gray4 else MainThemeColor.White,
+            iconResId = if (followStatus == "follow") R.drawable.follow else R.drawable.following,
+            location = "right",
+            onClick = {
+                // 버튼 클릭 시 상태 변경
+                // TODO: 서버 API 연동
+                followStatus = if (followStatus == "follow") "following" else "follow"
+            }
         )
-//        Button(
-//            onClick = { /*TODO*/ }, modifier = Modifier
-//                .width(56.dp)
-//                .height(21.dp)
-//        ) {
-//            Text(text = "팔로우 +")
-//        }
+
     }
 
     Row(
