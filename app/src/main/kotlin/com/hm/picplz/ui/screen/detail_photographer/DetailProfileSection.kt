@@ -77,7 +77,7 @@ fun DetailProfileSection(modifier: Modifier) {
             Text(text = "유가영 작가", style = pretendardTypography.titleSmall)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.spicky3),
+                    painter = painterResource(id = R.drawable.instagram),
                     contentDescription = "별점",
                     modifier = Modifier.size(10.dp)
                 )
