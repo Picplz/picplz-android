@@ -1,19 +1,13 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,9 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.R
+import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
+import com.hm.picplz.utils.ReviewUtil
 
 data class ReviewItem(
     val imageUri: Int, // 이미지 URI (리소스 ID)
@@ -58,6 +54,9 @@ fun ReviewSection(modifier: Modifier) {
         ),
     )
 
+    val totalRating = 3.5
+    val starList = ReviewUtil.calculateStarRating(totalRating) // MathUtil에서 호출
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -67,16 +66,15 @@ fun ReviewSection(modifier: Modifier) {
 
         // 별점 부분
         Row(verticalAlignment = Alignment.CenterVertically) {
-            repeat(5) {
+            starList.forEach { star ->
                 Image(
-                    painter = painterResource(id = R.drawable.spicky3),
-                    contentDescription = "별점",
-                    modifier = Modifier.size(23.dp)
+                    painter = painterResource(id = star),
+                    contentDescription = "별점"
                 )
-                Spacer(modifier = Modifier.width(3.dp))
             }
+            Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = "4.0",
+                text = totalRating.toString(),
                 style = pretendardTypography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = MainThemeColor.Gray4
@@ -86,51 +84,7 @@ fun ReviewSection(modifier: Modifier) {
         Spacer(modifier = Modifier.height(17.dp))
 
         // 아이템 리스트를 돌면서 표시
-        items.forEach { item ->
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(39.dp)
-                    .background(MainThemeColor.Gray1, RoundedCornerShape(5.dp))
-                    .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(5.dp))
-            ) {
-                // FIXME: 자식 박스의 너비는 value에 따라 다르게 설정
-                Box(
-                    modifier = Modifier
-                        .width((item.value * 10).dp) // value에 따라 width 계산 (예: 14 * 10dp)
-                        .height(39.dp)
-                        .background(MainThemeColor.Olive, RoundedCornerShape(5.dp))
-                )
-
-                Image(
-                    painterResource(id = item.imageUri),
-                    contentDescription = "리뷰 아이콘",
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .size(24.dp)
-                        .padding(start = 9.dp)
-                )
-
-                Text(
-                    text = item.label,
-                    color = MainThemeColor.Black,
-                    style = pretendardTypography.bodyMedium,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 30.dp)
-                )
-
-                Text(
-                    text = item.value.toString(),
-                    color = MainThemeColor.Gray4,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(10.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-        }
+        ReviewBars(items = items, modifier = modifier)
 
         Row(modifier = modifier
             .clickable { }
