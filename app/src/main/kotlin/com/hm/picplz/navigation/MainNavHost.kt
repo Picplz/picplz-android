@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.screen.chat.ChatScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
@@ -40,7 +42,6 @@ fun MainNavHost(
         modifier = modifier,
     ) {
         composable("login") { LoginScreen(navController = navController) }
-//        composable("login") { DetailPhotographerScreen(navController = navController) }
         composable("main") { MainScreen(navController = navController) }
         composable("sign-up") { SignUpScreen(mainNavController = navController) }
         composable("sign-up-client") { backStackEntry ->
@@ -104,6 +105,14 @@ fun MainNavHost(
 
         composable("mypage") {
             MyPageScreen(navController = navController)
+        }
+
+        composable("detail-photographer") {
+            DetailPhotographerScreen(navController = navController)
+        }
+
+        composable("review-photographer") {
+            DetailPhotographerReviewScreen(navController = navController)
         }
     }
 }

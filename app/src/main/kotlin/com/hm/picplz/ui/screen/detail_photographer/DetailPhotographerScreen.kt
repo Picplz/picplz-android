@@ -72,7 +72,7 @@ fun DetailPhotographerScreen(navController: NavHostController) {
                         .padding(vertical = 20.dp)
                 )
 
-                ReviewSection(modifier = paddingModifier)
+                ReviewSection(modifier = paddingModifier, navController = navController)
 
                 Spacer(modifier = Modifier.height(30.dp))
 

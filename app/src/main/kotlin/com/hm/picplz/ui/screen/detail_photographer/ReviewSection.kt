@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -29,7 +30,7 @@ data class ReviewItem(
 )
 
 @Composable
-fun ReviewSection(modifier: Modifier) {
+fun ReviewSection(modifier: Modifier, navController: NavHostController) {
     // 아이템 리스트 정의
     val items = listOf(
         ReviewItem(
@@ -87,7 +88,7 @@ fun ReviewSection(modifier: Modifier) {
         ReviewBars(items = items, modifier = modifier)
 
         Row(modifier = modifier
-            .clickable { }
+            .clickable { navController.navigate("review-photographer") }
             .align(Alignment.End)
         ) {
             Text(
