@@ -61,7 +61,7 @@ fun CommonBottomSheetScaffold(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 6.dp),
+                        .padding(top = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Surface(
@@ -69,7 +69,7 @@ fun CommonBottomSheetScaffold(
                             .width(40.dp)
                             .height(4.dp),
                         shape = RoundedCornerShape(2.dp),
-                        color = MainThemeColor.Gray3
+                        color = MainThemeColor.Black
                     ) {}
                 }
                 Column(
