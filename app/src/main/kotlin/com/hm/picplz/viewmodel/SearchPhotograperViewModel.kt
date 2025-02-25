@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.LocationListener
+import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
 import com.hm.picplz.ui.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
@@ -197,6 +198,13 @@ class SearchPhotographerViewModel @Inject constructor(
                     sheetPeekHeight = intent.peekHeight
                 )}
             }
+            is SearchPhotographerIntent.CenterSelectedPhotographer -> {
+                val newOffset = Offset(
+                    x = -intent.offset.x,
+                    y = -intent.offset.y
+                )
+                _state.update { it.copy(centerOffset = newOffset) }
+            }
         }
     }
 
@@ -210,7 +218,7 @@ class SearchPhotographerViewModel @Inject constructor(
 
     class OffsetGenerationFailedException : Exception("전체 위치 생성 최종 실패")
 
-    private fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Int, Pair<Float, Float>> {
+    private fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Int, Offset> {
         val maxAttempts = 1000
 
         for (attempt in 1..maxAttempts) {
@@ -227,8 +235,8 @@ class SearchPhotographerViewModel @Inject constructor(
     private class OffsetGenerationException : Exception("개별 위치 생성 실패")
 
 
-    private fun tryGenerateOffsets(photographers: FilteredPhotographers): Map<Int, Pair<Float, Float>> {
-        val offsets = mutableMapOf<Int, Pair<Float, Float>>()
+    private fun tryGenerateOffsets(photographers: FilteredPhotographers): Map<Int, Offset> {
+        val offsets = mutableMapOf<Int, Offset>()
         val minDistance = 110f
 
         val innerAreaRatio = 0.75f
@@ -244,10 +252,10 @@ class SearchPhotographerViewModel @Inject constructor(
         val innerCircleMaxOffsetX = maxOffsetX * innerAreaRatio
         val outerCircleMinOffsetX = maxOffsetX * outerAreaRatio
 
-        val center = Pair(0f, 0f)
+        val center = Offset(0f, 0f)
 
-        fun generateOffset(): Pair<Float, Float> {
-            return Pair(
+        fun generateOffset(): Offset {
+            return Offset(
                 (Random.nextFloat() * 2 - 1) * maxOffsetX,
                 (Random.nextFloat() * 2 - 1) * maxOffsetX
             )
@@ -255,7 +263,7 @@ class SearchPhotographerViewModel @Inject constructor(
 
         if (photographers.inactive.isEmpty()) {
             photographers.active.forEachIndexed{ index, photographer ->
-                var newOffset: Pair<Float, Float>
+                var newOffset: Offset
                 var attempts = 0
 
                 do {
@@ -278,7 +286,7 @@ class SearchPhotographerViewModel @Inject constructor(
         } else {
             photographers.active.forEachIndexed { index, photographer ->
                 var attempts = 0
-                var newOffset: Pair<Float, Float>
+                var newOffset: Offset
 
                 do {
                     attempts++
@@ -297,7 +305,7 @@ class SearchPhotographerViewModel @Inject constructor(
                 offsets[photographer.id] = newOffset
             }
             photographers.inactive.forEach { photographer ->
-                var newOffset: Pair<Float, Float>
+                var newOffset: Offset
                 var attempts = 0
                 do {
                     attempts++

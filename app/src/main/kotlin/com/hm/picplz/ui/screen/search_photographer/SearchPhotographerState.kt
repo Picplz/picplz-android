@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.search_photographer
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.model.FilteredPhotographers
@@ -12,10 +13,11 @@ data class SearchPhotographerState (
     val isFetchingGPS: Boolean = false,
     val isSearchingPhotographer: Boolean = false,
     val nearbyPhotographers: FilteredPhotographers = FilteredPhotographers(),
-    val randomOffsets: Map<Int, Pair<Float, Float>> = emptyMap(),
+    val randomOffsets: Map<Int, Offset> = emptyMap(),
     val selectedPhotographerId: Int? = null,
     val sheetMaxHeight: Dp = 750.dp,
-    val sheetPeekHeight: Dp? = 30.dp
+    val sheetPeekHeight: Dp? = 30.dp,
+    val centerOffset: Offset? = null
 ) {
     companion object {
         fun idle(): SearchPhotographerState {

@@ -1,5 +1,6 @@
 package com.hm.picplz.utils
 
+import androidx.compose.ui.geometry.Offset
 import com.kakao.vectormap.LatLng
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -43,9 +44,9 @@ object LocationUtil {
     /**
      * 화면상의 두 점의 거리
      */
-    fun calcurateScreenDistance(from: Pair<Float, Float>, to: Pair<Float, Float>): Float {
-        val dx = from.first - to.first
-        val dy = from.second - to.second
+    fun calcurateScreenDistance(from: Offset, to: Offset): Float {
+        val dx = from.x - to.x
+        val dy = from.y - to.y
         return sqrt(dx * dx + dy * dy)
     }
 }
