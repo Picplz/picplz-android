@@ -165,13 +165,9 @@ fun SearchPhotographerScreen(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
-                        viewModel.handleIntent(
-                            SearchPhotographerIntent.SetSelectedPhotographerId(
-                                null
-                            )
-                        )
                         scope.launch {
                             scaffoldState.bottomSheetState.partialExpand()
+                            viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(null))
                         }
                     },
             ) {
@@ -244,7 +240,10 @@ fun SearchPhotographerScreen(
                                 offset = Offset(x, y),
                                 distance = distanceInMeters,
                                 onClick = {
-                                    viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(id))
+                                    scope.launch {
+                                        scaffoldState.bottomSheetState.partialExpand()
+                                        viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(id))
+                                    }
                                 }
                             )
                         }
