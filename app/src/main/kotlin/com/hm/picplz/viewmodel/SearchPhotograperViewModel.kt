@@ -1,9 +1,7 @@
 package com.hm.picplz.viewmodel
 
-import android.content.Context
 import android.location.LocationManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.model.KaKaoAddressRequest
@@ -15,16 +13,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.Manifest
-import android.content.pm.PackageManager
 import android.location.LocationListener
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
+import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
 import com.hm.picplz.utils.DisplayMetricsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
@@ -34,7 +30,7 @@ import kotlin.random.Random
 class SearchPhotographerViewModel @Inject constructor(
     private val photographerRepository: PhotographerRepository,
     private val displayMetricsUtil: DisplayMetricsUtil,
-    @ApplicationContext private val context: Context
+    private val locationService: LocationService,
 ) : ViewModel() {
     private val _state = MutableStateFlow(SearchPhotographerState.idle())
     val state : StateFlow<SearchPhotographerState> get() = _state
@@ -47,9 +43,6 @@ class SearchPhotographerViewModel @Inject constructor(
     }
 
     private val kakaoSource = KakaoMapSource()
-
-    private var locationManager: LocationManager? = null
-    private val locationListeners = mutableListOf<LocationListener>()
 
     fun handleIntent(intent: SearchPhotographerIntent) {
         when (intent) {
@@ -89,63 +82,8 @@ class SearchPhotographerViewModel @Inject constructor(
                 handleIntent(SearchPhotographerIntent.GetAddress(intent.location))
             }
             is SearchPhotographerIntent.GetCurrentLocation -> {
-                if (locationManager == null) {
-                    locationManager = intent.context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                }
-
-                if (ActivityCompat.checkSelfPermission(
-                    intent.context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(
-                        intent.context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) return
-
-                val gpsProvider = LocationManager.GPS_PROVIDER
-                val networkProvider = LocationManager.NETWORK_PROVIDER
-
-                if (locationManager!!.isProviderEnabled(gpsProvider)) {
-                    locationManager!!.requestLocationUpdates(
-                        gpsProvider,
-                        1000L,
-                        1.0f,
-                    ) { location ->
-                        handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                            LatLng.from(location.latitude, location.longitude)
-                        ))
-                    }
-                    if (state.value.userLocation == null) {
-                        val lastGpsLocation = locationManager?.getLastKnownLocation(gpsProvider)
-                        if (lastGpsLocation != null) {
-                            handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                                LatLng.from(lastGpsLocation.latitude, lastGpsLocation.longitude)
-                            ))
-                        }
-                    }
-                } else if (locationManager!!.isProviderEnabled(networkProvider)) {
-                    if (state.value.userLocation == null) {
-                        locationManager!!.requestLocationUpdates(
-                            networkProvider,
-                            1000L,
-                            1.0f,
-                        ) { location ->
-                            handleIntent(
-                                SearchPhotographerIntent.SetCurrentLocation(
-                                    LatLng.from(location.latitude, location.longitude)
-                                )
-                            )
-                        }
-                    }
-                    if (state.value.userLocation == null) {
-                        val lastNetworkLocation = locationManager?.getLastKnownLocation(networkProvider)
-                        if (lastNetworkLocation != null) {
-                            handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                                LatLng.from(lastNetworkLocation.latitude, lastNetworkLocation.longitude)
-                            ))
-                        }
-                    }
+                locationService.getCurrentLocation(intent.context) { location ->
+                    handleIntent(SearchPhotographerIntent.SetCurrentLocation(location))
                 }
             }
             is SearchPhotographerIntent.SetIsSearchingPhotographer -> {
@@ -211,10 +149,7 @@ class SearchPhotographerViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        locationListeners.forEach { listener ->
-            locationManager?.removeUpdates(listener)
-        }
-        locationListeners.clear()
+        locationService.cleanup()
     }
 
     class OffsetGenerationFailedException : Exception("전체 위치 생성 최종 실패")
