@@ -1,11 +1,9 @@
 package com.hm.picplz.viewmodel
 
-import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.model.KaKaoAddressRequest
-import com.hm.picplz.data.source.KakaoMapSource
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
 import com.kakao.vectormap.LatLng
@@ -13,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.location.LocationListener
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
+import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
@@ -31,6 +29,8 @@ class SearchPhotographerViewModel @Inject constructor(
     private val photographerRepository: PhotographerRepository,
     private val displayMetricsUtil: DisplayMetricsUtil,
     private val locationService: LocationService,
+    private val addressService: AddressService
+
 ) : ViewModel() {
     private val _state = MutableStateFlow(SearchPhotographerState.idle())
     val state : StateFlow<SearchPhotographerState> get() = _state
@@ -41,8 +41,6 @@ class SearchPhotographerViewModel @Inject constructor(
     init {
         handleIntent(SearchPhotographerIntent.FetchNearbyPhotographers)
     }
-
-    private val kakaoSource = KakaoMapSource()
 
     fun handleIntent(intent: SearchPhotographerIntent) {
         when (intent) {
@@ -56,13 +54,8 @@ class SearchPhotographerViewModel @Inject constructor(
             }
             is SearchPhotographerIntent.GetAddress -> {
                 viewModelScope.launch {
-                    kakaoSource.getAddressFromCoords(KaKaoAddressRequest(intent.Coords.longitude.toString(), intent.Coords.latitude.toString()))
-                        .onSuccess { response ->
-                            val twoDepthRegion = response.documents.firstOrNull()?.address?.region_2depth_name
-                                ?.split(" ")
-                                ?.lastOrNull() ?: ""
-                            val threeDepthRegion = response.documents.firstOrNull()?.address?.region_3depth_name ?: ""
-                            val address = "$twoDepthRegion $threeDepthRegion"
+                    addressService.getAddressFromCoordinates(intent.Coords)
+                        .onSuccess { address ->
                             handleIntent(SearchPhotographerIntent.SetAddress(address))
                         }
                         .onFailure { error ->
