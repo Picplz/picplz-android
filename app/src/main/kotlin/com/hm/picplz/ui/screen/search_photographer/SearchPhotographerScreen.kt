@@ -85,7 +85,7 @@ fun SearchPhotographerScreen(
         when {
             permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
                     permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
+                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
             }
 
             else -> {
@@ -108,7 +108,7 @@ fun SearchPhotographerScreen(
                         context,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
+                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
             }
 
             else -> {

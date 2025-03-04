@@ -19,7 +19,6 @@ class LocationService @Inject constructor(
     private val locationListeners = mutableListOf<LocationListener>()
 
     fun getCurrentLocation(
-        context: Context,
         onLocationReceived: (LatLng) -> Unit
     ) {
         // LocationManager 초기화

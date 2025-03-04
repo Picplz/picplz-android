@@ -74,7 +74,7 @@ class SearchPhotographerViewModel @Inject constructor(
                 handleIntent(SearchPhotographerIntent.GetAddress(intent.location))
             }
             is SearchPhotographerIntent.GetCurrentLocation -> {
-                locationService.getCurrentLocation(intent.context) { location ->
+                locationService.getCurrentLocation { location ->
                     handleIntent(SearchPhotographerIntent.SetCurrentLocation(location))
                 }
             }
