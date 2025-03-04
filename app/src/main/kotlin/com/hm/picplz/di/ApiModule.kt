@@ -1,6 +1,7 @@
 package com.hm.picplz.di
 
 import com.hm.picplz.data.api.KakaoMapApi
+import com.hm.picplz.data.api.PhotographerApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ annotation class KakaoRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class OurBackendRetrofit
+annotation class PicplzApi
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,12 +41,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @OurBackendRetrofit
-    fun provideOurBackendRetrofit(): Retrofit {
+    @PicplzApi
+    fun providePicplzRetrofit(): Retrofit {
+        // Todo: api url 정의
         return Retrofit.Builder()
-            .baseUrl("https://api.ourservice.com/")  // 자체 백엔드 URL
+            .baseUrl("")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun providePhotographerApi(@PicplzApi retrofit: Retrofit): PhotographerApi {
+        return retrofit.create(PhotographerApi::class.java)
+    }
 }

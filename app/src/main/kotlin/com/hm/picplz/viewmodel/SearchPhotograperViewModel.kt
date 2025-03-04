@@ -30,7 +30,6 @@ class SearchPhotographerViewModel @Inject constructor(
     private val displayMetricsUtil: DisplayMetricsUtil,
     private val locationService: LocationService,
     private val addressService: AddressService
-
 ) : ViewModel() {
     private val _state = MutableStateFlow(SearchPhotographerState.idle())
     val state : StateFlow<SearchPhotographerState> get() = _state
