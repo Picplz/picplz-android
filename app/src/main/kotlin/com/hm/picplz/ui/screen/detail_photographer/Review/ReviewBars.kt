@@ -18,12 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import com.hm.picplz.data.model.KeywordBar
 import com.hm.picplz.ui.screen.detail_photographer.ReviewItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun ReviewBars(items: List<ReviewItem>, modifier: Modifier = Modifier) {
+fun ReviewBars(items: List<KeywordBar>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         items.forEach { item ->
             Box(
@@ -34,15 +36,16 @@ fun ReviewBars(items: List<ReviewItem>, modifier: Modifier = Modifier) {
                     .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(5.dp))
             ) {
                 // value에 따라 너비가 결정되는 박스
+                // TODO: 박스 채우는 기준에 따라 로직 변경 필요
                 Box(
                     modifier = Modifier
-                        .width((item.value * 10).dp) // value 값에 따라 width 동적 적용
+                        .width((item.count * 10).dp) // value 값에 따라 width 동적 적용
                         .height(39.dp)
                         .background(MainThemeColor.Olive, RoundedCornerShape(5.dp))
                 )
 
                 Image(
-                    painterResource(id = item.imageUri),
+                    painter = rememberAsyncImagePainter(model = item.icon),
                     contentDescription = "리뷰 아이콘",
                     modifier = Modifier
                         .align(Alignment.CenterStart)
@@ -60,7 +63,7 @@ fun ReviewBars(items: List<ReviewItem>, modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = item.value.toString(),
+                    text = item.count.toString(),
                     color = MainThemeColor.Gray4,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)

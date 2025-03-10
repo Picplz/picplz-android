@@ -79,7 +79,6 @@ fun DetailProfileSection(modifier: Modifier) {
                 Image(
                     painter = painterResource(id = R.drawable.instagram),
                     contentDescription = "별점",
-                    modifier = Modifier.size(10.dp)
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 ClickableText(
