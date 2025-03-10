@@ -39,61 +39,68 @@ fun DetailPhotographerScreen(
 
     val reviewSummary = reviewCurrentState.reviewSummary
 
-    Scaffold(modifier = Modifier.fillMaxSize(), containerColor = MainThemeColor.White, topBar = {
-    }, floatingActionButton = {
-        Box(modifier = Modifier.padding(start = 30.dp)) {
-            CommonBottomButton(
-                text = "예약하기",
-                onClick = { },
-                containerColor = MainThemeColor.Black,
-            )
-        }
-    }, content = { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth()
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                    .zIndex(1f)
-                    .height(56.dp)
-            ) {
-                CommonTopBar(
-                    text = "",
-                    onClickBack = { /*TODO*/ }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MainThemeColor.White,
+        floatingActionButton = {
+            Box(modifier = Modifier.padding(start = 30.dp)) {
+                CommonBottomButton(
+                    text = "예약하기",
+                    onClick = { },
+                    containerColor = MainThemeColor.Black,
                 )
             }
-
+        },
+        content = { innerPadding ->
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()) // verticalScroll을 적용
+                    .padding(innerPadding)
+                    .fillMaxWidth()
             ) {
-                DetailProfileSection(modifier = paddingModifier)
-
-                Divider(
-                    color = MainThemeColor.Gray2,
-                    thickness = 10.dp,
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp)
-                )
+                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
+                        .zIndex(1f)
+                        .height(56.dp)
+                ) {
+                    CommonTopBar(
+                        text = "",
+                        onClickBack = { navController.popBackStack() }
+                    )
+                }
 
-                ReviewSection(modifier = paddingModifier, navController = navController, reviewSummary=reviewSummary)
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState()) // verticalScroll을 적용
+                ) {
+                    DetailProfileSection(modifier = paddingModifier)
 
-                Spacer(modifier = Modifier.height(30.dp))
+                    Divider(
+                        color = MainThemeColor.Gray2,
+                        thickness = 10.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp)
+                    )
 
-                PortfolioSection(modifier = paddingModifier)
+                    ReviewSection(
+                        modifier = paddingModifier,
+                        navController = navController,
+                        reviewSummary = reviewSummary
+                    )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
-                PhotoPriceSection(modifier = paddingModifier)
+                    PortfolioSection(modifier = paddingModifier)
 
-                Spacer(modifier = Modifier.height(130.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
+
+                    PhotoPriceSection(modifier = paddingModifier)
+
+                    Spacer(modifier = Modifier.height(130.dp))
+                }
             }
-        }
-    })
+        })
 }
 
 @Preview(showBackground = true)
