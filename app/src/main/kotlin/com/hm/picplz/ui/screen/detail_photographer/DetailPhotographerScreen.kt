@@ -26,18 +26,20 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.viewmodel.DetailPhotographerReviewViewModel
+import com.hm.picplz.viewmodel.DetailPhotographerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPhotographerScreen(
-    reviewViewModel: DetailPhotographerReviewViewModel = hiltViewModel(),
+    viewModel: DetailPhotographerViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
-    val reviewCurrentState = reviewViewModel.state.collectAsState().value
+    val currentState = viewModel.state.collectAsState().value
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
-    val reviewSummary = reviewCurrentState.reviewSummary
+    val profileInfo = currentState.profileInfo
+    val reviewSummary = currentState.reviewSummary
+    val portfolioPhotos = profileInfo.portfolioPhotos
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,7 +75,7 @@ fun DetailPhotographerScreen(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState()) // verticalScroll을 적용
                 ) {
-                    DetailProfileSection(modifier = paddingModifier)
+                    DetailProfileSection(modifier = paddingModifier, profileInfo = profileInfo)
 
                     Divider(
                         color = MainThemeColor.Gray2,
@@ -91,7 +93,7 @@ fun DetailPhotographerScreen(
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    PortfolioSection(modifier = paddingModifier)
+                    PortfolioSection(modifier = paddingModifier, portfolioPhotos = portfolioPhotos)
 
                     Spacer(modifier = Modifier.height(30.dp))
 

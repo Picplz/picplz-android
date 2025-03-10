@@ -3,7 +3,7 @@ package com.hm.picplz.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewIntent
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerIntent
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewState
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailPhotographerReviewViewModel @Inject constructor(
+class DetailPhotographerViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _state = MutableStateFlow(DetailPhotographerReviewState.idle())
@@ -25,9 +25,9 @@ class DetailPhotographerReviewViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<DetailPhotographerSideEffect>()
     val sideEffect: SharedFlow<DetailPhotographerSideEffect> get() = _sideEffect
 
-    fun handleIntent(intent: DetailPhotographerReviewIntent) {
+    fun handleIntent(intent: DetailPhotographerIntent) {
         when (intent) {
-            is DetailPhotographerReviewIntent.NavigateToPrev -> {
+            is DetailPhotographerIntent.NavigateToPrev -> {
                 viewModelScope.launch {
                     _sideEffect.emit(DetailPhotographerSideEffect.NavigateToPrev)
                 }

@@ -49,19 +49,18 @@ import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.screen.detail_photographer.Review.SingleReview
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
 import com.hm.picplz.utils.StarType
-import com.hm.picplz.viewmodel.DetailPhotographerReviewViewModel
+import com.hm.picplz.viewmodel.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun DetailPhotographerReviewScreen(
-    viewModel: DetailPhotographerReviewViewModel = hiltViewModel(),
+    viewModel: DetailPhotographerViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val currentState = viewModel.state.collectAsState().value
@@ -93,7 +92,7 @@ fun DetailPhotographerReviewScreen(
                         .zIndex(1f)
                         .height(56.dp)
                 ) {
-                    CommonTopBar(text = "리뷰", onClickBack = { viewModel.handleIntent(DetailPhotographerReviewIntent.NavigateToPrev) })
+                    CommonTopBar(text = "리뷰", onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
                 }
 
                 Column(

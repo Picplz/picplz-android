@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import com.hm.picplz.data.model.KeywordBar
+import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.data.model.PhotographerReviewSummary
 
@@ -181,10 +182,34 @@ val dummyReviews = listOf(
     ),
 )
 
+val dummyPhotographerInfo = PhotographerInfo(
+    id = 1,
+    name = "홍길동",
+    socialAccount = "dlwlrma",
+    infoText = "10/31 이후 예약 가능합니다. 어쩌고저쩌고 적으면 최대 두 줄까지 적을 수 있습니다",
+    isActive = true,
+    isFollow = true,
+    followCount = 108,
+    profileImageUri = "https://picsum.photos/seed/profile/100",
+    workingArea = listOf("서울시 마포구", "서울시 용산구"),
+    keyword = listOf("#MZ감성", "#을지로감성"),
+    portfolioPhotos = listOf(
+        "https://picsum.photos/seed/port/300",
+        "https://picsum.photos/seed/port1/200/300",
+        "https://picsum.photos/seed/port2/100",
+        "https://picsum.photos/seed/port3/200/300",
+        "https://picsum.photos/seed/port4/200/300",
+        "https://picsum.photos/seed/port5/200/300",
+        "https://picsum.photos/seed/port6/200/300",
+        "https://picsum.photos/seed/port7/200/300",
+        "https://picsum.photos/seed/port8/200/300",
+        "https://picsum.photos/seed/port9/200/300",)
+)
 
 data class DetailPhotographerReviewState(
+    val profileInfo: PhotographerInfo = dummyPhotographerInfo,
     val reviewSummary: PhotographerReviewSummary = dummyReviewSummary,
-    val reviews: List<PhotographerReview> = dummyReviews,
+    val reviews: List<PhotographerReview> = dummyReviews
 ) {
     companion object {
         fun idle(): DetailPhotographerReviewState {

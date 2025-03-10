@@ -28,33 +28,39 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
+import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
+import com.hm.picplz.ui.screen.search_photographer.composable.ActiveStatusBadge
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun DetailProfileSection(modifier: Modifier) {
+fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
     val uriHandler = LocalUriHandler.current
-    var followStatus by remember { mutableStateOf("follow") }
+    var isFollow by remember { mutableStateOf(profileInfo.isFollow) }
 
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "128")
+        Text(text = profileInfo.followCount.toString())
         Spacer(modifier = Modifier.width(6.dp))
         CommonIconButton(
-            label = if (followStatus == "follow") "팔로우" else "팔로잉",
-            backgroundColor = if (followStatus == "follow") MainThemeColor.Gray2 else MainThemeColor.Black,
-            textColor = if (followStatus == "follow") MainThemeColor.Gray4 else MainThemeColor.White,
-            iconResId = if (followStatus == "follow") R.drawable.follow else R.drawable.following,
+            label = if (isFollow) "팔로잉" else "팔로우",
+            backgroundColor = if (isFollow) MainThemeColor.Black else MainThemeColor.Gray2,
+            textColor = if (isFollow) MainThemeColor.White else MainThemeColor.Gray4,
+            iconResId = if (isFollow) R.drawable.following else R.drawable.follow,
             location = "right",
+            horizontalPadding = 7.dp,
+            verticalPadding = 3.dp,
+            borderRadius = 5.dp,
             onClick = {
                 // 버튼 클릭 시 상태 변경
                 // TODO: 서버 API 연동
-                followStatus = if (followStatus == "follow") "following" else "follow"
+                isFollow = !isFollow
             }
         )
 
@@ -64,7 +70,7 @@ fun DetailProfileSection(modifier: Modifier) {
         modifier = modifier.fillMaxWidth(),
     ) {
         Image(
-            painterResource(id = R.drawable.default_profile),
+            rememberAsyncImagePainter(model = profileInfo.profileImageUri),
             contentDescription = "작가 프로필",
             modifier = Modifier
                 .size(74.dp)
@@ -74,7 +80,11 @@ fun DetailProfileSection(modifier: Modifier) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Column {
-            Text(text = "유가영 작가", style = pretendardTypography.titleSmall)
+            Row {
+                Text(text = "${profileInfo.name} 작가", style = pretendardTypography.titleSmall)
+                Spacer(modifier = Modifier.width(9.dp))
+                ActiveStatusBadge(text = "바로 촬영")
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.instagram),
@@ -82,21 +92,20 @@ fun DetailProfileSection(modifier: Modifier) {
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 ClickableText(
-                    text = AnnotatedString("Gayoung"),
+                    text = AnnotatedString(profileInfo.socialAccount.toString()),
                     style = pretendardTypography.bodySmall.copy(
                         color = MainThemeColor.Black,
                         textDecoration = TextDecoration.Underline
                     ),
                     onClick = {
-//                        TODO: 인스타그램 링크 연결
-                        uriHandler.openUri("https://www.instagram.com/travelkorea.official/")
+                        uriHandler.openUri("https://www.instagram.com/${profileInfo.socialAccount}/")
                     }
                 )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "10/31 이후 예약 가능합니다. 어쩌고저쩌고어마ㅣ;ㅓㄹ어ㅓ어ㅓ어어",
+                text = profileInfo.infoText,
                 style = pretendardTypography.labelSmall
             )
         }
@@ -118,11 +127,20 @@ fun DetailProfileSection(modifier: Modifier) {
             fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = "촬영지",
-            style = pretendardTypography.labelMedium,
-            color = MainThemeColor.Gray4
-        )
+        profileInfo.workingArea.forEachIndexed { index, area ->
+            Text(
+                text = area,
+                style = pretendardTypography.labelMedium,
+                color = MainThemeColor.Gray4
+            )
+            if (index != profileInfo.keyword.lastIndex) {
+                Text(
+                    text = ", ",
+                    style = pretendardTypography.labelMedium,
+                    color = MainThemeColor.Gray4
+                )
+            }
+        }
     }
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -136,10 +154,19 @@ fun DetailProfileSection(modifier: Modifier) {
             fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = "촬영지",
-            style = pretendardTypography.labelMedium,
-            color = MainThemeColor.Gray4
-        )
+        profileInfo.keyword.forEachIndexed { index, keyword ->
+            Text(
+                text = keyword,
+                style = pretendardTypography.labelMedium,
+                color = MainThemeColor.Gray4
+            )
+            if (index != profileInfo.keyword.lastIndex) {
+                Text(
+                    text = ", ",
+                    style = pretendardTypography.labelMedium,
+                    color = MainThemeColor.Gray4
+                )
+            }
+        }
     }
 }

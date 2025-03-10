@@ -30,6 +30,20 @@ data class PhotographerReview(
     val recommendationCount: Int // 추천 개수
 )
 
+data class PhotographerInfo(
+    val id: Int,
+    val name: String,
+    val socialAccount: String?,
+    val infoText: String,
+    val isActive: Boolean,
+    val isFollow: Boolean,
+    val followCount: Int,
+    val profileImageUri: String,
+    val workingArea: List<String>,
+    val keyword: List<String>,
+    val portfolioPhotos: List<String>,
+)
+
 //typealias PhotographerReviewSummaryResponse = PhotographerReviewSummaryEntity
 //typealias PhotographerReviewResponse = PhotographerReview
 //typealias PhotographerReviewListResponse = List<PhotographerReview>
