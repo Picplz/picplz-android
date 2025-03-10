@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.search_photographer.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,21 +20,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.ui.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun PhotographerCard (
+fun PhotographerCard(
     modifier: Modifier = Modifier,
     photographer: Photographer,
+    mainNavController: NavHostController
 ) {
-    Row (
+    Row(
         modifier = modifier
             .background(color = MainThemeColor.White)
             .height(140.dp)
             .padding(vertical = 20.dp)
             .width(345.dp)
+            .clickable { mainNavController.navigate("detail-photographer") }
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = photographer.profileImageUri),
@@ -42,16 +47,16 @@ fun PhotographerCard (
                 .size(90.dp)
         )
         Spacer(modifier = Modifier.width(10.dp))
-        Column (
+        Column(
             modifier = Modifier.fillMaxSize()
-        ){
-            Row (
+        ) {
+            Row(
                 modifier = Modifier
                     .padding(horizontal = 2.dp)
                     .fillMaxSize()
                     .weight(1f),
                 horizontalArrangement = Arrangement.SpaceBetween,
-            ){
+            ) {
                 Column {
                     Text(
                         text = photographer.name,
@@ -85,6 +90,7 @@ fun PhotographerCard (
 @Preview
 @Composable
 fun PhotographerCardPreview() {
+    val mainNavController = rememberNavController()
     PhotographerCard(
         photographer = Photographer(
             id = 1,
@@ -97,6 +103,7 @@ fun PhotographerCardPreview() {
             followers = listOf(1, 2, 3),
             socialAccount = "@account",
             portfolioPhotos = List(5) { "https://picsum.photos/100" },
-        )
+        ),
+        mainNavController = mainNavController
     )
 }
