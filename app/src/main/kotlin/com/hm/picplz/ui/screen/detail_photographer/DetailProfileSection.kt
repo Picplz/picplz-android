@@ -83,7 +83,9 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
             Row {
                 Text(text = "${profileInfo.name} 작가", style = pretendardTypography.titleSmall)
                 Spacer(modifier = Modifier.width(9.dp))
-                ActiveStatusBadge(text = "바로 촬영")
+                if (profileInfo.isActive) {
+                    ActiveStatusBadge(text = "바로 촬영")
+                }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
