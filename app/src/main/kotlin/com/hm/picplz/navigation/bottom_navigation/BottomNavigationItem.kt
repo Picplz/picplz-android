@@ -1,52 +1,52 @@
 package com.hm.picplz.navigation.bottom_navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.hm.picplz.R
 
 sealed class BottomNavigationItem(
     val route: String,
     val label: String,
-    val icon: ImageVector
+    val iconSelect: Int,
+    val iconUnselect: Int
 ) {
     object Main : BottomNavigationItem(
         "main",
         "홈",
-        Icons.Default.Home
+        R.drawable.home_select,
+        R.drawable.home_unselect,
     )
 
     object Map : BottomNavigationItem(
         "search-photographer",
         "지도",
-        Icons.Default.LocationOn
+        R.drawable.map_select,
+        R.drawable.map_unselect,
     )
 
     object Reservation : BottomNavigationItem(
         "reservation",
         "받은 예약",
-        Icons.Default.DateRange
+        R.drawable.reservation_select,
+        R.drawable.reservation_unselect,
     )
 
     object Feed : BottomNavigationItem(
         "feed",
         "피드",
-        Icons.Default.Add
+        R.drawable.feed_select,
+        R.drawable.feed_unselect,
     )
 
     object Chat : BottomNavigationItem(
         "chat",
         "채팅",
-        Icons.Default.Email
+        R.drawable.chat_select,
+        R.drawable.chat_unselect,
     )
 
     object MyPage : BottomNavigationItem(
         "mypage",
         "마이페이지",
-        Icons.Default.AccountCircle
+        R.drawable.mypage_select,
+        R.drawable.mypage_unselect,
     )
 }
