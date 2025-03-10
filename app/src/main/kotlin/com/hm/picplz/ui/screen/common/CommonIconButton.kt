@@ -1,20 +1,24 @@
 package com.hm.picplz.ui.screen.common.common_chip
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,48 +30,50 @@ import com.hm.picplz.ui.theme.pretendardTypography
 @Composable
 fun CommonIconButton(
     label: String = "",
-    height: Dp = 21.dp,
     horizontalPadding: Dp = 7.dp,
     verticalPadding: Dp = 2.dp,
     backgroundColor: Color = MainThemeColor.Black,
     textColor: Color = MainThemeColor.White,
-    radius: Dp = 5.dp,
+    textStyle: TextStyle = pretendardTypography.bodySmall,
+    borderRadius: Dp = 0.dp,
     @DrawableRes iconResId: Int? = null,
-    location: String = "left",
-    gap: Dp = 4.dp,
+    location: String = "left",                // left || right
+    gap: Dp = 4.dp,                           // 텍스트, 아이콘 사이의 간격
     onClick: () -> Unit = {},
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
-    Button(
-        onClick = onClick,
-        shape = RoundedCornerShape(radius),
-        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
-        contentPadding = PaddingValues(horizontalPadding, verticalPadding),
-        modifier = Modifier.height(height)
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(borderRadius))
+            .clickable { onClick() }
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
     ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontalPadding, verticalPadding)
+        ) {
+            if (location == "left" && iconResId != null) {
+                Image(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = "icon Button image"
+                )
+                Spacer(modifier = Modifier.width(gap))
+            }
 
-        if (location == "left" && iconResId != null) {
-            Image(
-                painter = painterResource(id = iconResId),
-                contentDescription = "icon Button iamge",
-                contentScale = ContentScale.Fit,
+            Text(
+                text = label,
+                color = textColor,
+                style = textStyle
             )
 
-            Spacer(modifier = Modifier.width(gap))
-        }
-
-        Text(
-            text = label,
-            style = pretendardTypography.bodySmall.copy(color = textColor)
-        )
-
-        if (location == "right" && iconResId != null) {
-            Spacer(modifier = Modifier.width(gap))
-
-            Image(
-                painter = painterResource(id = iconResId),
-                contentDescription = "icon Button iamge",
-                contentScale = ContentScale.Fit,
-            )
+            if (location == "right" && iconResId != null) {
+                Spacer(modifier = Modifier.width(gap))
+                Image(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = "icon Button image"
+                )
+            }
         }
     }
 }
@@ -77,7 +83,8 @@ fun CommonIconButton(
 fun CommonIconButtonPreview() {
     PicplzTheme {
         CommonIconButton(
-            label = "팔로우",
+            label = "추천순",
+            textStyle = pretendardTypography.bodySmall.copy(color = MainThemeColor.Gray4),
             backgroundColor = MainThemeColor.Gray2,
             textColor = MainThemeColor.Gray4,
             iconResId = R.drawable.follow,
