@@ -23,26 +23,29 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.hm.picplz.data.model.UserType
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
-//    TODO: UserType에 따라 네비게이션바 아이템 분기처리
-    val items = listOf(
-        BottomNavigationItem.Main,
-        BottomNavigationItem.Map,
-        BottomNavigationItem.Feed,
-        BottomNavigationItem.Chat,
-        BottomNavigationItem.MyPage,
-    )
-//    val items = listOf(
-//        BottomNavigationItem.Main,
-//        BottomNavigationItem.Reservation,
-//        BottomNavigationItem.Feed,
-//        BottomNavigationItem.Chat,
-//        BottomNavigationItem.MyPage,
-//    )
+fun BottomNavigationBar(navController: NavHostController, userType: UserType = UserType.User) {
+    val items = when (userType) {
+        UserType.User -> listOf(
+            BottomNavigationItem.Main,
+            BottomNavigationItem.Map,
+            BottomNavigationItem.Feed,
+            BottomNavigationItem.Chat,
+            BottomNavigationItem.MyPage,
+        )
+
+        UserType.Photographer -> listOf(
+            BottomNavigationItem.Main,
+            BottomNavigationItem.Reservation,
+            BottomNavigationItem.Feed,
+            BottomNavigationItem.Chat,
+            BottomNavigationItem.MyPage,
+        )
+    }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
