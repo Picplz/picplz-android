@@ -12,16 +12,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.R
+import com.hm.picplz.data.model.PhotographerReviewSummary
+import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
+import com.hm.picplz.utils.StarType
 
 data class ReviewItem(
     val imageUri: Int, // 이미지 URI (리소스 ID)
@@ -30,33 +34,13 @@ data class ReviewItem(
 )
 
 @Composable
-fun ReviewSection(modifier: Modifier, navController: NavHostController) {
-    // 아이템 리스트 정의
-    val items = listOf(
-        ReviewItem(
-            imageUri = R.drawable.default_profile,
-            label = "사진을 예쁘게 찍어줘요",
-            value = 14
-        ),
-        ReviewItem(
-            imageUri = R.drawable.user_selected,
-            label = "포즈 추천을 잘 해줘요",
-            value = 10
-        ),
-        ReviewItem(
-            imageUri = R.drawable.center_char,
-            label = "친절해요",
-            value = 9
-        ),
-        ReviewItem(
-            imageUri = R.drawable.user_deselected,
-            label = "보정을 잘 해요",
-            value = 5
-        ),
-    )
-
-    val totalRating = 3.5
-    val starList = ReviewUtil.calculateStarRating(totalRating) // MathUtil에서 호출
+fun ReviewSection(
+    modifier: Modifier,
+    navController: NavHostController,
+    reviewSummary: PhotographerReviewSummary
+) {
+    val totalRating = reviewSummary.averageRating
+    val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN) // MathUtil에서 호출
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -85,24 +69,19 @@ fun ReviewSection(modifier: Modifier, navController: NavHostController) {
         Spacer(modifier = Modifier.height(17.dp))
 
         // 아이템 리스트를 돌면서 표시
-        ReviewBars(items = items, modifier = modifier)
+        ReviewBars(items = reviewSummary.keywordBars, modifier = modifier)
 
-        Row(modifier = modifier
-            .clickable { navController.navigate("review-photographer") }
-            .align(Alignment.End)
-        ) {
-            Text(
-                "전체 리뷰 보러가기 (00)",
-                style = pretendardTypography.bodyMedium.copy(
-                    color = MainThemeColor.Gray4
-                )
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Image(
-                painter = painterResource(id = R.drawable.depth_arrow),
-                contentDescription = "depth_arrow",
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
+        CommonIconButton(label = "전체 리뷰 보러가기 (${reviewSummary.totalReviewCount})",
+            backgroundColor = Color.Transparent,
+            textColor = MainThemeColor.Gray4,
+            textStyle = pretendardTypography.bodyMedium,
+            iconResId = R.drawable.depth_arrow,
+            location = "right",
+            horizontalPadding = 0.dp,
+            verticalPadding = 0.dp,
+            gap = 6.dp,
+            onClick = { navController.navigate("review-photographer") },
+            modifier = modifier.align(Alignment.End)
+        )
     }
 }

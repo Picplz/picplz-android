@@ -14,22 +14,30 @@ import androidx.compose.material.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.viewmodel.DetailPhotographerReviewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailPhotographerScreen(navController: NavHostController) {
+fun DetailPhotographerScreen(
+    reviewViewModel: DetailPhotographerReviewViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
+    val reviewCurrentState = reviewViewModel.state.collectAsState().value
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
-    val scrollState = rememberScrollState()
+
+    val reviewSummary = reviewCurrentState.reviewSummary
 
     Scaffold(modifier = Modifier.fillMaxSize(), containerColor = MainThemeColor.White, topBar = {
     }, floatingActionButton = {
@@ -72,7 +80,7 @@ fun DetailPhotographerScreen(navController: NavHostController) {
                         .padding(vertical = 20.dp)
                 )
 
-                ReviewSection(modifier = paddingModifier, navController = navController)
+                ReviewSection(modifier = paddingModifier, navController = navController, reviewSummary=reviewSummary)
 
                 Spacer(modifier = Modifier.height(30.dp))
 
