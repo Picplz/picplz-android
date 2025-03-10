@@ -93,7 +93,11 @@ fun DetailPhotographerScreen(
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    PortfolioSection(modifier = paddingModifier, portfolioPhotos = portfolioPhotos)
+                    PortfolioSection(
+                        modifier = paddingModifier,
+                        navController = navController,
+                        portfolioPhotos = portfolioPhotos
+                    )
 
                     Spacer(modifier = Modifier.height(30.dp))
 

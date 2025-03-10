@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
@@ -25,7 +26,11 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PortfolioSection(modifier: Modifier, portfolioPhotos: List<String>) {
+fun PortfolioSection(
+    modifier: Modifier,
+    navController: NavController,
+    portfolioPhotos: List<String>
+) {
     Column {
         // 포트폴리오
         Text(
@@ -70,7 +75,8 @@ fun PortfolioSection(modifier: Modifier, portfolioPhotos: List<String>) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CommonIconButton(label = "포트폴리오 더보기",
+        CommonIconButton(
+            label = "포트폴리오 더보기",
             backgroundColor = Color.Transparent,
             textColor = MainThemeColor.Gray4,
             textStyle = pretendardTypography.bodyMedium,
@@ -79,8 +85,8 @@ fun PortfolioSection(modifier: Modifier, portfolioPhotos: List<String>) {
             horizontalPadding = 0.dp,
             verticalPadding = 0.dp,
             gap = 6.dp,
-//        onClick = { navController.navigate("review-photographer") },
-        modifier = modifier.align(Alignment.End)
+            onClick = { navController.navigate("detail-photographer-photo-reviews") },
+            modifier = modifier.align(Alignment.End)
         )
 
     }
