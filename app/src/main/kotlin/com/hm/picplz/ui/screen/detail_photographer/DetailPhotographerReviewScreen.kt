@@ -1,8 +1,10 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import CommonChip
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +47,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
+import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
@@ -92,7 +95,9 @@ fun DetailPhotographerReviewScreen(
                         .zIndex(1f)
                         .height(56.dp)
                 ) {
-                    CommonTopBar(text = "리뷰", onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                    CommonTopBar(
+                        text = "리뷰",
+                        onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
                 }
 
                 Column(
@@ -158,7 +163,19 @@ fun DetailPhotographerReviewScreen(
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
-                                        .aspectRatio(1f),
+                                        .aspectRatio(1f)
+                                        .clickable {
+                                            // Bundle에 데이터 넣기
+                                            val bundle = Bundle().apply {
+                                                putStringArray(
+                                                    "photo-reviews",
+                                                    images.toTypedArray()
+                                                )
+                                            }
+
+                                            // Bundle을 navigate의 두 번째 인자로 전달
+                                            navController.navigateWithBundle("detail-photographer-photo-reviews", bundle)
+                                        },
                                     contentAlignment = Alignment.Center
                                 ) {
                                     // 원본 이미지
@@ -267,7 +284,7 @@ fun DetailPhotographerReviewScreen(
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
-            when(sideEffect) {
+            when (sideEffect) {
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
