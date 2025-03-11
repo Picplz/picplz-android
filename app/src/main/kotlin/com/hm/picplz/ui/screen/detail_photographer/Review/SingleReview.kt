@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.detail_photographer.Review
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +37,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
@@ -61,14 +57,21 @@ fun SingleReview(
 ) {
     val subStarList = ReviewUtil.calculateStarRating(review.rating, StarType.SUB)
 
+    val modifier = Modifier
+        .padding(top = 10.dp)
+        .fillMaxWidth()
+
+    val singleReviewModifier = if (type == SingleReviewType.OVERVIEW) {
+        modifier.clickable {
+            navController.navigate("detail-photographer-single-review/${review.reviewId}/0")
+        }
+    } else {
+        modifier
+    }
+
     // 리스트 형식 (싱글 리뷰)
     Column(
-        modifier = Modifier
-            .padding(top = 10.dp)
-            .fillMaxWidth()
-            .clickable {
-                navController.navigate("detail-photographer-single-review/${review.reviewId}/0")
-            },
+        modifier = singleReviewModifier
     ) {
         Row(
             modifier = Modifier
