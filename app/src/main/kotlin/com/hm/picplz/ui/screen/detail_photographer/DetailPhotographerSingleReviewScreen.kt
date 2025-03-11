@@ -125,12 +125,13 @@ fun DetailPhotographerSingleReviewScreen(
                             .zIndex(1f)
                             .height(56.dp)
                     ) {
-                        CommonTopBar(text = "${singleReview.nickname} ${currentPhotoIndex + 1} / ${singleReview.photoReviewCount}",
+                        CommonTopBar(text = "${currentPhotoIndex + 1} / ${singleReview.photoReviewCount}",
                             onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
                     }
 
                     Column(modifier = paddingModifier.fillMaxSize()) {
                         SingleReview(
+                            navController=navController,
                             review = singleReview,
                             type = SingleReviewType.DETAIL,
                             photoIndex = currentPhotoIndex

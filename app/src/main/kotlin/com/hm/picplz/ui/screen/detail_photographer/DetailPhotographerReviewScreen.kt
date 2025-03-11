@@ -275,7 +275,7 @@ fun DetailPhotographerReviewScreen(
 
                         // 리스트 형식 (싱글 리뷰)
                         reviews.forEach { item ->
-                            SingleReview(item)
+                            SingleReview(navController, item)
                         }
                     }
                 }

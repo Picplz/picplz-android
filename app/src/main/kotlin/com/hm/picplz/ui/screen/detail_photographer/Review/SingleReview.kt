@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -53,6 +54,7 @@ import com.hm.picplz.utils.StarType
 
 @Composable
 fun SingleReview(
+    navController: NavController,
     review: PhotographerReview,
     type: SingleReviewType = SingleReviewType.OVERVIEW,
     photoIndex: Int = 0
@@ -64,6 +66,9 @@ fun SingleReview(
         modifier = Modifier
             .padding(top = 10.dp)
             .fillMaxWidth()
+            .clickable {
+                navController.navigate("detail-photographer-single-review/${review.reviewId}/0")
+            },
     ) {
         Row(
             modifier = Modifier
@@ -122,63 +127,61 @@ fun SingleReview(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-
         // 리뷰 이미지들
-        when (type) {
-            SingleReviewType.OVERVIEW -> {
-                Row(
-                    modifier = Modifier
-                        .horizontalScroll(rememberScrollState()) // horizontalScroll 추가
-                        .padding(start = 0.dp, end = 0.dp)
-                        .clickable {
-                            // TODO: 이미지 클릭했을 때 사진 원본 크기 스크린으로 이동
-                        },
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    review.photoReviews.forEach { review ->
-                        Image(
-                            painter = rememberAsyncImagePainter(model = review.photoReviewUri),
-                            contentDescription = "리뷰 사진",
-                            modifier = Modifier.size(114.dp),
-                            contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
-                        )
-                    }
-                }
-            }
-
-            SingleReviewType.DETAIL -> {
-                val painter = rememberAsyncImagePainter(model = review.photoReviews[photoIndex].photoReviewUri)
-
-                val imageState = painter.state
-                var aspectRatio by remember { mutableStateOf(1f) }
-
-                // 이미지의 원본 비율을 계산하여 동적으로 설정
-                LaunchedEffect(imageState) {
-                    if (imageState is AsyncImagePainter.State.Success) {
-                        val width = imageState.result.drawable.intrinsicWidth
-                        val height = imageState.result.drawable.intrinsicHeight
-                        if (width > 0 && height > 0) {
-                            aspectRatio = width.toFloat() / height.toFloat()
+        if (review.photoReviews.isNotEmpty()) {
+            when (type) {
+                SingleReviewType.OVERVIEW -> {
+                    Row(
+                        modifier = Modifier
+                            .horizontalScroll(rememberScrollState()) // horizontalScroll 추가
+                            .padding(start = 0.dp, end = 0.dp),
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        review.photoReviews.forEach { review ->
+                            Image(
+                                painter = rememberAsyncImagePainter(model = review.photoReviewUri),
+                                contentDescription = "리뷰 사진",
+                                modifier = Modifier.size(114.dp),
+                                contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
+                            )
                         }
                     }
                 }
 
-                Image(
-                    painter = painter,
-                    contentDescription = "review-image",
-                    modifier = Modifier
-                        .fillMaxWidth() // 가로를 꽉 채우되
-                        .aspectRatio(aspectRatio) // 비율에 맞게 세로 크기 자동 조정
-                        .padding(vertical = 0.dp), // 수직 여백 제거
-                    contentScale = ContentScale.Fit
-                )
+                SingleReviewType.DETAIL -> {
+                    val painter =
+                        rememberAsyncImagePainter(model = review.photoReviews[photoIndex].photoReviewUri)
+
+                    val imageState = painter.state
+                    var aspectRatio by remember { mutableStateOf(1f) }
+
+                    // 이미지의 원본 비율을 계산하여 동적으로 설정
+                    LaunchedEffect(imageState) {
+                        if (imageState is AsyncImagePainter.State.Success) {
+                            val width = imageState.result.drawable.intrinsicWidth
+                            val height = imageState.result.drawable.intrinsicHeight
+                            if (width > 0 && height > 0) {
+                                aspectRatio = width.toFloat() / height.toFloat()
+                            }
+                        }
+                    }
+
+                    Image(
+                        painter = painter,
+                        contentDescription = "review-image",
+                        modifier = Modifier
+                            .fillMaxWidth() // 가로를 꽉 채우되
+                            .aspectRatio(aspectRatio) // 비율에 맞게 세로 크기 자동 조정
+                            .padding(vertical = 0.dp), // 수직 여백 제거
+                        contentScale = ContentScale.Fit
+                    )
+                }
             }
         }
 
-
         Spacer(modifier = Modifier.height(18.dp))
 
-        Column (modifier = Modifier.fillMaxWidth()){
+        Column(modifier = Modifier.fillMaxWidth()) {
             Row {
                 Text(
                     text = "옵션", style = pretendardTypography.bodySmall.copy(
@@ -257,6 +260,6 @@ fun SingleReviewPreview() {
     )
 
     PicplzTheme {
-        SingleReview(dummyReview)
+        SingleReview(navController, dummyReview)
     }
 }
