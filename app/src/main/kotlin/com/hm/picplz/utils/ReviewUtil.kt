@@ -7,6 +7,10 @@ enum class StarType(val full: Int, val empty: Int) {
     SUB(R.drawable.small_star_full, R.drawable.small_star_empty)
 }
 
+enum class SingleReviewType {
+    OVERVIEW, DETAIL
+}
+
 object ReviewUtil {
     /**
      * 주어진 평점(totalRating)에 따라 별 아이콘 리스트 반환

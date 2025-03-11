@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailPhotographerViewModel @Inject constructor(
+open class DetailPhotographerViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _state = MutableStateFlow(DetailPhotographerReviewState.idle())

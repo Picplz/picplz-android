@@ -1,5 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,12 +32,14 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.R
+import com.hm.picplz.data.model.PhotoReview
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
@@ -43,10 +47,16 @@ fun DetailPhotographerPhotoReviewsScreen(
 ) {
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
-    // arguments 접근
-    val images = navController.currentBackStackEntry?.arguments?.getStringArray("photo-reviews")
+    val photoReviews =
+        navController.currentBackStackEntry?.arguments?.getParcelableArrayList(
+            "photo-reviews",
+            PhotoReview::class.java
+        )
 
-    val chunkedImages = images?.toList()?.chunked(3) ?: emptyList() // 3개씩 나눔, null이면 빈 리스트 반환
+    // arguments 접근
+//    val images = navController.currentBackStackEntry?.arguments?.getStringArray("photo-reviews")
+
+    val chunkedImages = photoReviews?.chunked(3) ?: emptyList() // 3개씩 나눔, null이면 빈 리스트 반환
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         containerColor = MainThemeColor.White,
@@ -102,7 +112,7 @@ fun DetailPhotographerPhotoReviewsScreen(
                                             model = ImageRequest.Builder(
                                                 LocalContext.current
                                             )
-                                                .data(imageRes) // 실제 로드할 이미지
+                                                .data(imageRes.photoReviewUri) // 실제 로드할 이미지
                                                 .placeholder(R.drawable.center_char) // 로드되기 전 기본 이미지
                                                 .error(R.drawable.center_char) // 로드 실패 시 보여줄 이미지
                                                 .crossfade(true) // 부드러운 전환 효과
@@ -114,7 +124,7 @@ fun DetailPhotographerPhotoReviewsScreen(
                                             .aspectRatio(1f) // 1:1 비율
                                             .padding(2.dp)
                                             .clickable {
-
+                                                navController.navigate("detail-photographer-single-review/${imageRes.reviewId}/${imageRes.index}")
                                             },
                                         contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
                                     )

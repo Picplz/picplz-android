@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer.Review
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,16 +22,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
@@ -37,14 +48,23 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
+import com.hm.picplz.utils.SingleReviewType
 import com.hm.picplz.utils.StarType
 
 @Composable
-fun SingleReview(review: PhotographerReview) {
+fun SingleReview(
+    review: PhotographerReview,
+    type: SingleReviewType = SingleReviewType.OVERVIEW,
+    photoIndex: Int = 0
+) {
     val subStarList = ReviewUtil.calculateStarRating(review.rating, StarType.SUB)
 
     // 리스트 형식 (싱글 리뷰)
-    Column(modifier = Modifier.padding(top = 10.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,30 +122,63 @@ fun SingleReview(review: PhotographerReview) {
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // 리뷰 이미지들
-        Row(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState()) // horizontalScroll 추가
-                .padding(start = 0.dp, end = 0.dp)
-                .clickable {
-                    // TODO: 이미지 클릭했을 때 사진 원본 크기 스크린으로 이동
-                },
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            review.photos.forEach { image ->
-                Image(
-                    painter = rememberAsyncImagePainter(model = image),
-                    contentDescription = "리뷰 사진",
-                    modifier = Modifier.size(114.dp),
-                    contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
-                )
 
+        // 리뷰 이미지들
+        when (type) {
+            SingleReviewType.OVERVIEW -> {
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState()) // horizontalScroll 추가
+                        .padding(start = 0.dp, end = 0.dp)
+                        .clickable {
+                            // TODO: 이미지 클릭했을 때 사진 원본 크기 스크린으로 이동
+                        },
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    review.photoReviews.forEach { review ->
+                        Image(
+                            painter = rememberAsyncImagePainter(model = review.photoReviewUri),
+                            contentDescription = "리뷰 사진",
+                            modifier = Modifier.size(114.dp),
+                            contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
+                        )
+                    }
+                }
+            }
+
+            SingleReviewType.DETAIL -> {
+                val painter = rememberAsyncImagePainter(model = review.photoReviews[photoIndex].photoReviewUri)
+
+                val imageState = painter.state
+                var aspectRatio by remember { mutableStateOf(1f) }
+
+                // 이미지의 원본 비율을 계산하여 동적으로 설정
+                LaunchedEffect(imageState) {
+                    if (imageState is AsyncImagePainter.State.Success) {
+                        val width = imageState.result.drawable.intrinsicWidth
+                        val height = imageState.result.drawable.intrinsicHeight
+                        if (width > 0 && height > 0) {
+                            aspectRatio = width.toFloat() / height.toFloat()
+                        }
+                    }
+                }
+
+                Image(
+                    painter = painter,
+                    contentDescription = "review-image",
+                    modifier = Modifier
+                        .fillMaxWidth() // 가로를 꽉 채우되
+                        .aspectRatio(aspectRatio) // 비율에 맞게 세로 크기 자동 조정
+                        .padding(vertical = 0.dp), // 수직 여백 제거
+                    contentScale = ContentScale.Fit
+                )
             }
         }
 
+
         Spacer(modifier = Modifier.height(18.dp))
 
-        Column {
+        Column (modifier = Modifier.fillMaxWidth()){
             Row {
                 Text(
                     text = "옵션", style = pretendardTypography.bodySmall.copy(
@@ -172,11 +225,12 @@ fun SingleReview(review: PhotographerReview) {
                     style = pretendardTypography.bodyMedium.copy(color = MainThemeColor.Gray6)
                 )
             }
+
             Spacer(modifier = Modifier.height(20.dp))
 
-            HorizontalDivider(thickness = 1.dp, color = MainThemeColor.Gray2)
-
-
+            if (type == SingleReviewType.OVERVIEW) {
+                HorizontalDivider(thickness = 1.dp, color = MainThemeColor.Gray2)
+            }
         }
     }
 
@@ -187,12 +241,14 @@ fun SingleReview(review: PhotographerReview) {
 fun SingleReviewPreview() {
     val navController = rememberNavController()
     val dummyReview = PhotographerReview(
+        reviewId = 1,
         profileImageUri = "https://picsum.photos/200/300",
         nickname = "사용자1",
         rating = 4.0f,
         createdAt = "2025-02-26",
         isReported = true,
-        photos = dummyPhotoReviews.slice(0..2),
+        photoReviews = dummyPhotoReviews.slice(0..2),
+        photoReviewCount = 3,
         option = "프로필 Only",
         location = "서울 강남",
         reviewText = "하나하나 신경써서 해주시고 잘 알려주세요 사진 처음찍거나 잘 못찍으시는 분들 하시면 후회 안하십니다!",

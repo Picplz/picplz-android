@@ -149,7 +149,7 @@ fun DetailPhotographerReviewScreen(
                         ) {
                             images.take(3).forEach { image ->
                                 Image(
-                                    painter = rememberAsyncImagePainter(model = image),
+                                    painter = rememberAsyncImagePainter(model = image.photoReviewUri),
                                     contentDescription = "리뷰 사진",
                                     modifier = Modifier
                                         .weight(1f)
@@ -167,20 +167,20 @@ fun DetailPhotographerReviewScreen(
                                         .clickable {
                                             // Bundle에 데이터 넣기
                                             val bundle = Bundle().apply {
-                                                putStringArray(
-                                                    "photo-reviews",
-                                                    images.toTypedArray()
-                                                )
+                                                putParcelableArrayList("photo-reviews", ArrayList((images)))
                                             }
 
                                             // Bundle을 navigate의 두 번째 인자로 전달
-                                            navController.navigateWithBundle("detail-photographer-photo-reviews", bundle)
+                                            navController.navigateWithBundle(
+                                                "detail-photographer-photo-reviews",
+                                                bundle
+                                            )
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
                                     // 원본 이미지
                                     Image(
-                                        painter = rememberAsyncImagePainter(model = images[3]), // 네 번째 이미지를 기준으로
+                                        painter = rememberAsyncImagePainter(model = images[3].photoReviewUri), // 네 번째 이미지를 기준으로
                                         contentDescription = "리뷰 사진",
                                         modifier = Modifier
                                             .matchParentSize()
