@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +19,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     Scaffold(
-        backgroundColor = MainThemeColor.White,
+        containerColor = MainThemeColor.White,
         bottomBar = {
             BottomNavigationBar(
                 navController = navController,

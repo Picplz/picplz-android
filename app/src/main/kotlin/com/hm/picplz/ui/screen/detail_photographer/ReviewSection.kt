@@ -1,14 +1,13 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +70,8 @@ fun ReviewSection(
         // 아이템 리스트를 돌면서 표시
         ReviewBars(items = reviewSummary.keywordBars, modifier = modifier)
 
-        CommonIconButton(label = "전체 리뷰 보러가기 (${reviewSummary.totalReviewCount})",
+        CommonIconButton(
+            label = "전체 리뷰 보러가기 (${reviewSummary.totalReviewCount})",
             backgroundColor = Color.Transparent,
             textColor = MainThemeColor.Gray4,
             textStyle = pretendardTypography.bodyMedium,
