@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -75,6 +76,7 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
             modifier = Modifier
                 .size(74.dp)
                 .clip(CircleShape)
+                .border(1.dp, MainThemeColor.Gray2, CircleShape)
         )
 
         Spacer(modifier = Modifier.width(8.dp))
