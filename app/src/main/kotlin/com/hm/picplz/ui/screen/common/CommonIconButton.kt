@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun CommonIconButton(
+    modifier: Modifier = Modifier,
     label: String = "",
     horizontalPadding: Dp = 7.dp,
     verticalPadding: Dp = 2.dp,
@@ -37,10 +39,10 @@ fun CommonIconButton(
     textStyle: TextStyle = pretendardTypography.bodySmall,
     borderRadius: Dp = 0.dp,
     @DrawableRes iconResId: Int? = null,
+    iconSize: Dp = 8.dp,
     location: String = "left",                // left || right
     gap: Dp = 4.dp,                           // 텍스트, 아이콘 사이의 간격
     onClick: () -> Unit = {},
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -56,7 +58,8 @@ fun CommonIconButton(
             if (location == "left" && iconResId != null) {
                 Image(
                     painter = painterResource(id = iconResId),
-                    contentDescription = "icon Button image"
+                    contentDescription = "icon Button image",
+                    modifier = Modifier.size(iconSize)
                 )
                 Spacer(modifier = Modifier.width(gap))
             }
