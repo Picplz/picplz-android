@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotographerReviewSummary
-import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
+import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText

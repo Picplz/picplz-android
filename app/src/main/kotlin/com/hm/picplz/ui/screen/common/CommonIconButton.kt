@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.common.common_chip
+package com.hm.picplz.ui.screen.common
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes

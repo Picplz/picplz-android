@@ -49,7 +49,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.common.common_chip.CommonIconButton
+import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
 import com.hm.picplz.ui.screen.detail_photographer.Review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
