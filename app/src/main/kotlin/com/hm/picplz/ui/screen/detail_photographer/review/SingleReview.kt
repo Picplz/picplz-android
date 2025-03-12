@@ -111,8 +111,9 @@ fun SingleReview(
             Spacer(modifier = Modifier.weight(1f))
 
             Row(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.align(
+                    if (type == SingleReviewType.OVERVIEW) Alignment.CenterVertically else Alignment.Bottom
+                ),
             ) {
                 CommonIconButton(
                     label = "신고",
