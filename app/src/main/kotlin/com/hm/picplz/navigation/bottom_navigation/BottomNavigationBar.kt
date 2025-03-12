@@ -1,6 +1,7 @@
 package com.hm.picplz.navigation.bottom_navigation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -8,9 +9,9 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Text
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -20,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hm.picplz.data.model.UserType
@@ -50,8 +50,8 @@ fun BottomNavigationBar(navController: NavHostController, userType: UserType = U
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation(
-        backgroundColor = Color.White,
+    NavigationBar(
+        containerColor = Color.White, // backgroundColor -> containerColor
         contentColor = Color.Black,
         modifier = Modifier.height(84.dp),
     ) {
@@ -69,13 +69,12 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
-    val isSelected = currentDestination?.hierarchy?.any {
-        it.route == item.route
-    } == true
+    val isSelected = currentDestination?.route == item.route
 
-    BottomNavigationItem(
+    NavigationBarItem(
         selected = isSelected,
         onClick = {}, // 클릭 이벤트 제거(RippleEffect 제거)
+        modifier = Modifier.background(MainThemeColor.Transparent),
         icon = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
