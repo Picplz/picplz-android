@@ -5,14 +5,24 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.NavHostController
+import androidx.navigation.navArgument
 import com.hm.picplz.data.model.User
+import com.hm.picplz.ui.screen.chat.ChatScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoReviewsScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
+import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
+import com.hm.picplz.ui.screen.my_page.MyPageScreen
+import com.hm.picplz.ui.screen.my_page.ReservationScreen
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
 import com.hm.picplz.viewmodel.MainActivityUiState
@@ -79,6 +89,55 @@ fun MainNavHost(
 
         composable("search-photographer") {
             SearchPhotographerScreen(mainNavController = navController)
+        }
+
+        composable("main") {
+            MainScreen(navController = navController)
+        }
+
+        composable("reservation") {
+            ReservationScreen(navController = navController)
+        }
+
+        composable("feed") {
+            FeedScreen(navController = navController)
+        }
+
+        composable("chat") {
+            ChatScreen(navController = navController)
+        }
+
+        composable("mypage") {
+            MyPageScreen(navController = navController)
+        }
+
+        composable("detail-photographer") {
+            DetailPhotographerScreen(navController = navController)
+        }
+
+        composable("review-photographer") {
+            DetailPhotographerReviewScreen(navController = navController)
+        }
+
+        composable("detail-photographer-photo-reviews") {
+            DetailPhotographerPhotoReviewsScreen(navController = navController)
+        }
+
+        composable(
+            route = "detail-photographer-single-review/{reviewId}/{photoIndex}",
+            arguments = listOf(
+                navArgument("reviewId") { type = NavType.IntType },
+                navArgument("photoIndex") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val reviewId = backStackEntry.arguments?.getInt("reviewId") ?: 0
+            val photoIndex = backStackEntry.arguments?.getInt("photoIndex") ?: 0
+
+            DetailPhotographerSingleReviewScreen(
+                navController = navController,
+                reviewId = reviewId,
+                photoIndex = photoIndex
+            )
         }
     }
 }

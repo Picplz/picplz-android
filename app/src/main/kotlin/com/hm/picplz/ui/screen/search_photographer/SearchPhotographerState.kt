@@ -16,7 +16,7 @@ data class SearchPhotographerState (
     val randomOffsets: Map<Int, Offset> = emptyMap(),
     val selectedPhotographerId: Int? = null,
     val sheetMaxHeight: Dp = 750.dp,
-    val sheetPeekHeight: Dp? = 30.dp,
+    val sheetPeekHeight: Dp? = 114.dp, // 하단 네비게이션 높이(84.dp)만큼 추가
     val centerOffset: Offset? = null
 ) {
     companion object {

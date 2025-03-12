@@ -26,6 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import com.hm.picplz.data.model.ChipMode
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -51,7 +53,8 @@ private val vibeTags = listOf(
 
 @Composable
 fun PhotographerListSheet(
-    viewModel: SearchPhotographerViewModel = hiltViewModel()
+    viewModel: SearchPhotographerViewModel = hiltViewModel(),
+    mainNavController: NavHostController
 ) {
     val currentState = viewModel.state.collectAsState().value
 
@@ -106,7 +109,8 @@ fun PhotographerListSheet(
             currentState.nearbyPhotographers.let { photographers ->
                 items(photographers.active + photographers.inactive) { photographer ->
                     PhotographerCard(
-                        photographer = photographer
+                        photographer = photographer,
+                        mainNavController = mainNavController
                     )
                 }
             }
@@ -117,6 +121,8 @@ fun PhotographerListSheet(
 @Preview(showBackground = true)
 @Composable
 fun PhotographerListScreenPreview() {
-    PhotographerListSheet()
+    val mainNavController = rememberNavController()
+
+    PhotographerListSheet(mainNavController = mainNavController)
 }
 

@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.search_photographer.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,14 +25,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 import com.hm.picplz.viewmodel.SearchPhotographerViewModel
 
 @Composable
-fun PhotographerSheet (
-    viewModel: SearchPhotographerViewModel = hiltViewModel()
+fun PhotographerSheet(
+    viewModel: SearchPhotographerViewModel = hiltViewModel(),
+    mainNavController: NavController
 ) {
     val currentState = viewModel.state.collectAsState().value
     val selectedPhotographer = currentState.selectedPhotographerId?.let { selectedId ->
@@ -43,6 +46,7 @@ fun PhotographerSheet (
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp)
+            .clickable { mainNavController.navigate("detail-photographer") }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +86,7 @@ fun PhotographerSheet (
             modifier = Modifier
                 .padding(start = 4.dp, top = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-        ){
+        ) {
             ActiveStatusBadge(text = "바로 촬영")
             DistanceText(
                 distance = selectedPhotographer?.distance.toString(),

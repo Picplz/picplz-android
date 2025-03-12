@@ -3,6 +3,7 @@ package com.hm.picplz.ui.theme
 import androidx.compose.ui.graphics.Color
 
 object MainThemeColor {
+    val Transparent = Color.Transparent
     val Olive = Color(0xFFA6CB80)
     val Black = Color(0xFF0E0E0F)
     val White = Color(0xFFFEFEFE)

@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -42,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -53,7 +55,8 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.viewmodel.SearchPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.hm.picplz.R
-import androidx.compose.ui.layout.ContentScale
+import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
+import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
 import com.hm.picplz.ui.screen.search_photographer.composable.AddressMarker
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerProfile
@@ -61,10 +64,11 @@ import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.RefetchButton
 import com.hm.picplz.utils.LocationUtil.getDistance
 import com.kakao.vectormap.LatLng
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("DefaultLocale")
+@SuppressLint("DefaultLocale", "UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SearchPhotographerScreen(
@@ -83,6 +87,7 @@ fun SearchPhotographerScreen(
                     permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                 viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
             }
+
             else -> {
                 Toast.makeText(
                     context,
@@ -105,6 +110,7 @@ fun SearchPhotographerScreen(
                     ) == PackageManager.PERMISSION_GRANTED -> {
                 viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
             }
+
             else -> {
                 launcher.launch(
                     arrayOf(
@@ -130,7 +136,11 @@ fun SearchPhotographerScreen(
         if (currentState.selectedPhotographerId != null) {
             val selectedOffset = currentState.randomOffsets[currentState.selectedPhotographerId]
             if (selectedOffset != null) {
-                viewModel.handleIntent(SearchPhotographerIntent.CenterSelectedPhotographer(selectedOffset))
+                viewModel.handleIntent(
+                    SearchPhotographerIntent.CenterSelectedPhotographer(
+                        selectedOffset
+                    )
+                )
             }
             scaffoldState.bottomSheetState.expand()
         } else {
@@ -145,139 +155,150 @@ fun SearchPhotographerScreen(
         }
     }
 
-    CommonBottomSheetScaffold (
-        modifier = Modifier
-            .fillMaxSize(),
-        sheetContent = {
-            if (currentState.selectedPhotographerId === null) {
-                PhotographerListSheet()
-            } else {
-                PhotographerSheet()
-            }
-        },
-        scaffoldState = scaffoldState,
-        sheetPeekHeight = currentState.sheetPeekHeight,
-        sheetMaxHeight = currentState.sheetMaxHeight
-    ){
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MainThemeColor.White),
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = MainThemeColor.Gray1)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        scope.launch {
-                            scaffoldState.bottomSheetState.partialExpand()
-                            viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(null))
-                        }
-                    },
-            ) {
-                if (currentState.isFetchingGPS && currentState.userLocation == null) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = MainThemeColor.Black
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "위치 정보 로딩",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MainThemeColor.Black
-                            )
-                        }
-                    }
+    Scaffold(bottomBar = { BottomNavigationBar(navController = mainNavController) }) {
+        CommonBottomSheetScaffold(
+            modifier = Modifier.fillMaxSize(),
+            sheetContent = {
+                if (currentState.selectedPhotographerId === null) {
+                    PhotographerListSheet(mainNavController = mainNavController)
                 } else {
-                    Row (
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, start = 5.dp, end = 3.dp)
-                        ,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AddressMarker(
-                            address = currentState.address
-                        )
-                        RefetchButton (
-                            onClick = {
+                    PhotographerSheet(mainNavController = mainNavController)
+                }
+            },
+            scaffoldState = scaffoldState,
+            sheetPeekHeight = currentState.sheetPeekHeight,
+            sheetMaxHeight = currentState.sheetMaxHeight
+        ) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(MainThemeColor.White),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = MainThemeColor.Gray1)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.partialExpand()
+                                viewModel.handleIntent(
+                                    SearchPhotographerIntent.SetSelectedPhotographerId(
+                                        null
+                                    )
+                                )
+                            }
+                        },
+                ) {
+                    if (currentState.isFetchingGPS && currentState.userLocation == null) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = MainThemeColor.Black
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "위치 정보 로딩",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MainThemeColor.Black
+                                )
+                            }
+                        }
+                    } else {
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AddressMarker(
+                                address = currentState.address
+                            )
+                            RefetchButton(onClick = {
                                 viewModel.handleIntent(SearchPhotographerIntent.RefetchNearbyPhotographers)
                             }
-                        )
-                    }
-
-                    val boxOffset by animateOffsetAsState(
-                        targetValue = currentState.centerOffset ?: Offset.Zero,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        ),
-                        label = "boxAnimation"
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .offset(boxOffset.x.dp, boxOffset.y.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.multicircle),
-                            contentDescription = "범위 지정 이미지",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier
-                                .scale(1.5f)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.center_char),
-                            contentDescription = "작가 탐색 중앙 캐릭터"
-                        )
-                        val entirePhotographer = currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
-                        // val userLocation = currentState.userLocation
-                        val dummyUserLocation = LatLng.from(37.402960, 127.115587)
-                        entirePhotographer.forEach {  ( id, name, photographerLocation, profileImageUri, isActive )  ->
-                            val offset = currentState.randomOffsets[id] ?: return@forEach
-                            val isSelected = id == currentState.selectedPhotographerId
-                            val distanceInMeters = photographerLocation?.let { location ->
-                                getDistance(dummyUserLocation, location) * 1000
-                            }
-                            PhotographerProfile(
-                                name = name,
-                                profileImageUri = profileImageUri,
-                                isActive = isActive,
-                                isSelected = isSelected,
-                                offset = offset,
-                                distance = distanceInMeters,
-                                onClick = {
-                                    scope.launch {
-                                        scaffoldState.bottomSheetState.partialExpand()
-                                        viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(id))
-                                        viewModel.handleIntent(SearchPhotographerIntent.CenterSelectedPhotographer(offset))
-                                    }
-                                }
                             )
+                        }
+
+                        val boxOffset by animateOffsetAsState(
+                            targetValue = currentState.centerOffset ?: Offset.Zero,
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow
+                            ),
+                            label = "boxAnimation"
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .offset(boxOffset.x.dp, boxOffset.y.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.multicircle),
+                                contentDescription = "범위 지정 이미지",
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier
+                                    .scale(1.5f)
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.center_char),
+                                contentDescription = "작가 탐색 중앙 캐릭터"
+                            )
+                            val entirePhotographer =
+                                currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
+                            // val userLocation = currentState.userLocation
+                            val dummyUserLocation = LatLng.from(37.402960, 127.115587)
+                            entirePhotographer.forEach { (id, name, photographerLocation, profileImageUri, isActive) ->
+                                val offset = currentState.randomOffsets[id] ?: return@forEach
+                                val isSelected = id == currentState.selectedPhotographerId
+                                val distanceInMeters = photographerLocation?.let { location ->
+                                    getDistance(dummyUserLocation, location) * 1000
+                                }
+                                PhotographerProfile(
+                                    name = name,
+                                    profileImageUri = profileImageUri,
+                                    isActive = isActive,
+                                    isSelected = isSelected,
+                                    offset = offset,
+                                    distance = distanceInMeters,
+                                    onClick = {
+                                        scope.launch {
+                                            scaffoldState.bottomSheetState.partialExpand()
+                                            viewModel.handleIntent(
+                                                SearchPhotographerIntent.SetSelectedPhotographerId(
+                                                    id
+                                                )
+                                            )
+                                            viewModel.handleIntent(
+                                                SearchPhotographerIntent.CenterSelectedPhotographer(
+                                                    offset
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collectLatest { sideEffect ->
-            when (sideEffect) {
-                is SearchPhotographerSideEffect.NavigateToPrev -> {
-                    mainNavController.popBackStack()
+        LaunchedEffect(Unit) {
+            viewModel.sideEffect.collectLatest { sideEffect ->
+                when (sideEffect) {
+                    is SearchPhotographerSideEffect.NavigateToPrev -> {
+                        mainNavController.popBackStack()
+                    }
                 }
             }
         }
