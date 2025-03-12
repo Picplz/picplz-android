@@ -40,7 +40,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.data.model.PhotoReview
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.detail_photographer.Review.SingleReview
+import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.utils.SingleReviewType
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel

@@ -50,8 +50,8 @@ import com.hm.picplz.R
 import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.detail_photographer.Review.ReviewBars
-import com.hm.picplz.ui.screen.detail_photographer.Review.SingleReview
+import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
+import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText

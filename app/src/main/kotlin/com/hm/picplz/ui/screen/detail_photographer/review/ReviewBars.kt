@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.detail_photographer.Review
+package com.hm.picplz.ui.screen.detail_photographer.review
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
