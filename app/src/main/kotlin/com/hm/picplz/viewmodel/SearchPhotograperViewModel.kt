@@ -1,13 +1,8 @@
 package com.hm.picplz.viewmodel
 
-import android.content.Context
-import android.location.LocationManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.model.KaKaoAddressRequest
-import com.hm.picplz.data.source.KakaoMapSource
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
 import com.kakao.vectormap.LatLng
@@ -15,16 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.LocationListener
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
+import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
-import com.hm.picplz.utils.LocationUtil.calcurateScreenDistance
+import com.hm.picplz.utils.DisplayMetricsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Inject
@@ -33,7 +26,9 @@ import kotlin.random.Random
 @HiltViewModel
 class SearchPhotographerViewModel @Inject constructor(
     private val photographerRepository: PhotographerRepository,
-    @ApplicationContext private val context: Context
+    private val displayMetricsUtil: DisplayMetricsUtil,
+    private val locationService: LocationService,
+    private val addressService: AddressService
 ) : ViewModel() {
     private val _state = MutableStateFlow(SearchPhotographerState.idle())
     val state : StateFlow<SearchPhotographerState> get() = _state
@@ -44,11 +39,6 @@ class SearchPhotographerViewModel @Inject constructor(
     init {
         handleIntent(SearchPhotographerIntent.FetchNearbyPhotographers)
     }
-
-    private val kakaoSource = KakaoMapSource()
-
-    private var locationManager: LocationManager? = null
-    private val locationListeners = mutableListOf<LocationListener>()
 
     fun handleIntent(intent: SearchPhotographerIntent) {
         when (intent) {
@@ -62,13 +52,8 @@ class SearchPhotographerViewModel @Inject constructor(
             }
             is SearchPhotographerIntent.GetAddress -> {
                 viewModelScope.launch {
-                    kakaoSource.getAddressFromCoords(KaKaoAddressRequest(intent.Coords.longitude.toString(), intent.Coords.latitude.toString()))
-                        .onSuccess { response ->
-                            val twoDepthRegion = response.documents.firstOrNull()?.address?.region_2depth_name
-                                ?.split(" ")
-                                ?.lastOrNull() ?: ""
-                            val threeDepthRegion = response.documents.firstOrNull()?.address?.region_3depth_name ?: ""
-                            val address = "$twoDepthRegion $threeDepthRegion"
+                    addressService.getAddressFromCoordinates(intent.Coords)
+                        .onSuccess { address ->
                             handleIntent(SearchPhotographerIntent.SetAddress(address))
                         }
                         .onFailure { error ->
@@ -87,65 +72,23 @@ class SearchPhotographerViewModel @Inject constructor(
                 ) }
                 handleIntent(SearchPhotographerIntent.GetAddress(intent.location))
             }
+            is SearchPhotographerIntent.RequestLocationPermission -> {
+                viewModelScope.launch {
+                    _sideEffect.emit(SearchPhotographerSideEffect.RequestLocationPermission)
+                }
+            }
             is SearchPhotographerIntent.GetCurrentLocation -> {
-                if (locationManager == null) {
-                    locationManager = intent.context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                }
-
-                if (ActivityCompat.checkSelfPermission(
-                    intent.context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(
-                        intent.context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) return
-
-                val gpsProvider = LocationManager.GPS_PROVIDER
-                val networkProvider = LocationManager.NETWORK_PROVIDER
-
-                if (locationManager!!.isProviderEnabled(gpsProvider)) {
-                    locationManager!!.requestLocationUpdates(
-                        gpsProvider,
-                        1000L,
-                        1.0f,
-                    ) { location ->
-                        handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                            LatLng.from(location.latitude, location.longitude)
-                        ))
+                _state.update { it.copy(isFetchingGPS = true) }
+                locationService.getCurrentLocation(
+                    onLocationReceived = { location ->
+                        _state.update { it.copy(isFetchingGPS = false) }
+                        handleIntent(SearchPhotographerIntent.SetCurrentLocation(location))
+                    },
+                    onPermissionDenied = {
+                        _state.update { it.copy(isFetchingGPS = false) }
+                        handleIntent(SearchPhotographerIntent.RequestLocationPermission())
                     }
-                    if (state.value.userLocation == null) {
-                        val lastGpsLocation = locationManager?.getLastKnownLocation(gpsProvider)
-                        if (lastGpsLocation != null) {
-                            handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                                LatLng.from(lastGpsLocation.latitude, lastGpsLocation.longitude)
-                            ))
-                        }
-                    }
-                } else if (locationManager!!.isProviderEnabled(networkProvider)) {
-                    if (state.value.userLocation == null) {
-                        locationManager!!.requestLocationUpdates(
-                            networkProvider,
-                            1000L,
-                            1.0f,
-                        ) { location ->
-                            handleIntent(
-                                SearchPhotographerIntent.SetCurrentLocation(
-                                    LatLng.from(location.latitude, location.longitude)
-                                )
-                            )
-                        }
-                    }
-                    if (state.value.userLocation == null) {
-                        val lastNetworkLocation = locationManager?.getLastKnownLocation(networkProvider)
-                        if (lastNetworkLocation != null) {
-                            handleIntent(SearchPhotographerIntent.SetCurrentLocation(
-                                LatLng.from(lastNetworkLocation.latitude, lastNetworkLocation.longitude)
-                            ))
-                        }
-                    }
-                }
+                )
             }
             is SearchPhotographerIntent.SetIsSearchingPhotographer -> {
                 _state.update { it.copy(isSearchingPhotographer = intent.isSearchingPhotographer) }
@@ -210,10 +153,7 @@ class SearchPhotographerViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        locationListeners.forEach { listener ->
-            locationManager?.removeUpdates(listener)
-        }
-        locationListeners.clear()
+        locationService.cleanup()
     }
 
     class OffsetGenerationFailedException : Exception("전체 위치 생성 최종 실패")
@@ -239,18 +179,9 @@ class SearchPhotographerViewModel @Inject constructor(
         val offsets = mutableMapOf<Int, Offset>()
         val minDistance = 110f
 
-        val innerAreaRatio = 0.75f
-        val outerAreaRatio = 0.93f
-
         val maxSingleAttempts = 100
 
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels / displayMetrics.density
-        val padding = 40f
-
-        val maxOffsetX = (screenWidth - padding * 2) / 2
-        val innerCircleMaxOffsetX = maxOffsetX * innerAreaRatio
-        val outerCircleMinOffsetX = maxOffsetX * outerAreaRatio
+        val (maxOffsetX, innerCircleMaxOffsetX, outerCircleMinOffsetX) = displayMetricsUtil.calculateOffsetLimits()
 
         val center = Offset(0f, 0f)
 
@@ -275,11 +206,11 @@ class SearchPhotographerViewModel @Inject constructor(
                     }
                 } while (
                     offsets.values.any { existingOffset ->
-                        calcurateScreenDistance(existingOffset, newOffset) < minDistance
+                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
                     } ||
-                    (index < 3 && calcurateScreenDistance(center, newOffset) < minDistance) ||
-                    (index < 3 && calcurateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
-                    (index >= 3 && calcurateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
+                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < minDistance) ||
+                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
+                    (index >= 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
                 )
                 offsets[photographer.id] = newOffset
             }
@@ -296,11 +227,11 @@ class SearchPhotographerViewModel @Inject constructor(
                     }
                 } while (
                     offsets.values.any { existingOffset ->
-                        calcurateScreenDistance(existingOffset, newOffset) < minDistance
+                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
                     } ||
-                    (index < 3 && calcurateScreenDistance(center, newOffset) < minDistance) ||
-                    (index < 3 && calcurateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
-                    (index >= 3 && calcurateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
+                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < minDistance) ||
+                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
+                    (index >= 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
                 )
                 offsets[photographer.id] = newOffset
             }
@@ -315,9 +246,9 @@ class SearchPhotographerViewModel @Inject constructor(
                     }
                 } while (
                     offsets.values.any { existingOffset ->
-                        calcurateScreenDistance(existingOffset, newOffset) < minDistance
+                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
                     } ||
-                    calcurateScreenDistance(center, newOffset) < outerCircleMinOffsetX
+                    displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX
                 )
                 offsets[photographer.id] = newOffset
             }

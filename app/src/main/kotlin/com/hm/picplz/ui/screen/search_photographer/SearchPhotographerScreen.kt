@@ -85,7 +85,7 @@ fun SearchPhotographerScreen(
         when {
             permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
                     permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
+                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
             }
 
             else -> {
@@ -99,28 +99,9 @@ fun SearchPhotographerScreen(
     }
 
     LaunchedEffect(Unit) {
-        when {
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation(context))
-            }
-
-            else -> {
-                launcher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
-            }
-        }
+        viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
     }
+
     val scope = rememberCoroutineScope()
 
     val bottomSheetState = rememberStandardBottomSheetState(
@@ -298,6 +279,14 @@ fun SearchPhotographerScreen(
                 when (sideEffect) {
                     is SearchPhotographerSideEffect.NavigateToPrev -> {
                         mainNavController.popBackStack()
+                    }
+                    is SearchPhotographerSideEffect.RequestLocationPermission -> {
+                        launcher.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
+                        )
                     }
                 }
             }

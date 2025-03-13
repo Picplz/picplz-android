@@ -38,7 +38,7 @@ fun AddressMarker (
         )
         Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text = address?: "마포구 서교동",
+            text = address?: "대한민국 어딘가",
             modifier = Modifier,
             color = MainThemeColor.Black,
             style = TextStyle(
