@@ -3,7 +3,6 @@ package com.hm.picplz.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.model.KaKaoAddressRequest
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
 import com.kakao.vectormap.LatLng
@@ -73,10 +72,23 @@ class SearchPhotographerViewModel @Inject constructor(
                 ) }
                 handleIntent(SearchPhotographerIntent.GetAddress(intent.location))
             }
-            is SearchPhotographerIntent.GetCurrentLocation -> {
-                locationService.getCurrentLocation { location ->
-                    handleIntent(SearchPhotographerIntent.SetCurrentLocation(location))
+            is SearchPhotographerIntent.RequestLocationPermission -> {
+                viewModelScope.launch {
+                    _sideEffect.emit(SearchPhotographerSideEffect.RequestLocationPermission)
                 }
+            }
+            is SearchPhotographerIntent.GetCurrentLocation -> {
+                _state.update { it.copy(isFetchingGPS = true) }
+                locationService.getCurrentLocation(
+                    onLocationReceived = { location ->
+                        _state.update { it.copy(isFetchingGPS = false) }
+                        handleIntent(SearchPhotographerIntent.SetCurrentLocation(location))
+                    },
+                    onPermissionDenied = {
+                        _state.update { it.copy(isFetchingGPS = false) }
+                        handleIntent(SearchPhotographerIntent.RequestLocationPermission())
+                    }
+                )
             }
             is SearchPhotographerIntent.SetIsSearchingPhotographer -> {
                 _state.update { it.copy(isSearchingPhotographer = intent.isSearchingPhotographer) }

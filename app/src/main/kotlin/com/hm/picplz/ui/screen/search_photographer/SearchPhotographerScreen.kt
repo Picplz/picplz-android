@@ -99,28 +99,9 @@ fun SearchPhotographerScreen(
     }
 
     LaunchedEffect(Unit) {
-        when {
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
-            }
-
-            else -> {
-                launcher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
-            }
-        }
+        viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
     }
+
     val scope = rememberCoroutineScope()
 
     val bottomSheetState = rememberStandardBottomSheetState(
@@ -299,6 +280,14 @@ fun SearchPhotographerScreen(
                     is SearchPhotographerSideEffect.NavigateToPrev -> {
                         mainNavController.popBackStack()
                     }
+                }
+                is SearchPhotographerSideEffect.RequestLocationPermission -> {
+                    launcher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
                 }
             }
         }
