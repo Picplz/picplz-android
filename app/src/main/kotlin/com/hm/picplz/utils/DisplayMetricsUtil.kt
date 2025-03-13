@@ -16,14 +16,19 @@ class DisplayMetricsUtil @Inject constructor(
         return displayMetrics.widthPixels / displayMetrics.density
     }
 
+     companion object CircleRatios {
+        const val INNER_CIRCLE_RATIO = 0.75f
+        const val OUTER_CIRCLE_RATIO = 0.93f
+    }
+
     fun calculateOffsetLimits(padding: Float = 40f): OffsetLimits {
         val screenWidth = getScreenWidthDp()
         val maxOffsetX = (screenWidth - padding * 2) / 2
 
         return OffsetLimits(
             maxOffset = maxOffsetX,
-            innerCircleMaxOffset = maxOffsetX * 0.75f,
-            outerCircleMinOffset = maxOffsetX * 0.93f
+            innerCircleMaxOffset = maxOffsetX * CircleRatios.INNER_CIRCLE_RATIO,
+            outerCircleMinOffset = maxOffsetX * CircleRatios.OUTER_CIRCLE_RATIO,
         )
     }
 
