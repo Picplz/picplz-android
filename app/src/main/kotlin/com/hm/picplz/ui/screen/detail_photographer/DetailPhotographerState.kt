@@ -1,8 +1,10 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import com.hm.picplz.data.model.KeywordBar
+import com.hm.picplz.data.model.PhotoPortfolio
 import com.hm.picplz.data.model.PhotoReview
 import com.hm.picplz.data.model.PhotographerInfo
+import com.hm.picplz.data.model.PhotographerPortfolio
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.data.model.PhotographerReviewSummary
 
@@ -294,6 +296,91 @@ val dummyReviews = listOf(
     ),
 )
 
+val dummyPhotoPortfolio = listOf(
+    PhotoPortfolio(
+        portfolioId = 0,
+        photoPortfolioUri = "https://picsum.photos/seed/port/1080/2640",
+        index = 0
+    ),
+    PhotoPortfolio(
+        portfolioId = 0,
+        photoPortfolioUri = "https://picsum.photos/seed/port1/500/600",
+        index = 1
+    ),
+    PhotoPortfolio(
+        portfolioId = 0,
+        photoPortfolioUri = "https://picsum.photos/seed/port2/500/600",
+        index = 2
+    ),
+    PhotoPortfolio(
+        portfolioId = 0,
+        photoPortfolioUri = "https://picsum.photos/seed/port3/500/600",
+        index = 3
+    ),
+    PhotoPortfolio(
+        portfolioId = 1,
+        photoPortfolioUri = "https://picsum.photos/seed/port4/500/600",
+        index = 0
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port5/500/600",
+        index = 0
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port6/500/600",
+        index = 1
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port7/500/600",
+        index = 2
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port8/500/600",
+        index = 3
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port9/500/600",
+        index = 4
+    ),
+    PhotoPortfolio(
+        portfolioId = 2,
+        photoPortfolioUri = "https://picsum.photos/seed/port10/500/600",
+        index = 5
+    ),
+)
+
+val dummyPortfolios = listOf(
+    PhotographerPortfolio(
+        portfolioId = 0,
+        title = "홍익대학교 서울캠퍼스",
+        location = "서울 마포구 와우산로",
+        createdAt = "2023-01-10",
+        photoPortfolios = dummyPhotoPortfolio.slice(0..3),
+        photoPortfolioCount = 4,
+    ),
+    PhotographerPortfolio(
+        portfolioId = 1,
+        title = "강남역 5번출구",
+        location = "서울 강남구",
+        createdAt = "2023-05-26",
+        photoPortfolios = dummyPhotoPortfolio.slice(4..4),
+        photoPortfolioCount = 1,
+    ),
+    PhotographerPortfolio(
+        portfolioId = 2,
+        title = "서울숲",
+        location = "서울 까치산로",
+        createdAt = "2024-02-01",
+        photoPortfolios = dummyPhotoPortfolio.slice(5..10),
+        photoPortfolioCount = 6,
+    ),
+)
+
 val dummyPhotographerInfo = PhotographerInfo(
     id = 1,
     name = "홍길동",
@@ -305,48 +392,14 @@ val dummyPhotographerInfo = PhotographerInfo(
     profileImageUri = "https://picsum.photos/seed/profile/100",
     workingArea = listOf("서울시 마포구", "서울시 용산구"),
     keyword = listOf("#MZ감성", "#을지로감성"),
-    portfolioPhotos = listOf(
-        "https://picsum.photos/seed/port/300",
-        "https://picsum.photos/seed/port1/200/300",
-        "https://picsum.photos/seed/port2/100",
-        "https://picsum.photos/seed/port3/200/300",
-        "https://picsum.photos/seed/port4/200/300",
-        "https://picsum.photos/seed/port5/200/300",
-        "https://picsum.photos/seed/port6/200/300",
-        "https://picsum.photos/seed/port7/200/300",
-        "https://picsum.photos/seed/port8/200/300",
-        "https://picsum.photos/seed/port9/200/300",
-        "https://picsum.photos/seed/port10/200/300",
-        "https://picsum.photos/seed/port11/200/300",
-        "https://picsum.photos/seed/port12/200/300",
-        "https://picsum.photos/seed/port13/200/300",
-        "https://picsum.photos/seed/port14/200/300",
-        "https://picsum.photos/seed/port15/200/300",
-        "https://picsum.photos/seed/port16/200/300",
-        "https://picsum.photos/seed/port17/200/300",
-        "https://picsum.photos/seed/port18/200/300",
-        "https://picsum.photos/seed/port19/200/300",
-        "https://picsum.photos/seed/port20/200/300",
-        "https://picsum.photos/seed/port21/200/300",
-        "https://picsum.photos/seed/port22/200/300",
-        "https://picsum.photos/seed/port23/200/300",
-        "https://picsum.photos/seed/port24/200/300",
-        "https://picsum.photos/seed/port25/200/300",
-        "https://picsum.photos/seed/port26/200/300",
-        "https://picsum.photos/seed/port27/200/300",
-        "https://picsum.photos/seed/port28/200/300",
-        "https://picsum.photos/seed/port29/200/300",
-        "https://picsum.photos/seed/port30/200/300",
-        "https://picsum.photos/seed/port31/200/300",
-        "https://picsum.photos/seed/port32/200/300",
-        "https://picsum.photos/seed/port33/200/300",
-    )
+    photoPortfolios = dummyPhotoPortfolio
 )
 
 data class DetailPhotographerReviewState(
     val profileInfo: PhotographerInfo = dummyPhotographerInfo,
     val reviewSummary: PhotographerReviewSummary = dummyReviewSummary,
-    val reviews: List<PhotographerReview> = dummyReviews
+    val reviews: List<PhotographerReview> = dummyReviews,
+    val portfolios: List<PhotographerPortfolio> = dummyPortfolios,
 ) {
     companion object {
         fun idle(): DetailPhotographerReviewState {

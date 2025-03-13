@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,7 +40,7 @@ fun DetailPhotographerScreen(
 
     val profileInfo = currentState.profileInfo
     val reviewSummary = currentState.reviewSummary
-    val portfolioPhotos = profileInfo.portfolioPhotos
+    val photoPortfolios = profileInfo.photoPortfolios
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -77,12 +78,12 @@ fun DetailPhotographerScreen(
                 ) {
                     DetailProfileSection(modifier = paddingModifier, profileInfo = profileInfo)
 
-                    Divider(
-                        color = MainThemeColor.Gray2,
-                        thickness = 10.dp,
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 20.dp)
+                            .padding(vertical = 20.dp),
+                        thickness = 10.dp,
+                        color = MainThemeColor.Gray2
                     )
 
                     ReviewSection(
@@ -96,7 +97,7 @@ fun DetailPhotographerScreen(
                     PortfolioSection(
                         modifier = paddingModifier,
                         navController = navController,
-                        portfolioPhotos = portfolioPhotos
+                        photoPortfolios = photoPortfolios
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))

@@ -135,3 +135,13 @@ val buttonText = TextStyle(
     lineHeight = 16.sp * 1.4,
     letterSpacing = 0.sp
 )
+
+object MainFontFamily {
+    val caption = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 12.sp * 1.4,
+        letterSpacing = 0.sp
+    )
+}

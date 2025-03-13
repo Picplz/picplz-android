@@ -53,7 +53,23 @@ data class PhotographerInfo(
     val profileImageUri: String,
     val workingArea: List<String>,
     val keyword: List<String>,
-    val portfolioPhotos: List<String>,
+    val photoPortfolios: List<PhotoPortfolio>,
+)
+
+@Parcelize
+data class PhotoPortfolio(
+    val portfolioId: Int, // 속한 리뷰 아이디
+    val photoPortfolioUri: String, // 포토 리뷰 URL
+    val index: Int, // 속한 리뷰의 포토 중 몇 번째에 해당하는 지
+) : Parcelable
+
+data class PhotographerPortfolio(
+    val portfolioId: Int,
+    val title: String,
+    val location: String,
+    val createdAt: String,
+    val photoPortfolios: List<PhotoPortfolio>,
+    val photoPortfolioCount: Int,
 )
 
 //typealias PhotographerReviewSummaryResponse = PhotographerReviewSummaryEntity
