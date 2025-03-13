@@ -280,14 +280,14 @@ fun SearchPhotographerScreen(
                     is SearchPhotographerSideEffect.NavigateToPrev -> {
                         mainNavController.popBackStack()
                     }
-                }
-                is SearchPhotographerSideEffect.RequestLocationPermission -> {
-                    launcher.launch(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    is SearchPhotographerSideEffect.RequestLocationPermission -> {
+                        launcher.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
