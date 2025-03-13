@@ -5,6 +5,7 @@ import androidx.compose.ui.geometry.Offset
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.hypot
 import kotlin.math.sqrt
 
 @Singleton
@@ -41,6 +42,6 @@ class DisplayMetricsUtil @Inject constructor(
     fun calculateScreenDistance(point1: Offset, point2: Offset): Float {
         val dx = point1.x - point2.x
         val dy = point1.y - point2.y
-        return sqrt(dx * dx + dy * dy)
+        return hypot(dx, dy)
     }
 }
