@@ -27,52 +27,41 @@ class LocationService @Inject constructor(
 
         // 권한 체크
         if (!PermissionUtil.hasLocationPermissions(context)) {
-            // 권한 없을 경우 콜백 함수 호출 후 return
             onPermissionDenied()
             return
         }
 
+        val gpsProvider = LocationManager.GPS_PROVIDER
+        val networkProvider = LocationManager.NETWORK_PROVIDER
+
+        if (locationManager!!.isProviderEnabled(gpsProvider)) {
+            requestLocationUpdates(gpsProvider, onLocationReceived, onPermissionDenied)
+        } else if (locationManager!!.isProviderEnabled(networkProvider)) {
+            requestLocationUpdates(networkProvider, onLocationReceived, onPermissionDenied)
+        }
+    }
+
+    private fun requestLocationUpdates(
+        provider: String,
+        onLocationReceived: (LatLng) -> Unit,
+        onPermissionDenied: () -> Unit
+    ) {
         try {
-            val gpsProvider = LocationManager.GPS_PROVIDER
-            val networkProvider = LocationManager.NETWORK_PROVIDER
-
-            // GPS 제공자 사용 시도
-            if (locationManager!!.isProviderEnabled(gpsProvider)) {
-                val locationListener = LocationListener { location ->
-                    onLocationReceived(LatLng.from(location.latitude, location.longitude))
-                }
-                locationListeners.add(locationListener)
-
-                locationManager!!.requestLocationUpdates(
-                    gpsProvider,
-                    1000L,
-                    1.0f,
-                    locationListener
-                )
-
-                val lastGpsLocation = locationManager?.getLastKnownLocation(gpsProvider)
-                if (lastGpsLocation != null) {
-                    onLocationReceived(LatLng.from(lastGpsLocation.latitude, lastGpsLocation.longitude))
-                }
+            val locationListener = LocationListener { location ->
+                onLocationReceived(LatLng.from(location.latitude, location.longitude))
             }
-            // 네트워크 제공자 사용 시도
-            else if (locationManager!!.isProviderEnabled(networkProvider)) {
-                val locationListener = LocationListener { location ->
-                    onLocationReceived(LatLng.from(location.latitude, location.longitude))
-                }
-                locationListeners.add(locationListener)
+            locationListeners.add(locationListener)
 
-                locationManager!!.requestLocationUpdates(
-                    networkProvider,
-                    1000L,
-                    1.0f,
-                    locationListener
-                )
+            locationManager!!.requestLocationUpdates(
+                provider,
+                1000L,
+                1.0f,
+                locationListener
+            )
 
-                val lastNetworkLocation = locationManager?.getLastKnownLocation(networkProvider)
-                if (lastNetworkLocation != null) {
-                    onLocationReceived(LatLng.from(lastNetworkLocation.latitude, lastNetworkLocation.longitude))
-                }
+            val lastLocation = locationManager?.getLastKnownLocation(provider)
+            if (lastLocation != null) {
+                onLocationReceived(LatLng.from(lastLocation.latitude, lastLocation.longitude))
             }
         } catch (securityException: SecurityException) {
             onPermissionDenied()
