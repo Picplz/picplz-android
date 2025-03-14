@@ -106,9 +106,9 @@ private suspend fun animatePageScroll(
 
     // 페이지 이동 범위(오름차순/내림차순)
     val range = if (direction == 1) {
-        currentPage + 1..targetPage
+        currentPage until targetPage
     } else {
-        currentPage - 1 downTo targetPage
+        currentPage downTo targetPage + 1
     }
 
     // 페이지를 순차적으로 애니메이션
