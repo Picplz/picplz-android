@@ -23,7 +23,10 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotographerPortfolio
+import com.hm.picplz.ui.screen.common.CommonDropdownMenu
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
+import com.hm.picplz.ui.screen.common.CommonIconButton
+import com.hm.picplz.ui.screen.common.DropdownMenuItemData
 import com.hm.picplz.ui.screen.detail_photographer.dummyPhotoPortfolio
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -41,7 +44,29 @@ fun SinglePortfolio(
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        Text(text = portfolio.title, style = MainFontFamily.titleMediumLarge)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = portfolio.title, style = MainFontFamily.titleMediumLarge)
+
+            CommonDropdownMenu(
+                triggerButton = {
+                    CommonIconButton(
+                        iconResId = R.drawable.menu_meatball,
+                        backgroundColor = MainThemeColor.Transparent,
+                        iconSize = 16.dp
+                    )
+                }, menuItems = listOf(
+                    DropdownMenuItemData("편집하기", MainThemeColor.Gray5),
+                    DropdownMenuItemData("대표이미지 수정", MainThemeColor.Gray5),
+                    DropdownMenuItemData("삭제하기", MainThemeColor.Red),
+                )
+            )
+
+        }
+
 
         Spacer(modifier = Modifier.height(6.dp))
 

@@ -55,7 +55,7 @@ fun DetailPhotographerScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                CommonFixedTopBar {
+                CommonFixedTopBar(title = "") {
                     viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 

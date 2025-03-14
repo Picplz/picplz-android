@@ -3,7 +3,6 @@ package com.hm.picplz.ui.screen.detail_photographer
 import CommonChip
 import android.os.Bundle
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,9 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,23 +30,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.ui.screen.common.CommonDropdownMenu
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.DropdownMenuItemData
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -90,15 +85,8 @@ fun DetailPhotographerReviewScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                        .zIndex(1f)
-                        .height(56.dp)
-                ) {
-                    CommonTopBar(
-                        text = "리뷰",
-                        onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                CommonFixedTopBar(title = "리뷰") {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
@@ -239,43 +227,27 @@ fun DetailPhotographerReviewScreen(
                         Spacer(modifier = Modifier.height(14.dp))
 
                         // 추천순 / 최신순
-                        // TODO: 드롭다운 메뉴 컴포넌트화 하기
-                        Box {
-                            CommonIconButton(label = selectedLabel,
-                                backgroundColor = Color.Transparent,
-                                textColor = MainThemeColor.Gray5,
-                                textStyle = pretendardTypography.bodySmall,
-                                iconResId = R.drawable.arrow_down,
-                                location = "right",
-                                horizontalPadding = 0.dp,
-                                verticalPadding = 0.dp,
-                                gap = 4.dp,
-                                onClick = { expanded = !expanded })
-
-                            DropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                                offset = DpOffset(0.dp, 5.dp),
-                                modifier = Modifier.background(MainThemeColor.White)
-
-                            ) {
-                                Column {
-                                    DropdownMenuItem(text = { Text("추천순") }, onClick = {
-                                        selectedLabel = "추천순" // 선택한 값으로 변경
-                                        expanded = false
-                                    })
-                                    Divider(
-                                        color = MainThemeColor.Gray2,
-                                        thickness = 1.dp,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    DropdownMenuItem(text = { Text("최신순") }, onClick = {
-                                        selectedLabel = "최신순" // 선택한 값으로 변경
-                                        expanded = false
-                                    })
-                                }
-                            }
-                        }
+                        CommonDropdownMenu(
+                            initialSelectedText = "최신순",
+                            triggerButton = { label ->
+                                CommonIconButton(
+                                    label = label,
+                                    backgroundColor = MainThemeColor.Transparent,
+                                    textColor = MainThemeColor.Gray5,
+                                    textStyle = pretendardTypography.bodySmall,
+                                    iconResId = R.drawable.arrow_down,
+                                    location = "right",
+                                    horizontalPadding = 0.dp,
+                                    verticalPadding = 0.dp,
+                                    gap = 4.dp,
+                                    borderRadius = 10.dp
+                                )
+                            },
+                            menuItems = listOf(
+                                DropdownMenuItemData("추천순", MainThemeColor.Gray5, itemOnClick = {}),
+                                DropdownMenuItemData("최신순", MainThemeColor.Gray5),
+                            )
+                        )
 
                         // 리스트 형식 (싱글 리뷰)
                         reviews.forEach { item ->

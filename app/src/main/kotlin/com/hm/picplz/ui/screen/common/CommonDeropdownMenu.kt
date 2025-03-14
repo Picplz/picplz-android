@@ -11,6 +11,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,13 +37,13 @@ data class DropdownMenuItemData(
 
 @Composable
 fun CommonDropdownMenu(
-    initialSelectedText: String, // 초기 노출 텍스트
+    initialSelectedText: String? = null, // 초기 노출 텍스트, 없을 경우 null
     triggerButton: @Composable (String) -> Unit, // triggerButton에서 selectedText를 받아서 표시
     menuItems: List<DropdownMenuItemData> // 아이템 리스트
 ) {
     // 상태 값과 상태 변경 함수
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(initialSelectedText) } // 선택된 텍스트를 저장할 상태
+    var selectedText by remember { mutableStateOf(initialSelectedText ?: "") } // 선택된 텍스트를 저장할 상태
 
     Box {
         // 트리거 콘텐츠 클릭 시 드롭다운 메뉴 열기
@@ -59,7 +60,10 @@ fun CommonDropdownMenu(
         }
 
         MaterialTheme(
-            shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(20.dp))
+            shapes = MaterialTheme.shapes.copy(
+                extraSmall = RoundedCornerShape(15.dp)
+            ),
+            colorScheme = lightColorScheme()
         ) {
             DropdownMenu(
                 expanded = expanded,
@@ -77,7 +81,12 @@ fun CommonDropdownMenu(
                     }, onClick = {
                         item.itemOnClick() // 클릭 시 지정된 이벤트 실행
 
-                        selectedText = item.text // 선택된 텍스트로 텍스트 변경
+                        // initialSelectedText가 null이 아닐 경우에만 업데이트
+                        if (initialSelectedText != null) {
+                            selectedText = item.text // 선택된 텍스트로 텍스트 변경
+                        }
+
+                        // TODO: 아이템 선택 시 드롭다운 메뉴가 너무 빨리 사라짐(부자연스러움)
                         expanded = false // 드롭다운 닫기
                     })
 
