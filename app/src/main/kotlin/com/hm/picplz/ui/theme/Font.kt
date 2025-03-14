@@ -144,4 +144,11 @@ object MainFontFamily {
         lineHeight = 12.sp * 1.4,
         letterSpacing = 0.sp
     )
+    val titleMediumLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        lineHeight = 22.sp * 1.4,
+        letterSpacing = 0.sp
+    )
 }

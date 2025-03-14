@@ -86,7 +86,7 @@ fun CommonFixedTopBar(
         modifier = Modifier
             .background(MainThemeColor.White)
             .zIndex(1f)
-            .height(56.dp)
+            .height(44.dp)
     ) {
         CommonTopBar(
             text = title,

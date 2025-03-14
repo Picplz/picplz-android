@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,8 +49,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.navigation.navigateWithBundle
-import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
+import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -218,12 +219,12 @@ fun DetailPhotographerReviewScreen(
                         }
                     }
 
-                    Divider(
-                        color = MainThemeColor.Gray2,
-                        thickness = 10.dp,
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 20.dp)
+                            .padding(vertical = 20.dp),
+                        thickness = 10.dp,
+                        color = MainThemeColor.Gray2
                     )
 
                     Column(modifier = paddingModifier) {
