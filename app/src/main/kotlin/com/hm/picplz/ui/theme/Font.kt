@@ -137,6 +137,7 @@ val buttonText = TextStyle(
 )
 
 object MainFontFamily {
+    // 캡션
     val caption = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Normal,
@@ -149,6 +150,15 @@ object MainFontFamily {
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
         lineHeight = 22.sp * 1.4,
+        letterSpacing = 0.sp
+    )
+
+    // 큰 본문
+    val bodyLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 16.sp * 1.4,
         letterSpacing = 0.sp
     )
 }
