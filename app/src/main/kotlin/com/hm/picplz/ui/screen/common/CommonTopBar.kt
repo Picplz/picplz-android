@@ -79,7 +79,7 @@ fun CommonTopBar(
 
 @Composable
 fun CommonFixedTopBar(
-    title: String = "",
+    title: String,
     onClickBack: () -> Unit
 ) {
     Box(

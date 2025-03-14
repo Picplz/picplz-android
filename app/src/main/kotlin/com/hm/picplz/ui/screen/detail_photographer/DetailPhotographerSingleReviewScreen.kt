@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.data.model.PhotoReview
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.utils.SingleReviewType
@@ -119,19 +119,13 @@ fun DetailPhotographerSingleReviewScreen(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .background(MainThemeColor.White)
-                            .zIndex(1f)
-                            .height(56.dp)
-                    ) {
-                        CommonTopBar(text = "${currentPhotoIndex + 1} / ${singleReview.photoReviewCount}",
-                            onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                    CommonFixedTopBar(title = "${currentPhotoIndex + 1} / ${singleReview.photoReviewCount}") {
+                        viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                     }
 
                     Column(modifier = paddingModifier.fillMaxSize()) {
                         SingleReview(
-                            navController=navController,
+                            navController = navController,
                             review = singleReview,
                             type = SingleReviewType.DETAIL,
                             photoIndex = currentPhotoIndex

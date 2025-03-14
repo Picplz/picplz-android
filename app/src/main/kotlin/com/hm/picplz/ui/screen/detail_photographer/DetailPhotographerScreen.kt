@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,12 +16,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
@@ -57,16 +55,8 @@ fun DetailPhotographerScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                        .zIndex(1f)
-                        .height(56.dp)
-                ) {
-                    CommonTopBar(
-                        text = "",
-                        onClickBack = { navController.popBackStack() }
-                    )
+                CommonFixedTopBar {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(

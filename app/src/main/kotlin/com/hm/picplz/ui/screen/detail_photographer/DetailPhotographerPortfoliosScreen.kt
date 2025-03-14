@@ -49,8 +49,9 @@ fun DetailPhotographerPortfoliosScreen(
                         .padding(innerPadding)
                         .fillMaxWidth()
                 ) {
-                    CommonFixedTopBar(
-                        onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                    CommonFixedTopBar(title = "") {
+                        viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
+                    }
 
                     PortfolioList(portfolios, navController, portfolioId, photoIndex, listState)
                 }

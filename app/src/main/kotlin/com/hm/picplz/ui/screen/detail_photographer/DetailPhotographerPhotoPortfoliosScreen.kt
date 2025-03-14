@@ -3,16 +3,13 @@ package com.hm.picplz.ui.screen.detail_photographer
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,14 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotoPortfolio
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -62,15 +58,8 @@ fun DetailPhotographerPhotoPortfoliosScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                        .zIndex(1f)
-                        .height(56.dp)
-                ) {
-                    CommonTopBar(
-                        text = "포트폴리오",
-                        onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                CommonFixedTopBar(title = "포트폴리오") {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
