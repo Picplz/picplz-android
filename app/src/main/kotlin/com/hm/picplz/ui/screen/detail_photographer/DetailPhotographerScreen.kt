@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +25,7 @@ import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun DetailPhotographerScreen(
@@ -95,6 +97,18 @@ fun DetailPhotographerScreen(
                 }
             }
         })
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is DetailPhotographerSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+
+                else -> {}
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
