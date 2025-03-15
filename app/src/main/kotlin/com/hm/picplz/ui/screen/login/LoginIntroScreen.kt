@@ -85,6 +85,7 @@ fun LoginIntroScreen(
                         viewModel.handleIntent(LoginIntent.NavigateToKaKao)
                     }
                 },
+                isIndicatorPositionAbsolute = true,
                 indicatorTopSpacing = imageHeight + 122.dp
             )
         }

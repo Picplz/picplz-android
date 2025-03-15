@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,39 +26,83 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.launch
 
 object PagerConfig {
-    const val BASE_DURATION = 150 // 페이지 전환 기본 시간
+    const val BASE_DURATION = 200 // 페이지 전환 기본 시간
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> CommonHorizontalPager(
+    modifier: Modifier = Modifier,
     items: List<T>, // 표시할 아이템 리스트
     pageCount: Int, // 전체 아이템 개수
     initialPage: Int = 0, // 처음 표시할 인덱스
     showIndicator: Boolean = false,  // Indicator 표시 여부
-    itemContent: @Composable (T) -> Unit // 각 페이지의 UI를 구성하는 Composable 함수
+    isIndicatorPositionAbsolute: Boolean = false, // Indicator의 위치를 절대적으로 할 것인지, 상대적으로 할 것인지
+    /*
+    * Indicator 상단 여백을 정의하는 값(dp)
+    * - "상대적 위치"일 경우: HorizontalPager 아래에 위채, 해당 값을 기준으로 상단 여백이 적용됨
+    * - "절대적 위치"일 경우: 화면 상단에서부터의 여백을 기준으로 Indicator가 고정 위치로 표시됨
+    * */
+    indicatorTopSpacing: Dp = 10.dp,
+    itemContent: @Composable (T) -> Unit, // 각 페이지의 UI를 구성하는 Composable 함수
 ) {
     val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 
-    Column {
+    Column(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            userScrollEnabled = pageCount > 1 // 아이템이 한개 이상일 때만 스크롤 활성화 
+            userScrollEnabled = pageCount > 1 // 아이템이 한개 이상일 때만 스크롤 활성화
         ) { page ->
             itemContent(items[page])
         }
 
-        // Indicator 표시하는 경우 추가
-        if (showIndicator) {
-            Spacer(modifier = Modifier.height(10.dp))
-            CommonHorizontalPagerIndicator(pagerState = pagerState)
+        if (showIndicator && !isIndicatorPositionAbsolute) {
+            CommonHorizontalPagerWithRelativeIndicator(
+                pagerState = pagerState,
+                indicatorTopSpacing = indicatorTopSpacing
+            )
         }
+    }
+
+    if (showIndicator && isIndicatorPositionAbsolute) {
+        CommonHorizontalPagerWithAbsoluteIndicator(
+            pagerState = pagerState,
+            indicatorTopSpacing = indicatorTopSpacing
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CommonHorizontalPagerWithRelativeIndicator(
+    pagerState: PagerState,
+    indicatorTopSpacing: Dp,
+) {
+    Spacer(modifier = Modifier.height(indicatorTopSpacing))
+    CommonHorizontalPagerIndicator(pagerState = pagerState)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CommonHorizontalPagerWithAbsoluteIndicator(
+    pagerState: PagerState,
+    indicatorTopSpacing: Dp,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f)
+            .padding(top = indicatorTopSpacing)
+    ) {
+        CommonHorizontalPagerIndicator(pagerState = pagerState)
     }
 }
 
