@@ -1,6 +1,5 @@
 package com.hm.picplz.navigation
 
-import LoginScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScree
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
 import com.hm.picplz.ui.screen.feed.FeedScreen
+import com.hm.picplz.ui.screen.login.LoginIntroScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.ReservationScreen
@@ -45,7 +45,8 @@ fun MainNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        composable("login") { LoginScreen(navController = navController) }
+        composable("login") { LoginIntroScreen(navController = navController) }
+//        composable("login") { DetailPhotographerScreen(navController = navController) }
         composable("main") { MainScreen(navController = navController) }
         composable("sign-up") { SignUpScreen(mainNavController = navController) }
         composable("sign-up-client") { backStackEntry ->

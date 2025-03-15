@@ -152,6 +152,13 @@ object MainFontFamily {
         lineHeight = 22.sp * 1.4,
         letterSpacing = 0.sp
     )
+    val titleLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 24.sp * 1.4,
+        letterSpacing = 0.0.sp
+    )
 
     // 큰 본문
     val bodyLarge = TextStyle(
