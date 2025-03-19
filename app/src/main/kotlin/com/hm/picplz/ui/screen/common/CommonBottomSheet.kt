@@ -62,6 +62,11 @@ fun CommonBottomSheetScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = 1.dp)
+                    .heightIn(
+                        min = sheetMinHeight ?: 0.dp,
+                        max = (sheetMaxHeight ?: Dp.Infinity)
+                    )
+                    .padding(bottom = if (navigationBarPadding) totalBottomPadding else 0.dp)
                     .clip(sheetShape),
                 color = MainThemeColor.White
             ) {
@@ -81,17 +86,7 @@ fun CommonBottomSheetScaffold(
                 }
                 Column(
                     modifier = Modifier
-                        .padding(
-                            start = 16.dp,
-                            top = 16.dp,
-                            end = 16.dp,
-                            bottom = 16.dp + if (navigationBarPadding) totalBottomPadding else 0.dp
-                        )
-                        .heightIn(
-                            min = sheetMinHeight ?: 0.dp,
-                            max = (sheetMaxHeight ?: Dp.Infinity) +
-                                    if (navigationBarPadding) totalBottomPadding else 0.dp
-                        )
+                        .padding(16.dp)
                 ) {
                     sheetContent()
                 }
