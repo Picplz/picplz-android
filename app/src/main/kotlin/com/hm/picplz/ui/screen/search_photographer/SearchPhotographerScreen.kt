@@ -148,7 +148,8 @@ fun SearchPhotographerScreen(
             },
             scaffoldState = scaffoldState,
             sheetPeekHeight = currentState.sheetPeekHeight,
-            sheetMaxHeight = currentState.sheetMaxHeight
+            sheetMaxHeight = currentState.sheetMaxHeight,
+            navigationBarPadding = true,
         ) {
             Column(
                 modifier = modifier
