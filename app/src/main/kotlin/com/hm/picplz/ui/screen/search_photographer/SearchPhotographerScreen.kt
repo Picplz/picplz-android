@@ -55,11 +55,11 @@ import com.hm.picplz.viewmodel.SearchPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.hm.picplz.R
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
-import com.hm.picplz.ui.screen.search_photographer.composable.AddressMarker
+import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerSheet
-import com.hm.picplz.ui.screen.search_photographer.composable.RefetchButton
+import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.utils.LocationUtil.getDistance
 import com.kakao.vectormap.LatLng
 import kotlinx.coroutines.launch
