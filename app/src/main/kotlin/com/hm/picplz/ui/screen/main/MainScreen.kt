@@ -38,6 +38,9 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
             Button(onClick = { navController.navigate("detail-photographer") }) {
                 Text(text = "작사 상세 페이지 테스트 버튼")
             }
+            Button(onClick = { navController.navigate("photographer-main") }) {
+                Text(text = "작가 메인 페이지 테스트 버튼")
+            }
         }
     }
 }
