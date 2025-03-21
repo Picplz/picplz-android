@@ -49,7 +49,7 @@ fun CommonToggleSwitch(
     uncheckedTrackColor: Color = Color(0xFFE0E0E0),
     uncheckedBorderColor: Color = MainThemeColor.Gray2,
     borderWidth: Dp = 1.dp,
-    thumbColor: Color = Color.White,
+    thumbColor: Color = MainThemeColor.White,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val width = 60.dp

@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,12 +21,13 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
@@ -32,17 +35,19 @@ import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.Equipment
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonToggleSwitch
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentListItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.viewmodel.PhotographerMainViewModel
 
 @Composable
 fun PhotographerMainScreen(
     modifier: Modifier = Modifier,
+    viewModel: PhotographerMainViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    val currentState = viewModel.state.collectAsState().value
 
     val equipmentList = listOf(
         Equipment("내 폰", "아이폰 16 Pro Max", true),
@@ -67,7 +72,9 @@ fun PhotographerMainScreen(
         ) {
             Box (
                 Modifier
-                    .background(color = MainThemeColor.Gray1)
+                    .background(
+                        color = if (currentState.isActive) MainThemeColor.Green100 else MainThemeColor.Gray1
+                    )
             ){
                 Row(
                     modifier = Modifier
@@ -90,20 +97,47 @@ fun PhotographerMainScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.double_circle),
+                        painter = painterResource(
+                            if (currentState.isActive) R.drawable.double_circle_active else R.drawable.double_circle_inactive
+                        ),
                         contentDescription = "범위 이미지",
                         modifier = Modifier
                     )
                     Image(
-                        painter = painterResource(R.drawable.searching_photographer),
+                        painter = painterResource(
+                            if (currentState.isActive) R.drawable.searching_photographer_active else R.drawable.searching_photographer_inactive
+                        ),
                         contentDescription = "작가 캐릭터",
                     )
+                    if (currentState.isActive) {
+                        Image(
+                            modifier = Modifier
+                                .offset(x = (-85).dp, y = (-85).dp)
+                                .size(75.dp),
+                            painter = painterResource(R.drawable.flash),
+                            contentDescription = "플래시 이미지",
+                        )
+                        Image(
+                            modifier = Modifier
+                                .offset(x = 88.dp, y = 88.dp)
+                                .size(55.dp),
+                            painter = painterResource(R.drawable.flash),
+                            contentDescription = "플래시 이미지",
+                        )
+                        Image(
+                            modifier = Modifier
+                                .offset(x = 120.dp, y = 42.dp)
+                                .size(37.dp),
+                            painter = painterResource(R.drawable.flash),
+                            contentDescription = "플래시 이미지",
+                        )
+                    }
                 }
             }
             Column(
                 modifier = Modifier
                     .padding(
-                        vertical = 5.dp,
+                        vertical = 10.dp,
                         horizontal = 15.dp
                     )
                     .fillMaxHeight()
@@ -138,11 +172,16 @@ fun PhotographerMainScreen(
                             equipmentType = equipment.type,
                             deviceName = equipment.deviceName,
                             isEnabled = equipment.isEnabled,
-                            onEnabledChanged = {}
+                            onEnabledChanged = {},
+                            isPhotographerActive = currentState.isActive,
                         )
                     }
                 }
-                CommonBottomButton(text = "바로 촬영 시작", onClick = { /*TODO*/ })
+                CommonBottomButton(
+                    text = if (currentState.isActive) "바로 촬영 끄기 " else "바로 촬영 시작",
+                    onClick = {},
+                    containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
+                )
             }
         }
     }
