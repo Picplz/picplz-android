@@ -24,7 +24,8 @@ fun EquipmentListItem(
     equipmentType: String,
     deviceName: String,
     isEnabled: Boolean = true,
-    onEnabledChanged: (Boolean) -> Unit = {}
+    onEnabledChanged: (Boolean) -> Unit = {},
+    isPhotographerActive: Boolean = false,
 ) {
     Row(
         modifier = modifier
@@ -54,7 +55,9 @@ fun EquipmentListItem(
 
         CommonToggleSwitch(
             checked = isEnabled,
-            onCheckedChange = onEnabledChanged
+            onCheckedChange = onEnabledChanged,
+            checkedTrackColor = if (isPhotographerActive) MainThemeColor.Green100 else MainThemeColor.Green120,
+            thumbColor = if (isPhotographerActive) MainThemeColor.Gray2 else MainThemeColor.White,
         )
     }
 }
@@ -66,6 +69,7 @@ fun EquipmentListItemPreview() {
     PicplzTheme {
         EquipmentListItem(
             equipmentType = "내 폰",
-            deviceName = "아이폰 16",        )
+            deviceName = "아이폰 16",
+        )
     }
 }
