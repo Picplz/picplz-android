@@ -20,6 +20,7 @@ import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.ReservationScreen
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
@@ -109,6 +110,10 @@ fun MainNavHost(
 
         composable("mypage") {
             MyPageScreen(navController = navController)
+        }
+
+        composable("photographer-main") {
+            PhotographerMainScreen(navController = navController)
         }
 
         composable("detail-photographer") {
