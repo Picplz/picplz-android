@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -23,9 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hm.picplz.ui.theme.LocalNavigationHeight
 import com.hm.picplz.ui.theme.MainThemeColor
 
 
@@ -42,9 +43,15 @@ fun CommonBottomSheetScaffold(
     sheetMaxHeight: Dp? = Dp.Infinity,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val navigationBarHeight = with(LocalDensity.current) {
-        WindowInsets.navigationBars.getBottom(this).toDp()
-    }
+    val systemNavBarHeight = WindowInsets.navigationBars
+        .asPaddingValues()
+        .calculateBottomPadding()
+
+    val appBottomNavHeight = LocalNavigationHeight.current
+
+    val totalBottomPadding = systemNavBarHeight +
+            (if (navigationBarPadding) appBottomNavHeight else 0.dp)
+
     BottomSheetScaffold(
         modifier = modifier
             .safeDrawingPadding(),
@@ -55,6 +62,11 @@ fun CommonBottomSheetScaffold(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = 1.dp)
+                    .heightIn(
+                        min = sheetMinHeight ?: 0.dp,
+                        max = (sheetMaxHeight ?: Dp.Infinity)
+                    )
+                    .padding(bottom = if (navigationBarPadding) totalBottomPadding else 0.dp)
                     .clip(sheetShape),
                 color = MainThemeColor.White
             ) {
@@ -75,18 +87,13 @@ fun CommonBottomSheetScaffold(
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .heightIn(
-                            min = sheetMinHeight ?: 0.dp,
-                            max = sheetMaxHeight ?: Dp.Infinity
-                        )
                 ) {
                     sheetContent()
                 }
             }
-
         },
         sheetPeekHeight = sheetPeekHeight
-            ?: (30.dp + if (navigationBarPadding) navigationBarHeight else 0.dp),
+            ?: (30.dp + if (navigationBarPadding) totalBottomPadding else 0.dp),
         sheetShape = sheetShape,
         sheetDragHandle = null,
         content = content,

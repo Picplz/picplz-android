@@ -2,7 +2,6 @@ package com.hm.picplz.ui.screen.search_photographer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -44,10 +43,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
@@ -56,7 +55,6 @@ import com.hm.picplz.viewmodel.SearchPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.hm.picplz.R
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
-import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
 import com.hm.picplz.ui.screen.search_photographer.composable.AddressMarker
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerProfile
@@ -64,7 +62,6 @@ import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.RefetchButton
 import com.hm.picplz.utils.LocationUtil.getDistance
 import com.kakao.vectormap.LatLng
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,6 +133,19 @@ fun SearchPhotographerScreen(
         }
     }
 
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val topMargin = 60.dp
+
+    val calculatedSheetMaxHeight = if (currentState.selectedPhotographerId === null) {
+        screenHeight - topMargin
+    } else {
+        screenHeight
+    }
+
+    LaunchedEffect(calculatedSheetMaxHeight, currentState.selectedPhotographerId) {
+        viewModel.handleIntent(SearchPhotographerIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
+    }
+
     Scaffold(bottomBar = { BottomNavigationBar(navController = mainNavController) }) {
         CommonBottomSheetScaffold(
             modifier = Modifier.fillMaxSize(),
@@ -148,7 +158,8 @@ fun SearchPhotographerScreen(
             },
             scaffoldState = scaffoldState,
             sheetPeekHeight = currentState.sheetPeekHeight,
-            sheetMaxHeight = currentState.sheetMaxHeight
+            sheetMaxHeight = currentState.sheetMaxHeight,
+            navigationBarPadding = true,
         ) {
             Column(
                 modifier = modifier

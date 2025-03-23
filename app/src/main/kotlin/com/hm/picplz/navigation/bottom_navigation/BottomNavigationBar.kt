@@ -14,6 +14,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hm.picplz.data.model.UserType
+import com.hm.picplz.ui.theme.LocalNavigationHeight
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
@@ -51,20 +53,26 @@ fun BottomNavigationBar(navController: NavHostController, userType: UserType = U
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    NavigationBar(
-        containerColor = MainThemeColor.White, // backgroundColor -> containerColor
-        contentColor = MainThemeColor.Black,
-        modifier = Modifier
-            .height(84.dp)
-            .shadow(
-                elevation = 12.dp,
-                shape = RoundedCornerShape(0.dp),
-            )
+    val navBarHeight = 84.dp
+
+    CompositionLocalProvider(
+        LocalNavigationHeight provides navBarHeight
     ) {
-        items.forEach { item ->
-            AddItem(
-                item = item, currentDestination = currentDestination, navController = navController
-            )
+        NavigationBar(
+            containerColor = MainThemeColor.White, // backgroundColor -> containerColor
+            contentColor = MainThemeColor.Black,
+            modifier = Modifier
+                .height(navBarHeight)
+                .shadow(
+                    elevation = 12.dp,
+                    shape = RoundedCornerShape(0.dp),
+                )
+        ) {
+            items.forEach { item ->
+                AddItem(
+                    item = item, currentDestination = currentDestination, navController = navController
+                )
+            }
         }
     }
 }

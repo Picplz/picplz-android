@@ -16,12 +16,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,6 +63,17 @@ fun PhotographerListSheet(
     mainNavController: NavHostController
 ) {
     val currentState = viewModel.state.collectAsState().value
+
+    val listState = rememberLazyListState()
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val isAtTop = listState.firstVisibleItemIndex == 0 &&
+                        (listState.firstVisibleItemScrollOffset == 0)
+                return if (available.y > 0 && isAtTop) available else Offset.Zero
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -104,6 +121,8 @@ fun PhotographerListSheet(
         }
         Spacer(modifier = Modifier.height(10.dp))
         LazyColumn(
+            state = listState,
+            modifier = Modifier.nestedScroll(nestedScrollConnection),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             currentState.nearbyPhotographers.let { photographers ->
