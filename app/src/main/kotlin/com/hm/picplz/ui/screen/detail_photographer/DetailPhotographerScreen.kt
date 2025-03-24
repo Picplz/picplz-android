@@ -22,6 +22,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
+import com.hm.picplz.ui.screen.detail_photographer.main.DetailProfileSection
+import com.hm.picplz.ui.screen.detail_photographer.main.PhotoPriceSection
+import com.hm.picplz.ui.screen.detail_photographer.main.PortfolioSection
+import com.hm.picplz.ui.screen.detail_photographer.main.ReviewSection
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.detail_photographer
+package com.hm.picplz.ui.screen.detail_photographer.main
 
 import android.os.Bundle
 import androidx.compose.foundation.Image
