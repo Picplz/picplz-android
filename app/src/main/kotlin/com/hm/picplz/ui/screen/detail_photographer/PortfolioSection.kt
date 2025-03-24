@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
+import com.hm.picplz.data.model.PhotoPortfolio
+import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
@@ -29,7 +32,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun PortfolioSection(
     modifier: Modifier,
     navController: NavController,
-    portfolioPhotos: List<String>
+    photoPortfolios: List<PhotoPortfolio>
 ) {
     Column {
         // 포트폴리오
@@ -40,7 +43,7 @@ fun PortfolioSection(
         )
 
         // 3열의 고정 그리드를 직접 구성
-        val chunkedImages = portfolioPhotos.take(9).chunked(3) // 3개씩 나눔, 최대 9개
+        val chunkedImages = photoPortfolios.take(9).chunked(3) // 3개씩 나눔, 최대 9개
 
         Column(
             modifier = modifier
@@ -51,7 +54,7 @@ fun PortfolioSection(
                 Row(modifier = Modifier.fillMaxWidth()) {
                     rowImages.forEach { imageRes ->
                         Image(
-                            painter = rememberAsyncImagePainter(model = imageRes),
+                            painter = rememberAsyncImagePainter(model = imageRes.photoPortfolioUri),
                             contentDescription = "포트폴리오 이미지",
                             modifier = Modifier
                                 .weight(1f) // 각 이미지가 동일한 크기를 가짐
@@ -85,7 +88,19 @@ fun PortfolioSection(
             horizontalPadding = 0.dp,
             verticalPadding = 0.dp,
             gap = 6.dp,
-            onClick = { navController.navigate("detail-photographer-photo-reviews") },
+            onClick = {
+                val bundle = Bundle().apply {
+                    putParcelableArrayList(
+                        "photo-portfolios",
+                        ArrayList(photoPortfolios)
+                    )
+                }
+
+                navController.navigateWithBundle(
+                    "detail-photographer-photo-portfolios",
+                    bundle
+                )
+            },
             modifier = modifier.align(Alignment.End)
         )
 

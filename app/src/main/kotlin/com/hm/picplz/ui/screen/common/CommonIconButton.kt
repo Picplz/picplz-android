@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.common
 
-import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,12 +41,16 @@ fun CommonIconButton(
     iconSize: Dp = 8.dp,
     location: String = "left",                // left || right
     gap: Dp = 4.dp,                           // 텍스트, 아이콘 사이의 간격
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
 ) {
+    val clickableModifier = onClick?.let {
+        Modifier.clickable { it() }
+    } ?: Modifier // onClick이 null일 경우 clickable modifier를 적용하지 않음
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(borderRadius))
-            .clickable { onClick() }
+            .then(clickableModifier)
             .background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {

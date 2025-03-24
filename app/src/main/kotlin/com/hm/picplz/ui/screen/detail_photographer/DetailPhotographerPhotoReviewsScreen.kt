@@ -3,7 +3,6 @@ package com.hm.picplz.ui.screen.detail_photographer
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,14 +25,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotoReview
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
@@ -53,9 +51,6 @@ fun DetailPhotographerPhotoReviewsScreen(
             PhotoReview::class.java
         )
 
-    // arguments 접근
-//    val images = navController.currentBackStackEntry?.arguments?.getStringArray("photo-reviews")
-
     val chunkedImages = photoReviews?.chunked(3) ?: emptyList() // 3개씩 나눔, null이면 빈 리스트 반환
 
     Scaffold(modifier = Modifier.fillMaxSize(),
@@ -66,15 +61,8 @@ fun DetailPhotographerPhotoReviewsScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                        .zIndex(1f)
-                        .height(56.dp)
-                ) {
-                    CommonTopBar(
-                        text = "사진 리뷰",
-                        onClickBack = { viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev) })
+                CommonFixedTopBar(title = "사진 리뷰") {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(

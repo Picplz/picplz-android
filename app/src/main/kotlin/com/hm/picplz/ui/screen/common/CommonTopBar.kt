@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.common
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.hm.picplz.R
+import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
 fun CommonTopBar(
@@ -71,5 +74,23 @@ fun CommonTopBar(
             }
             Spacer(modifier = Modifier.width(spacerWidth))
         }
+    }
+}
+
+@Composable
+fun CommonFixedTopBar(
+    title: String,
+    onClickBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .background(MainThemeColor.White)
+            .zIndex(1f)
+            .height(44.dp)
+    ) {
+        CommonTopBar(
+            text = title,
+            onClickBack = { onClickBack() }
+        )
     }
 }

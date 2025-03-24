@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,25 +9,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.DetailPhotographerViewModel
+import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPhotographerScreen(
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
@@ -39,7 +37,7 @@ fun DetailPhotographerScreen(
 
     val profileInfo = currentState.profileInfo
     val reviewSummary = currentState.reviewSummary
-    val portfolioPhotos = profileInfo.portfolioPhotos
+    val photoPortfolios = profileInfo.photoPortfolios
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -59,16 +57,8 @@ fun DetailPhotographerScreen(
                     .padding(innerPadding)
                     .fillMaxWidth()
             ) {
-                Box(
-                    modifier = Modifier
-                        .background(MainThemeColor.White) // 배경을 주어 내용이 비치지 않도록
-                        .zIndex(1f)
-                        .height(56.dp)
-                ) {
-                    CommonTopBar(
-                        text = "",
-                        onClickBack = { navController.popBackStack() }
-                    )
+                CommonFixedTopBar(title = "") {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
@@ -77,12 +67,12 @@ fun DetailPhotographerScreen(
                 ) {
                     DetailProfileSection(modifier = paddingModifier, profileInfo = profileInfo)
 
-                    Divider(
-                        color = MainThemeColor.Gray2,
-                        thickness = 10.dp,
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 20.dp)
+                            .padding(vertical = 20.dp),
+                        thickness = 10.dp,
+                        color = MainThemeColor.Gray2
                     )
 
                     ReviewSection(
@@ -96,7 +86,7 @@ fun DetailPhotographerScreen(
                     PortfolioSection(
                         modifier = paddingModifier,
                         navController = navController,
-                        portfolioPhotos = portfolioPhotos
+                        photoPortfolios = photoPortfolios
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))
@@ -107,6 +97,18 @@ fun DetailPhotographerScreen(
                 }
             }
         })
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is DetailPhotographerSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+
+                else -> {}
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
