@@ -41,3 +41,40 @@ data class KaKaoAddressResponse(
         val zone_no: String
     )
 }
+
+data class KaKaoPlaceRequest(
+    val query: String,
+)
+
+data class KaKaoPlaceResponse(
+    val meta: Meta,
+    val documents: List<Place>
+) {
+    data class Meta(
+        val total_count: Int,
+        val pageable_count: Int,
+        val is_end: Boolean,
+        val same_name: RegionInfo
+    )
+
+    data class RegionInfo(
+        val region: List<String>,
+        val keyword: String,
+        val selected_region: String,
+    )
+
+    data class Place(
+        val id: String,
+        val place_name: String,
+        val category_name: String,
+        val category_group_code: String,
+        val category_group_name: String,
+        val phone: String,
+        val address_name: String,
+        val road_address_name: String,
+        val x: String,
+        val y: String,
+        val place_url: String,
+        val distanc: String
+    )
+}
