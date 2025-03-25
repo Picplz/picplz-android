@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import java.time.LocalDate
 import java.time.YearMonth
@@ -103,7 +106,7 @@ fun <T> CommonScrollPicker(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xFFF5F6FA)),
+            .background(MainThemeColor.White),
         contentAlignment = Alignment.Center
     ) {
         // 하이라이트 박스 (선택 라인)
@@ -111,7 +114,7 @@ fun <T> CommonScrollPicker(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(PickerItemHeight)
-                .background(Color(0xFFE6E7EB))
+                .background(Color(0xFFF4F4F5), RoundedCornerShape(8.dp))
                 .zIndex(0f)
         )
 
@@ -183,6 +186,7 @@ fun <T> CommonPickerColumn(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateScrollPicker(
+    modifier: Modifier = Modifier,
     initialDate: LocalDate = LocalDate.now(),
     onDateSelected: (LocalDate) -> Unit
 ) {
@@ -228,12 +232,14 @@ fun DateScrollPicker(
             selectedYear = year
             selectedMonth = month
             onDateSelected(LocalDate.of(year, month, day))
-        }
+        },
+        modifier = modifier
     )
 }
 
 @Composable
 fun TimeScrollPicker(
+    modifier: Modifier = Modifier,
     initialHour24: Int = 14, // 24시간 형식
     initialMinute: Int = 30,
     onTimeSelected: (hour24: Int, minute: Int) -> Unit
@@ -280,15 +286,17 @@ fun TimeScrollPicker(
             }
 
             onTimeSelected(hour24, minute)
-        }
+        },
+        modifier = modifier
     )
 }
 
 @Composable
 fun SingleNumberScrollPicker(
+    modifier: Modifier = Modifier,
     numberRange: IntRange = 0..1000,
     initialNumber: Int,
-    onNumberSelected: (Int) -> Unit
+    onNumberSelected: (Int) -> Unit,
 ) {
     CommonScrollPicker(columns = listOf(
         PickerColumnConfig(
@@ -299,7 +307,9 @@ fun SingleNumberScrollPicker(
     ), onValuesSelected = { values ->
         val number = values.first() as Int
         onNumberSelected(number)
-    })
+    },
+        modifier = modifier
+    )
 
 }
 
@@ -342,6 +352,7 @@ fun SingleNumberScrollPickerPreview() {
         SingleNumberScrollPicker(
             numberRange = 0..50,
             initialNumber = count,
+            modifier = Modifier.padding(40.dp)
         ) {
             count = it
         }
