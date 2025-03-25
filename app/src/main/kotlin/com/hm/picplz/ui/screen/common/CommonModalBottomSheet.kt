@@ -61,6 +61,7 @@ import com.hm.picplz.utils.CommonUtil
 fun CommonModalBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
+    visible: Boolean = true,
     sheetState: SheetState = rememberModalBottomSheetState(),
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     shape: Shape = RoundedCornerShape(20.dp, 20.dp),
@@ -91,34 +92,36 @@ fun CommonModalBottomSheet(
         }
     }
 
-    ModalBottomSheet(
-        modifier = modifier.safeDrawingPadding(),
-        containerColor = containerColor,
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        sheetMaxWidth = sheetMaxWidth,
-        shape = shape,
-        tonalElevation = tonalElevation,
-        scrimColor = scrimColor,
-        dragHandle = dragHandle,
-        windowInsets = windowInsets,
-        properties = properties,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .nestedScroll(connection)
+    if (visible) {
+        ModalBottomSheet(
+            modifier = modifier.safeDrawingPadding(),
+            containerColor = containerColor,
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+            sheetMaxWidth = sheetMaxWidth,
+            shape = shape,
+            tonalElevation = tonalElevation,
+            scrimColor = scrimColor,
+            dragHandle = dragHandle,
+            windowInsets = windowInsets,
+            properties = properties,
         ) {
-            Column(
-                modifier = CommonUtil
-                    .paddingModifier
-                    .heightIn(
-                        min = sheetMinHeight ?: 0.dp,
-                        max = sheetMaxHeight ?: Dp.Infinity
-                    )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .nestedScroll(connection)
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                content()
+                Column(
+                    modifier = CommonUtil
+                        .paddingModifier
+                        .heightIn(
+                            min = sheetMinHeight ?: 0.dp,
+                            max = sheetMaxHeight ?: Dp.Infinity
+                        )
+                ) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    content()
+                }
             }
         }
     }
