@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -22,6 +23,7 @@ fun CommonBottomButton (
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    height: Dp = 60.dp,
     shape: RoundedCornerShape = RoundedCornerShape(5.dp),
     enabled: Boolean = true,
     containerColor: Color = MainThemeColor.Black,
@@ -33,7 +35,7 @@ fun CommonBottomButton (
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp),
+            .height(height),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,
