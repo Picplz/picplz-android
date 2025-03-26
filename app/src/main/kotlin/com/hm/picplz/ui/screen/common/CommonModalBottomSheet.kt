@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
@@ -62,7 +61,7 @@ fun CommonModalBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     visible: Boolean = true,
-    sheetState: SheetState = rememberModalBottomSheetState(),
+    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     shape: Shape = RoundedCornerShape(20.dp, 20.dp),
     containerColor: Color = MainThemeColor.White,
@@ -94,7 +93,7 @@ fun CommonModalBottomSheet(
 
     if (visible) {
         ModalBottomSheet(
-            modifier = modifier.safeDrawingPadding(),
+            modifier = modifier,
             containerColor = containerColor,
             onDismissRequest = onDismissRequest,
             sheetState = sheetState,
