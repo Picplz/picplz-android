@@ -56,8 +56,9 @@ import com.hm.picplz.ui.screen.login.LoginIntent
 import com.hm.picplz.ui.screen.login.LoginSideEffect
 import com.hm.picplz.ui.screen.login.LoginViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.button
 import com.hm.picplz.ui.theme.pretendardTypography
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -171,7 +172,7 @@ fun LoginScreen(
                                 Text(
                                     text = "카카오로 계속하기",
                                     modifier = Modifier.padding(vertical = 8.dp),
-                                    style = buttonText
+                                    style = MainTypography.button
                                 )
                             }
                         }
@@ -190,7 +191,7 @@ fun LoginScreen(
                         ) {
                             Text(
                                 text = "지도 기능 테스트",
-                                style = buttonText
+                                style = MainTypography.button
                             )
                         }
                     }

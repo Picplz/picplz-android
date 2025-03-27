@@ -21,7 +21,8 @@ import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.MainTypography
+import com.hm.picplz.ui.theme.button
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
 import com.hm.picplz.utils.StarType
@@ -45,7 +46,7 @@ fun ReviewSection(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "촬영 만족도", style = buttonText)
+        Text(text = "촬영 만족도", style = MainTypography.button)
         Spacer(modifier = Modifier.height(10.dp))
 
         // 별점 부분

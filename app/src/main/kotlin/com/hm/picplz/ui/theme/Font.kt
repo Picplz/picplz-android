@@ -26,7 +26,7 @@ val pretendardTypography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 16.sp * 1.4,
-        letterSpacing = 0.5.sp
+        letterSpacing = 0.5.sp,
     ),
     bodyMedium = TextStyle(
         fontFamily = Pretendard,
@@ -128,44 +128,91 @@ val pretendardTypography = Typography(
     )
 )
 
-val buttonText = TextStyle(
-    fontFamily = Pretendard,
-    fontWeight = FontWeight.Bold,
-    fontSize = 16.sp,
-    lineHeight = 16.sp * 1.4,
-    letterSpacing = 0.sp
-)
-
-object MainFontFamily {
-    // 캡션
-    val caption = TextStyle(
+val MainTypography = Typography(
+    displayLarge = Typography().displayLarge.copy(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 12.sp * 1.4,
-        letterSpacing = 0.sp
-    )
-    val titleMediumLarge = TextStyle(
+    ),
+    displayMedium = Typography().displayMedium.copy(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        lineHeight = 22.sp * 1.4,
-        letterSpacing = 0.sp
-    )
-    val titleLarge = TextStyle(
+        fontWeight = FontWeight.Normal,
+    ),
+    displaySmall = Typography().displaySmall.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+    ),
+
+    headlineLarge = Typography().headlineLarge.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+    ),
+    headlineMedium = Typography().headlineMedium.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+    ),
+    headlineSmall = Typography().headlineSmall.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+    ),
+
+    // 제목
+    titleLarge = Typography().titleLarge.copy(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        lineHeight = 24.sp * 1.4,
-        letterSpacing = 0.0.sp
-    )
+    ),
+    titleMedium = Typography().titleMedium.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+    ),
+    titleSmall = Typography().titleSmall.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+    ),
 
-    // 큰 본문
-    val bodyLarge = TextStyle(
+    // 본문
+    bodyLarge = Typography().bodyLarge.copy(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 16.sp * 1.4,
-        letterSpacing = 0.sp
+    ),
+    bodyMedium = Typography().bodyMedium.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+    ),
+    bodySmall = Typography().bodySmall.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+    ),
+
+    labelLarge = Typography().labelLarge.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+    ),
+    labelMedium = Typography().labelMedium.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+    ),
+    labelSmall = Typography().labelSmall.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+    ),
+)
+
+// 캡션
+val Typography.caption: TextStyle
+    get() = Typography().labelMedium.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
     )
-}
+
+// 버튼
+val Typography.button: TextStyle
+    get() = Typography().bodyLarge.copy(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+    )

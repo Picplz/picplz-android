@@ -33,8 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
-import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -144,7 +144,7 @@ fun LoginIntroPage(
 
         Text(
             text = page.text,
-            style = MainFontFamily.titleLarge,
+            style = MainTypography.titleLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

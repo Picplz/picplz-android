@@ -49,8 +49,9 @@ import com.hm.picplz.ui.screen.common.DropdownMenuItemData
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.button
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
 import com.hm.picplz.utils.StarType
@@ -95,7 +96,7 @@ fun DetailPhotographerReviewScreen(
                     Column(modifier = paddingModifier) {
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "촬영 만족도", style = buttonText)
+                            Text(text = "촬영 만족도", style = MainTypography.button)
                             Spacer(modifier = Modifier.width(4.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 starList.forEach { star ->
@@ -124,7 +125,7 @@ fun DetailPhotographerReviewScreen(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "리뷰", style = buttonText)
+                            Text(text = "리뷰", style = MainTypography.button)
                             Spacer(modifier = Modifier.width(4.dp)) // 텍스트 사이에 간격 추가
                             Text(text = reviewSummary.totalReviewCount.toString())
                         }

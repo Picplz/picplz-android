@@ -19,7 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.MainTypography
+import com.hm.picplz.ui.theme.button
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
@@ -27,7 +28,7 @@ fun PhotoPriceSection(modifier: Modifier) {
     // 촬영 가격
     Text(
         text = "촬영 가격",
-        style = buttonText,
+        style = MainTypography.button,
         modifier = modifier.fillMaxWidth()
     )
     var state by remember { mutableStateOf(0) }

@@ -24,7 +24,8 @@ import com.hm.picplz.data.model.PhotoPortfolio
 import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.MainTypography
+import com.hm.picplz.ui.theme.button
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +40,7 @@ fun PortfolioSection(
         Text(
             modifier = modifier.fillMaxWidth(),
             text = "포트폴리오",
-            style = buttonText
+            style = MainTypography.button
         )
 
         // 3열의 고정 그리드를 직접 구성

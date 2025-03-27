@@ -24,14 +24,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import com.hm.picplz.ui.theme.PicplzTheme
 
 data class DropdownMenuItemData(
     val text: String,
     val textColor: Color,
-    val textStyle: TextStyle = MainFontFamily.bodyLarge,
+    val textStyle: TextStyle = MainTypography.bodyLarge,
     val itemOnClick: () -> Unit = {}
 )
 

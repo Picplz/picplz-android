@@ -28,9 +28,10 @@ import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.common.DropdownMenuItemData
 import com.hm.picplz.ui.screen.detail_photographer.dummyPhotoPortfolio
-import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.theme.caption
 
 @Composable
 fun SinglePortfolio(
@@ -49,7 +50,7 @@ fun SinglePortfolio(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = portfolio.title, style = MainFontFamily.titleMediumLarge)
+            Text(text = portfolio.title, style = MainTypography.titleMedium)
 
             CommonDropdownMenu(
                 triggerButton = {
@@ -80,13 +81,13 @@ fun SinglePortfolio(
             )
             Text(
                 text = portfolio.location,
-                style = MainFontFamily.caption,
+                style = MainTypography.caption,
                 color = MainThemeColor.Gray3
             )
-            Text(text = "|", style = MainFontFamily.caption, color = MainThemeColor.Gray3)
+            Text(text = "|", style = MainTypography.caption, color = MainThemeColor.Gray3)
             Text(
                 text = portfolio.createdAt,
-                style = MainFontFamily.caption,
+                style = MainTypography.caption,
                 color = MainThemeColor.Gray3
             )
         }

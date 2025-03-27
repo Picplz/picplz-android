@@ -42,8 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFirst
 import androidx.compose.ui.util.fastFirstOrNull
-import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainTypography
 import kotlin.math.max
 import kotlin.math.min
 
@@ -116,8 +116,8 @@ fun CommonSnackbar(
         color = containerColor,
         contentColor = contentColor,
     ) {
-        val textStyle = MainFontFamily.bodyMedium
-        val actionTextStyle = MainFontFamily.bodyMedium
+        val textStyle = MainTypography.bodyMedium
+        val actionTextStyle = MainTypography.bodyMedium
         CompositionLocalProvider(LocalTextStyle provides textStyle) {
             when {
                 action == null -> OneRowSnackbar(
