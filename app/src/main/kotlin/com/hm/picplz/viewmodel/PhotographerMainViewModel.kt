@@ -16,7 +16,10 @@ class PhotographerMainViewModel @Inject constructor(): ViewModel() {
 
     fun handleIntent(intent: PhotographerMainIntent) {
         when (intent) {
-            is PhotographerMainIntent.SetModalState -> {
+            is PhotographerMainIntent.SetIsActive -> {
+                _state.update { it.copy(isActive = intent.isActive) }
+            }
+            is PhotographerMainIntent.SetIsModalOpen -> {
                 _state.update { it.copy(isModalOpen = intent.isModalOpen) }
             }
         }
