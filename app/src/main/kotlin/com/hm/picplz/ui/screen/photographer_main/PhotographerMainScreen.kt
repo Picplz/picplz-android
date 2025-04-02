@@ -184,7 +184,12 @@ fun PhotographerMainScreen(
                 CommonBottomButton(
                     text = if (currentState.isActive) "바로 촬영 끄기 " else "바로 촬영 시작",
                     onClick = {
-                        viewModel.handleIntent(PhotographerMainIntent.SetModalState(true))
+                        if (currentState.isActive) {
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsActive(false))
+                        } else {
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(true))
+                        }
+
                     },
                     containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
                 )
@@ -192,15 +197,16 @@ fun PhotographerMainScreen(
                 if (currentState.isModalOpen) {
                     CommonButtonModal(
                         onDismissRequest = {
-                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
                        },
-                        confirmText = if (currentState.isActive) "끄기" else "시작",
+                        confirmText = "확인",
                         cancelText = "취소",
                         onConfirm = {
-                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsActive(true))
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
                         },
                         onCancel = {
-                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
                         }
                     ) {
                         Box(
