@@ -35,6 +35,7 @@ import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.Equipment
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonButtonModal
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentListItem
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -179,9 +180,33 @@ fun PhotographerMainScreen(
                 }
                 CommonBottomButton(
                     text = if (currentState.isActive) "바로 촬영 끄기 " else "바로 촬영 시작",
-                    onClick = {},
+                    onClick = {
+                        viewModel.handleIntent(PhotographerMainIntent.SetModalState(true))
+                    },
                     containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
                 )
+
+                if (currentState.isModalOpen) {
+                    CommonButtonModal(
+                        onDismissRequest = {
+                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                       },
+                        confirmText = if (currentState.isActive) "끄기" else "시작",
+                        cancelText = "취소",
+                        onConfirm = {
+                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                        },
+                        onCancel = {
+                            viewModel.handleIntent(PhotographerMainIntent.SetModalState(false))
+                        }
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(30.dp),
+                        )
+                    }
+                }
             }
         }
     }

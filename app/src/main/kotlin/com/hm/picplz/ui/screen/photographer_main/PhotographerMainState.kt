@@ -1,7 +1,8 @@
 package com.hm.picplz.ui.screen.photographer_main
 
 data class PhotographerMainState (
-    val isActive: Boolean = true
+    val isActive: Boolean = true,
+    val isModalOpen: Boolean = false
 ) {
     companion object {
         fun idle(): PhotographerMainState {
