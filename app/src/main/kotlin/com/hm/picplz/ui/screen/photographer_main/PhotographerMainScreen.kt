@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme.typography
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +42,7 @@ import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentListItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.viewmodel.PhotographerMainViewModel
 
 @Composable
@@ -203,8 +206,27 @@ fun PhotographerMainScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(30.dp),
-                        )
+                                .padding(40.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.marker_map),
+                                    contentDescription = "마커 이미지",
+                                    modifier = Modifier
+                                        .width(49.dp)
+                                        .height(62.dp)
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Text(
+                                    text = "2km 이내 고객에게\n내 위치 정보가 나타납니다",
+                                    textAlign = TextAlign.Center,
+                                    style = pretendardTypography.titleSmall
+                                )
+                            }
+                        }
                     }
                 }
             }
