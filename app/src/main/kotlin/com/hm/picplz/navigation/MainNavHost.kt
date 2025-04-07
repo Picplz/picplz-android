@@ -21,6 +21,7 @@ import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.ReservationScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
+import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
@@ -143,6 +144,9 @@ fun MainNavHost(
                 reviewId = reviewId,
                 photoIndex = photoIndex
             )
+        }
+        composable("photographer-equipment-setting") {
+            EquipmentSettingScreen(navController = navController)
         }
     }
 }
