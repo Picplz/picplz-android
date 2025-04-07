@@ -53,13 +53,6 @@ fun PhotographerMainScreen(
 ) {
     val currentState = viewModel.state.collectAsState().value
 
-    val equipmentList = listOf(
-        Equipment("내 폰", "아이폰 16 Pro Max", true),
-        Equipment("카메라", "소니 a7m4", true),
-        Equipment("카메라", "소니 a7c", false),
-        Equipment("카메라", "소니 ZV-1", false)
-    )
-
     Scaffold(
         containerColor = MainThemeColor.White,
         bottomBar = {
@@ -171,12 +164,16 @@ fun PhotographerMainScreen(
                         .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(equipmentList) { equipment ->
+                    items(currentState.equipmentList) { equipment ->
                         EquipmentListItem(
                             equipmentType = equipment.type,
                             deviceName = equipment.deviceName,
                             isEnabled = equipment.isEnabled,
-                            onEnabledChanged = {},
+                            onEnabledChanged = {
+                                viewModel.handleIntent(PhotographerMainIntent.ToggleEquipmentEnabled(
+                                    equipment.id
+                                ))
+                            },
                             isPhotographerActive = currentState.isActive,
                         )
                     }
