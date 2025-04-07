@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -155,7 +156,11 @@ fun PhotographerMainScreen(
                         style = typography.titleSmall
                     )
                     TextButton(
-                        onClick = {},
+                        onClick = {
+                            viewModel.handleIntent(
+                                PhotographerMainIntent.Navigate("photographer-equipment-setting")
+                            )
+                        },
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         Text(
@@ -242,6 +247,19 @@ fun PhotographerMainScreen(
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is PhotographerMainSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+                is PhotographerMainSideEffect.Navigate -> {
+                    navController.navigate(sideEffect.destination)
                 }
             }
         }
