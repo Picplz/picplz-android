@@ -22,6 +22,19 @@ class PhotographerMainViewModel @Inject constructor(): ViewModel() {
             is PhotographerMainIntent.SetIsModalOpen -> {
                 _state.update { it.copy(isModalOpen = intent.isModalOpen) }
             }
+            is PhotographerMainIntent.ToggleEquipmentEnabled -> {
+                _state.update {
+                    it.copy(
+                        equipmentList = it.equipmentList.map { equipment ->
+                            if (equipment.id == intent.deviceId) {
+                                equipment.copy(isEnabled = !equipment.isEnabled)
+                            } else {
+                                equipment
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }
