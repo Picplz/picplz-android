@@ -197,12 +197,7 @@ fun PhotographerMainScreen(
                 CommonBottomButton(
                     text = if (currentState.isActive) "바로 촬영 끄기 " else "바로 촬영 시작",
                     onClick = {
-                        if (currentState.isActive) {
-                            viewModel.handleIntent(PhotographerMainIntent.SetIsActive(false))
-                        } else {
                             viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(true))
-                        }
-
                     },
                     containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
                 )
@@ -215,7 +210,7 @@ fun PhotographerMainScreen(
                         confirmText = "확인",
                         cancelText = "취소",
                         onConfirm = {
-                            viewModel.handleIntent(PhotographerMainIntent.SetIsActive(true))
+                            viewModel.handleIntent(PhotographerMainIntent.SetIsActive(currentState.isActive.not()))
                             viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
                         },
                         onCancel = {
@@ -240,7 +235,7 @@ fun PhotographerMainScreen(
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Text(
-                                    text = "2km 이내 고객에게\n내 위치 정보가 나타납니다",
+                                    text = if (currentState.isActive) "바로 촬영을 종료할까요?" else "2km 이내 고객에게\n내 위치 정보가 나타납니다",
                                     textAlign = TextAlign.Center,
                                     style = pretendardTypography.titleSmall
                                 )
