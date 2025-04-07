@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -152,11 +154,20 @@ fun PhotographerMainScreen(
                         text = "촬영 가능 장비",
                         style = typography.titleSmall
                     )
-                    Text(
-                        text = "장비 편집",
-                        style = typography.bodySmall,
-                        color = MainThemeColor.Gray4
-                    )
+                    TextButton(
+                        onClick = {},
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Text(
+                            text = if (currentState.isActive) {
+                                "바로 촬영 중에는 편집할 수 없어요"
+                            }else {
+                                "장비 편집"
+                            },
+                            style = typography.bodySmall,
+                            color = MainThemeColor.Gray4
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 LazyColumn(
