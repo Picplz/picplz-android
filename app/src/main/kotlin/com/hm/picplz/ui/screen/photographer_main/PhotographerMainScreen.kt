@@ -37,7 +37,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
-import com.hm.picplz.ui.model.Equipment
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonButtonModal
@@ -157,9 +156,11 @@ fun PhotographerMainScreen(
                     )
                     TextButton(
                         onClick = {
-                            viewModel.handleIntent(
-                                PhotographerMainIntent.Navigate("photographer-equipment-setting")
-                            )
+                            if (currentState.isActive.not()) {
+                                viewModel.handleIntent(
+                                    PhotographerMainIntent.Navigate("photographer-equipment-setting")
+                                )
+                            }
                         },
                         contentPadding = PaddingValues(0.dp)
                     ) {
@@ -186,9 +187,11 @@ fun PhotographerMainScreen(
                             deviceName = equipment.deviceName,
                             isEnabled = equipment.isEnabled,
                             onEnabledChanged = {
-                                viewModel.handleIntent(PhotographerMainIntent.ToggleEquipmentEnabled(
-                                    equipment.id
-                                ))
+                                if (currentState.isActive.not()) {
+                                    viewModel.handleIntent(PhotographerMainIntent.ToggleEquipmentEnabled(
+                                        equipment.id
+                                    ))
+                                }
                             },
                             isPhotographerActive = currentState.isActive,
                         )
