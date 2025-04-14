@@ -1,186 +1,143 @@
 package com.hm.picplz.ui.screen.chat.composable
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import com.hm.picplz.R
 import com.hm.picplz.ui.model.ChatRoomInfo
-import com.hm.picplz.ui.model.ChatStatus
-import com.hm.picplz.ui.model.Message
-import com.hm.picplz.ui.screen.common.BadgeTheme
-import com.hm.picplz.ui.screen.common.CommonBadge
-import com.hm.picplz.ui.theme.MainFontFamily.caption
+import com.hm.picplz.ui.screen.chat.ChatTabType
+import com.hm.picplz.ui.screen.chat.dummyChatRooms
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.utils.DateTimeUtil
 
 @Composable
 fun ChatList (
     modifier: Modifier = Modifier,
-    chatRoomInfo: ChatRoomInfo
+    chatRooms: List<ChatRoomInfo>,
+    chatTabType: ChatTabType = ChatTabType.ONGOING
 ) {
-    val timeText = DateTimeUtil.getTimeAgoText(chatRoomInfo.lastMessage.sentAt)
-
-    Column(
-        modifier = modifier
-            .padding(
-                vertical = 20.dp,
-                horizontal = 16.dp
-            ),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+    if (chatRooms.isEmpty()) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column (
+                modifier = modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .offset(y = (-60).dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CommonBadge(
-                    label = when (chatRoomInfo.chatStatus) {
-                        ChatStatus.PENDING -> "예약 대기"
-                        ChatStatus.CONFIRMED -> "예약 확정"
-                        ChatStatus.REJECTED -> "촬영 거절"
-                        ChatStatus.COMPLETED -> "촬영 완료"
-                    },
-                    theme = when (chatRoomInfo.chatStatus) {
-                        ChatStatus.PENDING -> BadgeTheme.INACTIVE
-                        ChatStatus.CONFIRMED -> BadgeTheme.ACTIVE
-                        ChatStatus.REJECTED -> BadgeTheme.INACTIVE
-                        ChatStatus.COMPLETED -> BadgeTheme.ACTIVE
-                    }
-                )
+                val chatStatusText = when (chatTabType) {
+                    ChatTabType.ONGOING -> "진행중인 채팅이 없습니다"
+                    ChatTabType.COMPLETED -> "완료된 채팅이 없습니다"
+                }
 
-                CommonBadge(
-                    label = chatRoomInfo.packageType,
-                    theme = BadgeTheme.DISABLED
+                Text(
+                    text = chatStatusText,
+                    style = pretendardTypography.headlineMedium
                 )
+                Spacer(
+                    modifier = Modifier
+                        .height(2.dp)
+                )
+                Text(
+                    text = "작가님과 촬영을 시작해보세요",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        lineHeight = (16 * 1.4).sp,
+                        letterSpacing = 0.sp,
+                    ),
+                    color = Color(0xFF5A6A76)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(20.dp)
+                )
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(60.dp),
+                    shape = RoundedCornerShape(5.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MainThemeColor.Black,
+                        contentColor = MainThemeColor.White
+                    )
+                ) {
+                    Text(
+                        text = "둘러보기",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
-            Text(
-                text = timeText,
-                style = caption,
-                color = MainThemeColor.Gray3,
+            Image(
+                painter = painterResource(id = R.drawable.empty_character),
+                contentDescription = "캐릭터 이미지",
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 28.dp)
+                    .offset(x = 25.dp)
             )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxWidth()
         ) {
-            Row (
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 10.dp),
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = chatRoomInfo.lastMessage.profileImageUrl),
-                    contentDescription = "최신 메세지 프로필",
-                    modifier = Modifier
-                        .size(37.dp)
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MainThemeColor.Black,
-                            shape = CircleShape
-                        )
-                )
-                Column(
-                    modifier = Modifier
-                        .padding(
-                            start = 10.dp,
-                            end = 45.dp
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    Text(
-                        text = chatRoomInfo.lastMessage.nickname,
-                        style = pretendardTypography.bodyMedium,
-                        color = MainThemeColor.Black,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        text = chatRoomInfo.lastMessage.message,
-                        style = caption,
-                        color = MainThemeColor.Gray5,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+            items(chatRooms) { chatRoom ->
+                ChatListItem(chatRoomInfo = chatRoom)
+                if (chatRoom !== dummyChatRooms.last()) {
+                    HorizontalDivider(
+                        thickness = 6.dp,
+                        color = MainThemeColor.Gray1
                     )
                 }
-            }
-            if (chatRoomInfo.lastMessage.unreadMessageCount > 0) {
-                Box(
-                    modifier = modifier
-                        .height(37.dp),
-                ) {
-                    val displayCount = if (chatRoomInfo.lastMessage.unreadMessageCount > 999)
-                        "999+"
-                    else
-                        chatRoomInfo.lastMessage.unreadMessageCount.toString()
-
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(MainThemeColor.Red)
-                            .padding(horizontal = 6.dp, vertical = 3.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = displayCount,
-                            color = MainThemeColor.White,
-                            fontSize = 10.sp,
-                            lineHeight = 10.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                }
-            } else {
-                 Spacer(modifier = Modifier.width(18.dp))
             }
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun ChatListPreview() {
     PicplzTheme {
-        ChatList(
-            chatRoomInfo = ChatRoomInfo(
-                chatStatus = ChatStatus.PENDING,
-                packageType = "인스타 종합 패키지",
-                lastMessage = Message(
-                    profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-                    nickname = "합정동 불주먹",
-                    message = "촬영 예약이 도착했습니다. 60분 이내에 답변 안 할 시 예약이 취소될 수 있습니다.",
-                    unreadMessageCount = 1,
-                )
-            )
-        )
+        ChatList(chatRooms = dummyChatRooms)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EmptyChatListPreview() {
+    PicplzTheme {
+        ChatList(chatRooms = emptyList())
     }
 }

@@ -8,9 +8,11 @@ enum class ChatStatus {
 }
 
 data class ChatRoomInfo(
+    val id: String,
     val chatStatus: ChatStatus,
     val packageType: String,
     val lastMessage: Message,
+    val unreadMessageCount: Int = 0,
 )
 
 data class Message (
@@ -18,5 +20,4 @@ data class Message (
     val nickname: String,
     val message: String,
     val sentAt: Long = System.currentTimeMillis(),
-    val unreadMessageCount: Int,
 )

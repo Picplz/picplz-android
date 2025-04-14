@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,9 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
-import com.hm.picplz.ui.model.ChatRoomInfo
 import com.hm.picplz.ui.model.ChatStatus
-import com.hm.picplz.ui.model.Message
 import com.hm.picplz.ui.screen.chat.composable.ChatList
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -69,7 +68,7 @@ fun ChatScreen(
                 navController = navController,
             )
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
     ) { innerPadding ->
         Column(
@@ -147,16 +146,10 @@ fun ChatScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(10.dp))
             ChatList(
-                chatRoomInfo = ChatRoomInfo(
-                    chatStatus = ChatStatus.PENDING,
-                    packageType = "인스타 종합 패키지",
-                    lastMessage = Message(
-                        profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-                        nickname = "김도현",
-                        message = "안녕하세요"
-                    )
-                )
+                chatRooms = dummyChatRooms,
+                chatTabType = currentState.selectedTab
             )
         }
     }
