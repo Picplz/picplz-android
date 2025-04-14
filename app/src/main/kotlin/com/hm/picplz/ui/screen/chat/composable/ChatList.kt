@@ -137,15 +137,20 @@ fun ChatList (
                     modifier = modifier
                         .height(37.dp),
                 ) {
+                    val displayCount = if (chatRoomInfo.lastMessage.unreadMessageCount > 999)
+                        "999+"
+                    else
+                        chatRoomInfo.lastMessage.unreadMessageCount.toString()
+
                     Box(
                         modifier = Modifier
-                            .size(17.dp)
                             .clip(CircleShape)
-                            .background(MainThemeColor.Red),
+                            .background(MainThemeColor.Red)
+                            .padding(horizontal = 6.dp, vertical = 3.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = chatRoomInfo.lastMessage.unreadMessageCount.toString(),
+                            text = displayCount,
                             color = MainThemeColor.White,
                             fontSize = 10.sp,
                             lineHeight = 10.sp,
@@ -173,7 +178,7 @@ fun ChatListPreview() {
                     profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
                     nickname = "합정동 불주먹",
                     message = "촬영 예약이 도착했습니다. 60분 이내에 답변 안 할 시 예약이 취소될 수 있습니다.",
-                    unreadMessageCount = 10,
+                    unreadMessageCount = 1,
                 )
             )
         )
