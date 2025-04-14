@@ -28,6 +28,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
+import com.hm.picplz.ui.model.ChatRoomInfo
+import com.hm.picplz.ui.model.ChatStatus
+import com.hm.picplz.ui.model.Message
+import com.hm.picplz.ui.screen.chat.composable.ChatList
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText
@@ -132,10 +136,28 @@ fun ChatScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                items(currentState.currentStatusTags) { tagLabel ->
-                    CommonStatusTag(label = tagLabel)
+                items(currentState.currentStatusTags) { statusTag ->
+                    CommonStatusTag(
+                        label = when (statusTag) {
+                            ChatStatus.PENDING -> "예약 대기"
+                            ChatStatus.CONFIRMED -> "예약 확정"
+                            ChatStatus.REJECTED -> "촬영 거절"
+                            ChatStatus.COMPLETED -> "촬영 완료"
+                        }
+                    )
                 }
             }
+            ChatList(
+                chatRoomInfo = ChatRoomInfo(
+                    chatStatus = ChatStatus.PENDING,
+                    packageType = "인스타 종합 패키지",
+                    lastMessage = Message(
+                        profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+                        nickname = "김도현",
+                        message = "안녕하세요"
+                    )
+                )
+            )
         }
     }
 }

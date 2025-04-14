@@ -1,21 +1,23 @@
 package com.hm.picplz.ui.screen.chat
 
+import com.hm.picplz.ui.model.ChatStatus
+
 enum class ChatTabType {
     ONGOING, COMPLETED
 }
 
 data class ChatState (
     val selectedTab : ChatTabType = ChatTabType.ONGOING,
-    val statusTags : List<String> = listOf("예약 대기", "예약 확정", "촬영 거절", "촬영 완료")
+    val statusTags: List<ChatStatus> = ChatStatus.entries
 ) {
     companion object {
         fun idle(): ChatState {
             return ChatState()
         }
     }
-    val currentStatusTags: List<String>
+    val currentStatusTags: List<ChatStatus>
         get() = when (selectedTab) {
-            ChatTabType.ONGOING -> statusTags.filter { it == "예약 대기" || it == "예약 확정" }
-            ChatTabType.COMPLETED -> statusTags.filter { it == "촬영 거절" || it == "촬영 완료" }
+            ChatTabType.ONGOING -> listOf(ChatStatus.PENDING, ChatStatus.CONFIRMED)
+            ChatTabType.COMPLETED -> listOf(ChatStatus.REJECTED, ChatStatus.COMPLETED)
         }
 }
