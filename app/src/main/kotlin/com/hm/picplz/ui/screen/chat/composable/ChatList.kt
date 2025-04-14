@@ -1,17 +1,30 @@
 package com.hm.picplz.ui.screen.chat.composable
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.ui.model.ChatRoomInfo
 import com.hm.picplz.ui.model.ChatStatus
 import com.hm.picplz.ui.model.Message
@@ -20,6 +33,7 @@ import com.hm.picplz.ui.screen.common.CommonBadge
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.DateTimeUtil
 
 @Composable
@@ -31,19 +45,21 @@ fun ChatList (
 
     Column(
         modifier = modifier
-            .height(105.dp)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center
+            .padding(
+                vertical = 20.dp,
+                horizontal = 16.dp
+            ),
+        verticalArrangement = Arrangement.Center,
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 CommonBadge(
                     label = when (chatRoomInfo.chatStatus) {
@@ -71,6 +87,76 @@ fun ChatList (
                 color = MainThemeColor.Gray3,
             )
         }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Row (
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 10.dp),
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = chatRoomInfo.lastMessage.profileImageUrl),
+                    contentDescription = "최신 메세지 프로필",
+                    modifier = Modifier
+                        .size(37.dp)
+                        .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = MainThemeColor.Black,
+                            shape = CircleShape
+                        )
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            start = 10.dp,
+                            end = 45.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = chatRoomInfo.lastMessage.nickname,
+                        style = pretendardTypography.bodyMedium,
+                        color = MainThemeColor.Black,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = chatRoomInfo.lastMessage.message,
+                        style = caption,
+                        color = MainThemeColor.Gray5,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+            if (chatRoomInfo.lastMessage.unreadMessageCount > 0) {
+                Box(
+                    modifier = modifier
+                        .height(37.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(17.dp)
+                            .clip(CircleShape)
+                            .background(MainThemeColor.Red),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = chatRoomInfo.lastMessage.unreadMessageCount.toString(),
+                            color = MainThemeColor.White,
+                            fontSize = 10.sp,
+                            lineHeight = 10.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+            } else {
+                 Spacer(modifier = Modifier.width(18.dp))
+            }
+        }
     }
 }
 
@@ -85,8 +171,9 @@ fun ChatListPreview() {
                 packageType = "인스타 종합 패키지",
                 lastMessage = Message(
                     profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-                    nickname = "김도현",
-                    message = "안녕하세요"
+                    nickname = "합정동 불주먹",
+                    message = "촬영 예약이 도착했습니다. 60분 이내에 답변 안 할 시 예약이 취소될 수 있습니다.",
+                    unreadMessageCount = 10,
                 )
             )
         )

@@ -18,4 +18,5 @@ data class Message (
     val nickname: String,
     val message: String,
     val sentAt: Long = System.currentTimeMillis(),
+    val unreadMessageCount: Int,
 )
