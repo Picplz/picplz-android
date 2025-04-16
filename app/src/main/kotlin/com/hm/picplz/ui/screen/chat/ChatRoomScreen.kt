@@ -17,7 +17,8 @@ import com.hm.picplz.ui.theme.PicplzTheme
 @Composable
 fun ChatRoomScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    roomId: Int,
 ) {
     Scaffold(
         containerColor = MainThemeColor.White,
@@ -46,7 +47,8 @@ fun ChatRoomScreenPreview() {
     val navController = rememberNavController()
     PicplzTheme {
         ChatRoomScreen(
-            navController = navController
+            navController = navController,
+            roomId = 1
         )
     }
 }

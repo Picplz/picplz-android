@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hm.picplz.data.model.User
+import com.hm.picplz.ui.screen.chat.ChatRoomScreen
 import com.hm.picplz.ui.screen.chat.ChatScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoPortfoliosScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoReviewsScreen
@@ -103,6 +104,23 @@ fun MainNavHost(
         composable("chat") {
             ChatScreen(navController = navController)
         }
+
+        composable(
+            route = "chat/{roomId}",
+            arguments = listOf(
+                navArgument("roomId") {
+                    type = NavType.IntType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getInt("roomId")
+            ChatRoomScreen(
+                navController = navController,
+                roomId = roomId ?: 0
+            )
+        }
+
 
         composable("mypage") {
             MyPageScreen(navController = navController)
