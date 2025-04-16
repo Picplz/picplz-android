@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
+import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 
@@ -22,6 +24,15 @@ fun ChatRoomScreen(
 ) {
     Scaffold(
         containerColor = MainThemeColor.White,
+        topBar = {
+            CommonTopBar(
+                text = "유가영 작가",
+                subText = "당장 촬영 가능",
+                subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
+                onClickBack = {},
+                showMenuIcon = true,
+            )
+        },
         bottomBar = {
             BottomNavigationBar(
                 navController = navController
