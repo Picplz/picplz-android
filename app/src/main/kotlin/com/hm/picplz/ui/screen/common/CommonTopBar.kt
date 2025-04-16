@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +37,8 @@ fun CommonTopBar(
     text: String,
     subText: String? = null,
     onClickBack: () -> Unit,
+    showMenuIcon: Boolean = false,
+    onClickMenu: () -> Unit = {},
     boxHeight: Dp = 50.dp,
     textStyle: TextStyle = pretendardTypography.bodyMedium,
     subTextStyle: TextStyle = MainFontFamily.caption,
@@ -89,7 +92,23 @@ fun CommonTopBar(
                     }
                 }
             }
-            Spacer(modifier = Modifier.width(spacerWidth))
+            Box(
+                modifier = Modifier
+                    .size(spacerWidth)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (showMenuIcon) {
+                    IconButton(onClick = onClickMenu) {
+                        Icon(
+                            modifier = Modifier
+                                .size(18.dp),
+                            painter = painterResource(id = R.drawable.menu),
+                            contentDescription = "상단바 메뉴 아이콘",
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -132,6 +151,20 @@ fun CommonTopBarSubtitlePreview() {
             subText = "부제목",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
             onClickBack = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CommonTopBarSubtitleMenuPreview() {
+    PicplzTheme {
+        CommonTopBar(
+            text = "제목",
+            subText = "부제목",
+            subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
+            onClickBack = {},
+            showMenuIcon = true
         )
     }
 }
