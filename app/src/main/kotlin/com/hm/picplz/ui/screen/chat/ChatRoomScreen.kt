@@ -112,6 +112,19 @@ fun ChatRoomScreen(
                     )
                 }
             }
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Black.copy(alpha = 0.08f),
+                                Color.Transparent
+                            )
+                        )
+                    )
+            )
         }
     }
 }
