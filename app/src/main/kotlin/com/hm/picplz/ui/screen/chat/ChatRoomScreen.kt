@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +29,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
+import androidx.compose.foundation.lazy.items
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
+import com.hm.picplz.ui.model.MessageContent
+import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -125,6 +130,26 @@ fun ChatRoomScreen(
                         )
                     )
             )
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ){
+                items(
+                    items = dummyChatMessages,
+                    key = { message -> message.id }
+                ) { chatMessage ->
+                    when (chatMessage.content) {
+                        is MessageContent.Text -> {
+                            ChatMessageBubble(
+                                chatMessage = chatMessage,
+                            )
+                        }
+                        is MessageContent.Image -> {}
+                        is MessageContent.Notification -> {}
+                    }
+                }
+            }
         }
     }
 }
