@@ -24,7 +24,8 @@ data class Message (
 )
 
 enum class MessageDirection {
-    SENT, RECEIVED, SYSTEM
+    SENT,
+    RECEIVED
 }
 
 enum class ButtonActionType {

@@ -60,7 +60,7 @@ val dummyChatMessages = listOf(
     ),
     ChatMessage(
         id = 4,
-        direction = MessageDirection.SYSTEM,
+        direction = MessageDirection.RECEIVED,
         sender = User(
             id = "2",
             nickname = "유가영작가",
