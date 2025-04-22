@@ -34,7 +34,7 @@ val dummyChatMessages = listOf(
             profileImageUri = null,
         ),
         content = MessageContent.Text("말풍선 어쩌고 저쩌고 가로 최대 크기는 이만큼 입니다"),
-        timestamp = (System.currentTimeMillis() - 100000).toString()
+        timestamp = System.currentTimeMillis() - 100000
     ),
     ChatMessage(
         id = 2,
@@ -45,7 +45,7 @@ val dummyChatMessages = listOf(
             profileImageUri = null,
         ),
         content = MessageContent.Text("말풍선 어쩌고 가로 최대 크기는 이만큼 입니다"),
-        timestamp = (System.currentTimeMillis() - 10000).toString()
+        timestamp = System.currentTimeMillis() - 10000
     ),
     ChatMessage(
         id = 3,
@@ -56,7 +56,7 @@ val dummyChatMessages = listOf(
             profileImageUri = null,
         ),
         content = MessageContent.Image(imageUrl = "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg"),
-        timestamp = (System.currentTimeMillis() - 1000).toString()
+        timestamp = System.currentTimeMillis() - 1000
     ),
     ChatMessage(
         id = 4,
@@ -73,7 +73,7 @@ val dummyChatMessages = listOf(
                 actionType = ButtonActionType.CONFIRM,
             )
         ),
-        timestamp = (System.currentTimeMillis() - 1000).toString()
+        timestamp = System.currentTimeMillis() - 1000
 
     )
 )

@@ -53,7 +53,7 @@ data class ChatMessage(
     val id: Int,
     val direction: MessageDirection,
     val content: MessageContent,
-    val timestamp: String,
+    val timestamp: Long,
     val sender: User,
     val isRead: Boolean = false
 )

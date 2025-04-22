@@ -21,10 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.R
 import com.hm.picplz.data.model.User
@@ -34,6 +36,8 @@ import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.theme.Pretendard
+import com.hm.picplz.utils.DateTimeUtil
 
 @Composable
 fun ChatMessageBubble(
@@ -42,10 +46,10 @@ fun ChatMessageBubble(
 ){
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = if (chatMessage.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
     ) {
-        if (chatMessage.direction === MessageDirection.RECEIVED) {
+        if (chatMessage.direction == MessageDirection.RECEIVED) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(chatMessage.sender.profileImageUri ?: R.drawable.active_dot)
@@ -61,36 +65,62 @@ fun ChatMessageBubble(
             )
             Spacer(modifier = Modifier.width(6.dp))
         }
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = when(chatMessage.direction) {
-                MessageDirection.SENT -> MainThemeColor.Gray1
-                MessageDirection.RECEIVED -> MainThemeColor.White
-            },
-            border = when(chatMessage.direction) {
-                MessageDirection.SENT -> null
-                MessageDirection.RECEIVED ->
-                    BorderStroke(
-                        width = 1.dp,
-                        color = MainThemeColor.Gray3
-                    )
-            }
+        Row(
+            verticalAlignment = Alignment.Bottom,
         ) {
-            val messageContent = chatMessage.content as MessageContent.Text
-
-            Text(
-                modifier = Modifier
-                    .padding(
-                        horizontal = 11.dp,
-                        vertical = 10.dp,
-                    )
-                    .widthIn(
-                        max = 253.dp
-                    )
-                ,
-                text = messageContent.message,
-                style = caption,
+            val timeFontStyle = TextStyle(
+                fontFamily = Pretendard,
+                fontWeight = FontWeight.Normal,
+                fontSize = 8.sp,
+                lineHeight = 8.sp * 1.4,
+                letterSpacing = 0.sp,
+                color = MainThemeColor.Gray3
             )
+            if (chatMessage.direction == MessageDirection.SENT) {
+                Text(
+                    text = DateTimeUtil.getFormattedTime(chatMessage.timestamp),
+                    style = timeFontStyle,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = when(chatMessage.direction) {
+                    MessageDirection.SENT -> MainThemeColor.Gray1
+                    MessageDirection.RECEIVED -> MainThemeColor.White
+                },
+                border = when(chatMessage.direction) {
+                    MessageDirection.SENT -> null
+                    MessageDirection.RECEIVED ->
+                        BorderStroke(
+                            width = 1.dp,
+                            color = MainThemeColor.Gray3
+                        )
+                }
+            ) {
+                val messageContent = chatMessage.content as MessageContent.Text
+
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 11.dp,
+                            vertical = 10.dp,
+                        )
+                        .widthIn(
+                            max = 253.dp
+                        )
+                    ,
+                    text = messageContent.message,
+                    style = caption,
+                )
+            }
+            if (chatMessage.direction == MessageDirection.RECEIVED) {
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = DateTimeUtil.getFormattedTime(chatMessage.timestamp),
+                    style = timeFontStyle,
+                )
+            }
         }
     }
 }
@@ -109,7 +139,7 @@ fun ChatMessageSentBubblePreview() {
                     nickname = "나",
                     profileImageUri = null,
                 ),
-                timestamp = (System.currentTimeMillis() - 100000).toString()
+                timestamp = System.currentTimeMillis() - 100000
             )
         )
     }
@@ -131,7 +161,7 @@ fun ChatMessageReceivedBubblePreview() {
                         "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
                     )
                 ),
-                timestamp = (System.currentTimeMillis() - 100000).toString()
+                timestamp = System.currentTimeMillis() - 100000
             ),
         )
     }

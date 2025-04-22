@@ -1,6 +1,16 @@
 package com.hm.picplz.utils
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 object DateTimeUtil {
+    private val timeFormat = SimpleDateFormat("a h:mm", Locale.KOREA)
+
+    fun getFormattedTime(timestamp: Long): String {
+        return timeFormat.format(Date(timestamp))
+    }
+
     fun getTimeAgoText(timestamp: Long): String {
         val minutesAgo = ((System.currentTimeMillis() - timestamp) / (1000 * 60)).toInt()
         return when {
