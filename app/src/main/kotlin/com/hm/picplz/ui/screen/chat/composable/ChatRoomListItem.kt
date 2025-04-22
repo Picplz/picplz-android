@@ -37,7 +37,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.DateTimeUtil
 
 @Composable
-fun ChatListItem (
+fun ChatRoomListItem (
     modifier: Modifier = Modifier,
     chatRoomInfo: ChatRoomInfo
 ) {
@@ -168,9 +168,9 @@ fun ChatListItem (
 
 @Preview(showBackground = true)
 @Composable
-fun ChatListItemPreview() {
+fun ChatRoomListItemPreview() {
     PicplzTheme {
-        ChatListItem(
+        ChatRoomListItem(
             chatRoomInfo = ChatRoomInfo(
                 id = "1",
                 chatStatus = ChatStatus.PENDING,
