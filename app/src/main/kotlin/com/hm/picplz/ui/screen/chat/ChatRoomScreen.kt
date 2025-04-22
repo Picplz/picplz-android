@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
@@ -37,6 +38,7 @@ import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.utils.DateTimeUtil
 import com.hm.picplz.viewmodel.ChatRoomViewModel
 
 @Composable
@@ -135,18 +137,52 @@ fun ChatRoomScreen(
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ){
-                items(
-                    items = dummyChatMessages,
-                    key = { message -> message.id }
-                ) { chatMessage ->
-                    when (chatMessage.content) {
-                        is MessageContent.Text -> {
-                            ChatMessageBubble(
-                                chatMessage = chatMessage,
-                            )
+                val chatListItem = dummyChatMessages
+                    .groupBy { chat ->
+                        DateTimeUtil.truncateToDate(chat.timestamp)
+                    }
+                    .flatMap { (date, rest) ->
+                        buildList {
+                            add(ChatListItem.DateHeader(date))
+                            addAll(rest.map { ChatListItem.MessageItem(it) })
                         }
-                        is MessageContent.Image -> {}
-                        is MessageContent.Notification -> {}
+                    }
+
+                items(
+                    items = chatListItem,
+                    key = { item ->
+                        when (item) {
+                            is ChatListItem.DateHeader -> "date_${item.date}"
+                            is ChatListItem.MessageItem -> "message_${item.message.id}"
+                        }
+                    }
+                ) { item ->
+                    when (item) {
+                        is ChatListItem.DateHeader -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 2.dp, bottom = 16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = DateTimeUtil.getFormattedDate(item.date),
+                                    style = MainFontFamily.caption,
+                                    color = MainThemeColor.Black
+                                )
+                            }
+                        }
+                        is ChatListItem.MessageItem -> {
+                            when (item.message.content) {
+                                is MessageContent.Text -> {
+                                    ChatMessageBubble(
+                                        chatMessage = item.message,
+                                    )
+                                }
+                                is MessageContent.Image -> {}
+                                is MessageContent.Notification -> {}
+                            }
+                        }
                     }
                 }
             }

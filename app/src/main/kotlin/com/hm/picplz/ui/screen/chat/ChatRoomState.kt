@@ -7,6 +7,11 @@ import com.hm.picplz.ui.model.MessageButton
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
 
+sealed interface ChatListItem {
+    data class DateHeader(val date: Long) : ChatListItem
+    data class MessageItem(val message: ChatMessage) : ChatListItem
+}
+
 enum class ReservationStep {
     PENDING,
     IN_PROGRESS,
