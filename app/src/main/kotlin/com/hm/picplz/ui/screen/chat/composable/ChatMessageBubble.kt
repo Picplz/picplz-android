@@ -46,7 +46,7 @@ fun ChatMessageBubble(
 ){
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = if (chatMessage.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
     ) {
         if (chatMessage.direction == MessageDirection.RECEIVED) {
