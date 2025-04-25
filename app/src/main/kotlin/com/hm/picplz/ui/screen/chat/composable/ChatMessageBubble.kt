@@ -107,7 +107,7 @@ fun ChatMessageBubble(
                             vertical = 10.dp,
                         )
                         .widthIn(
-                            max = 253.dp
+                            max = if (chatMessage.direction == MessageDirection.RECEIVED) 218.dp else 253.dp
                         )
                     ,
                     text = messageContent.message,
@@ -152,7 +152,7 @@ fun ChatMessageReceivedBubblePreview() {
         ChatMessageBubble(
             chatMessage = ChatMessage(
                 id = 2,
-                content = MessageContent.Text("말풍선 어쩌고 저쩌고 가로 최대 크기는 이만큼 입니다"),
+                content = MessageContent.Text("말풍선 오는쪽 가로 최대 크기는 이만큼 입니다"),
                 direction = MessageDirection.RECEIVED,
                 sender = User(
                     id = "2",
