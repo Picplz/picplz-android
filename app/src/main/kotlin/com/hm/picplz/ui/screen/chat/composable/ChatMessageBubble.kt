@@ -50,18 +50,8 @@ fun ChatMessageBubble(
         horizontalArrangement = if (chatMessage.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
     ) {
         if (chatMessage.direction == MessageDirection.RECEIVED) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(chatMessage.sender.profileImageUri ?: R.drawable.active_dot)
-                    .crossfade(true)
-                    .placeholder(R.drawable.active_dot)
-                    .error(R.drawable.active_dot)
-                    .build(),
-                contentDescription = "메세지 프로필",
-                modifier = Modifier
-                    .size(30.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
+            ChatMessageProfile(
+                profileImageUri = chatMessage.sender.profileImageUri
             )
             Spacer(modifier = Modifier.width(6.dp))
         }
