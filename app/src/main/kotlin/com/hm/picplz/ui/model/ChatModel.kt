@@ -40,11 +40,18 @@ data class MessageButton(
     val actionPayload: String? = null,
 )
 
+enum class NotificationType {
+    POSITIVE, NEGATIVE
+}
 sealed class MessageContent {
     data class Text(val message: String) : MessageContent()
     data class Image(val imageUrl: String) : MessageContent()
     data class Notification(
-        val message: String,
+        val title: String,
+        val subtitle: String,
+        val content: String,
+        val caption: String? = null,
+        val type: NotificationType,
         val button: MessageButton? = null
     ): MessageContent()
 }

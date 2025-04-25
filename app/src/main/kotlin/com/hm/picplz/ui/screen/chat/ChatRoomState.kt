@@ -6,6 +6,7 @@ import com.hm.picplz.ui.model.ChatMessage
 import com.hm.picplz.ui.model.MessageButton
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
+import com.hm.picplz.ui.model.NotificationType
 
 sealed interface ChatListItem {
     data class DateHeader(val date: Long) : ChatListItem
@@ -72,11 +73,14 @@ val dummyChatMessages = listOf(
             profileImageUri = null,
         ),
         content = MessageContent.Notification(
-            message = "[프로필 Only] 상품",
+            title = "상품명",
+            subtitle = "긍정적인 안내",
+            content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
+            type = NotificationType.POSITIVE,
             button = MessageButton(
-                text = "예약 정보 확인",
+                text = "확인",
                 actionType = ButtonActionType.CONFIRM,
-            )
+            ),
         ),
         timestamp = System.currentTimeMillis() - 1000
 
