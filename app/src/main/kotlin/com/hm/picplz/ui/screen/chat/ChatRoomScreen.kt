@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.chat
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,14 +33,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.MessageContent
+import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
+import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily
+import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.theme.Pretendard
 import com.hm.picplz.utils.DateTimeUtil
 import com.hm.picplz.viewmodel.ChatRoomViewModel
 
@@ -167,21 +179,60 @@ fun ChatRoomScreen(
                             ) {
                                 Text(
                                     text = DateTimeUtil.getFormattedDate(item.date),
-                                    style = MainFontFamily.caption,
+                                    style = caption,
                                     color = MainThemeColor.Black
                                 )
                             }
                         }
                         is ChatListItem.MessageItem -> {
-                            when (item.message.content) {
-                                is MessageContent.Text -> {
-                                    ChatMessageBubble(
-                                        chatMessage = item.message,
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = if (item.message.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
+                            ) {
+                                if (item.message.direction == MessageDirection.RECEIVED) {
+                                    ChatMessageProfile(
+                                        profileImageUri = item.message.sender.profileImageUri
                                     )
+                                    Spacer(modifier = Modifier.width(6.dp))
                                 }
-                                is MessageContent.Image -> {}
-                                is MessageContent.Notification -> {}
+                                Row(
+                                    verticalAlignment = Alignment.Bottom,
+                                ) {
+                                    val timeFontStyle = TextStyle(
+                                        fontFamily = Pretendard,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 8.sp,
+                                        lineHeight = 8.sp * 1.4,
+                                        letterSpacing = 0.sp,
+                                        color = MainThemeColor.Gray3
+                                    )
+                                    if (item.message.direction == MessageDirection.SENT) {
+                                        Text(
+                                            text = DateTimeUtil.getFormattedTime(item.message.timestamp),
+                                            style = timeFontStyle,
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                    }
+                                    when (item.message.content) {
+                                        is MessageContent.Text -> {
+                                            ChatMessageBubble(
+                                                chatMessage = item.message,
+                                            )
+                                        }
+                                        is MessageContent.Image -> {}
+                                        is MessageContent.Notification -> {}
+                                    }
+                                    if (item.message.direction == MessageDirection.RECEIVED) {
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = DateTimeUtil.getFormattedTime(item.message.timestamp),
+                                            style = timeFontStyle,
+                                        )
+                                    }
+                                }
                             }
+
                         }
                     }
                 }
