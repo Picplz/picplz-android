@@ -28,8 +28,16 @@ enum class MessageDirection {
     RECEIVED
 }
 
+enum class ButtonActionType {
+    OPEN_ORDER_FORM,
+    FIND_ANOTHER_ARTIST,
+    CONFIRM_ORDER,
+    OPEN_URL
+}
+
 data class MessageButton(
     val text: String,
+    val actionType: ButtonActionType,
     val actionPayload: String? = null
 )
 

@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.chat
 
 import com.hm.picplz.data.model.User
+import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.ChatMessage
 import com.hm.picplz.ui.model.MessageButton
 import com.hm.picplz.ui.model.MessageContent
@@ -79,9 +80,9 @@ val dummyChatMessages = listOf(
             type = NotificationType.POSITIVE,
             button = MessageButton(
                 text = "확인",
+                actionType = ButtonActionType.CONFIRM_ORDER
             ),
         ),
-        timestamp = System.currentTimeMillis() - 1000
-
+        timestamp = System.currentTimeMillis() - 1000,
     )
 )

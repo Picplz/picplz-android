@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,17 +31,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Surface
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
+import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat.composable.NotificationBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainFontFamily.caption
@@ -113,19 +110,19 @@ fun ChatRoomScreen(
                 ) {
                     Text(
                         text = "예약 대기",
-                        style = MainFontFamily.caption,
+                        style = caption,
                         color = MainThemeColor.Black
                     )
                     Text(
                         text = "서비스 진행",
-                        style = MainFontFamily.caption,
+                        style = caption,
                         color = if (
                             currentState.reservationStep == ReservationStep.PENDING
                         ) MainThemeColor.Gray3 else MainThemeColor.Black
                     )
                     Text(
                         text = "거래 확정",
-                        style = MainFontFamily.caption,
+                        style = caption,
                         color = if (
                             currentState.reservationStep == ReservationStep.CONFIRMED
                         ) MainThemeColor.Black else MainThemeColor.Gray3
@@ -188,7 +185,11 @@ fun ChatRoomScreen(
                         is ChatListItem.MessageItem -> {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
+                                verticalAlignment = when (item.message.content) {
+                                    is MessageContent.Text -> Alignment.CenterVertically
+                                    is MessageContent.Image -> Alignment.Top
+                                    is MessageContent.Notification -> Alignment.Top
+                                },
                                 horizontalArrangement = if (item.message.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
                             ) {
                                 if (item.message.direction == MessageDirection.RECEIVED) {
@@ -222,7 +223,19 @@ fun ChatRoomScreen(
                                             )
                                         }
                                         is MessageContent.Image -> {}
-                                        is MessageContent.Notification -> {}
+                                        is MessageContent.Notification -> {
+                                            NotificationBubble(
+                                                chatMessage = item.message,
+                                                onButtonClick = { button ->
+                                                    when (button.actionType) {
+                                                        ButtonActionType.OPEN_ORDER_FORM -> {}
+                                                        ButtonActionType.FIND_ANOTHER_ARTIST -> {}
+                                                        ButtonActionType.CONFIRM_ORDER -> {}
+                                                        ButtonActionType.OPEN_URL -> {}
+                                                    }
+                                                }
+                                            )
+                                        }
                                     }
                                     if (item.message.direction == MessageDirection.RECEIVED) {
                                         Spacer(modifier = Modifier.width(4.dp))

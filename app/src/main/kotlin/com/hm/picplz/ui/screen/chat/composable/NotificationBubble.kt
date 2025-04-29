@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.data.model.User
+import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.ChatMessage
 import com.hm.picplz.ui.model.MessageButton
 import com.hm.picplz.ui.model.MessageContent
@@ -159,6 +160,7 @@ fun NotificationBubblePreview() {
                     type = NotificationType.POSITIVE,
                     button = MessageButton(
                         text = "확인",
+                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
                     ),
                 ),
                 sender = User(
@@ -187,6 +189,7 @@ fun NotificationBubbleButtonPreview() {
                     type = NotificationType.NEGATIVE,
                     button = MessageButton(
                         text = "확인",
+                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
                     ),
                 ),
                 sender = User(
@@ -216,6 +219,7 @@ fun NotificationBubbleSendPreview() {
                     type = NotificationType.POSITIVE,
                     button = MessageButton(
                         text = "확인",
+                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
                     ),
                     caption = "캡션"
                 ),
@@ -246,6 +250,7 @@ fun NotificationBubbleCaptionButtonPreview() {
                     type = NotificationType.POSITIVE,
                     button = MessageButton(
                         text = "주문서 확인하기",
+                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
                     ),
                 ),
                 sender = User(
