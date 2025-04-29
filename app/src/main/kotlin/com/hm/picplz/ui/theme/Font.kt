@@ -121,7 +121,7 @@ val pretendardTypography = Typography(
     ),
     titleSmall = TextStyle(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
         lineHeight = 18.sp * 1.4,
         letterSpacing = 0.sp
@@ -166,6 +166,22 @@ object MainFontFamily {
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 16.sp * 1.4,
+        letterSpacing = 0.sp
+    )
+    // 굵은 본문
+    val bodyBold = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 14.sp * 1.4,
+        letterSpacing = 0.sp
+    )
+
+    val buttonChat = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 12.sp * 1.4,
         letterSpacing = 0.sp
     )
 }
