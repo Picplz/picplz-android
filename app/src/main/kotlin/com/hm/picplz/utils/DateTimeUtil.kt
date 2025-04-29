@@ -1,6 +1,10 @@
 package com.hm.picplz.utils
 
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -8,6 +12,7 @@ import java.util.Locale
 object DateTimeUtil {
     private val timeFormat = SimpleDateFormat("a h:mm", Locale.KOREA)
     private val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+    private val deadlineFormat = SimpleDateFormat("yyyy.MM.dd | hh:mm까지", Locale.KOREA)
 
     fun getFormattedTime(timestamp: Long): String {
         return timeFormat.format(Date(timestamp))
@@ -15,6 +20,10 @@ object DateTimeUtil {
 
     fun getFormattedDate(timestamp: Long): String {
         return dateFormat.format(Date(timestamp))
+    }
+
+    fun getFormattedDeadline(timestamp: Long): String {
+        return deadlineFormat.format(Date(timestamp))
     }
 
     fun getTimeAgoText(timestamp: Long): String {

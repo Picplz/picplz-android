@@ -40,9 +40,9 @@ import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat.composable.CompleteBubble
 import com.hm.picplz.ui.screen.chat.composable.NotificationBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -189,6 +189,7 @@ fun ChatRoomScreen(
                                     is MessageContent.Text -> Alignment.CenterVertically
                                     is MessageContent.Image -> Alignment.Top
                                     is MessageContent.Notification -> Alignment.Top
+                                    is MessageContent.Completion -> Alignment.Top
                                 },
                                 horizontalArrangement = if (item.message.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
                             ) {
@@ -234,6 +235,11 @@ fun ChatRoomScreen(
                                                         ButtonActionType.OPEN_URL -> {}
                                                     }
                                                 }
+                                            )
+                                        }
+                                        is MessageContent.Completion -> {
+                                            CompleteBubble(
+                                                chatMessage = item.message,
                                             )
                                         }
                                     }

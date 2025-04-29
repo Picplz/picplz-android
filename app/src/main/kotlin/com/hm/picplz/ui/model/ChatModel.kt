@@ -44,6 +44,11 @@ data class MessageButton(
 enum class NotificationType {
     POSITIVE, NEGATIVE
 }
+
+enum class DeliveryType {
+    EMAIL
+}
+
 sealed class MessageContent {
     data class Text(val message: String) : MessageContent()
     data class Image(val imageUrl: String) : MessageContent()
@@ -54,6 +59,11 @@ sealed class MessageContent {
         val caption: String? = null,
         val type: NotificationType,
         val button: MessageButton? = null
+    ): MessageContent()
+    data class Completion(
+        val title: String,
+        val deliveryMethod: DeliveryType,
+        val deliveryDeadline: Long,
     ): MessageContent()
 }
 

@@ -184,4 +184,12 @@ object MainFontFamily {
         lineHeight = 12.sp * 1.4,
         letterSpacing = 0.sp
     )
+
+    val insideTag = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
+        lineHeight = 12.sp * 1.4,
+        letterSpacing = 0.sp
+    )
 }
