@@ -28,16 +28,9 @@ enum class MessageDirection {
     RECEIVED
 }
 
-enum class ButtonActionType {
-    OPEN_URL,
-    CANCEL,
-    CONFIRM,
-}
-
 data class MessageButton(
     val text: String,
-    val actionType: ButtonActionType,
-    val actionPayload: String? = null,
+    val actionPayload: String? = null
 )
 
 enum class NotificationType {
@@ -47,8 +40,8 @@ sealed class MessageContent {
     data class Text(val message: String) : MessageContent()
     data class Image(val imageUrl: String) : MessageContent()
     data class Notification(
-        val title: String,
-        val subtitle: String,
+        val title: String? = null,
+        val subtitle: String? = null,
         val content: String,
         val caption: String? = null,
         val type: NotificationType,
