@@ -68,7 +68,7 @@ fun ChatRoomScreen(
             CommonTopBar(
                 text = "유가영 작가",
                 subText = "당장 촬영 가능",
-                subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
+                subTextStyle = caption.copy(color = MainThemeColor.Green120),
                 onClickBack = {},
                 showMenuIcon = true,
             )
@@ -96,6 +96,7 @@ fun ChatRoomScreen(
                 Image(
                     painter = painterResource(
                         id = when(currentState.reservationStep) {
+                            ReservationStep.NOT_STARTED -> R.drawable.reservation_step_zero
                             ReservationStep.PENDING -> R.drawable.reservation_step_one
                             ReservationStep.IN_PROGRESS -> R.drawable.reservation_step_two
                             ReservationStep.CONFIRMED -> R.drawable.reservation_step_three

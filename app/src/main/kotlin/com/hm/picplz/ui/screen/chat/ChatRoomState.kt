@@ -13,6 +13,7 @@ sealed interface ChatListItem {
 }
 
 enum class ReservationStep {
+    NOT_STARTED,
     PENDING,
     IN_PROGRESS,
     CONFIRMED,
