@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat.composable
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,22 +38,10 @@ fun NotificationBubble(
     onButtonClick: ((MessageButton) -> Unit)? = null
 ) {
     val messageContent = chatMessage.content as MessageContent.Notification
-    Surface(
+    ChatBubbleSurface(
         modifier = modifier
             .width(238.dp),
-        shape = RoundedCornerShape(20.dp),
-        color = when(chatMessage.direction) {
-            MessageDirection.SENT -> MainThemeColor.Gray1
-            MessageDirection.RECEIVED -> MainThemeColor.White
-        },
-        border = when(chatMessage.direction) {
-            MessageDirection.SENT -> null
-            MessageDirection.RECEIVED ->
-                BorderStroke(
-                    width = 1.dp,
-                    color = MainThemeColor.Gray3
-                )
-        }
+        direction = chatMessage.direction,
     ) {
         Column(
             modifier = modifier

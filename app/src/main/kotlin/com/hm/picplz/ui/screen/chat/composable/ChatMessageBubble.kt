@@ -1,11 +1,8 @@
 package com.hm.picplz.ui.screen.chat.composable
 
 import android.net.Uri
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +13,6 @@ import com.hm.picplz.ui.model.ChatMessage
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.theme.MainFontFamily.caption
-import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 
 @Composable
@@ -24,32 +20,20 @@ fun ChatMessageBubble(
     modifier: Modifier = Modifier,
     chatMessage: ChatMessage,
 ){
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        color = when(chatMessage.direction) {
-            MessageDirection.SENT -> MainThemeColor.Gray1
-            MessageDirection.RECEIVED -> MainThemeColor.White
-        },
-        border = when(chatMessage.direction) {
-            MessageDirection.SENT -> null
-            MessageDirection.RECEIVED ->
-                BorderStroke(
-                    width = 1.dp,
-                    color = MainThemeColor.Gray3
-                )
-        }
+    ChatBubbleSurface(
+        modifier = modifier
+            .widthIn(
+                max = if (chatMessage.direction == MessageDirection.RECEIVED) 238.dp else 273.dp
+            ),
+        direction = chatMessage.direction
     ) {
         val messageContent = chatMessage.content as MessageContent.Text
 
         Text(
             modifier = Modifier
                 .padding(
-                    horizontal = 11.dp,
+                    horizontal = 10.dp,
                     vertical = 10.dp,
-                )
-                .widthIn(
-                    max = if (chatMessage.direction == MessageDirection.RECEIVED) 218.dp else 253.dp
                 )
             ,
             text = messageContent.message,
@@ -65,7 +49,7 @@ fun ChatMessageSentBubblePreview() {
         ChatMessageBubble(
             chatMessage = ChatMessage(
                 id = 1,
-                content = MessageContent.Text("말풍선 어쩌고 저쩌고 가로 최대 크기는 이만큼 입니다"),
+                content = MessageContent.Text("어쩌고 저쩌고 가로 최대 크기는 이만큼 입니다"),
                 direction = MessageDirection.SENT,
                 sender = User(
                     id = "1",
