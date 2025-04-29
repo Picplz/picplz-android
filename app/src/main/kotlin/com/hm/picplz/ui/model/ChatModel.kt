@@ -65,6 +65,9 @@ sealed class MessageContent {
         val deliveryMethod: DeliveryType,
         val deliveryDeadline: Long,
     ): MessageContent()
+    data class ChangeTime(
+        val newScheduledTime: Long,
+    ): MessageContent()
 }
 
 data class ChatMessage(

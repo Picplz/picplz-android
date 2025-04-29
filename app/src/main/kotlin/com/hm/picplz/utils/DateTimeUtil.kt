@@ -13,6 +13,7 @@ object DateTimeUtil {
     private val timeFormat = SimpleDateFormat("a h:mm", Locale.KOREA)
     private val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
     private val deadlineFormat = SimpleDateFormat("yyyy.MM.dd | hh:mm까지", Locale.KOREA)
+    private val dateTimeFormat = SimpleDateFormat("MM월 dd일 hh:mm", Locale.KOREA)
 
     fun getFormattedTime(timestamp: Long): String {
         return timeFormat.format(Date(timestamp))
@@ -24,6 +25,10 @@ object DateTimeUtil {
 
     fun getFormattedDeadline(timestamp: Long): String {
         return deadlineFormat.format(Date(timestamp))
+    }
+
+    fun getFormattedDateTime(timestamp: Long): String {
+        return dateTimeFormat.format(Date(timestamp))
     }
 
     fun getTimeAgoText(timestamp: Long): String {
