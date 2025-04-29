@@ -38,10 +38,10 @@ import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
-import com.hm.picplz.ui.screen.chat.composable.ChatMessageBubble
+import com.hm.picplz.ui.screen.chat.composable.bubble.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
-import com.hm.picplz.ui.screen.chat.composable.CompleteBubble
-import com.hm.picplz.ui.screen.chat.composable.NotificationBubble
+import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
+import com.hm.picplz.ui.screen.chat.composable.bubble.NotificationBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor

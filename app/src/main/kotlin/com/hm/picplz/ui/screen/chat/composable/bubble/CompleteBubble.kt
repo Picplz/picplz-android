@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat.composable
+package com.hm.picplz.ui.screen.chat.composable.bubble
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

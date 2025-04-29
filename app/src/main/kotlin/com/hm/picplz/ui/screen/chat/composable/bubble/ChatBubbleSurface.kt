@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat.composable
+package com.hm.picplz.ui.screen.chat.composable.bubble
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
