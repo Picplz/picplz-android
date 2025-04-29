@@ -44,7 +44,7 @@ fun NotificationBubble(
         direction = chatMessage.direction,
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(18.dp)
         ) {
             if (messageContent.title !== null) {
