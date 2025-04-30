@@ -68,6 +68,9 @@ sealed class MessageContent {
     data class ChangeTime(
         val newScheduledTime: Long,
     ): MessageContent()
+    data class DealConfirmation(
+        val button: MessageButton? = null
+    ): MessageContent()
 }
 
 data class ChatMessage(

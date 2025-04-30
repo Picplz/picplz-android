@@ -42,6 +42,7 @@ import com.hm.picplz.ui.screen.chat.composable.bubble.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
 import com.hm.picplz.ui.screen.chat.composable.bubble.ChangeTimeBubble
 import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
+import com.hm.picplz.ui.screen.chat.composable.bubble.DealConfirmationBubble
 import com.hm.picplz.ui.screen.chat.composable.bubble.NotificationBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
@@ -192,6 +193,7 @@ fun ChatRoomScreen(
                                     is MessageContent.Notification -> Alignment.Top
                                     is MessageContent.Completion -> Alignment.Top
                                     is MessageContent.ChangeTime -> Alignment.Top
+                                    is MessageContent.DealConfirmation -> Alignment.Top
                                 },
                                 horizontalArrangement = if (item.message.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
                             ) {
@@ -246,6 +248,11 @@ fun ChatRoomScreen(
                                         }
                                         is MessageContent.ChangeTime -> {
                                             ChangeTimeBubble(
+                                                chatMessage = item.message
+                                            )
+                                        }
+                                        is MessageContent.DealConfirmation -> {
+                                            DealConfirmationBubble(
                                                 chatMessage = item.message
                                             )
                                         }
