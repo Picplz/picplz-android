@@ -76,5 +76,6 @@ data class ChatMessage(
     val content: MessageContent,
     val timestamp: Long,
     val sender: User,
+    val receiver: User,
     val isRead: Boolean = false
 )

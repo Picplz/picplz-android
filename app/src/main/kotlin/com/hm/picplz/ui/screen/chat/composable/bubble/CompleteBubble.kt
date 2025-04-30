@@ -124,6 +124,11 @@ fun CompleteBubblePreview() {
                     nickname = "나",
                     profileImageUri = null,
                 ),
+                receiver = User(
+                    id = "2",
+                    nickname = "유가영 작가",
+                    profileImageUri = null,
+                ),
                 timestamp = System.currentTimeMillis() - 1000,
             )
         )
@@ -146,6 +151,11 @@ fun CompleteBubbleReceivedPreview() {
                 sender = User(
                     id = "2",
                     nickname = "유가영 작가",
+                    profileImageUri = null,
+                ),
+                receiver = User(
+                    id = "1",
+                    nickname = "나",
                     profileImageUri = null,
                 ),
                 timestamp = System.currentTimeMillis() - 1000,

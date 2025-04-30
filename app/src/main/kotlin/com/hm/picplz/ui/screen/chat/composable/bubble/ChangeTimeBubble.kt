@@ -86,6 +86,11 @@ fun ChangeTimeBubblePreview() {
                     nickname = "유가영 작가",
                     profileImageUri = null,
                 ),
+                receiver = User(
+                    id = "2",
+                    nickname = "나",
+                    profileImageUri = null,
+                ),
                 timestamp = System.currentTimeMillis() - 100000,
             ),
         )

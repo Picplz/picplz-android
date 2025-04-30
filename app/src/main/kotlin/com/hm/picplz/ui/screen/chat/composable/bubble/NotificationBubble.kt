@@ -154,6 +154,11 @@ fun NotificationBubblePreview() {
                     nickname = "유가영 작가",
                     profileImageUri = null,
                 ),
+                receiver = User(
+                    id = "2",
+                    nickname = "나",
+                    profileImageUri = null,
+                ),
                 timestamp = System.currentTimeMillis() - 100000,
             ),
         )
@@ -181,6 +186,11 @@ fun NotificationBubbleButtonPreview() {
                 sender = User(
                     id = "1",
                     nickname = "유가영 작가",
+                    profileImageUri = null,
+                ),
+                receiver = User(
+                    id = "2",
+                    nickname = "나",
                     profileImageUri = null,
                 ),
                 timestamp = System.currentTimeMillis() - 100000,
@@ -214,6 +224,11 @@ fun NotificationBubbleSendPreview() {
                     nickname = "유가영 작가",
                     profileImageUri = null,
                 ),
+                receiver = User(
+                    id = "2",
+                    nickname = "나",
+                    profileImageUri = null,
+                ),
                 timestamp = System.currentTimeMillis() - 100000,
             ),
             onButtonClick = {}
@@ -242,6 +257,11 @@ fun NotificationBubbleCaptionButtonPreview() {
                 sender = User(
                     id = "1",
                     nickname = "유가영 작가",
+                    profileImageUri = null,
+                ),
+                receiver = User(
+                    id = "2",
+                    nickname = "나",
                     profileImageUri = null,
                 ),
                 timestamp = System.currentTimeMillis() - 100000,

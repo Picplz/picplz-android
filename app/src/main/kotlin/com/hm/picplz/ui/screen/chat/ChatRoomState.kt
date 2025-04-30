@@ -40,6 +40,11 @@ val dummyChatMessages = listOf(
             nickname = "나",
             profileImageUri = null,
         ),
+        receiver = User(
+            id = "2",
+            nickname = "유가영 작가",
+            profileImageUri = null,
+        ),
         content = MessageContent.Text("말풍선 어쩌고 저쩌고 가로 최대 크기는 이만큼 입니다"),
         timestamp = System.currentTimeMillis() - 100000
     ),
@@ -49,6 +54,11 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영 작가",
+            profileImageUri = null,
+        ),
+        receiver = User(
+            id = "1",
+            nickname = "나",
             profileImageUri = null,
         ),
         content = MessageContent.Text("말풍선 어쩌고 가로 최대 크기는 이만큼 입니다"),
@@ -62,6 +72,11 @@ val dummyChatMessages = listOf(
             nickname = "나",
             profileImageUri = null,
         ),
+        receiver = User(
+            id = "2",
+            nickname = "유가영 작가",
+            profileImageUri = null,
+        ),
         content = MessageContent.Image(imageUrl = "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg"),
         timestamp = System.currentTimeMillis() - 1000
     ),
@@ -71,6 +86,11 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
+            profileImageUri = null,
+        ),
+        receiver = User(
+            id = "1",
+            nickname = "나",
             profileImageUri = null,
         ),
         content = MessageContent.Notification(

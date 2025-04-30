@@ -56,6 +56,11 @@ fun ChatMessageSentBubblePreview() {
                     nickname = "나",
                     profileImageUri = null,
                 ),
+                receiver = User(
+                    id = "2",
+                    nickname = "유가영 작가",
+                    profileImageUri = null,
+                ),
                 timestamp = System.currentTimeMillis() - 100000
             )
         )
@@ -77,6 +82,11 @@ fun ChatMessageReceivedBubblePreview() {
                     profileImageUri = Uri.parse(
                         "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
                     )
+                ),
+                receiver = User(
+                    id = "1",
+                    nickname = "나",
+                    profileImageUri = null,
                 ),
                 timestamp = System.currentTimeMillis() - 100000
             ),
