@@ -109,23 +109,10 @@ fun NotificationBubble(
                             }
                         )
                 )
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .padding(0.dp),
-                    shape = RoundedCornerShape(5.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MainThemeColor.Black,
-                        contentColor = MainThemeColor.White
-                    ),
-                    onClick = { onButtonClick(messageContent.button) }
-                ) {
-                    Text(
-                        text = messageContent.button.text,
-                        style = MainFontFamily.buttonChat
-                    )
-                }
+                ChatBubbleButton(
+                    onClick = { onButtonClick(messageContent.button) },
+                    text = messageContent.button.text
+                )
             }
         }
     }
