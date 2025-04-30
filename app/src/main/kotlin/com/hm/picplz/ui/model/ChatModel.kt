@@ -71,6 +71,9 @@ sealed class MessageContent {
     data class DealConfirmation(
         val button: MessageButton? = null
     ): MessageContent()
+    data class ChatSuggest(
+        val suggestedChats: List<String>
+    ) : MessageContent()
 }
 
 data class ChatMessage(

@@ -106,3 +106,9 @@ val dummyChatMessages = listOf(
         timestamp = System.currentTimeMillis() - 1000,
     )
 )
+
+val dummySuggestedChat = listOf(
+    "촬영 소요 시간은 얼마나 걸리나요",
+    "촬영 장소를 추천해주실 수 있나요",
+    "현장에서 옵션 변경이 가능한가요?"
+)
