@@ -40,6 +40,7 @@ import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
 import com.hm.picplz.ui.screen.chat.composable.bubble.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat.composable.ReservationStep
 import com.hm.picplz.ui.screen.chat.composable.bubble.ChangeTimeBubble
 import com.hm.picplz.ui.screen.chat.composable.bubble.ChatSuggest
 import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
@@ -83,51 +84,9 @@ fun ChatRoomScreen(
             modifier = modifier
                 .padding(innerPadding)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(
-                        id = when(currentState.reservationStep) {
-                            ReservationStep.NOT_STARTED -> R.drawable.reservation_step_zero
-                            ReservationStep.PENDING -> R.drawable.reservation_step_one
-                            ReservationStep.IN_PROGRESS -> R.drawable.reservation_step_two
-                            ReservationStep.CONFIRMED -> R.drawable.reservation_step_three
-                        }
-                    ),
-                    contentDescription = "레벨"
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 25.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "예약 대기",
-                        style = caption,
-                        color = MainThemeColor.Black
-                    )
-                    Text(
-                        text = "서비스 진행",
-                        style = caption,
-                        color = if (
-                            currentState.reservationStep == ReservationStep.PENDING
-                        ) MainThemeColor.Gray3 else MainThemeColor.Black
-                    )
-                    Text(
-                        text = "거래 확정",
-                        style = caption,
-                        color = if (
-                            currentState.reservationStep == ReservationStep.CONFIRMED
-                        ) MainThemeColor.Black else MainThemeColor.Gray3
-                    )
-                }
-            }
+            ReservationStep(
+                reservationStep = currentState.reservationStep
+            )
             Box(
                 modifier = modifier
                     .fillMaxWidth()
