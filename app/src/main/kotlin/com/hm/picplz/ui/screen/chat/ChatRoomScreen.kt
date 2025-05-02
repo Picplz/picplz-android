@@ -170,7 +170,9 @@ fun ChatRoomScreen(
                                         letterSpacing = 0.sp,
                                         color = MainThemeColor.Gray3
                                     )
-                                    if (item.message.direction == MessageDirection.SENT) {
+                                    if (item.message.direction == MessageDirection.SENT
+                                        && item.message.content !is MessageContent.ChatSuggest
+                                    ) {
                                         Text(
                                             text = DateTimeUtil.getFormattedTime(item.message.timestamp),
                                             style = timeFontStyle,

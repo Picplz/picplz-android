@@ -89,20 +89,20 @@ val dummyChatMessages = listOf(
     ),
     ChatMessage(
         id = 4,
-        direction = MessageDirection.RECEIVED,
+        direction = MessageDirection.SENT,
         sender = User(
+            id = "1",
+            nickname = "나",
+            profileImageUri = null,
+        ),
+        receiver = User(
             id = "2",
             nickname = "유가영 작가",
             profileImageUri = Uri.parse(
                 "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
             )
         ),
-        receiver = User(
-            id = "1",
-            nickname = "나",
-            profileImageUri = null,
-        ),
-        content = MessageContent.Text("이거 사진너무 잘나왔어요 감사해요"),
+        content = MessageContent.Text("이거 사진 너무 잘나왔어요\n감사해요"),
         timestamp = System.currentTimeMillis() - 10000
     ),
     ChatMessage(
