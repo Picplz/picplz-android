@@ -74,11 +74,6 @@ fun ChatRoomScreen(
                 showMenuIcon = true,
             )
         },
-        bottomBar = {
-            BottomNavigationBar(
-                navController = navController
-            )
-        },
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
