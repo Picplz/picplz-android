@@ -8,15 +8,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 
 @Composable
@@ -58,6 +65,26 @@ private fun SingleImageChat(
             .width(200.dp)
             .clip(RoundedCornerShape(20.dp))
     ) {
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUri)
+                .crossfade(true)
+                .build()
+        )
+
+        when (painter.state) {
+            is AsyncImagePainter.State.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .align(Alignment.Center),
+                    color = MainThemeColor.Gray5,
+                    strokeWidth = 2.dp
+                )
+            }
+            is AsyncImagePainter.State.Error -> {}
+            else -> {}
+        }
         Image(
             painter = rememberAsyncImagePainter(imageUri),
             contentDescription = "채팅 이미지",
@@ -85,6 +112,27 @@ fun DoubleImageChat(
                     .weight(1f)
                     .clip(RoundedCornerShape(16.dp))
             ) {
+                val painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUri)
+                        .crossfade(true)
+                        .build()
+                )
+
+                when (painter.state) {
+                    is AsyncImagePainter.State.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(10.dp)
+                                .align(Alignment.Center),
+                            color = MainThemeColor.Gray5,
+                            strokeWidth = 2.dp
+                        )
+                    }
+                    is AsyncImagePainter.State.Error -> {}
+                    else -> {}
+                }
+
                 Image(
                     painter = rememberAsyncImagePainter(imageUri),
                     contentDescription = "채팅 이미지",
@@ -121,6 +169,27 @@ fun GridImageChat(
                             modifier = Modifier
                                 .weight(1f)
                         ) {
+                            val painter = rememberAsyncImagePainter(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(imageUris[index])
+                                    .crossfade(true)
+                                    .build()
+                            )
+
+                            when (painter.state) {
+                                is AsyncImagePainter.State.Loading -> {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier
+                                            .size(8.dp)
+                                            .align(Alignment.Center),
+                                        color = MainThemeColor.Gray5,
+                                        strokeWidth = 2.dp
+                                    )
+                                }
+                                is AsyncImagePainter.State.Error -> {}
+                                else -> {}
+                            }
+
                             Image(
                                 modifier = Modifier
                                     .aspectRatio(1f)
