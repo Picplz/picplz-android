@@ -28,10 +28,10 @@ fun ChatSuggest(
             style = MainFontFamily.bodyBold
         )
         Spacer(modifier = Modifier.height(10.dp))
-        LazyColumn(
+        Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(suggestedChats) { chat ->
+            suggestedChats.forEach { chat ->
                 ChatSuggestButton(chatText = chat)
             }
         }
