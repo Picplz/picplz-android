@@ -51,7 +51,7 @@ enum class DeliveryType {
 
 sealed class MessageContent {
     data class Text(val message: String) : MessageContent()
-    data class Image(val imageUrl: String) : MessageContent()
+    data class Image(val imageUris: List<String>) : MessageContent()
     data class Notification(
         val title: String? = null,
         val subtitle: String? = null,

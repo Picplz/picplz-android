@@ -44,6 +44,7 @@ import com.hm.picplz.ui.screen.chat.composable.bubble.ChangeTimeBubble
 import com.hm.picplz.ui.screen.chat.composable.bubble.ChatSuggest
 import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
 import com.hm.picplz.ui.screen.chat.composable.bubble.DealConfirmationBubble
+import com.hm.picplz.ui.screen.chat.composable.bubble.ImageChat
 import com.hm.picplz.ui.screen.chat.composable.bubble.NotificationBubble
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
@@ -229,7 +230,11 @@ fun ChatRoomScreen(
                                                 chatMessage = item.message,
                                             )
                                         }
-                                        is MessageContent.Image -> {}
+                                        is MessageContent.Image -> {
+                                            ImageChat(
+                                                imageUris = item.message.content.imageUris,
+                                            )
+                                        }
                                         is MessageContent.Notification -> {
                                             NotificationBubble(
                                                 chatMessage = item.message,
