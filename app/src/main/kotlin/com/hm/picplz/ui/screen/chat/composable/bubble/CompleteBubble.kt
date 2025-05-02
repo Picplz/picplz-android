@@ -86,7 +86,6 @@ fun CompleteBubble(
                         append(getFormattedDeadline(messageContent.deliveryDeadline))
                     }
                 },
-                style = TextStyle(letterSpacing = 12.sp * 1.4),
                 color = MainThemeColor.Gray5,
             )
             if (chatMessage.direction == MessageDirection.RECEIVED) {
