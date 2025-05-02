@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.chat
 
+import android.net.Uri
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.ChatMessage
@@ -54,7 +55,9 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영 작가",
-            profileImageUri = null,
+            profileImageUri = Uri.parse(
+                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
+            )
         ),
         receiver = User(
             id = "1",
@@ -80,15 +83,6 @@ val dummyChatMessages = listOf(
         content = MessageContent.Image(
             imageUris = listOf(
                 "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
-                "https://i.pinimg.com/736x/38/f4/0e/38f40e3944d8e5e63cc33594e2111ec7.jpg",
             )
         ),
         timestamp = System.currentTimeMillis() - 1000
@@ -99,8 +93,9 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = null,
-        ),
+            profileImageUri = Uri.parse(
+                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
+            )        ),
         receiver = User(
             id = "1",
             nickname = "나",
