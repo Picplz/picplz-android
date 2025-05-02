@@ -213,12 +213,13 @@ fun ChatRoomScreen(
                                         }
                                         is MessageContent.DealConfirmation -> {
                                             DealConfirmationBubble(
-                                                chatMessage = item.message
+                                                chatMessage = item.message,
+                                                onButtonClick = {}
                                             )
                                         }
                                         is MessageContent.ChatSuggest -> {
                                             ChatSuggest(
-                                                suggestedChats = dummySuggestedChat
+                                                suggestedChats = item.message.content.suggestedChats
                                             )
                                         }
                                     }
