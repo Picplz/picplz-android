@@ -4,6 +4,7 @@ agp = "8.5.1"
 hiltAndroidVersion = "2.48"
 hiltNavigationComposeVersion = "1.1.0"
 kakaoMaps = "2.12.8"
+kakaoUser = "2.21.2"
 androidxActivityCompose = "1.7.2"
 coilCompose = "2.1.0"
 converterGson = "2.9.0"
@@ -32,6 +33,7 @@ androidx-hilt-navigation-compose-v110 = { module = "androidx.hilt:hilt-navigatio
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidVersion" }
 hilt-android-v248 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 kakao-maps = { module = "com.kakao.maps.open:android", version.ref = "kakaoMaps" }
+kakao-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 androidx-activity-compose-v131 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
