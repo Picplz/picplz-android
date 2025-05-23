@@ -20,7 +20,7 @@ fun SignUpCommonNavHost(
 ) {
     NavHost(
         navController = signUpCommonNavController,
-        startDestination = "sign-up-nickname",
+        startDestination = "sign-up-select-type",
         modifier = modifier,
     ) {
         composable("sign-up-nickname") {
