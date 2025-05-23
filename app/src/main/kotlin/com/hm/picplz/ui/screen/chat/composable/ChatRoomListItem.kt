@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.chat.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,14 +38,17 @@ import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.DateTimeUtil
 
 @Composable
-fun ChatListItem (
+fun ChatRoomListItem (
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     chatRoomInfo: ChatRoomInfo
 ) {
     val timeText = DateTimeUtil.getTimeAgoText(chatRoomInfo.lastMessage.sentAt)
 
     Column(
         modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(
                 vertical = 20.dp,
                 horizontal = 16.dp
@@ -168,9 +172,9 @@ fun ChatListItem (
 
 @Preview(showBackground = true)
 @Composable
-fun ChatListItemPreview() {
+fun ChatRoomListItemPreview() {
     PicplzTheme {
-        ChatListItem(
+        ChatRoomListItem(
             chatRoomInfo = ChatRoomInfo(
                 id = "1",
                 chatStatus = ChatStatus.PENDING,

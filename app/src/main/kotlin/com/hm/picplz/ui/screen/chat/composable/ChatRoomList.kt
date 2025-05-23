@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.chat.composable
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +36,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun ChatList (
+fun ChatRoomList (
     modifier: Modifier = Modifier,
     chatRooms: List<ChatRoomInfo>,
     chatTabType: ChatTabType = ChatTabType.ONGOING
@@ -114,7 +113,7 @@ fun ChatList (
             modifier = modifier.fillMaxWidth()
         ) {
             items(chatRooms) { chatRoom ->
-                ChatListItem(chatRoomInfo = chatRoom)
+                ChatRoomListItem(chatRoomInfo = chatRoom)
                 if (chatRoom !== dummyChatRooms.last()) {
                     HorizontalDivider(
                         thickness = 6.dp,
@@ -128,9 +127,9 @@ fun ChatList (
 
 @Preview(showBackground = true)
 @Composable
-fun ChatListPreview() {
+fun ChatRoomListPreview() {
     PicplzTheme {
-        ChatList(chatRooms = dummyChatRooms)
+        ChatRoomList(chatRooms = dummyChatRooms)
     }
 }
 
@@ -138,6 +137,6 @@ fun ChatListPreview() {
 @Composable
 fun EmptyChatListPreview() {
     PicplzTheme {
-        ChatList(chatRooms = emptyList())
+        ChatRoomList(chatRooms = emptyList())
     }
 }
