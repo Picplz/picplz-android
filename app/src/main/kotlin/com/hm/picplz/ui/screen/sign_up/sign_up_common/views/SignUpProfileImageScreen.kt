@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.MainActivity
 import com.hm.picplz.R
+import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.*
@@ -56,7 +57,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun SignUpProfileImageScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpCommonViewModel = viewModel(),
-    navController: NavController,
+    mainNavController: NavController,
+    signUpCommonNavController: NavController,
 ) {
     /** 상태바 스타일 설정 **/
     val view = LocalView.current
@@ -183,7 +185,7 @@ fun SignUpProfileImageScreen(
             ) {
                 CommonBottomButton(
                     text = if (currentState.profileImageUri === null) {"다음에 설정하기"} else {"다음"},
-                    onClick = { viewModel.handleIntent(Navigate("sign-up-select-type")) },
+                    onClick = { viewModel.handleIntent(NavigateToSelected) },
                     enabled = currentState.nickname.isNotEmpty(),
                     containerColor = MainThemeColor.Black
                 )
@@ -195,10 +197,13 @@ fun SignUpProfileImageScreen(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is SignUpSideEffect.NavigateToPrev -> {
-                    navController.popBackStack()
+                    signUpCommonNavController.popBackStack()
+                }
+                is SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected -> {
+                    mainNavController.navigateWithBundle(sideEffect.destination, sideEffect.user)
                 }
                 is SignUpSideEffect.Navigate -> {
-                    navController.navigate(sideEffect.destination)
+                    signUpCommonNavController.navigate(sideEffect.destination)
                 }
                 is SignUpSideEffect.ShowFileUploadDialog -> {
                     filePickerLauncher.launch("image/*")
@@ -212,8 +217,12 @@ fun SignUpProfileImageScreen(
 @Preview
 @Composable
 fun SignUpProfileImageScreenPreview() {
-    val signUpNavController = rememberNavController()
+    val mainNavController = rememberNavController()
+    val signUpCommonNavController = rememberNavController()
+
     PicplzTheme {
-        SignUpProfileImageScreen(navController = signUpNavController)
+        SignUpProfileImageScreen(
+            mainNavController = mainNavController,
+            signUpCommonNavController = signUpCommonNavController        )
     }
 }

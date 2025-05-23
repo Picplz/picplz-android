@@ -25,21 +25,21 @@ fun SignUpCommonNavHost(
     ) {
         composable("sign-up-nickname") {
             SignUpNicknameScreen(
-                mainNavController = mainNavController,
                 signUpCommonNavController = signUpCommonNavController,
                 viewModel = viewModel
             )
         }
         composable("sign-up-profile") {
             SignUpProfileImageScreen(
-                navController = signUpCommonNavController,
+                mainNavController = mainNavController,
+                signUpCommonNavController = signUpCommonNavController,
                 viewModel = viewModel
             )
         }
         composable("sign-up-select-type") {
             SignUpSelectTypeScreen(
-                mainNavController = mainNavController,
                 signUpCommonNavController = signUpCommonNavController,
+                mainNavController = mainNavController,
                 viewModel = viewModel
             )
         }
