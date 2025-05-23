@@ -12,6 +12,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ClickUs
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToSelected
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ResetAllSignUpData
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ResetSelectedUserType
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetNickname
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetProfileImageUri
@@ -131,6 +132,10 @@ class SignUpCommonViewModel : ViewModel() {
                 viewModelScope.launch {
                     _sideEffect.emit(SignUpSideEffect.ShowFileUploadDialog)
                 }
+            }
+
+            is ResetAllSignUpData -> {
+                _state.value = SignUpCommonState.idle()
             }
         }
     }

@@ -60,6 +60,7 @@ fun SignUpSelectTypeScreen(
             statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(this, view).isAppearanceLightStatusBars = true
         }
+        viewModel.handleIntent(ResetAllSignUpData)
     }
 
     val currentState = viewModel.state.collectAsState().value
