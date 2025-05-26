@@ -1,5 +1,6 @@
 package com.hm.picplz.di
 
+import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.KakaoMapApi
 import com.hm.picplz.data.api.PhotographerApi
 import dagger.Module
@@ -43,9 +44,8 @@ object NetworkModule {
     @Singleton
     @PicplzApi
     fun providePicplzRetrofit(): Retrofit {
-        // Todo: api url 정의
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("http://3.36.183.87:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -54,5 +54,11 @@ object NetworkModule {
     @Singleton
     fun providePhotographerApi(@PicplzApi retrofit: Retrofit): PhotographerApi {
         return retrofit.create(PhotographerApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddressApi(@PicplzApi retrofit: Retrofit): AddressApi {
+        return retrofit.create(AddressApi::class.java)
     }
 }
