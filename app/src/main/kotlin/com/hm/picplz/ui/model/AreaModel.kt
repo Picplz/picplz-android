@@ -2,7 +2,7 @@ package com.hm.picplz.ui.model
 
 import com.hm.picplz.data.model.AreaData
 
-data class SearchedArea(
+data class Area(
     val id: Long,
     val name: String,
     val dong: String,
@@ -12,8 +12,8 @@ data class SearchedArea(
         get() = ri?.let { "$dong $it" } ?: dong
 }
 
-fun AreaData.toUiModel(): SearchedArea {
-    return SearchedArea(
+fun AreaData.toUiModel(): Area {
+    return Area(
         id = id,
         name = name,
         dong = dong,
