@@ -1,9 +1,8 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import com.hm.picplz.data.model.ChipItem
-import com.hm.picplz.data.model.PhotographyExperience
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.model.SearchedArea
+import com.hm.picplz.ui.model.Area
 import com.hm.picplz.viewmodel.emptyUserData
 
 enum class SelectorType {
@@ -34,9 +33,10 @@ data class SignUpPhotographerState(
     val careerPeriod: CareerPeriod? = null,
     val selectedSelector: SelectorType = SelectorType.NONE,
     val searchQuery: String = "",
-    val searchResults: List<SearchedArea> = emptyList(),
+    val hasLocationPermission: Boolean? = null,
+    val searchResults: List<Area> = emptyList(),
     val isSearching: Boolean = false,
-    val selectedArea: SearchedArea? = null,
+    val selectedArea: Area? = null,
     val searchError: String? = null
 ) {
     companion object {

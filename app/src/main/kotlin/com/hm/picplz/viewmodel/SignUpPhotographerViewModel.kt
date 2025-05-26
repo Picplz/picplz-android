@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
 import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
@@ -24,12 +25,66 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpPhotographerViewModel @Inject constructor(
-    private val addressService: AddressService
+    private val addressService: AddressService,
+    private val locationService: LocationService
 ) : ViewModel() {    private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
     val state: StateFlow<SignUpPhotographerState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<SignUpPhotographerSideEffect>()
     val sideEffect: SharedFlow<SignUpPhotographerSideEffect> get() = _sideEffect
+
+    init {
+        loadNearbyAreasOnInit()
+    }
+
+    private fun loadNearbyAreasOnInit() {
+        viewModelScope.launch {
+            locationService.getCurrentLocation(
+                onLocationReceived = { location ->
+                    _state.update { it.copy(hasLocationPermission = true) }
+
+                    loadNearbyAreas(
+                        lat = location.latitude,
+                        lng = location.longitude
+                    )
+                },
+                onPermissionDenied = {
+                    Log.w("LocationInfo", "위치 권한 거부됨")
+
+                    _state.update { it.copy(
+                        hasLocationPermission = false,
+                        searchResults = emptyList(),
+                        isSearching = false,
+                        searchError = "위치 권한이 필요합니다"
+                    )}
+                }
+            )
+        }
+    }
+
+    private fun loadNearbyAreas(lat: Double, lng: Double) {
+        _state.update { it.copy(isSearching = true) }
+
+        viewModelScope.launch {
+            addressService.getNearbyAreas(3, lat, lng)
+                .onSuccess { nearbyAreas ->
+                    _state.update { it.copy(
+                        searchResults = nearbyAreas,
+                        isSearching = false,
+                        searchError = null
+                    )}
+                    Log.d("AddressSearch", "근처 지역 로딩 성공: ${nearbyAreas.size}개")
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(
+                        searchResults = emptyList(),
+                        isSearching = false,
+                        searchError = "근처 지역을 불러올 수 없습니다"
+                    )}
+                    Log.e("AddressSearch", "근처 지역 로딩 실패", error)
+                }
+        }
+    }
 
     fun handleIntent(intent: SignUpPhotographerIntent) {
         when (intent) {
@@ -168,6 +223,11 @@ class SignUpPhotographerViewModel @Inject constructor(
 
             is SearchArea -> {
                 viewModelScope.launch {
+                    if (intent.keyword.isBlank()) {
+                        loadNearbyAreasOnInit()
+                        return@launch
+                    }
+
                     addressService.searchArea(intent.keyword)
                         .onSuccess { searchedAreas ->
                             _state.update { it.copy(
