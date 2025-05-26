@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.MainActivity
 import com.hm.picplz.R
+import com.hm.picplz.data.model.UserType
 import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -161,12 +162,22 @@ fun SignUpProfileImageScreen(
                         text = if (currentState.profileImageUri === null) {
                             buildAnnotatedString {
                                 append("프로필 이미지를\n")
-                                append("설정해 주세요.\n")
+                                append("설정해 주세요.")
                             }
                         } else {
-                            buildAnnotatedString {
-                                append("회원 타입 설정으로\n")
-                                append("넘어갈게요.\n")
+                            when (currentState.selectedUserType) {
+                                UserType.User -> buildAnnotatedString {
+                                    append("프로필 이미지 설정이\n")
+                                    append("완료되었습니다.")
+                                }
+                                UserType.Photographer -> buildAnnotatedString {
+                                    append("이제 주 촬영지와 촬영 기기를\n")
+                                    append("입력해볼까요?")
+                                }
+                                else -> buildAnnotatedString {
+                                    append("다음 단계로\n")
+                                    append("넘어갈게요.")
+                                }
                             }
                         },
                         style = MaterialTheme.typography.titleMedium,
