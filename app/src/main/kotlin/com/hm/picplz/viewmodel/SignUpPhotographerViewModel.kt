@@ -1,26 +1,31 @@
 package com.hm.picplz.viewmodel
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
+import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SelectorType
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class SignUpPhotographerViewModel : ViewModel() {
-    private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
+@HiltViewModel
+class SignUpPhotographerViewModel @Inject constructor(
+    private val addressService: AddressService
+) : ViewModel() {    private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
     val state: StateFlow<SignUpPhotographerState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<SignUpPhotographerSideEffect>()
@@ -153,6 +158,48 @@ class SignUpPhotographerViewModel : ViewModel() {
             }
             is SetSelectedSelector -> {
                 _state.update { it.copy( selectedSelector = intent.selectedSelector ) }
+            }
+            is UpdateSearchQuery -> {
+                _state.update { it.copy(
+                    searchQuery = intent.query,
+                    searchError = null
+                )}
+            }
+
+            is SearchArea -> {
+                viewModelScope.launch {
+                    addressService.searchArea(intent.keyword)
+                        .onSuccess { searchedAreas ->
+                            _state.update { it.copy(
+                                searchResults = searchedAreas,
+                                isSearching = false,
+                                searchError = null
+                            )}
+                        }
+                        .onFailure { error ->
+                            _state.update { it.copy(
+                                searchResults = emptyList(),
+                                isSearching = false,
+                                searchError = "검색 중 오류가 발생했습니다"
+                            )}
+                            Log.e("AddressSearch", "지역 검색 실패", error)
+                        }
+                }
+            }
+
+            is SelectArea -> {
+                _state.update { it.copy(
+                    selectedArea = intent.area,
+                    searchResults = emptyList(),
+                    searchQuery = intent.area.displayName
+                )}
+            }
+
+            is ClearSearchResults -> {
+                _state.update { it.copy(
+                    searchResults = emptyList(),
+                    searchError = null
+                )}
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import com.hm.picplz.data.model.User
+import com.hm.picplz.ui.model.SearchedArea
 
 sealed class SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent()
@@ -22,4 +23,8 @@ sealed class SignUpPhotographerIntent {
     data object SetCareerPeriod : SignUpPhotographerIntent()
     data object InitializeCareerValues : SignUpPhotographerIntent()
     data class SetSelectedSelector(val selectedSelector: SelectorType) : SignUpPhotographerIntent()
+    data class SearchArea(val keyword: String) : SignUpPhotographerIntent()
+    data class SelectArea(val area: SearchedArea) : SignUpPhotographerIntent()
+    data object ClearSearchResults : SignUpPhotographerIntent()
+    data class UpdateSearchQuery(val query: String) : SignUpPhotographerIntent()
 }
