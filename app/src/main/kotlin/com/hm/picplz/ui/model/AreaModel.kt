@@ -3,8 +3,8 @@ package com.hm.picplz.ui.model
 import com.hm.picplz.data.model.AreaData
 
 data class SearchedArea(
-    val id: Int,
-    val fullName: String,
+    val id: Long,
+    val name: String,
     val dong: String,
     val ri: String?
 ) {
@@ -15,7 +15,7 @@ data class SearchedArea(
 fun AreaData.toUiModel(): SearchedArea {
     return SearchedArea(
         id = id,
-        fullName = name,
+        name = name,
         dong = dong,
         ri = ri
     )

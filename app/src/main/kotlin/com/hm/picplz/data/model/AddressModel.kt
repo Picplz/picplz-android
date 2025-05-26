@@ -12,7 +12,7 @@ data class AreaSearchResponse(
 )
 
 data class AreaData(
-    val id: Int,
+    val id: Long,
     val name: String,
     val dong: String,
     val ri: String?,
