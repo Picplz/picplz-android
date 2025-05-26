@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +15,7 @@ import com.hm.picplz.viewmodel.emptyUserData
 @Composable
 fun SignUpPhotographerScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpPhotographerViewModel = viewModel(),
+    viewModel: SignUpPhotographerViewModel = hiltViewModel(),
     mainNavController: NavHostController,
     userInfo: User = emptyUserData,
 ) {

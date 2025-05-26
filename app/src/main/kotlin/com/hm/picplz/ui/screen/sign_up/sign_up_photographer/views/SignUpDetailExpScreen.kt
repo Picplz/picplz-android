@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,7 +46,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpDetailExpScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpPhotographerViewModel = viewModel(),
+    viewModel: SignUpPhotographerViewModel = hiltViewModel(),
     signUpPhotographerNavController: NavController
 ){
     val view = LocalView.current
