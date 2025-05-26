@@ -1,19 +1,19 @@
 package com.hm.picplz.data.service
 
-import com.hm.picplz.data.source.AddressSource
 import com.hm.picplz.data.model.KaKaoAddressRequest
+import com.hm.picplz.data.source.KakaoMapSource
 import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
-interface AddressService {
+interface KakaoMapService {
     suspend fun getAddressFromCoordinates(coords: LatLng): Result<String>
 }
 
-class AddressServiceImpl @Inject constructor(
-    private val addressSource: AddressSource
-) : AddressService {
+class KakaoMapServiceImpl @Inject constructor(
+    private val kakaoMapSource: KakaoMapSource
+) : KakaoMapService {
     override suspend fun getAddressFromCoordinates(coords: LatLng): Result<String> {
-        return addressSource.getAddressFromCoords(
+        return kakaoMapSource.getAddressFromCoords(
             KaKaoAddressRequest(coords.longitude.toString(), coords.latitude.toString())
         ).map { response ->
             val twoDepthRegion = response.documents.firstOrNull()?.address?.region_2depth_name
