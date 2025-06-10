@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 interface AddressService {
     suspend fun searchArea(keyword: String): Result<List<Area>>
-    suspend fun getNearbyAreas(radius: Int, lat: Double, lng: Double): Result<List<Area>>
+    suspend fun getNearbyAreas(rad: Int, lat: Double, lng: Double): Result<List<Area>>
 }
 
 class AddressServiceImpl @Inject constructor(
@@ -25,12 +25,12 @@ class AddressServiceImpl @Inject constructor(
         }
     }
     override suspend fun getNearbyAreas(
-        radius: Int,
+        rad: Int,
         lat: Double,
         lng: Double
     ): Result<List<Area>> {
         return addressSource.getNearbyAreas(
-            AreaNearbyRequest(radius = radius, lat = lat, lng = lng)
+            AreaNearbyRequest(rad = rad, lat = lat, lng = lng)
         ).map { response ->
             response.data.map { areaData ->
                 areaData.toUiModel()

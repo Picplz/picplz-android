@@ -13,7 +13,7 @@ interface AddressApi {
 
     @GET("api/v1/areas/nearby")
     suspend fun getNearbyAreas(
-        @Query("radius") radius: Int,
+        @Query("rad") rad: Int,
         @Query("lat") lat: Double,
         @Query("lng") lng: Double
     ): AreaNearbyResponse

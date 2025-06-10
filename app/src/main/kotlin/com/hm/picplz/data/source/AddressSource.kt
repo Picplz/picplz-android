@@ -22,7 +22,7 @@ class AddressSourceImpl @Inject constructor(
     override suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<AreaNearbyResponse> =
         runCatching {
             addressApi.getNearbyAreas(
-                radius = request.radius,
+                rad = request.rad,
                 lat = request.lat,
                 lng = request.lng
             )

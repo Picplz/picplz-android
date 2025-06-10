@@ -19,7 +19,7 @@ data class AreaSearchResponse(
 )
 
 data class AreaNearbyRequest(
-    val radius: Int,
+    val rad: Int,
     val lat: Double,
     val lng: Double,
 )
