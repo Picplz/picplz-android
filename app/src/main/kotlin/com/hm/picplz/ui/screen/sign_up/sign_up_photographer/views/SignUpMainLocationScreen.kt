@@ -1,6 +1,8 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,8 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,6 +61,7 @@ fun SignUpMainLocationScreen(
     signUpPhotographerNavController: NavController,
 ) {
     val currentState by viewModel.state.collectAsState()
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         modifier = modifier
@@ -67,6 +72,12 @@ fun SignUpMainLocationScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    focusManager.clearFocus()
+                }
         ) {
             CommonTopBar(
                 text = "주 촬영지",
@@ -117,6 +128,7 @@ fun SignUpMainLocationScreen(
                             AreaTag(
                                 label = area.name.split(" ").lastOrNull() ?: area.name,
                                 onRemove = {
+                                    focusManager.clearFocus()
                                     viewModel.handleIntent(
                                         SignUpPhotographerIntent.RemoveSelectedArea(area)
                                     )
@@ -172,6 +184,7 @@ fun SignUpMainLocationScreen(
                                         area = area,
                                         isSelected = isSelected,
                                         onItemClick = { selectedArea ->
+                                            focusManager.clearFocus()
                                             viewModel.handleIntent(
                                                 SignUpPhotographerIntent.ToggleAreaSelection(selectedArea)
                                             )
