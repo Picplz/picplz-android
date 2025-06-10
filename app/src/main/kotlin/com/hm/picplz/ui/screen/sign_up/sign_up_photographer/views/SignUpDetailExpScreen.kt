@@ -157,7 +157,7 @@ fun SignUpDetailExpScreen(
                 is SignUpPhotographerSideEffect.Navigate -> {
                     signUpPhotographerNavController.navigate(sideEffect.destination)
                 }
-                is SignUpPhotographerSideEffect.NavigateWithSubmit -> {}
+                else -> {}
             }
         }
     }

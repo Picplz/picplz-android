@@ -37,7 +37,9 @@ data class SignUpPhotographerState(
     val searchResults: List<Area> = emptyList(),
     val isSearching: Boolean = false,
     val selectedAreas: List<Area> = emptyList(),
-    val searchError: String? = null
+    val searchError: String? = null,
+    val toastMessage: String? = null,
+    val showToast: Boolean = false,
 ) {
     companion object {
         private fun defaultExperienceChipList(): List<ChipItem> {

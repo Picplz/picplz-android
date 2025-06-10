@@ -1,7 +1,5 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
-import CommonOutlinedTextField
-import CommonStatusTag
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -42,15 +39,15 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.R
+import com.hm.picplz.ui.screen.common.CommonToast
+import com.hm.picplz.ui.screen.common.ToastPosition
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
-import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -186,6 +183,17 @@ fun SignUpMainLocationScreen(
                     }
                 }
             }
+        }
+        currentState.toastMessage?.let { message ->
+            CommonToast(
+                message = message,
+                isVisible = currentState.showToast,
+                position = ToastPosition.BOTTOM,
+                offset = 133.dp,
+                onDismiss = {
+                    viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
+                }
+            )
         }
     }
     LaunchedEffect(Unit) {

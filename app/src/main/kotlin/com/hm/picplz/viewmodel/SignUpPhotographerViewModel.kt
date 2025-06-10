@@ -251,6 +251,13 @@ class SignUpPhotographerViewModel @Inject constructor(
                 _state.update { currentState ->
                     val isAlreadySelected = currentState.selectedAreas.any { it.id == intent.area.id }
 
+                    if (!isAlreadySelected && currentState.selectedAreas.size >= 10) {
+                        return@update currentState.copy(
+                            toastMessage = "활동 지역은 최대 10개까지 선택할 수 있습니다.",
+                            showToast = true
+                        )
+                    }
+
                     val newSelectedAreas = if (isAlreadySelected) {
                         currentState.selectedAreas.filter { it.id != intent.area.id }
                     } else {
@@ -274,6 +281,9 @@ class SignUpPhotographerViewModel @Inject constructor(
                     searchResults = emptyList(),
                     searchError = null
                 )}
+            }
+            is DismissToast -> {
+                _state.update { it.copy(showToast = false, toastMessage = null) }
             }
         }
     }

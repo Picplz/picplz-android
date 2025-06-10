@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.MainActivity
@@ -234,7 +233,7 @@ fun SignUpExperienceScreen(
                 is SignUpPhotographerSideEffect.Navigate -> {
                     signUpPhotographerNavController.navigate(sideEffect.destination)
                 }
-                is SignUpPhotographerSideEffect.NavigateWithSubmit -> {}
+                else -> {}
             }
         }
     }

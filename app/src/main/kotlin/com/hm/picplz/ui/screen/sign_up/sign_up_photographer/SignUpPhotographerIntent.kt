@@ -28,4 +28,5 @@ sealed class SignUpPhotographerIntent {
     data class RemoveSelectedArea(val area: Area) : SignUpPhotographerIntent()
     data object ClearSearchResults : SignUpPhotographerIntent()
     data class UpdateSearchQuery(val query: String) : SignUpPhotographerIntent()
+    data object DismissToast : SignUpPhotographerIntent()
 }
