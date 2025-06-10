@@ -36,7 +36,7 @@ data class SignUpPhotographerState(
     val hasLocationPermission: Boolean? = null,
     val searchResults: List<Area> = emptyList(),
     val isSearching: Boolean = false,
-    val selectedArea: Area? = null,
+    val selectedAreas: List<Area> = emptyList(),
     val searchError: String? = null
 ) {
     companion object {

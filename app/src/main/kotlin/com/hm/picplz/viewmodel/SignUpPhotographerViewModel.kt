@@ -247,12 +247,26 @@ class SignUpPhotographerViewModel @Inject constructor(
                 }
             }
 
-            is SelectArea -> {
-                _state.update { it.copy(
-                    selectedArea = intent.area,
-                    searchResults = emptyList(),
-                    searchQuery = intent.area.displayName
-                )}
+            is ToggleAreaSelection -> {
+                _state.update { currentState ->
+                    val isAlreadySelected = currentState.selectedAreas.any { it.id == intent.area.id }
+
+                    val newSelectedAreas = if (isAlreadySelected) {
+                        currentState.selectedAreas.filter { it.id != intent.area.id }
+                    } else {
+                        currentState.selectedAreas + intent.area
+                    }
+
+                    currentState.copy(selectedAreas = newSelectedAreas)
+                }
+            }
+
+            is RemoveSelectedArea -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedAreas = currentState.selectedAreas.filter { it.id != intent.area.id }
+                    )
+                }
             }
 
             is ClearSearchResults -> {

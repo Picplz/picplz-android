@@ -24,7 +24,8 @@ sealed class SignUpPhotographerIntent {
     data object InitializeCareerValues : SignUpPhotographerIntent()
     data class SetSelectedSelector(val selectedSelector: SelectorType) : SignUpPhotographerIntent()
     data class SearchArea(val keyword: String) : SignUpPhotographerIntent()
-    data class SelectArea(val area: Area) : SignUpPhotographerIntent()
+    data class ToggleAreaSelection(val area: Area) : SignUpPhotographerIntent()
+    data class RemoveSelectedArea(val area: Area) : SignUpPhotographerIntent()
     data object ClearSearchResults : SignUpPhotographerIntent()
     data class UpdateSearchQuery(val query: String) : SignUpPhotographerIntent()
 }

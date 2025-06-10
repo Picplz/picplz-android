@@ -1,7 +1,9 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
 import CommonOutlinedTextField
+import CommonStatusTag
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -45,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.pretendardTypography
 
@@ -105,6 +109,25 @@ fun SignUpMainLocationScreen(
                         )
                     }
                 )
+                if (currentState.selectedAreas.isNotEmpty()) {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(currentState.selectedAreas) { area ->
+                            AreaTag(
+                                label = area.name.split(" ").lastOrNull() ?: area.name,
+                                onRemove = {
+                                    viewModel.handleIntent(
+                                        SignUpPhotographerIntent.RemoveSelectedArea(area)
+                                    )
+                                },
+                            )
+                        }
+                    }
+                } else Spacer(modifier = Modifier.height(10.dp))
                 Spacer(modifier = Modifier.height(30.dp))
                 when {
                     currentState.isSearching -> {
@@ -146,9 +169,16 @@ fun SignUpMainLocationScreen(
                                 modifier = Modifier.padding(top = 16.dp)
                             ) {
                                 items(currentState.searchResults) { area ->
+                                    val isSelected = currentState.selectedAreas.any { it.id == area.id }
+
                                     AreaListItem(
                                         area = area,
-                                        onItemClick = {}
+                                        isSelected = isSelected,
+                                        onItemClick = { selectedArea ->
+                                            viewModel.handleIntent(
+                                                SignUpPhotographerIntent.ToggleAreaSelection(selectedArea)
+                                            )
+                                        }
                                     )
                                 }
                             }
