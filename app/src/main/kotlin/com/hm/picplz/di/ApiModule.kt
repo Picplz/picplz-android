@@ -3,10 +3,13 @@ package com.hm.picplz.di
 import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.KakaoMapApi
 import com.hm.picplz.data.api.PhotographerApi
+import com.hm.picplz.data.provider.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
@@ -23,6 +26,26 @@ annotation class PicplzApi
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
     @Provides
     @Singleton
     @KakaoRetrofit
@@ -43,9 +66,10 @@ object NetworkModule {
     @Provides
     @Singleton
     @PicplzApi
-    fun providePicplzRetrofit(): Retrofit {
+    fun providePicplzRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://3.36.183.87:8080/")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

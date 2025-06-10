@@ -41,6 +41,8 @@ android {
             "${localProperties["kakao_native_app_key"]}"
         )
         buildConfigField("String", "KAKAO_REST_API_KEY", "${localProperties["kakao_rest_api_key"]}")
+        buildConfigField("String", "DEV_GUEST_TOKEN", "${localProperties["dev_guest_token"]}")
+        buildConfigField("String", "DEV_USER_TOKEN", "${localProperties["dev_user_token"]}")
 
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = localProperties["kakao_native_app_key"] ?: ""
     }
