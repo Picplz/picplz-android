@@ -1,24 +1,30 @@
 package com.hm.picplz.data.source
 
-import com.hm.picplz.BuildConfig
-import com.hm.picplz.data.api.KakaoMapApi
-import com.hm.picplz.data.model.KaKaoAddressRequest
-import com.hm.picplz.data.model.KaKaoAddressResponse
+import com.hm.picplz.data.api.AddressApi
+import com.hm.picplz.data.model.AreaNearbyRequest
+import com.hm.picplz.data.model.AreaNearbyResponse
+import com.hm.picplz.data.model.AreaSearchRequest
+import com.hm.picplz.data.model.AreaSearchResponse
 import javax.inject.Inject
 
-interface AddressSource {
-    suspend fun getAddressFromCoords(request: KaKaoAddressRequest): Result<KaKaoAddressResponse>
+interface  AddressSource {
+    suspend fun searchArea(request: AreaSearchRequest): Result<AreaSearchResponse>
+    suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<AreaNearbyResponse>
 }
 
 class AddressSourceImpl @Inject constructor(
-    private val kakaoMapApi: KakaoMapApi
+    private val addressApi: AddressApi
 ) : AddressSource {
-    override suspend fun getAddressFromCoords(request: KaKaoAddressRequest): Result<KaKaoAddressResponse> =
+    override suspend fun searchArea(request: AreaSearchRequest): Result<AreaSearchResponse> =
         runCatching {
-            kakaoMapApi.getAddressFromCoords(
-                authorization = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}",
-                x = request.x,
-                y = request.y
+            addressApi.searchAreas(request.keyword)
+        }
+    override suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<AreaNearbyResponse> =
+        runCatching {
+            addressApi.getNearbyAreas(
+                rad = request.rad,
+                lat = request.lat,
+                lng = request.lng
             )
         }
 }

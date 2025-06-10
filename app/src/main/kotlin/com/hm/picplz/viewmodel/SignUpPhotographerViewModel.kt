@@ -1,30 +1,91 @@
 package com.hm.picplz.viewmodel
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
+import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SelectorType
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class SignUpPhotographerViewModel : ViewModel() {
+@HiltViewModel
+class SignUpPhotographerViewModel @Inject constructor(
+    private val addressService: AddressService,
+    private val locationService: LocationService
+) : ViewModel() {
     private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
     val state: StateFlow<SignUpPhotographerState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<SignUpPhotographerSideEffect>()
     val sideEffect: SharedFlow<SignUpPhotographerSideEffect> get() = _sideEffect
+
+    init {
+        loadNearbyAreasOnInit()
+    }
+
+    private fun loadNearbyAreasOnInit() {
+        viewModelScope.launch {
+            locationService.getCurrentLocation(
+                onLocationReceived = { location ->
+                    _state.update { it.copy(hasLocationPermission = true) }
+
+                    loadNearbyAreas(
+                        lat = location.latitude,
+                        lng = location.longitude
+                    )
+                },
+                onPermissionDenied = {
+                    Log.w("LocationInfo", "위치 권한 거부됨")
+
+                    _state.update { it.copy(
+                        hasLocationPermission = false,
+                        searchResults = emptyList(),
+                        isSearching = false,
+                        searchError = "위치 권한이 필요합니다"
+                    )}
+                }
+            )
+        }
+    }
+
+    private fun loadNearbyAreas(lat: Double, lng: Double) {
+        _state.update { it.copy(isSearching = true) }
+
+        viewModelScope.launch {
+            addressService.getNearbyAreas(3, lat, lng)
+                .onSuccess { nearbyAreas ->
+                    _state.update { it.copy(
+                        searchResults = nearbyAreas,
+                        isSearching = false,
+                        searchError = null
+                    )}
+                    Log.d("AddressSearch", "근처 지역 로딩 성공: ${nearbyAreas.size}개")
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(
+                        searchResults = emptyList(),
+                        isSearching = false,
+                        searchError = "근처 지역을 불러올 수 없습니다"
+                    )}
+                    Log.e("AddressSearch", "근처 지역 로딩 실패", error)
+                }
+        }
+    }
 
     fun handleIntent(intent: SignUpPhotographerIntent) {
         when (intent) {
@@ -153,6 +214,89 @@ class SignUpPhotographerViewModel : ViewModel() {
             }
             is SetSelectedSelector -> {
                 _state.update { it.copy( selectedSelector = intent.selectedSelector ) }
+            }
+            is UpdateSearchQuery -> {
+                _state.update { it.copy(
+                    searchQuery = intent.query,
+                    searchError = null,
+                    hasSearchCompleted = false
+                )}
+            }
+
+            is SearchArea -> {
+                viewModelScope.launch {
+                    if (intent.keyword.isBlank()) {
+                        _state.update { it.copy(
+                            hasSearchCompleted = false,
+                            searchResults = emptyList()
+                        )}
+                        loadNearbyAreasOnInit()
+                        return@launch
+                    }
+
+                    _state.update { it.copy(
+                        isSearching = true,
+                        hasSearchCompleted = false
+                    )}
+
+                    addressService.searchArea(intent.keyword)
+                        .onSuccess { searchedAreas ->
+                            _state.update { it.copy(
+                                searchResults = searchedAreas,
+                                isSearching = false,
+                                hasSearchCompleted = true,
+                                searchError = null
+                            )}
+                        }
+                        .onFailure { error ->
+                            _state.update { it.copy(
+                                searchResults = emptyList(),
+                                isSearching = false,
+                                hasSearchCompleted = true,
+                                searchError = "검색 중 오류가 발생했습니다"
+                            )}
+                            Log.e("AddressSearch", "지역 검색 실패", error)
+                        }
+                }
+            }
+
+            is ToggleAreaSelection -> {
+                _state.update { currentState ->
+                    val isAlreadySelected = currentState.selectedAreas.any { it.id == intent.area.id }
+
+                    if (!isAlreadySelected && currentState.selectedAreas.size >= 10) {
+                        return@update currentState.copy(
+                            toastMessage = "활동 지역은 최대 10개까지 선택할 수 있습니다.",
+                            showToast = true
+                        )
+                    }
+
+                    val newSelectedAreas = if (isAlreadySelected) {
+                        currentState.selectedAreas.filter { it.id != intent.area.id }
+                    } else {
+                        currentState.selectedAreas + intent.area
+                    }
+
+                    currentState.copy(selectedAreas = newSelectedAreas)
+                }
+            }
+
+            is RemoveSelectedArea -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedAreas = currentState.selectedAreas.filter { it.id != intent.area.id }
+                    )
+                }
+            }
+
+            is ClearSearchResults -> {
+                _state.update { it.copy(
+                    searchResults = emptyList(),
+                    searchError = null
+                )}
+            }
+            is DismissToast -> {
+                _state.update { it.copy(showToast = false, toastMessage = null) }
             }
         }
     }

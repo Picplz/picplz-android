@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
-import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.KakaoMapService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
@@ -28,7 +28,7 @@ class SearchPhotographerViewModel @Inject constructor(
     private val photographerRepository: PhotographerRepository,
     private val displayMetricsUtil: DisplayMetricsUtil,
     private val locationService: LocationService,
-    private val addressService: AddressService
+    private val kakaoMapService: KakaoMapService
 ) : ViewModel() {
     private val _state = MutableStateFlow(SearchPhotographerState.idle())
     val state : StateFlow<SearchPhotographerState> get() = _state
@@ -52,7 +52,7 @@ class SearchPhotographerViewModel @Inject constructor(
             }
             is SearchPhotographerIntent.GetAddress -> {
                 viewModelScope.launch {
-                    addressService.getAddressFromCoordinates(intent.Coords)
+                    kakaoMapService.getAddressFromCoordinates(intent.Coords)
                         .onSuccess { address ->
                             handleIntent(SearchPhotographerIntent.SetAddress(address))
                         }

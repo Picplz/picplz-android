@@ -60,6 +60,7 @@ fun SignUpSelectTypeScreen(
             statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(this, view).isAppearanceLightStatusBars = true
         }
+        viewModel.handleIntent(ResetAllSignUpData)
     }
 
     val currentState = viewModel.state.collectAsState().value
@@ -145,7 +146,7 @@ fun SignUpSelectTypeScreen(
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = { viewModel.handleIntent(NavigateToSelected) },
+                    onClick = { viewModel.handleIntent( Navigate("sign-up-nickname")) },
                     enabled = currentState.selectedUserType != null,
                     containerColor = MainThemeColor.Black
                 )
@@ -156,11 +157,11 @@ fun SignUpSelectTypeScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
-                is SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected -> {
-                    mainNavController.navigateWithBundle(sideEffect.destination, sideEffect.user)
+                is SignUpSideEffect.Navigate -> {
+                    signUpCommonNavController.navigate(sideEffect.destination)
                 }
                 is SignUpSideEffect.NavigateToPrev -> {
-                    signUpCommonNavController.popBackStack()
+                    mainNavController.popBackStack()
                 }
                 else -> {}
             }

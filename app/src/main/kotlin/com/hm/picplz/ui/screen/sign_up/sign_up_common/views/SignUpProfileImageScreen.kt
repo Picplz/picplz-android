@@ -43,6 +43,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.MainActivity
 import com.hm.picplz.R
+import com.hm.picplz.data.model.UserType
+import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.*
@@ -56,7 +58,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun SignUpProfileImageScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpCommonViewModel = viewModel(),
-    navController: NavController,
+    mainNavController: NavController,
+    signUpCommonNavController: NavController,
 ) {
     /** 상태바 스타일 설정 **/
     val view = LocalView.current
@@ -159,12 +162,22 @@ fun SignUpProfileImageScreen(
                         text = if (currentState.profileImageUri === null) {
                             buildAnnotatedString {
                                 append("프로필 이미지를\n")
-                                append("설정해 주세요.\n")
+                                append("설정해 주세요.")
                             }
                         } else {
-                            buildAnnotatedString {
-                                append("회원 타입 설정으로\n")
-                                append("넘어갈게요.\n")
+                            when (currentState.selectedUserType) {
+                                UserType.User -> buildAnnotatedString {
+                                    append("프로필 이미지 설정이\n")
+                                    append("완료되었습니다.")
+                                }
+                                UserType.Photographer -> buildAnnotatedString {
+                                    append("이제 주 촬영지와 촬영 기기를\n")
+                                    append("입력해볼까요?")
+                                }
+                                else -> buildAnnotatedString {
+                                    append("다음 단계로\n")
+                                    append("넘어갈게요.")
+                                }
                             }
                         },
                         style = MaterialTheme.typography.titleMedium,
@@ -183,7 +196,7 @@ fun SignUpProfileImageScreen(
             ) {
                 CommonBottomButton(
                     text = if (currentState.profileImageUri === null) {"다음에 설정하기"} else {"다음"},
-                    onClick = { viewModel.handleIntent(Navigate("sign-up-select-type")) },
+                    onClick = { viewModel.handleIntent(NavigateToSelected) },
                     enabled = currentState.nickname.isNotEmpty(),
                     containerColor = MainThemeColor.Black
                 )
@@ -195,10 +208,13 @@ fun SignUpProfileImageScreen(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is SignUpSideEffect.NavigateToPrev -> {
-                    navController.popBackStack()
+                    signUpCommonNavController.popBackStack()
+                }
+                is SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected -> {
+                    mainNavController.navigateWithBundle(sideEffect.destination, sideEffect.user)
                 }
                 is SignUpSideEffect.Navigate -> {
-                    navController.navigate(sideEffect.destination)
+                    signUpCommonNavController.navigate(sideEffect.destination)
                 }
                 is SignUpSideEffect.ShowFileUploadDialog -> {
                     filePickerLauncher.launch("image/*")
@@ -212,8 +228,12 @@ fun SignUpProfileImageScreen(
 @Preview
 @Composable
 fun SignUpProfileImageScreenPreview() {
-    val signUpNavController = rememberNavController()
+    val mainNavController = rememberNavController()
+    val signUpCommonNavController = rememberNavController()
+
     PicplzTheme {
-        SignUpProfileImageScreen(navController = signUpNavController)
+        SignUpProfileImageScreen(
+            mainNavController = mainNavController,
+            signUpCommonNavController = signUpCommonNavController        )
     }
 }

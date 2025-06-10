@@ -52,7 +52,6 @@ import kotlinx.coroutines.flow.collectLatest
 fun SignUpNicknameScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpCommonViewModel = viewModel(),
-    mainNavController: NavController,
     signUpCommonNavController: NavController,
 ) {
     /** 상태바 스타일 설정 **/
@@ -64,7 +63,6 @@ fun SignUpNicknameScreen(
             statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(this, view).isAppearanceLightStatusBars = true
         }
-        viewModel.handleIntent(ResetSelectedUserType)
     }
 
     val currentState = viewModel.state.collectAsState().value
@@ -167,7 +165,7 @@ fun SignUpNicknameScreen(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is SignUpSideEffect.NavigateToPrev -> {
-                    mainNavController.popBackStack()
+                    signUpCommonNavController.popBackStack()
                 }
                 is SignUpSideEffect.Navigate -> {
                     signUpCommonNavController.navigate(sideEffect.destination)
@@ -181,12 +179,10 @@ fun SignUpNicknameScreen(
 @Preview(showBackground = true)
 @Composable
 fun SignUpNicknameScreenPreview() {
-    val mainNavController = rememberNavController()
     val signUpNavController = rememberNavController()
 
     PicplzTheme {
         SignUpNicknameScreen(
-            mainNavController = mainNavController,
             signUpCommonNavController = signUpNavController,
         )
     }

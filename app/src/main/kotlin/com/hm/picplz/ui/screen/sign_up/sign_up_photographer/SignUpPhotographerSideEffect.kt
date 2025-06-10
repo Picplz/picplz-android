@@ -5,6 +5,6 @@ import android.os.Bundle
 
 sealed class SignUpPhotographerSideEffect {
     data object NavigateToPrev : SignUpPhotographerSideEffect()
-    data class  Navigate(val destination: String) : SignUpPhotographerSideEffect()
-    data class  NavigateWithSubmit(val destination: String, val userInfo: Bundle) : SignUpPhotographerSideEffect()
+    data class Navigate(val destination: String) : SignUpPhotographerSideEffect()
+    data class NavigateWithSubmit(val destination: String, val userInfo: Bundle) : SignUpPhotographerSideEffect()
 }
