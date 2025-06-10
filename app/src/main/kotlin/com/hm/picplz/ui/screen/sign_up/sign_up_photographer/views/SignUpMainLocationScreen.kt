@@ -1,11 +1,17 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
 import CommonOutlinedTextField
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +39,14 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.hm.picplz.R
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
+import com.hm.picplz.ui.theme.MainFontFamily
+import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -92,6 +105,7 @@ fun SignUpMainLocationScreen(
                         )
                     }
                 )
+                Spacer(modifier = Modifier.height(30.dp))
                 when {
                     currentState.isSearching -> {
                         Box(
@@ -105,13 +119,38 @@ fun SignUpMainLocationScreen(
                     }
 
                     currentState.searchResults.isNotEmpty() -> {
-                        LazyColumn(
-                            modifier = Modifier.padding(top = 16.dp)
-                        ) {
-                            items(currentState.searchResults) { address ->
-                                Text(
-                                    text = address.name,
+                        Column {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.marker_icon),
+                                    contentDescription = "아이콘",
+                                    modifier = Modifier.size(16.dp)
                                 )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = when {
+                                        currentState.searchQuery.isBlank() -> "근처 동네"
+                                        else -> "'${currentState.searchQuery}' 검색 결과"
+                                    },
+                                    style = MainFontFamily.buttonDefault,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MainThemeColor.Black
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            LazyColumn(
+                                modifier = Modifier.padding(top = 16.dp)
+                            ) {
+                                items(currentState.searchResults) { area ->
+                                    AreaListItem(
+                                        area = area,
+                                        onItemClick = {}
+                                    )
+                                }
                             }
                         }
                     }

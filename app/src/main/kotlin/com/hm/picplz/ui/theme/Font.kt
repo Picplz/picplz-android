@@ -192,4 +192,12 @@ object MainFontFamily {
         lineHeight = 12.sp * 1.4,
         letterSpacing = 0.sp
     )
+
+    val buttonDefault = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 12.sp * 1.4,
+        letterSpacing = 0.sp
+    )
 }
