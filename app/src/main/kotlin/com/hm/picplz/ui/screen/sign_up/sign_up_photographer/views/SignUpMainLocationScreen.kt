@@ -41,6 +41,8 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -177,7 +179,7 @@ fun SignUpMainLocationScreen(
                             LazyColumn(
                                 modifier = Modifier.padding(top = 16.dp)
                             ) {
-                                items(currentState.searchResults) { area ->
+                                itemsIndexed(currentState.searchResults) { index, area ->
                                     val isSelected = currentState.selectedAreas.any { it.id == area.id }
 
                                     AreaListItem(
@@ -190,6 +192,12 @@ fun SignUpMainLocationScreen(
                                             )
                                         }
                                     )
+                                    if (index < currentState.searchResults.size - 1) {
+                                        HorizontalDivider(
+                                            thickness = 0.98.dp,
+                                            color = MainThemeColor.Gray2
+                                        )
+                                    }
                                 }
                             }
                         }
