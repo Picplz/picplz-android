@@ -49,8 +49,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.R
+import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.ToastPosition
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
@@ -87,6 +89,7 @@ fun SignUpMainLocationScreen(
             )
             Column(
                 modifier = Modifier
+                    .weight(1f)
                     .padding(horizontal = 15.dp)
             ) {
                 Text(
@@ -203,6 +206,20 @@ fun SignUpMainLocationScreen(
                         }
                     }
                 }
+            }
+            Box(
+                modifier = Modifier
+                    .height(120.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CommonBottomButton(
+                    text = "다음",
+                    onClick = {},
+                    enabled = currentState.selectedAreas.isNotEmpty(),
+                    containerColor = MainThemeColor.Black
+                )
             }
         }
         currentState.toastMessage?.let { message ->
