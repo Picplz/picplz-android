@@ -244,7 +244,8 @@ fun SignUpMainLocationScreen(
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 60.dp),
+                                        .padding(top = 60.dp)
+                                        .requiredHeight(166.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
@@ -254,14 +255,11 @@ fun SignUpMainLocationScreen(
                                     )
                                     Spacer(modifier = Modifier
                                         .height(18.dp)
-                                        .requiredHeight(18.dp)
                                     )
                                     Box(
                                         modifier = Modifier
                                             .height(60.68.dp)
                                             .width(52.39.dp)
-                                            .requiredHeight(60.68.dp)
-                                            .requiredWidth(52.39.dp)
                                     ) {
                                         Image(
                                             painter = painterResource(id = R.drawable.user_undefined),
@@ -302,7 +300,7 @@ fun SignUpMainLocationScreen(
                 message = message,
                 isVisible = currentState.showToast,
                 position = ToastPosition.BOTTOM,
-                offset = 133.dp,
+                offset = 120.dp,
                 onDismiss = {
                     viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
                 }
