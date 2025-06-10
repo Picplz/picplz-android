@@ -27,7 +27,8 @@ import javax.inject.Inject
 class SignUpPhotographerViewModel @Inject constructor(
     private val addressService: AddressService,
     private val locationService: LocationService
-) : ViewModel() {    private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
+) : ViewModel() {
+    private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
     val state: StateFlow<SignUpPhotographerState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<SignUpPhotographerSideEffect>()
@@ -217,22 +218,33 @@ class SignUpPhotographerViewModel @Inject constructor(
             is UpdateSearchQuery -> {
                 _state.update { it.copy(
                     searchQuery = intent.query,
-                    searchError = null
+                    searchError = null,
+                    hasSearchCompleted = false
                 )}
             }
 
             is SearchArea -> {
                 viewModelScope.launch {
                     if (intent.keyword.isBlank()) {
+                        _state.update { it.copy(
+                            hasSearchCompleted = false,
+                            searchResults = emptyList()
+                        )}
                         loadNearbyAreasOnInit()
                         return@launch
                     }
+
+                    _state.update { it.copy(
+                        isSearching = true,
+                        hasSearchCompleted = false
+                    )}
 
                     addressService.searchArea(intent.keyword)
                         .onSuccess { searchedAreas ->
                             _state.update { it.copy(
                                 searchResults = searchedAreas,
                                 isSearching = false,
+                                hasSearchCompleted = true,
                                 searchError = null
                             )}
                         }
@@ -240,6 +252,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                             _state.update { it.copy(
                                 searchResults = emptyList(),
                                 isSearching = false,
+                                hasSearchCompleted = true,
                                 searchError = "검색 중 오류가 발생했습니다"
                             )}
                             Log.e("AddressSearch", "지역 검색 실패", error)

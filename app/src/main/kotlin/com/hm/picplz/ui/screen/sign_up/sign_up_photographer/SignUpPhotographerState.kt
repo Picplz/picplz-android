@@ -36,6 +36,7 @@ data class SignUpPhotographerState(
     val hasLocationPermission: Boolean? = null,
     val searchResults: List<Area> = emptyList(),
     val isSearching: Boolean = false,
+    val hasSearchCompleted: Boolean = false,
     val selectedAreas: List<Area> = emptyList(),
     val searchError: String? = null,
     val toastMessage: String? = null,

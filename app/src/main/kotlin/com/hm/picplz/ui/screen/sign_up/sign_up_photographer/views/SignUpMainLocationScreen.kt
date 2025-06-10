@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -46,6 +48,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +62,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListI
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.pretendardTypography
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -69,6 +73,19 @@ fun SignUpMainLocationScreen(
 ) {
     val currentState by viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(currentState.searchQuery) {
+        if (currentState.searchQuery.isNotBlank()) {
+            delay(200L)
+            viewModel.handleIntent(
+                SignUpPhotographerIntent.SearchArea(currentState.searchQuery)
+            )
+        } else {
+            viewModel.handleIntent(
+                SignUpPhotographerIntent.SearchArea("")
+            )
+        }
+    }
 
     Scaffold(
         modifier = modifier
@@ -94,6 +111,7 @@ fun SignUpMainLocationScreen(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 15.dp)
+                    .weight(1f)
             ) {
                 Text(
                     modifier = Modifier
@@ -170,10 +188,9 @@ fun SignUpMainLocationScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp)
-                ) {
+                    ) {
                     when {
                         currentState.isSearching -> {
                             Box(
@@ -215,18 +232,19 @@ fun SignUpMainLocationScreen(
                             }
                         }
 
-                        currentState.searchQuery.isNotBlank() && currentState.searchResults.isEmpty() && !currentState.isSearching -> {
+                        currentState.searchQuery.isNotBlank() &&
+                                currentState.searchResults.isEmpty() &&
+                                !currentState.isSearching &&
+                                currentState.hasSearchCompleted -> {
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 60.dp),
+                                    .fillMaxWidth(),
                                 contentAlignment = Alignment.TopCenter
                             ) {
                                 Column(
                                     modifier = Modifier
-                                        .align(Alignment.Center)
                                         .fillMaxWidth()
-                                        .padding(top = 0.dp),
+                                        .padding(top = 60.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
@@ -234,15 +252,23 @@ fun SignUpMainLocationScreen(
                                         style = pretendardTypography.titleSmall,
                                         color = MainThemeColor.Gray6,
                                     )
-                                    Spacer(modifier = Modifier.height(18.dp))
-                                    Image(
-                                        painter = painterResource(id = R.drawable.user_undefined),
-                                        contentDescription = "아이콘",
+                                    Spacer(modifier = Modifier
+                                        .height(18.dp)
+                                        .requiredHeight(18.dp)
+                                    )
+                                    Box(
                                         modifier = Modifier
                                             .height(60.68.dp)
                                             .width(52.39.dp)
-                                            .wrapContentSize()
-                                    )
+                                            .requiredHeight(60.68.dp)
+                                            .requiredWidth(52.39.dp)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.user_undefined),
+                                            contentDescription = "아이콘",
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                    }
                                     Spacer(modifier = Modifier.height(22.dp))
                                     Text(
                                         text = "다른 지역으로\n이동해 보는 건 어때요?",
