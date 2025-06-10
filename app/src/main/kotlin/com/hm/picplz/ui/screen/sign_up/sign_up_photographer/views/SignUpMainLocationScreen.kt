@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.CircularProgressIndicator
@@ -47,15 +49,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.ToastPosition
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
+import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -69,7 +72,8 @@ fun SignUpMainLocationScreen(
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .imePadding(),
         containerColor = MainThemeColor.White
     ){
         innerPadding ->
@@ -89,7 +93,6 @@ fun SignUpMainLocationScreen(
             )
             Column(
                 modifier = Modifier
-                    .weight(1f)
                     .padding(horizontal = 15.dp)
             ) {
                 Text(
@@ -143,64 +146,110 @@ fun SignUpMainLocationScreen(
                     }
                 } else Spacer(modifier = Modifier.height(10.dp))
                 Spacer(modifier = Modifier.height(30.dp))
-                when {
-                    currentState.isSearching -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
 
-                    currentState.searchResults.isNotEmpty() -> {
-                        Column {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.marker_icon),
+                        contentDescription = "아이콘",
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = when {
+                            currentState.searchQuery.isBlank() -> "근처 동네"
+                            else -> "'${currentState.searchQuery}' 검색 결과"
+                        },
+                        style = MainFontFamily.buttonDefault,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MainThemeColor.Black
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp)
+                ) {
+                    when {
+                        currentState.isSearching -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp),
+                                contentAlignment = Alignment.Center
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.marker_icon),
-                                    contentDescription = "아이콘",
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = when {
-                                        currentState.searchQuery.isBlank() -> "근처 동네"
-                                        else -> "'${currentState.searchQuery}' 검색 결과"
-                                    },
-                                    style = MainFontFamily.buttonDefault,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MainThemeColor.Black
-                                )
+                                CircularProgressIndicator()
                             }
+                        }
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                        currentState.searchResults.isNotEmpty() -> {
+                            Column {
+                                LazyColumn(
+                                    modifier = Modifier.padding(top = 16.dp)
+                                ) {
+                                    itemsIndexed(currentState.searchResults) { index, area ->
+                                        val isSelected = currentState.selectedAreas.any { it.id == area.id }
 
-                            LazyColumn(
-                                modifier = Modifier.padding(top = 16.dp)
-                            ) {
-                                itemsIndexed(currentState.searchResults) { index, area ->
-                                    val isSelected = currentState.selectedAreas.any { it.id == area.id }
-
-                                    AreaListItem(
-                                        area = area,
-                                        isSelected = isSelected,
-                                        onItemClick = { selectedArea ->
-                                            focusManager.clearFocus()
-                                            viewModel.handleIntent(
-                                                SignUpPhotographerIntent.ToggleAreaSelection(selectedArea)
+                                        AreaListItem(
+                                            area = area,
+                                            isSelected = isSelected,
+                                            onItemClick = { selectedArea ->
+                                                focusManager.clearFocus()
+                                                viewModel.handleIntent(
+                                                    SignUpPhotographerIntent.ToggleAreaSelection(selectedArea)
+                                                )
+                                            }
+                                        )
+                                        if (index < currentState.searchResults.size - 1) {
+                                            HorizontalDivider(
+                                                thickness = 0.98.dp,
+                                                color = MainThemeColor.Gray2
                                             )
                                         }
-                                    )
-                                    if (index < currentState.searchResults.size - 1) {
-                                        HorizontalDivider(
-                                            thickness = 0.98.dp,
-                                            color = MainThemeColor.Gray2
-                                        )
                                     }
+                                }
+                            }
+                        }
+
+                        currentState.searchQuery.isNotBlank() && currentState.searchResults.isEmpty() && !currentState.isSearching -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 60.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .fillMaxWidth()
+                                        .padding(top = 0.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = "검색 결과가 없어요",
+                                        style = pretendardTypography.titleSmall,
+                                        color = MainThemeColor.Gray6,
+                                    )
+                                    Spacer(modifier = Modifier.height(18.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user_undefined),
+                                        contentDescription = "아이콘",
+                                        modifier = Modifier
+                                            .height(60.68.dp)
+                                            .width(52.39.dp)
+                                            .wrapContentSize()
+                                    )
+                                    Spacer(modifier = Modifier.height(22.dp))
+                                    Text(
+                                        text = "다른 지역으로\n이동해 보는 건 어때요?",
+                                        style = pretendardTypography.bodyMedium,
+                                        color = MainThemeColor.Gray5,
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
                             }
                         }
