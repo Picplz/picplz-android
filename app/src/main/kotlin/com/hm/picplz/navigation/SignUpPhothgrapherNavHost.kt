@@ -68,7 +68,6 @@ fun SignUpPhotographerNavHost(
             SignUpDeviceScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
-                mainNavController = mainNavController,
                 viewModel = viewModel
             )
         }

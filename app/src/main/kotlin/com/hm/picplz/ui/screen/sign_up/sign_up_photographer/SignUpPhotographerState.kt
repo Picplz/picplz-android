@@ -3,6 +3,8 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.model.Area
+import com.hm.picplz.ui.model.Device
+import com.hm.picplz.ui.model.DeviceCategory
 import com.hm.picplz.viewmodel.emptyUserData
 
 enum class SelectorType {
@@ -41,6 +43,41 @@ data class SignUpPhotographerState(
     val searchError: String? = null,
     val toastMessage: String? = null,
     val showToast: Boolean = false,
+    val phoneDevices: List<Device> = listOf(
+        Device(
+            id = "1",
+            companyName = "애플",
+            productName = "아이폰 6S",
+            category = DeviceCategory.PHONE
+        ),
+        Device(
+            id = "2",
+            companyName = "애플",
+            productName = "아이폰 16 Pro",
+            category = DeviceCategory.PHONE
+        ),
+        Device(
+            id = "3",
+            companyName = "애플",
+            productName = "아이폰 6S",
+            category = DeviceCategory.PHONE
+        ),
+        Device(
+            id = "4",
+            companyName = "애플",
+            productName = "아이폰 6S",
+            category = DeviceCategory.PHONE
+        ),
+
+    ),
+    val cameraDevices: List<Device> = listOf(
+        Device(
+            id = "3",
+            companyName = "소니",
+            productName = "a7m3 (DSLR 카메라)",
+            category = DeviceCategory.CAMERA
+        )
+    )
 ) {
     companion object {
         private fun defaultExperienceChipList(): List<ChipItem> {

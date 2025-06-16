@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.model.Area
+import com.hm.picplz.ui.model.Device
 
 sealed class SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent()
@@ -29,4 +30,6 @@ sealed class SignUpPhotographerIntent {
     data object ClearSearchResults : SignUpPhotographerIntent()
     data class UpdateSearchQuery(val query: String) : SignUpPhotographerIntent()
     data object DismissToast : SignUpPhotographerIntent()
+    data class AddDeviceToCategory(val device: Device) : SignUpPhotographerIntent()
+    data class RemoveDeviceFromCategory(val device: Device) : SignUpPhotographerIntent()
 }

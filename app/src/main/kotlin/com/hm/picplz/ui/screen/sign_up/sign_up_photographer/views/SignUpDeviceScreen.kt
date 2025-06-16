@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
-import CommonSelectButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -76,62 +78,94 @@ fun SignUpDeviceScreen(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(
-                        top = 16.dp,
-                        start = 15.dp,
-                        end = 15.dp
-                    )
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(top = 16.dp)
                 ) {
                     Text(
                         text = "활용 기기를 선택해 주세요.",
                         style = pretendardTypography.titleMedium
                     )
-                    Spacer(
+                    Spacer(modifier = Modifier.height(30.dp))
+                    Column(
                         modifier = Modifier
-                            .height(30.dp)
-                    )
-
-                    Column {
+                            .fillMaxWidth()
+                            .height(220.dp)
+                    ) {
                         Text(
                             text = "내 핸드폰",
                             style = pretendardTypography.titleSmall
                         )
-                        Spacer(
+                        Column(
                             modifier = Modifier
-                                .height(10.dp)
-                        )
-                        CommonAddButton (
-                            text = "추가하기 +",
-                            onClick = {}
-                        )
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState())
+                                .padding(top = 10.dp, end = 10.dp),
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(17.dp)
+                            ) {
+                                currentState.phoneDevices.forEach { device ->
+                                    DeviceItem(
+                                        device = device,
+                                        onRemove = {
+                                            viewModel.handleIntent(RemoveDeviceFromCategory(device))
+                                        }
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            CommonAddButton(
+                                text = "추가하기 +",
+                                onClick = {
+                                    viewModel.handleIntent(Navigate("sign-up-add-device?category=phone"))
+                                }
+                            )
+                        }
                     }
-
-                    Spacer(
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Column(
                         modifier = Modifier
-                            .height(16.dp)
-                    )
-
-                    Column {
+                            .fillMaxWidth()
+                            .height(220.dp)
+                    ) {
                         Text(
                             text = "내 카메라",
                             style = pretendardTypography.titleSmall
                         )
-                        Spacer(
+                        Column(
                             modifier = Modifier
-                                .height(10.dp)
-                        )
-                        CommonAddButton (
-                            text = "추가하기 +",
-                            onClick = {}
-                        )
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState())
+                                .padding(top = 10.dp, end = 10.dp),
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(17.dp)
+                            ) {
+                                currentState.cameraDevices.forEach { device ->
+                                    DeviceItem(
+                                        device = device,
+                                        onRemove = {
+                                            viewModel.handleIntent(RemoveDeviceFromCategory(device))
+                                        }
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            CommonAddButton(
+                                text = "추가하기 +",
+                                onClick = {
+                                    viewModel.handleIntent(Navigate("sign-up-add-device?category=camera"))
+                                }
+                            )
+                        }
                     }
                 }
             }
-
             Box(
                 modifier = Modifier
                     .height(120.dp)
@@ -141,13 +175,15 @@ fun SignUpDeviceScreen(
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = {},
+                    onClick = {
+                        viewModel.handleIntent(Navigate("sign-up-completion"))
+                    },
+                    enabled = currentState.phoneDevices.isNotEmpty() || currentState.cameraDevices.isNotEmpty(),
                     containerColor = MainThemeColor.Black
                 )
             }
         }
     }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {

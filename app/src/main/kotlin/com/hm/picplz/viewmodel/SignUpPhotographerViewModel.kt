@@ -8,6 +8,7 @@ import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.LocationService
+import com.hm.picplz.ui.model.DeviceCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
@@ -297,6 +298,32 @@ class SignUpPhotographerViewModel @Inject constructor(
             }
             is DismissToast -> {
                 _state.update { it.copy(showToast = false, toastMessage = null) }
+            }
+            is AddDeviceToCategory -> {
+                _state.update { currentState ->
+                    when (intent.device.category) {
+                        DeviceCategory.PHONE -> currentState.copy(
+                            phoneDevices = currentState.phoneDevices + intent.device
+                        )
+                        DeviceCategory.CAMERA -> currentState.copy(
+                            cameraDevices = currentState.cameraDevices + intent.device
+                        )
+                        else -> currentState
+                    }
+                }
+            }
+            is RemoveDeviceFromCategory -> {
+                _state.update { currentState ->
+                    when (intent.device.category) {
+                        DeviceCategory.PHONE -> currentState.copy(
+                            phoneDevices = currentState.phoneDevices.filter { it.id != intent.device.id }
+                        )
+                        DeviceCategory.CAMERA -> currentState.copy(
+                            cameraDevices = currentState.cameraDevices.filter { it.id != intent.device.id }
+                        )
+                        else -> currentState
+                    }
+                }
             }
         }
     }
