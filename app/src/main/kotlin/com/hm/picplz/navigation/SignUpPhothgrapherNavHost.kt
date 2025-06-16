@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpCareerPeriodScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDetailExpScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDeviceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpExperienceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpMainLocationScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpPhotographyVibeScreen
@@ -57,6 +58,14 @@ fun SignUpPhotographerNavHost(
         }
         composable("sign-up-main-location") {
             SignUpMainLocationScreen(
+                modifier = modifier,
+                signUpPhotographerNavController = signUpPhotographerNavController,
+                mainNavController = mainNavController,
+                viewModel = viewModel
+            )
+        }
+        composable("sign-up-device") {
+            SignUpDeviceScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
                 mainNavController = mainNavController,
