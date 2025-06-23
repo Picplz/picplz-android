@@ -176,7 +176,7 @@ fun SignUpDeviceScreen(
                 CommonBottomButton(
                     text = "다음",
                     onClick = {
-                        viewModel.handleIntent(Navigate("sign-up-completion"))
+                        viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
                     },
                     enabled = currentState.phoneDevices.isNotEmpty() || currentState.cameraDevices.isNotEmpty(),
                     containerColor = MainThemeColor.Black
