@@ -73,7 +73,10 @@ fun DeviceItem(
                     )
                     Spacer(modifier = Modifier.width(14.dp))
                     Text(
-                        text = device.productName,
+                        text = when (device) {
+                            is Device.PhoneDevice -> device.modelName ?: "모델명 없음"
+                            is Device.CameraDevice -> "${device.modelName ?: "모델명 없음"} (${device.cameraType})"
+                        },
                         style = MainFontFamily.bodyBold,
                         color = MainThemeColor.Gray5,
                     )
@@ -98,18 +101,17 @@ fun DeviceItemPreview() {
     PicplzTheme {
         Column {
             DeviceItem(
-                device = Device(
+                device = Device.PhoneDevice(
                     companyName = "애플",
-                    productName = "아이폰 16 Pro",
-                    category = DeviceCategory.PHONE
+                    modelName = "아이폰 16 Pro"
                 ),
                 onRemove = {}
             )
             DeviceItem(
-                device = Device(
+                device = Device.CameraDevice(
                     companyName = "소니",
-                    productName = "a7m3 (DSLR 카메라)",
-                    category = DeviceCategory.CAMERA
+                    modelName = "a7m3",
+                    cameraType = "DSLR 카메라"
                 ),
                 onRemove = {}
             )
