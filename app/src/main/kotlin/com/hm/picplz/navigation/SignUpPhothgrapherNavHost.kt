@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpAddDeviceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpCareerPeriodScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDetailExpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDeviceScreen
@@ -69,6 +71,20 @@ fun SignUpPhotographerNavHost(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
                 viewModel = viewModel
+            )
+        }
+        composable("sign-up-add-device?category={category}") { backStackEntry ->
+            val categoryString = backStackEntry.arguments?.getString("category") ?: "phone"
+            val category = when (categoryString.lowercase()) {
+                "camera" -> DeviceCategory.CAMERA
+                "phone" -> DeviceCategory.PHONE
+                else -> DeviceCategory.PHONE
+            }
+            SignUpAddDeviceScreen(
+                modifier = modifier,
+                signUpPhotographerNavController = signUpPhotographerNavController,
+                viewModel = viewModel,
+                category = category
             )
         }
     }
