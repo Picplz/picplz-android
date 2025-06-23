@@ -8,6 +8,7 @@ import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.LocationService
+import com.hm.picplz.ui.model.Device
 import com.hm.picplz.ui.model.DeviceCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
@@ -301,27 +302,135 @@ class SignUpPhotographerViewModel @Inject constructor(
             }
             is AddDeviceToCategory -> {
                 _state.update { currentState ->
-                    when (intent.device.category) {
-                        DeviceCategory.PHONE -> currentState.copy(
+                    when (intent.device) {
+                        is Device.PhoneDevice -> currentState.copy(
                             phoneDevices = currentState.phoneDevices + intent.device
                         )
-                        DeviceCategory.CAMERA -> currentState.copy(
+                        is Device.CameraDevice -> currentState.copy(
                             cameraDevices = currentState.cameraDevices + intent.device
                         )
-                        else -> currentState
                     }
                 }
             }
             is RemoveDeviceFromCategory -> {
                 _state.update { currentState ->
-                    when (intent.device.category) {
-                        DeviceCategory.PHONE -> currentState.copy(
+                    when (intent.device) {
+                        is Device.PhoneDevice -> currentState.copy(
                             phoneDevices = currentState.phoneDevices.filter { it.id != intent.device.id }
                         )
-                        DeviceCategory.CAMERA -> currentState.copy(
+                        is Device.CameraDevice -> currentState.copy(
                             cameraDevices = currentState.cameraDevices.filter { it.id != intent.device.id }
                         )
-                        else -> currentState
+                    }
+                }
+            }
+            is SetBrandExpanded -> {
+                _state.update { it.copy(brandExpanded = intent.expanded) }
+            }
+            is SetModelExpanded -> {
+                _state.update { it.copy(modelExpanded = intent.expanded) }
+            }
+            is SetCameraTypeExpanded -> {
+                _state.update { it.copy(cameraTypeExpanded = intent.expanded) }
+            }
+            is SetPhoneDirectInputMode -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        phoneBrandDirectInput = intent.brandMode,
+                        phoneModelDirectInput = intent.modelMode,
+                        currentPhone = if (intent.brandMode || intent.modelMode) {
+                            Device.PhoneDevice(
+                                companyName = "",
+                                modelName = ""
+                            )
+                        } else currentState.currentPhone
+                    )
+                }
+            }
+            is SetCameraDirectInputMode -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        cameraBrandDirectInput = intent.brandMode,
+                        currentCamera = if (intent.brandMode) {
+                            Device.CameraDevice(
+                                companyName = "",
+                                modelName = "",
+                                cameraType = ""
+                            )
+                        } else currentState.currentCamera
+                    )
+                }
+            }
+            is UpdateCurrentPhone -> {
+                _state.update { currentState ->
+                    currentState.copy(currentPhone = intent.phone)
+                }
+            }
+            is UpdateCurrentCamera -> {
+                _state.update { currentState ->
+                    currentState.copy(currentCamera = intent.camera)
+                }
+            }
+            is AddCurrentDeviceToList -> {
+                _state.update { currentState ->
+                    when (intent.category) {
+                        DeviceCategory.PHONE -> {
+                            currentState.currentPhone?.let { phone ->
+                                currentState.copy(
+                                    phoneDevices = currentState.phoneDevices + phone,
+                                    currentPhone = null,
+                                    brandExpanded = false,
+                                    modelExpanded = false,
+                                    phoneBrandDirectInput = false,
+                                    phoneModelDirectInput = false
+                                )
+                            } ?: currentState
+                        }
+                        DeviceCategory.CAMERA -> {
+                            currentState.currentCamera?.let { camera ->
+                                currentState.copy(
+                                    cameraDevices = currentState.cameraDevices + camera,
+                                    currentCamera = null,
+                                    brandExpanded = false,
+                                    modelExpanded = false,
+                                    cameraTypeExpanded = false,
+                                    cameraBrandDirectInput = false
+                                )
+                            } ?: currentState
+                        }
+                    }
+                }
+            }
+            is ResetCurrentDevice -> {
+                _state.update { currentState ->
+                    when (intent.category) {
+                        DeviceCategory.PHONE -> currentState.copy(
+                            currentPhone = null,
+                            brandExpanded = false,
+                            modelExpanded = false,
+                            phoneBrandDirectInput = false,
+                            phoneModelDirectInput = false
+                        )
+                        DeviceCategory.CAMERA -> currentState.copy(
+                            currentCamera = null,
+                            brandExpanded = false,
+                            modelExpanded = false,
+                            cameraTypeExpanded = false,
+                            cameraBrandDirectInput = false
+                        )
+                    }
+                }
+            }
+            is SetModelDirectInput -> {
+                _state.update { currentState ->
+                    when (intent.category) {
+                        DeviceCategory.PHONE -> currentState.copy(
+                            phoneModelDirectInput = intent.enabled,
+                            modelExpanded = false
+                        )
+                        DeviceCategory.CAMERA -> {
+                            currentState
+                        }
                     }
                 }
             }
