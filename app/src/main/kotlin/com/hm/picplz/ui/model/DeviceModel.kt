@@ -5,12 +5,25 @@ enum class DeviceCategory {
     PHONE
 }
 
-data class Device(
-    val id: String = "",
-    val companyName: String,
-    val productName: String,
-    val category: DeviceCategory
-) {
-    val fullName: String
-        get() = "$companyName $productName"
+sealed class Device {
+    abstract val id: String
+    abstract val companyName: String
+    abstract val category: DeviceCategory
+
+    data class PhoneDevice(
+        override val id: String = "",
+        override val companyName: String,
+        val modelName: String? = null
+    ) : Device() {
+        override val category = DeviceCategory.PHONE
+    }
+
+    data class CameraDevice(
+        override val id: String = "",
+        override val companyName: String,
+        val modelName: String? = null,
+        val cameraType: String? = null
+    ) : Device() {
+        override val category = DeviceCategory.CAMERA
+    }
 }
