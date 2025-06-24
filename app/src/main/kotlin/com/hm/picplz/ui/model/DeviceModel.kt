@@ -1,5 +1,7 @@
 package com.hm.picplz.ui.model
 
+import java.util.UUID
+
 enum class DeviceCategory {
     CAMERA,
     PHONE
@@ -11,7 +13,7 @@ sealed class Device {
     abstract val category: DeviceCategory
 
     data class PhoneDevice(
-        override val id: String = "",
+        override val id: String = UUID.randomUUID().toString(),
         override val companyName: String,
         val modelName: String? = null
     ) : Device() {
@@ -19,7 +21,7 @@ sealed class Device {
     }
 
     data class CameraDevice(
-        override val id: String = "",
+        override val id: String = UUID.randomUUID().toString(),
         override val companyName: String,
         val modelName: String? = null,
         val cameraType: String? = null

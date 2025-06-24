@@ -31,6 +31,7 @@ import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
+import java.util.UUID
 
 @Composable
 fun DeviceItem(
@@ -102,6 +103,7 @@ fun DeviceItemPreview() {
         Column {
             DeviceItem(
                 device = Device.PhoneDevice(
+                    id = UUID.randomUUID().toString(),
                     companyName = "애플",
                     modelName = "아이폰 16 Pro"
                 ),
@@ -109,6 +111,7 @@ fun DeviceItemPreview() {
             )
             DeviceItem(
                 device = Device.CameraDevice(
+                    id = UUID.randomUUID().toString(),
                     companyName = "소니",
                     modelName = "a7m3",
                     cameraType = "DSLR 카메라"

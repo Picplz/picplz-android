@@ -30,6 +30,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
+import java.util.UUID
 
 @Composable
 fun SignUpAddDeviceScreen(
@@ -139,18 +140,19 @@ fun SignUpAddDeviceScreen(
                 DeviceCategory.PHONE -> {
                     viewModel.handleIntent(UpdateCurrentPhone(
                         Device.PhoneDevice(
+                            id = UUID.randomUUID().toString(),
                             companyName = brand,
                             modelName = null
                         )
                     ))
                 }
                 DeviceCategory.CAMERA -> {
-                    val currentType = currentState.currentCamera?.cameraType
                     viewModel.handleIntent(UpdateCurrentCamera(
                         Device.CameraDevice(
+                            id = UUID.randomUUID().toString(),
                             companyName = brand,
                             modelName = null,
-                            cameraType = currentType
+                            cameraType = null
                         )
                     ))
                 }
@@ -184,6 +186,7 @@ fun SignUpAddDeviceScreen(
                 val currentModel = currentState.currentCamera?.modelName
                 viewModel.handleIntent(UpdateCurrentCamera(
                     Device.CameraDevice(
+                        id = currentState.currentCamera?.id ?: UUID.randomUUID().toString(),
                         companyName = currentBrand,
                         modelName = currentModel,
                         cameraType = type
@@ -205,6 +208,7 @@ fun SignUpAddDeviceScreen(
                     val currentBrand = currentState.currentPhone?.companyName ?: ""
                     viewModel.handleIntent(UpdateCurrentPhone(
                         Device.PhoneDevice(
+                            id = currentState.currentPhone?.id ?: UUID.randomUUID().toString(),
                             companyName = currentBrand,
                             modelName = model
                         )
@@ -215,6 +219,7 @@ fun SignUpAddDeviceScreen(
                     val currentType = currentState.currentCamera?.cameraType ?: ""
                     viewModel.handleIntent(UpdateCurrentCamera(
                         Device.CameraDevice(
+                            id = currentState.currentCamera?.id ?: UUID.randomUUID().toString(),
                             companyName = currentBrand,
                             modelName = model,
                             cameraType = currentType
@@ -266,6 +271,7 @@ private fun PhoneDeviceForm(
             onTextChange = { brand ->
                 viewModel.handleIntent(UpdateCurrentPhone(
                     Device.PhoneDevice(
+                        id = currentState.currentPhone?.id ?: UUID.randomUUID().toString(),
                         companyName = brand,
                         modelName = currentState.currentPhone?.modelName
                     )
@@ -299,6 +305,7 @@ private fun PhoneDeviceForm(
                 val currentBrand = currentState.currentPhone?.companyName ?: ""
                 viewModel.handleIntent(UpdateCurrentPhone(
                     Device.PhoneDevice(
+                        id = currentState.currentPhone?.id ?: UUID.randomUUID().toString(),
                         companyName = currentBrand,
                         modelName = model
                     )
@@ -337,6 +344,7 @@ private fun CameraDeviceForm(
                 val currentCamera = currentState.currentCamera
                 viewModel.handleIntent(UpdateCurrentCamera(
                     Device.CameraDevice(
+                        id = currentCamera?.id ?: UUID.randomUUID().toString(),
                         companyName = brand,
                         modelName = currentCamera?.modelName ?: "",
                         cameraType = currentCamera?.cameraType ?: ""
@@ -389,6 +397,7 @@ private fun CameraDeviceForm(
                     if (modelName.isNotEmpty()) {
                         viewModel.handleIntent(UpdateCurrentCamera(
                             Device.CameraDevice(
+                                id = UUID.randomUUID().toString(),
                                 companyName = "",
                                 modelName = modelName,
                                 cameraType = ""

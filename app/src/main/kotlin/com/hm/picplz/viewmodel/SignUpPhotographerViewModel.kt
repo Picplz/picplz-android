@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import java.util.UUID
 
 
 @HiltViewModel
@@ -340,6 +341,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                         phoneModelDirectInput = intent.modelMode,
                         currentPhone = if (intent.brandMode || intent.modelMode) {
                             Device.PhoneDevice(
+                                id = UUID.randomUUID().toString(),
                                 companyName = "",
                                 modelName = ""
                             )
@@ -353,6 +355,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                         cameraBrandDirectInput = intent.brandMode,
                         currentCamera = if (intent.brandMode) {
                             Device.CameraDevice(
+                                id = UUID.randomUUID().toString(),
                                 companyName = "",
                                 modelName = "",
                                 cameraType = ""
