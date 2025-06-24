@@ -23,7 +23,7 @@ import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerState
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceSelector
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceSelectorBottomSheet
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceSelectorBox
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -132,8 +132,7 @@ fun SignUpAddDeviceScreen(
             }
         }
     }
-    DeviceSelector(
-        title = "브랜드 선택",
+    DeviceSelectorBottomSheet(
         options = brands.map { it.name },
         onOptionSelected = { brand ->
             when (category) {
@@ -178,8 +177,7 @@ fun SignUpAddDeviceScreen(
         visible = currentState.brandExpanded
     )
     if (category == DeviceCategory.CAMERA) {
-        DeviceSelector(
-            title = "카메라 종류 선택",
+        DeviceSelectorBottomSheet(
             options = DeviceData.cameraTypes,
             onOptionSelected = { type ->
                 val currentBrand = currentState.currentCamera?.companyName ?: ""
@@ -199,8 +197,7 @@ fun SignUpAddDeviceScreen(
             visible = currentState.cameraTypeExpanded
         )
     }
-    DeviceSelector(
-        title = "모델명 선택",
+    DeviceSelectorBottomSheet(
         options = models,
         onOptionSelected = { model ->
             when (category) {
