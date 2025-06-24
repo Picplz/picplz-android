@@ -58,6 +58,7 @@ import com.hm.picplz.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.ToastPosition
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaTag
 import com.hm.picplz.ui.theme.MainFontFamily
@@ -289,7 +290,9 @@ fun SignUpMainLocationScreen(
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = {},
+                    onClick = {
+                        viewModel.handleIntent(Navigate("sign-up-device"))
+                    },
                     enabled = currentState.selectedAreas.isNotEmpty(),
                     containerColor = MainThemeColor.Black
                 )
@@ -312,6 +315,9 @@ fun SignUpMainLocationScreen(
             when (sideEffect) {
                 is SignUpPhotographerSideEffect.NavigateToPrev -> {
                     mainNavController.popBackStack()
+                }
+                is SignUpPhotographerSideEffect.Navigate -> {
+                    signUpPhotographerNavController.navigate(sideEffect.destination)
                 }
                 else -> {}
             }

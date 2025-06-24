@@ -2,6 +2,8 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.model.Area
+import com.hm.picplz.ui.model.Device
+import com.hm.picplz.ui.model.DeviceCategory
 
 sealed class SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent()
@@ -29,4 +31,16 @@ sealed class SignUpPhotographerIntent {
     data object ClearSearchResults : SignUpPhotographerIntent()
     data class UpdateSearchQuery(val query: String) : SignUpPhotographerIntent()
     data object DismissToast : SignUpPhotographerIntent()
+    data class AddDeviceToCategory(val device: Device) : SignUpPhotographerIntent()
+    data class RemoveDeviceFromCategory(val device: Device) : SignUpPhotographerIntent()
+    data class UpdateCurrentPhone(val phone: Device.PhoneDevice?) : SignUpPhotographerIntent()
+    data class UpdateCurrentCamera(val camera: Device.CameraDevice?) : SignUpPhotographerIntent()
+    data class ResetCurrentDevice(val category: DeviceCategory) : SignUpPhotographerIntent()
+    data class SetBrandExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
+    data class SetModelExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
+    data class SetCameraTypeExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
+    data class SetPhoneDirectInputMode(val brandMode: Boolean, val modelMode: Boolean) : SignUpPhotographerIntent()
+    data class SetCameraDirectInputMode(val brandMode: Boolean) : SignUpPhotographerIntent()
+    data class SetModelDirectInput(val category: DeviceCategory, val enabled: Boolean) : SignUpPhotographerIntent()
+    data class AddCurrentDeviceToList(val category: DeviceCategory) : SignUpPhotographerIntent()
 }
