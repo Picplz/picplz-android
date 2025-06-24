@@ -149,10 +149,10 @@ fun SignUpAddDeviceScreen(
                 DeviceCategory.CAMERA -> {
                     viewModel.handleIntent(UpdateCurrentCamera(
                         Device.CameraDevice(
-                            id = UUID.randomUUID().toString(),
+                            id = currentState.currentCamera?.id ?: UUID.randomUUID().toString(),
                             companyName = brand,
-                            modelName = null,
-                            cameraType = null
+                            modelName = currentState.currentCamera?.modelName,
+                            cameraType = currentState.currentCamera?.cameraType
                         )
                     ))
                 }

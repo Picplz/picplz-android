@@ -355,10 +355,10 @@ class SignUpPhotographerViewModel @Inject constructor(
                         cameraBrandDirectInput = intent.brandMode,
                         currentCamera = if (intent.brandMode) {
                             Device.CameraDevice(
-                                id = UUID.randomUUID().toString(),
+                                id = currentState.currentCamera?.id ?: UUID.randomUUID().toString(),
                                 companyName = "",
-                                modelName = "",
-                                cameraType = ""
+                                modelName = currentState.currentCamera?.modelName ?: "",
+                                cameraType = currentState.currentCamera?.cameraType ?: ""
                             )
                         } else currentState.currentCamera
                     )
