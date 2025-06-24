@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,12 +46,12 @@ data class LoginIntroPageData(
 
 object LoginIntroPageConfig {
     val PAGES = listOf(
-        LoginIntroPageData("내 인생샷 찍어줄\n픽플과 위치기반 매칭!", R.drawable.logo),
-        LoginIntroPageData("인생샷 맛집\n핫플레이스 추천", R.drawable.user_selected),
-        LoginIntroPageData("나의 인생 프사,\n이젠 픽플즈가 함께", R.drawable.logo, isLast = true)
+        LoginIntroPageData("내 인생샷 찍어줄\n작가님과 위치기반 매칭!", R.drawable.intro1),
+        LoginIntroPageData("작가와 고객 모두 걱정 없는\n정찰제, 안전 결제 시스템!", R.drawable.intro2),
+        LoginIntroPageData("나의 인생 프사,\n이젠 픽플즈가 함께", R.drawable.intro3, isLast = true)
     )
 
-    const val IMAGE_HEIGHT_FACTOR = 0.65f
+    const val IMAGE_HEIGHT_FACTOR = 0.6f
 }
 
 val TAG = "LOGININTROSCREEN"
@@ -85,7 +85,7 @@ fun LoginIntroScreen(
                     }
                 },
                 isIndicatorPositionAbsolute = true,
-                indicatorTopSpacing = imageHeight + 122.dp
+                indicatorTopSpacing = imageHeight + 92.dp
             )
         }
     }
@@ -187,12 +187,13 @@ fun LoginIntroPage(
             Image(
                 painter = painterResource(id = page.imageRes),
                 contentDescription = "Background Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+//        Spacer(modifier = Modifier.height(34.dp))
 
         Text(
             text = page.text,
