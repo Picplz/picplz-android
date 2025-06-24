@@ -259,7 +259,7 @@ private fun PhoneDeviceForm(
         Spacer(modifier = Modifier.height(10.dp))
         DeviceSelectorBox(
             text = currentState.currentPhone?.companyName,
-            placeholder = if (currentState.phoneBrandDirectInput) "브랜드명을 입력하세요 (ex. Apple)" else "선택",
+            placeholder = if (currentState.phoneBrandDirectInput) "브랜드명을 입력하세요" else "선택",
             isSelected = currentState.currentPhone?.companyName != null,
             isDirectInput = currentState.phoneBrandDirectInput,
             inputText = currentState.currentPhone?.companyName ?: "",
@@ -286,9 +286,9 @@ private fun PhoneDeviceForm(
         DeviceSelectorBox(
             text = currentState.currentPhone?.modelName,
             placeholder = when {
-                currentState.phoneBrandDirectInput -> "모델명을 입력하세요 (ex. iPhone 15 Pro)"
-                currentState.phoneModelDirectInput -> "모델명을 입력하세요 (ex. iPhone 15 Pro)"
-                currentState.currentPhone?.companyName == null -> "먼저 브랜드를 선택하세요"
+                currentState.phoneBrandDirectInput -> "상세 모델명을 입력해 주세요 (ex, 아이폰 15 pro)"
+                currentState.phoneModelDirectInput -> "상세 모델명을 입력해 주세요 (ex, 아이폰 15 pro)"
+                currentState.currentPhone?.companyName == null -> "먼저 브랜드를 선택해주세요"
                 else -> "선택"
             },
             isSelected = currentState.currentPhone?.modelName != null,
@@ -329,7 +329,7 @@ private fun CameraDeviceForm(
         Spacer(modifier = Modifier.height(10.dp))
         DeviceSelectorBox(
             text = currentState.currentCamera?.companyName?.takeIf { it.isNotEmpty() },
-            placeholder = if (currentState.cameraBrandDirectInput) "브랜드명을 입력하세요 (ex. Canon)" else "선택",
+            placeholder = if (currentState.cameraBrandDirectInput) "브랜드명을 입력하세요" else "선택",
             isSelected = !currentState.currentCamera?.companyName.isNullOrEmpty(),
             isDirectInput = currentState.cameraBrandDirectInput,
             inputText = currentState.currentCamera?.companyName ?: "",
@@ -375,7 +375,7 @@ private fun CameraDeviceForm(
         Spacer(modifier = Modifier.height(10.dp))
         DeviceSelectorBox(
             text = currentState.currentCamera?.modelName?.takeIf { it.isNotEmpty() },
-            placeholder = "상세 모델명을 입력하세요 (ex. EOS R5)",
+            placeholder = "상세 모델명을 입력해 주세요 (ex, A0000)",
             isSelected = !currentState.currentCamera?.modelName.isNullOrEmpty(),
             isDirectInput = true,
             inputText = currentState.currentCamera?.modelName ?: "",
