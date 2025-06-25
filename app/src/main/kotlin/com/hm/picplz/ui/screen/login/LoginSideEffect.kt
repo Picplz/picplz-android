@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.login
 
 sealed class LoginSideEffect {
     object NavigateToKaKao : LoginSideEffect()
-    data class LoginSuccess(val token: String) : LoginSideEffect()
-    object LoginFailed : LoginSideEffect()
+    object LoginSuccess : LoginSideEffect()
+    data class LoginFailed(val error: Throwable?) : LoginSideEffect()
+    data class NavigateToSignUp(val profileImageUrl: String?) : LoginSideEffect()
 }

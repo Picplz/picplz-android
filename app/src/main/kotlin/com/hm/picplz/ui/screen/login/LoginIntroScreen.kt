@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -25,18 +26,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.os.bundleOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
+import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,7 +59,7 @@ val TAG = "LOGININTROSCREEN"
 
 @Composable
 fun LoginIntroScreen(
-    navController: NavController, viewModel: LoginViewModel = viewModel()
+    navController: NavController, viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -94,81 +95,61 @@ fun LoginIntroScreen(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is LoginSideEffect.NavigateToKaKao -> {
-                    /**
-                     * Todo : 카카오 로그인 관련 로직 추가
-                     *  로그인 성공한 경우 -> 로그인 정보를 가지고 메인 페이지로 이동
-                     *  로그인 정보가 없는 경우 -> 카카오와 연동된 회원가입 -> 회원가입 정보를 가지고 sign-up 스크린으로 이동
-                     */
                     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                         if (error != null) {
-                            Log.e(TAG, "카카오계정으로 로그인 실패", error)
+                            viewModel.handleIntent(LoginIntent.LoginFailed(error))
                         } else if (token != null) {
-                            Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
+                            viewModel.handleIntent(LoginIntent.LoginWithKaKao(token.accessToken))
                         }
                     }
 
-                    // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
                     if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                            if (error != null) {
-                                Log.e(TAG, "카카오톡으로 로그인 실패", error)
-
-                                // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-                                // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-                                if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                                    return@loginWithKakaoTalk
-                                }
-
-                                // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                                UserApiClient.instance.loginWithKakaoAccount(
-                                    context, callback = callback
-                                )
-                            } else if (token != null) {
-                                requestKakaoLoginInfo(token)
+                            if (token != null) {
+                                viewModel.handleIntent(LoginIntent.LoginWithKaKao(token.accessToken))
+                            } else if (error != null) {
+                                viewModel.handleIntent(LoginIntent.LoginFailed(error))
                             }
                         }
                     } else {
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     }
-
-
-//                    Toast.makeText(context, "카카오 로그인", Toast.LENGTH_LONG).show()
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        navController.navigate("sign-up") {
-//                            popUpTo(navController.graph.startDestinationId) {
-//                                saveState = true
-//                            }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
-//                    }, 500)
                 }
 
-                LoginSideEffect.LoginFailed -> TODO()
-                is LoginSideEffect.LoginSuccess -> TODO()
+                is LoginSideEffect.LoginFailed -> {
+                    Toast.makeText(context, "로그인 실패", Toast.LENGTH_SHORT).show()
+                    Log.e("Kakao", "카카오톡 로그인 실패", sideEffect.error)
+                }
+
+                LoginSideEffect.LoginSuccess -> {
+                    Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
+
+                    // TODO: UserType에 따라 분기점 설정
+                    navController.navigate("main") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+
+                is LoginSideEffect.NavigateToSignUp -> {
+                    val profileImageUrlBundle = bundleOf(
+                        "profileImageUri" to sideEffect.profileImageUrl
+                    )
+                    navController.navigateWithBundle("sign-up", profileImageUrlBundle)
+
+//                    navController.navigate("sign-up") {
+//                        popUpTo(navController.graph.startDestinationId) {
+//                            saveState = true
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+                }
             }
         }
-    }
-}
-
-private fun requestKakaoLoginInfo(token: OAuthToken) {
-    UserApiClient.instance.me { user, error ->
-        if (error != null) {
-            Log.e(TAG, "사용자 정보 요청 실패", error)
-            return@me
-        }
-
-        val accessToken = token.accessToken
-        val nickname = user?.kakaoAccount?.profile?.nickname
-        val profileImageUrl = user?.kakaoAccount?.profile?.thumbnailImageUrl
-
-        Log.i(
-            TAG, "사용자 정보 요청 성공" +
-                    "\n토큰: ${accessToken}" +
-                    "\n닉네임: ${nickname}" +
-                    "\n프로필사진: ${profileImageUrl}"
-        )
     }
 }
 
