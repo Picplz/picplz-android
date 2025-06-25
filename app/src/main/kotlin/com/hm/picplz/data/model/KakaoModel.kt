@@ -1,5 +1,16 @@
 package com.hm.picplz.data.model
 
+data class KaKaoLoginRequest(
+    val accessToken: String
+)
+
+data class KaKaoLoginResponse(
+    val socialEmail: String?,
+    val socialProvider: String,
+    val token: String?,
+    val registered: Boolean
+)
+
 data class KaKaoAddressRequest(
     val x: String,
     val y: String

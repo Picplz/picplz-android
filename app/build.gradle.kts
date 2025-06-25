@@ -127,6 +127,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
+    // kakao login
+    implementation(libs.kakao.user)
+
     // kakao map
     implementation(libs.kakao.maps)
 

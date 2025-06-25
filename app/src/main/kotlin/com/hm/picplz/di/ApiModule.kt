@@ -1,6 +1,7 @@
 package com.hm.picplz.di
 
 import com.hm.picplz.data.api.AddressApi
+import com.hm.picplz.data.api.AuthApi
 import com.hm.picplz.data.api.KakaoMapApi
 import com.hm.picplz.data.api.PhotographerApi
 import com.hm.picplz.data.provider.AuthInterceptor
@@ -84,5 +85,11 @@ object NetworkModule {
     @Singleton
     fun provideAddressApi(@PicplzApi retrofit: Retrofit): AddressApi {
         return retrofit.create(AddressApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthApi(@PicplzApi retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
     }
 }

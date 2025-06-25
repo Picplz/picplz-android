@@ -1,5 +1,6 @@
 package com.hm.picplz.navigation
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -51,7 +52,19 @@ fun MainNavHost(
         composable("login") { LoginIntroScreen(navController = navController) }
 //        composable("login") { DetailPhotographerScreen(navController = navController) }
         composable("main") { MainScreen(navController = navController) }
-        composable("sign-up") { SignUpScreen(mainNavController = navController) }
+
+        composable("sign-up") { backStackEntry ->
+            val profileImageUri: Uri? = backStackEntry.arguments
+                ?.getString("profileImageUri")
+                ?.let { Uri.parse(it) }
+            android.util.Log.d("SignUpViewModel", "받음!!! nickname: ${profileImageUri}")
+
+            SignUpScreen(
+                mainNavController = navController,
+                profileImageUri = profileImageUri
+            )
+        }
+
         composable("sign-up-client") { backStackEntry ->
             val userInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 backStackEntry.arguments?.getParcelable("userInfo", User::class.java)
