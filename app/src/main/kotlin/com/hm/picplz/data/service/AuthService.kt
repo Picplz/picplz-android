@@ -1,9 +1,17 @@
 package com.hm.picplz.data.service
 
-import retrofit2.http.GET
-import retrofit2.Response
+import com.hm.picplz.data.model.KaKaoLoginResponse
+import com.hm.picplz.data.source.AuthSource
+import javax.inject.Inject
 
 interface AuthService {
-    @GET("api/v1/oauth2/authorization/kakao")
-    suspend fun requestKakaoLogin(): Response<String>
+    suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse>
+}
+
+class AuthServiceImpl @Inject constructor(
+    private val authSource: AuthSource
+) : AuthService {
+    override suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse> {
+        return authSource.loginWithKaKao(accessToken = accessToken)
+    }
 }

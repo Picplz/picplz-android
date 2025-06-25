@@ -1,24 +1,26 @@
 package com.hm.picplz.data.source
 
-import com.hm.picplz.data.service.AuthService
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.hm.picplz.data.api.AuthApi
+import com.hm.picplz.data.model.KaKaoLoginRequest
+import com.hm.picplz.data.model.KaKaoLoginResponse
+import javax.inject.Inject
 
-object AuthSource {
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("http://3.36.183.87:8080/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 
-    val authService: AuthService = retrofit.create(AuthService::class.java)
+interface AuthSource {
+    suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse>
+}
 
-//    suspend fun requestKakaoLogin(): Result<String> =
-//        runCatching {
-//            val response = authService.requestKakaoLogin()
-//            if (response.isSuccessful) {
-//                response.body() ?: throw Exception("Response body is null")
-//            } else {
-//                throw Exception("Request failed with code: ${response.code()}")
-//            }
-//        }
+class AuthSourceImpl @Inject constructor(
+    private val authApi: AuthApi
+) : AuthSource {
+    override suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse> {
+        return runCatching {
+            val response = authApi.loginWithKaKao(KaKaoLoginRequest(accessToken))
+            if (response.isSuccessful) {
+                response.body() ?: throw Exception("응답 body가 null입니다.")
+            } else {
+                throw Exception("로그인 실패: ${response.code()} ${response.errorBody()?.string()}")
+            }
+        }
+    }
 }
