@@ -37,7 +37,6 @@ import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.common.SingleNumberScrollPicker
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SelectorType
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.InitializeCareerValues
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCareerPeriod
@@ -55,10 +54,6 @@ fun SignUpCareerPeriodScreen(
     signUpPhotographerNavController: NavController
 ) {
     val currentState = viewModel.state.collectAsState().value
-
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(InitializeCareerValues)
-    }
 
     Scaffold(
         modifier = Modifier
@@ -173,7 +168,6 @@ fun SignUpCareerPeriodScreen(
                     text = "다음",
                     onClick = {
                         viewModel.handleIntent(SetCareerPeriod)
-                        viewModel.handleIntent(InitializeCareerValues)
                         viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
                     },
                     enabled = currentState.yearValue != null && currentState.monthValue != null,
