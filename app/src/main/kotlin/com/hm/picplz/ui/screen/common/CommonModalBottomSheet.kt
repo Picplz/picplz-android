@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -118,6 +119,7 @@ fun CommonModalBottomSheet(
                             min = sheetMinHeight ?: 0.dp,
                             max = sheetMaxHeight ?: Dp.Infinity
                         )
+                        .fillMaxHeight(0.9f)
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
                     content()
