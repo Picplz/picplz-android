@@ -168,6 +168,7 @@ object MainFontFamily {
         lineHeight = 16.sp * 1.4,
         letterSpacing = 0.sp
     )
+
     // 굵은 본문
     val bodyBold = TextStyle(
         fontFamily = Pretendard,
@@ -199,5 +200,88 @@ object MainFontFamily {
         fontSize = 16.sp,
         lineHeight = 12.sp * 1.4,
         letterSpacing = 0.sp
+    )
+}
+
+object MainThemeFont {
+
+    /** 큰 제목 · 24/140 */
+    val TitleLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 32.sp
+    )
+
+    /** 제목 · 20/140 */
+    val Title = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        lineHeight = 28.sp
+    )
+
+    /** 작은 제목 · 18/140 */
+    val TitleSmall = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 26.sp
+    )
+
+    /** 큰 본문 · 16/140 */
+    val BodyLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    )
+
+    /** 굵은 본문 · 14/140 */
+    val BodyBold = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 22.sp
+    )
+
+    /** 본문 · 14/140 */
+    val Body = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 22.sp
+    )
+
+    /** 캡션 · 12/140 */
+    val Caption = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 18.sp
+    )
+
+    /** 태그 내부 · 12/140 */
+    val InnerTag = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    )
+
+    /** 버튼 기본 · 16/140 */
+    val ButtonDefault = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    )
+
+    /** 버튼 채팅 · 12/140 */
+    val ButtonChat = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
     )
 }
