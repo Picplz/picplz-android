@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.common
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -125,7 +124,6 @@ fun CommonModalBottomSheet(
                         max = sheetMaxHeight ?: Dp.Infinity
                     )
                     .fillMaxHeight(0.9f)
-                    .background(Color.Red)
             ) {
                 // ✅ 메인 콘텐츠
                 Column(modifier = Modifier.fillMaxSize()) {
