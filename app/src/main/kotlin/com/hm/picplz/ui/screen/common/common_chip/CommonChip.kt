@@ -36,24 +36,30 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hm.picplz.R
 import com.hm.picplz.data.model.ChipMode
-import com.hm.picplz.data.model.ChipMode.*
-import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.*
+import com.hm.picplz.data.model.ChipMode.ADD
+import com.hm.picplz.data.model.ChipMode.DEFAULT
+import com.hm.picplz.data.model.ChipMode.EDIT
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetCalculatedWidth
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetChipMode
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetIsEditing
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetTextFieldWidth
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetValue
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainThemeFont
+import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.Pretendard
 import com.hm.picplz.viewmodel.common.CommonChipViewModel
 import java.util.UUID
-import androidx.compose.ui.text.input.TextFieldValue
 
 enum class ChipHeight {
-    MEDIUM,
-    BIG
+    MEDIUM, BIG
 }
 
 @Composable
@@ -64,7 +70,7 @@ fun CommonChip(
     viewModel: CommonChipViewModel = viewModel(key = id),
     unselectedBorderColor: Color = MainThemeColor.Gray3,
     selectedBorderColor: Color = MainThemeColor.Black,
-    unselectedTextColor: Color = MainThemeColor.Gray4,
+    unselectedTextColor: Color = MainThemeColor.Gray3,
     selectedTextColor: Color = MainThemeColor.Black,
     backgroundColor: Color = MainThemeColor.White,
     isSelected: Boolean = false,
@@ -136,30 +142,27 @@ fun CommonChip(
         }
     }
 
-    val chipHeight = when(height ?: ChipHeight.MEDIUM) {
+    val chipHeight = when (height ?: ChipHeight.MEDIUM) {
         ChipHeight.MEDIUM -> 30.dp
         ChipHeight.BIG -> 40.dp
     }
 
     when (currentState.chipMode) {
         DEFAULT -> {
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        onClickDefaultMode()
-                    }
-                    .height(chipHeight)
-                    .background(
-                        color = backgroundColor,
-                        shape = RoundedCornerShape(5.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = if (isSelected) selectedBorderColor else unselectedBorderColor,
-                        shape = RoundedCornerShape(5.dp)
-                    )
-                    .widthIn(min = 20.dp)
-            ) {
+            Row(modifier = Modifier
+                .clickable {
+                    onClickDefaultMode()
+                }
+                .height(chipHeight)
+                .background(
+                    color = backgroundColor, shape = RoundedCornerShape(5.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (isSelected) selectedBorderColor else unselectedBorderColor,
+                    shape = RoundedCornerShape(5.dp)
+                )
+                .widthIn(min = 20.dp)) {
                 Row(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -168,23 +171,19 @@ fun CommonChip(
                             val widthInPx = layoutCoordinates.size.width
                             val widthInDp = with(density) { widthInPx.toDp() }
                             viewModel.handleIntent(SetCalculatedWidth(widthInDp))
-                        },
-                    verticalAlignment = CenterVertically
+                        }, verticalAlignment = CenterVertically
                 ) {
                     Text(
                         text = label,
-                        style = TextStyle(
-                            fontFamily = Pretendard,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                            fontSize = 14.sp,
+                        style = MainThemeFont.Body.copy(
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                         ),
                         color = if (isSelected) selectedTextColor else unselectedTextColor,
                     )
                     if (isEditable) {
                         Spacer(modifier = Modifier.width(3.dp))
                         IconButton(
-                            onClick = { onEdit() },
-                            modifier = Modifier.size(12.dp)
+                            onClick = { onEdit() }, modifier = Modifier.size(12.dp)
                         ) {
                             Image(
                                 painter = painterResource(if (isSelected) R.drawable.edit else R.drawable.edit_grey4),
@@ -196,21 +195,17 @@ fun CommonChip(
                 }
             }
         }
+
         ADD -> {
-            Row(
-                modifier = Modifier
-                    .clickable { onEdit() }
-                    .height(chipHeight)
-                    .border(
-                        width = 1.dp,
-                        color = MainThemeColor.Gray3,
-                        shape = RoundedCornerShape(5.dp)
-                    )
-                    .background(color = MainThemeColor.Gray1)
-            ) {
+            Row(modifier = Modifier
+                .clickable { onEdit() }
+                .height(chipHeight)
+                .border(
+                    width = 1.dp, color = MainThemeColor.Gray3, shape = RoundedCornerShape(5.dp)
+                )
+                .background(color = MainThemeColor.Gray1)) {
                 Row(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalAlignment = CenterVertically
+                    modifier = Modifier.fillMaxHeight(), verticalAlignment = CenterVertically
                 ) {
                     Text(
                         text = "+직접 적어주세요",
@@ -225,10 +220,9 @@ fun CommonChip(
                 }
             }
         }
+
         EDIT -> {
-            BasicTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester),
+            BasicTextField(modifier = Modifier.focusRequester(focusRequester),
                 value = currentState.value,
                 onValueChange = { newValue ->
                     val textWidthInDp = with(density) {
@@ -242,23 +236,18 @@ fun CommonChip(
                     viewModel.handleIntent(SetValue(newValue))
                 },
                 singleLine = true,
-                textStyle = TextStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    fontSize = 14.sp,
+                textStyle = MainThemeFont.Body.copy(
+                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                 ),
                 cursorBrush = SolidColor(Color.Black),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        viewModel.handleIntent(SetIsEditing(false))
-                        onEndEdit()
-                        viewModel.handleIntent(SetChipMode(initialMode))
-                        keyboardController?.hide()
-                    }
-                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    viewModel.handleIntent(SetIsEditing(false))
+                    onEndEdit()
+                    viewModel.handleIntent(SetChipMode(initialMode))
+                    keyboardController?.hide()
+                }),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Text
+                    imeAction = ImeAction.Done, keyboardType = KeyboardType.Text
                 ),
                 decorationBox = { innerTextField ->
                     Box(
@@ -279,8 +268,7 @@ fun CommonChip(
                             innerTextField()
                         }
                     }
-                }
-            )
+                })
         }
     }
 }
