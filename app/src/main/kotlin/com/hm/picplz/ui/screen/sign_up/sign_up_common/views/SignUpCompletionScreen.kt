@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -41,8 +40,7 @@ import com.hm.picplz.R
 import com.hm.picplz.data.model.User
 import com.hm.picplz.data.model.UserType
 import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
+
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -79,11 +77,7 @@ fun SignUpCompletionScreen(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CommonTopBar(
-                text = "가입 완료",
-                onClickBack = { viewModel.handleIntent(NavigateToPrev) }
-            )
-
+            Spacer(modifier = Modifier.height(80.dp))
             Box(
                 modifier = Modifier
                     .weight(1f)
