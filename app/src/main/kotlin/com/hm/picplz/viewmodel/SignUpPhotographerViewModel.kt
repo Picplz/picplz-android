@@ -12,7 +12,42 @@ import com.hm.picplz.ui.model.Device
 import com.hm.picplz.ui.model.DeviceCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddCurrentDeviceToList
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddDeviceToCategory
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddVibeChip
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.ClearSearchResults
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.DeleteVibeChip
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.DismissToast
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateWithSubmit
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.RemoveDeviceFromCategory
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.RemoveSelectedArea
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.ResetCurrentDevice
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SearchArea
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetBrandExpanded
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCameraDirectInputMode
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCameraTypeExpanded
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCareerPeriod
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetEditingChipId
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetHasPhotographyExperience
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetIsOpenDialog
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetModelDirectInput
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetModelExpanded
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetMonthValue
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetPhoneDirectInputMode
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetPhotographyExperience
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetSelectedSelector
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetUserInfo
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetUserPhotographyExperience
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetUserPhotographyVibe
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetYearValue
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.ToggleAreaSelection
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateCurrentCamera
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateCurrentPhone
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateSearchQuery
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateSelectedVibeChipList
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateVibeChip
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +57,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import java.util.UUID
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -55,12 +90,14 @@ class SignUpPhotographerViewModel @Inject constructor(
                 onPermissionDenied = {
                     Log.w("LocationInfo", "위치 권한 거부됨")
 
-                    _state.update { it.copy(
-                        hasLocationPermission = false,
-                        searchResults = emptyList(),
-                        isSearching = false,
-                        searchError = "위치 권한이 필요합니다"
-                    )}
+                    _state.update {
+                        it.copy(
+                            hasLocationPermission = false,
+                            searchResults = emptyList(),
+                            isSearching = false,
+                            searchError = "위치 권한이 필요합니다"
+                        )
+                    }
                 }
             )
         }
@@ -72,19 +109,23 @@ class SignUpPhotographerViewModel @Inject constructor(
         viewModelScope.launch {
             addressService.getNearbyAreas(3, lat, lng)
                 .onSuccess { nearbyAreas ->
-                    _state.update { it.copy(
-                        searchResults = nearbyAreas,
-                        isSearching = false,
-                        searchError = null
-                    )}
+                    _state.update {
+                        it.copy(
+                            searchResults = nearbyAreas,
+                            isSearching = false,
+                            searchError = null
+                        )
+                    }
                     Log.d("AddressSearch", "근처 지역 로딩 성공: ${nearbyAreas.size}개")
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(
-                        searchResults = emptyList(),
-                        isSearching = false,
-                        searchError = "근처 지역을 불러올 수 없습니다"
-                    )}
+                    _state.update {
+                        it.copy(
+                            searchResults = emptyList(),
+                            isSearching = false,
+                            searchError = "근처 지역을 불러올 수 없습니다"
+                        )
+                    }
                     Log.e("AddressSearch", "근처 지역 로딩 실패", error)
                 }
         }
@@ -97,9 +138,11 @@ class SignUpPhotographerViewModel @Inject constructor(
                     _sideEffect.emit(SignUpPhotographerSideEffect.NavigateToPrev)
                 }
             }
+
             is SetUserInfo -> {
-                _state.update { it.copy(userInfo = intent.userInfo)}
+                _state.update { it.copy(userInfo = intent.userInfo) }
             }
+
             is SetHasPhotographyExperience -> {
                 val newPhotographyExperienceState = _state.value.copy(
                     hasPhotographyExperience = if (_state.value.hasPhotographyExperience == intent.hasExperience) {
@@ -110,17 +153,21 @@ class SignUpPhotographerViewModel @Inject constructor(
                 )
                 _state.value = newPhotographyExperienceState
             }
+
             is Navigate -> {
                 viewModelScope.launch {
                     _sideEffect.emit(SignUpPhotographerSideEffect.Navigate(intent.destination))
                 }
             }
+
             is SetPhotographyExperience -> {
-                _state.update { it.copy(selectedPhotographyExperienceId = intent.photographyExperienceId)}
+                _state.update { it.copy(selectedPhotographyExperienceId = intent.photographyExperienceId) }
             }
+
             is SetEditingChipId -> {
-                _state.update { it.copy(editingChipId = intent.chipId)}
+                _state.update { it.copy(editingChipId = intent.chipId) }
             }
+
             is AddVibeChip -> {
                 val maxId = _state.value.vibeChipList
                     .maxByOrNull { it.id.toIntOrNull() ?: 0 }?.id?.toIntOrNull() ?: 0
@@ -132,12 +179,15 @@ class SignUpPhotographerViewModel @Inject constructor(
                     currentState.copy(vibeChipList = updatedChipList)
                 }
             }
+
             is DeleteVibeChip -> {
                 _state.update { currentState ->
-                    val updatedChipList = currentState.vibeChipList.filter { it.id != intent.chipId }
+                    val updatedChipList =
+                        currentState.vibeChipList.filter { it.id != intent.chipId }
                     currentState.copy(vibeChipList = updatedChipList)
                 }
             }
+
             is UpdateVibeChip -> {
                 _state.update { currentState ->
                     val updatedChipList = currentState.vibeChipList.map { chip ->
@@ -150,16 +200,22 @@ class SignUpPhotographerViewModel @Inject constructor(
                     currentState.copy(vibeChipList = updatedChipList)
                 }
             }
+
             is UpdateSelectedVibeChipList -> {
                 _state.update { currentState ->
-                    val updateSelectedChipList = if (currentState.selectedVibeChipList.any {it.id == intent.chipId}) {
-                        currentState.selectedVibeChipList.filter { it.id != intent.chipId }
-                    } else {
-                        currentState.selectedVibeChipList + ChipItem(id = intent.chipId, label = intent.label)
-                    }
+                    val updateSelectedChipList =
+                        if (currentState.selectedVibeChipList.any { it.id == intent.chipId }) {
+                            currentState.selectedVibeChipList.filter { it.id != intent.chipId }
+                        } else {
+                            currentState.selectedVibeChipList + ChipItem(
+                                id = intent.chipId,
+                                label = intent.label
+                            )
+                        }
                     currentState.copy(selectedVibeChipList = updateSelectedChipList)
                 }
             }
+
             is SetUserPhotographyExperience -> {
                 val experience = when (_state.value.selectedPhotographyExperienceId) {
                     "1" -> PhotographyExperience.PHOTO_MAJOR
@@ -172,34 +228,45 @@ class SignUpPhotographerViewModel @Inject constructor(
                     val updatedUser = _state.value.userInfo.copy(
                         photographyExperience = newExperience
                     )
-                    _state.update { it.copy( userInfo = updatedUser ) }
+                    _state.update { it.copy(userInfo = updatedUser) }
                 }
             }
+
             is NavigateWithSubmit -> {
                 viewModelScope.launch {
-                    val userBundle  = if (_state.value.vibeChipList.isNotEmpty()) {
+                    val userBundle = if (_state.value.vibeChipList.isNotEmpty()) {
                         bundleOf(
                             "userInfo" to _state.value.userInfo
                         )
                     } else bundleOf()
-                    _sideEffect.emit(SignUpPhotographerSideEffect.NavigateWithSubmit(intent.destination, userBundle))
+                    _sideEffect.emit(
+                        SignUpPhotographerSideEffect.NavigateWithSubmit(
+                            intent.destination,
+                            userBundle
+                        )
+                    )
                 }
             }
+
             is SetUserPhotographyVibe -> {
                 val updatedUser = _state.value.userInfo.copy(
                     photographyVibes = _state.value.selectedVibeChipList.map { chip -> chip.label }
                 )
                 _state.update { it.copy(userInfo = updatedUser) }
             }
+
             is SetIsOpenDialog -> {
-                _state.update { it.copy( showInfoDialog = intent.isOpen) }
+                _state.update { it.copy(showInfoDialog = intent.isOpen) }
             }
+
             is SetYearValue -> {
-                _state.update { it.copy( yearValue = intent.year ) }
+                _state.update { it.copy(yearValue = intent.year) }
             }
+
             is SetMonthValue -> {
-                _state.update { it.copy( monthValue = intent.month ) }
+                _state.update { it.copy(monthValue = intent.month) }
             }
+
             is SetCareerPeriod -> {
                 _state.update {
                     it.copy(
@@ -209,55 +276,61 @@ class SignUpPhotographerViewModel @Inject constructor(
                     )
                 }
             }
-            is InitializeCareerValues -> {
-                _state.update { it.copy(
-                    yearValue = null,
-                    monthValue = null
-                )}
-            }
+
             is SetSelectedSelector -> {
-                _state.update { it.copy( selectedSelector = intent.selectedSelector ) }
+                _state.update { it.copy(selectedSelector = intent.selectedSelector) }
             }
+
             is UpdateSearchQuery -> {
-                _state.update { it.copy(
-                    searchQuery = intent.query,
-                    searchError = null,
-                    hasSearchCompleted = false
-                )}
+                _state.update {
+                    it.copy(
+                        searchQuery = intent.query,
+                        searchError = null,
+                        hasSearchCompleted = false
+                    )
+                }
             }
 
             is SearchArea -> {
                 viewModelScope.launch {
                     if (intent.keyword.isBlank()) {
-                        _state.update { it.copy(
-                            hasSearchCompleted = false,
-                            searchResults = emptyList()
-                        )}
+                        _state.update {
+                            it.copy(
+                                hasSearchCompleted = false,
+                                searchResults = emptyList()
+                            )
+                        }
                         loadNearbyAreasOnInit()
                         return@launch
                     }
 
-                    _state.update { it.copy(
-                        isSearching = true,
-                        hasSearchCompleted = false
-                    )}
+                    _state.update {
+                        it.copy(
+                            isSearching = true,
+                            hasSearchCompleted = false
+                        )
+                    }
 
                     addressService.searchArea(intent.keyword)
                         .onSuccess { searchedAreas ->
-                            _state.update { it.copy(
-                                searchResults = searchedAreas,
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                                searchError = null
-                            )}
+                            _state.update {
+                                it.copy(
+                                    searchResults = searchedAreas,
+                                    isSearching = false,
+                                    hasSearchCompleted = true,
+                                    searchError = null
+                                )
+                            }
                         }
                         .onFailure { error ->
-                            _state.update { it.copy(
-                                searchResults = emptyList(),
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                                searchError = "검색 중 오류가 발생했습니다"
-                            )}
+                            _state.update {
+                                it.copy(
+                                    searchResults = emptyList(),
+                                    isSearching = false,
+                                    hasSearchCompleted = true,
+                                    searchError = "검색 중 오류가 발생했습니다"
+                                )
+                            }
                             Log.e("AddressSearch", "지역 검색 실패", error)
                         }
                 }
@@ -265,7 +338,8 @@ class SignUpPhotographerViewModel @Inject constructor(
 
             is ToggleAreaSelection -> {
                 _state.update { currentState ->
-                    val isAlreadySelected = currentState.selectedAreas.any { it.id == intent.area.id }
+                    val isAlreadySelected =
+                        currentState.selectedAreas.any { it.id == intent.area.id }
 
                     if (!isAlreadySelected && currentState.selectedAreas.size >= 10) {
                         return@update currentState.copy(
@@ -293,47 +367,58 @@ class SignUpPhotographerViewModel @Inject constructor(
             }
 
             is ClearSearchResults -> {
-                _state.update { it.copy(
-                    searchResults = emptyList(),
-                    searchError = null
-                )}
+                _state.update {
+                    it.copy(
+                        searchResults = emptyList(),
+                        searchError = null
+                    )
+                }
             }
+
             is DismissToast -> {
                 _state.update { it.copy(showToast = false, toastMessage = null) }
             }
+
             is AddDeviceToCategory -> {
                 _state.update { currentState ->
                     when (intent.device) {
                         is Device.PhoneDevice -> currentState.copy(
                             phoneDevices = currentState.phoneDevices + intent.device
                         )
+
                         is Device.CameraDevice -> currentState.copy(
                             cameraDevices = currentState.cameraDevices + intent.device
                         )
                     }
                 }
             }
+
             is RemoveDeviceFromCategory -> {
                 _state.update { currentState ->
                     when (intent.device) {
                         is Device.PhoneDevice -> currentState.copy(
                             phoneDevices = currentState.phoneDevices.filter { it.id != intent.device.id }
                         )
+
                         is Device.CameraDevice -> currentState.copy(
                             cameraDevices = currentState.cameraDevices.filter { it.id != intent.device.id }
                         )
                     }
                 }
             }
+
             is SetBrandExpanded -> {
                 _state.update { it.copy(brandExpanded = intent.expanded) }
             }
+
             is SetModelExpanded -> {
                 _state.update { it.copy(modelExpanded = intent.expanded) }
             }
+
             is SetCameraTypeExpanded -> {
                 _state.update { it.copy(cameraTypeExpanded = intent.expanded) }
             }
+
             is SetPhoneDirectInputMode -> {
                 _state.update { currentState ->
                     currentState.copy(
@@ -349,6 +434,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                     )
                 }
             }
+
             is SetCameraDirectInputMode -> {
                 _state.update { currentState ->
                     currentState.copy(
@@ -364,16 +450,19 @@ class SignUpPhotographerViewModel @Inject constructor(
                     )
                 }
             }
+
             is UpdateCurrentPhone -> {
                 _state.update { currentState ->
                     currentState.copy(currentPhone = intent.phone)
                 }
             }
+
             is UpdateCurrentCamera -> {
                 _state.update { currentState ->
                     currentState.copy(currentCamera = intent.camera)
                 }
             }
+
             is AddCurrentDeviceToList -> {
                 _state.update { currentState ->
                     when (intent.category) {
@@ -389,6 +478,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                                 )
                             } ?: currentState
                         }
+
                         DeviceCategory.CAMERA -> {
                             currentState.currentCamera?.let { camera ->
                                 currentState.copy(
@@ -404,6 +494,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                     }
                 }
             }
+
             is ResetCurrentDevice -> {
                 _state.update { currentState ->
                     when (intent.category) {
@@ -414,6 +505,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                             phoneBrandDirectInput = false,
                             phoneModelDirectInput = false
                         )
+
                         DeviceCategory.CAMERA -> currentState.copy(
                             currentCamera = null,
                             brandExpanded = false,
@@ -424,6 +516,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                     }
                 }
             }
+
             is SetModelDirectInput -> {
                 _state.update { currentState ->
                     when (intent.category) {
@@ -431,6 +524,7 @@ class SignUpPhotographerViewModel @Inject constructor(
                             phoneModelDirectInput = intent.enabled,
                             modelExpanded = false
                         )
+
                         DeviceCategory.CAMERA -> {
                             currentState
                         }

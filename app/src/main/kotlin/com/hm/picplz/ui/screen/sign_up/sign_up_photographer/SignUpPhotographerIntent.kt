@@ -9,21 +9,24 @@ sealed class SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent()
     data object NavigateToPrev : SignUpPhotographerIntent()
     data class SetHasPhotographyExperience(val hasExperience: Boolean) : SignUpPhotographerIntent()
-    data class SetPhotographyExperience(val photographyExperienceId: String?) : SignUpPhotographerIntent()
+    data class SetPhotographyExperience(val photographyExperienceId: String?) :
+        SignUpPhotographerIntent()
+
     data class Navigate(val destination: String) : SignUpPhotographerIntent()
     data class SetEditingChipId(val chipId: String?) : SignUpPhotographerIntent()
     data class AddVibeChip(val label: String) : SignUpPhotographerIntent()
     data class DeleteVibeChip(val chipId: String) : SignUpPhotographerIntent()
     data class UpdateVibeChip(val chipId: String, val label: String) : SignUpPhotographerIntent()
-    data class UpdateSelectedVibeChipList(val chipId: String, val label: String) : SignUpPhotographerIntent()
+    data class UpdateSelectedVibeChipList(val chipId: String, val label: String) :
+        SignUpPhotographerIntent()
+
     data object SetUserPhotographyExperience : SignUpPhotographerIntent()
     data class NavigateWithSubmit(val destination: String) : SignUpPhotographerIntent()
-    data object SetUserPhotographyVibe: SignUpPhotographerIntent()
+    data object SetUserPhotographyVibe : SignUpPhotographerIntent()
     data class SetIsOpenDialog(val isOpen: Boolean) : SignUpPhotographerIntent()
     data class SetYearValue(val year: Int) : SignUpPhotographerIntent()
     data class SetMonthValue(val month: Int) : SignUpPhotographerIntent()
     data object SetCareerPeriod : SignUpPhotographerIntent()
-    data object InitializeCareerValues : SignUpPhotographerIntent()
     data class SetSelectedSelector(val selectedSelector: SelectorType) : SignUpPhotographerIntent()
     data class SearchArea(val keyword: String) : SignUpPhotographerIntent()
     data class ToggleAreaSelection(val area: Area) : SignUpPhotographerIntent()
@@ -39,8 +42,12 @@ sealed class SignUpPhotographerIntent {
     data class SetBrandExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
     data class SetModelExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
     data class SetCameraTypeExpanded(val expanded: Boolean) : SignUpPhotographerIntent()
-    data class SetPhoneDirectInputMode(val brandMode: Boolean, val modelMode: Boolean) : SignUpPhotographerIntent()
+    data class SetPhoneDirectInputMode(val brandMode: Boolean, val modelMode: Boolean) :
+        SignUpPhotographerIntent()
+
     data class SetCameraDirectInputMode(val brandMode: Boolean) : SignUpPhotographerIntent()
-    data class SetModelDirectInput(val category: DeviceCategory, val enabled: Boolean) : SignUpPhotographerIntent()
+    data class SetModelDirectInput(val category: DeviceCategory, val enabled: Boolean) :
+        SignUpPhotographerIntent()
+
     data class AddCurrentDeviceToList(val category: DeviceCategory) : SignUpPhotographerIntent()
 }

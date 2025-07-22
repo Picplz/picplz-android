@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.common
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +19,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 
 @Composable
-fun CommonBottomButton (
+fun CommonBottomButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -26,6 +27,7 @@ fun CommonBottomButton (
     enabled: Boolean = true,
     containerColor: Color = MainThemeColor.Black,
     contentColor: Color = Color(0xFFFFFFFF),
+    borderColor: Color = containerColor,
     disabledContainerColor: Color = MainThemeColor.Gray3,
     disabledContentColor: Color = MainThemeColor.Gray2,
 ) {
@@ -33,7 +35,8 @@ fun CommonBottomButton (
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp),
+            .height(60.dp)
+            .border(width = 1.dp, color = borderColor, shape = shape),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,
