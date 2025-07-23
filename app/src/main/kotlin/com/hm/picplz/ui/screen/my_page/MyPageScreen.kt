@@ -62,7 +62,7 @@ data class Profile(
 )
 
 @Composable
-fun ProfileSection() {
+fun ProfileSection(navController: NavHostController) {
     val dummyProfile = Profile(
         profileImage = R.drawable.logo,
         userName = "임두현",
@@ -107,7 +107,7 @@ fun ProfileSection() {
             Text(text = dummyProfile.introduction, style = MainThemeFont.Caption)
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate("mypage-modify-profile") },
                 shape = RoundedCornerShape(5.dp),
                 border = BorderStroke(1.dp, MainThemeColor.Gray3),
                 modifier = Modifier.fillMaxWidth(),
@@ -386,7 +386,7 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
                 .verticalScroll(rememberScrollState())
 
         ) {
-            ProfileSection()
+            ProfileSection(navController)
 
             Spacer(modifier = Modifier.height(28.5.dp))
 
