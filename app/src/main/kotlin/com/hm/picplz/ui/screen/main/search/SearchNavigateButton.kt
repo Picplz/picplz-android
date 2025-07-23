@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.main.searchNavigateButton
+package com.hm.picplz.ui.screen.main.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -48,6 +49,7 @@ fun SearchNavigateButton(
             Icon(
                 painter = painterResource(id = R.drawable.search),
                 contentDescription = "검색",
+                modifier = Modifier.size(14.dp)
             )
         }
     }

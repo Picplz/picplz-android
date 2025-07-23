@@ -38,7 +38,7 @@ fun MoodKeywordModalBottomSheet(
         "캐주얼", "고급미", "심플", "단아", "몽환적",
         "빈티지", "청량", "화려", "퇴폐적", "키치", "힙스터"
     )
-    var selectedMoodKeywords by remember { mutableStateOf(setOf("캐주얼", "고급미")) }
+    var selectedMoodKeywords by remember { mutableStateOf(emptySet<String>()) }
 
     CommonModalBottomSheet(
         visible = visible,
