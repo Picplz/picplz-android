@@ -15,9 +15,13 @@ object MainThemeColor {
     val Gray5 = Color(0xFF465561)
     val Gray6 = Color(0xFF2F3139)
     val Red = Color(0xFFFF3D3D)
+    val Pink1 = Color(0xFFFAE5E5)
+    val Pink2 = Color(0xFFF5BDC8)
     val Yellow = Color(0xFFFFEB3B)
+    val Green150 = Color(0xFF436C00)
     val Green120 = Color(0xFF8AC054)
     val Green100 = Color(0xFFB0D987)
+    val Green30 = Color(0XFFEBF9DD)
 }
 
 val Purple80 = Color(0xFFD0BCFF)
