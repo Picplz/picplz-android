@@ -27,7 +27,7 @@ fun CommonBottomButton(
     enabled: Boolean = true,
     containerColor: Color = MainThemeColor.Black,
     contentColor: Color = Color(0xFFFFFFFF),
-    borderColor: Color = containerColor,
+    borderColor: Color? = null,
     disabledContainerColor: Color = MainThemeColor.Gray3,
     disabledContentColor: Color = MainThemeColor.Gray2,
 ) {
@@ -36,8 +36,13 @@ fun CommonBottomButton(
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-            .border(width = 1.dp, color = borderColor, shape = shape),
-        colors = ButtonDefaults.buttonColors(
+            .let { mod ->
+                if (borderColor != null) {
+                    mod.border(width = 1.dp, color = borderColor, shape = shape)
+                } else {
+                    mod
+                }
+            },        colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,
             disabledContainerColor = disabledContainerColor,

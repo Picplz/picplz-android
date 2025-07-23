@@ -25,7 +25,7 @@ fun SignUpPhotographerNavHost(
 ) {
     NavHost(
         navController = signUpPhotographerNavController,
-        startDestination = "sign-up-experience",
+        startDestination = "sign-up-main-location",
         modifier = modifier,
     ) {
         composable("sign-up-experience") {

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -39,9 +38,9 @@ import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.MainActivity
 import com.hm.picplz.R
 import com.hm.picplz.data.model.User
+import com.hm.picplz.data.model.UserType
 import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
+
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -78,11 +77,7 @@ fun SignUpCompletionScreen(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CommonTopBar(
-                text = "가입 완료",
-                onClickBack = { viewModel.handleIntent(NavigateToPrev) }
-            )
-
+            Spacer(modifier = Modifier.height(80.dp))
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -96,69 +91,51 @@ fun SignUpCompletionScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        modifier = Modifier.size(300.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        val painter = if (userInfo.profileImageUri != null) {
-                            rememberAsyncImagePainter(model = userInfo.profileImageUri)
-                        } else {
-                            painterResource(id = R.drawable.default_profile_large)
-                        }
-                        Box(
-                            modifier = Modifier
-                                .offset(y = 30.dp)
-                        ) {
-                            Image(
-                                painter = painter,
-                                contentDescription = "프로필 이미지",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(194.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Gray)
-                            )
-                        }
-                        Image(
-                            painter = painterResource(id = R.drawable.spicky1),
-                            contentDescription = "프로필 이미지",
-                            modifier = Modifier
-                                .offset(x = (-80).dp, y = (-100).dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.spicky2),
-                            contentDescription = "프로필 이미지",
-                            modifier = Modifier
-                                .offset(x = (-25).dp, y = (-90).dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.spicky3),
-                            contentDescription = "프로필 이미지",
-                            modifier = Modifier
-                                .offset(x = 112.dp, y = 112.dp)
-                        )
+                    val painter = if (userInfo.profileImageUri != null) {
+                        rememberAsyncImagePainter(model = userInfo.profileImageUri)
+                    } else {
+                        painterResource(id = R.drawable.default_profile_large)
                     }
-                    Spacer(
-                        modifier = Modifier
-                            .height(10.dp)
-                    )
                     Text(
                         text = buildAnnotatedString {
-                            append("${userInfo.nickname}님,\n")
-                            append("가입이 완료되었습니다!")
+                            append("안녕하세요 ")
+                            append("${userInfo.nickname}님!")
                         },
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(
+                        modifier = Modifier
+                            .height(27.dp)
+                    )
+                    Image(
+                        painter = painter,
+                        contentDescription = "프로필 이미지",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(160.dp)
+                            .clip(CircleShape)
+                            .background(Color.Gray)
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(74.dp)
+                    )
                     Text(
-                        text = "픽플즈와 인생샷을 건져보세요.",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = buildAnnotatedString {
+                            append("가입을 축하드려요.\n")
+                            when (userInfo.userType) {
+                                UserType.Photographer -> append("함께 사진 촬영하러 가볼까요?")
+                                UserType.User -> append("인생샷 건지러 가볼까요")
+                                null -> append("인생샷 건지러 가볼까요")
+                            }
+                        },
+                        style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    Spacer(modifier = Modifier.height(200.dp))
+                    Spacer(modifier = Modifier.height(80.dp))
                 }
 
             }
