@@ -47,7 +47,7 @@ import com.hm.picplz.ui.screen.main.modalBottomSheet.SortType
 import com.hm.picplz.ui.screen.main.photographerCard.PhotographerCard
 import com.hm.picplz.ui.screen.main.portfolioCard.PortfolioCard
 import com.hm.picplz.ui.screen.main.scheduleCard.ScheduleCardNone
-import com.hm.picplz.ui.screen.main.searchNavigateButton.SearchButton
+import com.hm.picplz.ui.screen.main.search.SearchNavigateButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -61,7 +61,7 @@ private val DISTRICTS = listOf(
 private val TODAY_DISTRICT: String by lazy { DISTRICTS.random() }
 
 @Composable
-fun SearchBanner() {
+fun SearchBanner(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,14 +78,21 @@ fun SearchBanner() {
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(Modifier.height(10.dp))
-            SearchButton(placeholder = "촬영을 하고 싶은 장소 또는 동을 검색해보세요", onClick = {/*TODO*/})
+
+            SearchNavigateButton(
+                placeholder = "촬영을 하고 싶은 장소 또는 동을 검색해보세요",
+                onClick = { navController.navigate("main-search") })
+
             Spacer(Modifier.height(20.dp))
+
             Text(
                 text = "오늘은 $TODAY_DISTRICT 나들이 어때요?",
                 style = MainThemeFont.TitleSmall,
                 color = MainThemeColor.White
             )
+
             Spacer(Modifier.height(4.dp))
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
@@ -286,7 +293,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                 .verticalScroll(rememberScrollState())
 
         ) {
-            SearchBanner()
+            SearchBanner(navController = navController)
 
             Spacer(modifier = Modifier.height(30.dp))
 
