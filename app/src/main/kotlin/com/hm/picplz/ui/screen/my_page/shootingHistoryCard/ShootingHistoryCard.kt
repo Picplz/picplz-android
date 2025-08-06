@@ -72,6 +72,7 @@ fun ShootingHistoryCard(
     paymentDate: String = "2025.03.01",
     date: String = "",
     location: String = "",
+    onClickOrderSheet : () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -191,7 +192,7 @@ fun ShootingHistoryCard(
                             style = MainThemeFont.Caption,
                             color = MainThemeColor.Gray4,
                             textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable { /*TODO*/ }
+                            modifier = Modifier.clickable { onClickOrderSheet() }
                         )
                     }
                     Spacer(modifier = Modifier.height(23.dp))

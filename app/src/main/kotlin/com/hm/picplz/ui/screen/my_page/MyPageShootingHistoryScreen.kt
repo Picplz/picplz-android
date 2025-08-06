@@ -48,11 +48,12 @@ fun MyPageShootingHistoryScreen(modifier: Modifier = Modifier, navController: Na
             ) {
                 item {
                     SwipeableShootingHistoryCard(
-                        userName = "합정동 불주먹",
+                        userName = "합정동 불주먹@@",
                         userProfile = R.drawable.edit_grey4,
                         status = ShootingStatus.COMPLEETED,
                         date = "5월 26일 오전 9시 30분",
                         location = "종로구 효자로 33",
+                        onClickOrderSheet = { navController.navigate("mypage-order-sheet") }
                     )
                 }
                 item {

@@ -45,7 +45,8 @@ fun SwipeableShootingHistoryCard(
     paymentDate: String = "2025.03.01",
     date: String = "",
     location: String = "",
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    onClickOrderSheet: () -> Unit = {}
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
     val maxSwipeDistance = with(LocalDensity.current) { 140.dp.toPx() } // 최대 140px까지만 스와이프
@@ -141,7 +142,8 @@ fun SwipeableShootingHistoryCard(
                 packageType = packageType,
                 paymentDate = paymentDate,
                 date = date,
-                location = location
+                location = location,
+                onClickOrderSheet = onClickOrderSheet
             )
         }
     }
