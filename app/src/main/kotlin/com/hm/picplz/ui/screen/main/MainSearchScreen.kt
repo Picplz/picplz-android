@@ -361,7 +361,7 @@ fun SearchResultSection() {
                 .padding(top = 163.dp), contentAlignment = Alignment.TopCenter
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "검색 결과가 없습니다")
+                Text(text = "검색 결과가 없습니다", style = MainThemeFont.TitleSmall)
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(
                     painter = painterResource(id = R.drawable.user_undefined),

@@ -46,8 +46,7 @@ fun CommonStatusText(
             modifier = Modifier.size(10.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
-//        TODO: 폰트 시스템 반영
-        Text(text = type.label, style = MainThemeFont.ButtonDefault, color = textColor)
+        Text(text = type.label, style = MainThemeFont.InnerTag, color = textColor)
     }
 }
 
