@@ -305,9 +305,9 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            PopularPortfolioSection()
-
-            Spacer(modifier = Modifier.height(30.dp))
+//            PopularPortfolioSection()
+//
+//            Spacer(modifier = Modifier.height(30.dp))
 
             PopularPhotographerSection()
 

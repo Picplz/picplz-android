@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,7 +50,6 @@ import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.main.photographerCard.PhotographerCard
 import com.hm.picplz.ui.screen.main.portfolioCard.PortfolioCard
 import com.hm.picplz.ui.screen.main.scheduleCard.ScheduleCardNone
-import com.hm.picplz.ui.screen.my_page.toggleSwitch.ToggleSwitch
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -92,7 +92,7 @@ fun ProfileSection(navController: NavHostController) {
                 Spacer(modifier = Modifier.width(15.dp))
                 Column {
                     Text(text = dummyProfile.userName, style = MainThemeFont.TitleSmall)
-                    Spacer(modifier = Modifier.width(9.8.dp))
+                    Spacer(modifier = Modifier.height(9.8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.instagram),
@@ -104,7 +104,11 @@ fun ProfileSection(navController: NavHostController) {
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = dummyProfile.introduction, style = MainThemeFont.Caption)
+            Text(
+                text = dummyProfile.introduction,
+                style = MainThemeFont.Caption,
+                color = MainThemeColor.Gray6
+            )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(
                 onClick = { navController.navigate("mypage-modify-profile") },
@@ -314,7 +318,10 @@ fun ScrapSection() {
 @Composable
 fun EtcSection() {
     // TODO: 디자인 작업 완료 후 적용
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         Text(text = "내 리뷰", style = MainThemeFont.ButtonDefault)
         Text(text = "문의하기", style = MainThemeFont.ButtonDefault)
         Text(text = "계정 정보 수정", style = MainThemeFont.ButtonDefault)
@@ -354,18 +361,30 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(MainThemeColor.Green120)
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                            .padding(horizontal = 16.dp, vertical = 15.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+//                        TODO: 분기 처리
+//                        Text(
+//                            text = "작가로 전환",
+//                            style = MainThemeFont.BodyBold,
+//                            color = MainThemeColor.White
+//                        )
+//                        ToggleSwitch(
+//                            checked = isToggled,
+//                            onCheckedChange = { isToggled = it }
+//                        )
                         Text(
-                            text = "작가로 전환",
+                            text = "작가로도 활동하기",
                             style = MainThemeFont.BodyBold,
                             color = MainThemeColor.White
                         )
-                        ToggleSwitch(
-                            checked = isToggled,
-                            onCheckedChange = { isToggled = it }
+                        Icon(
+                            painter = painterResource(id = R.drawable.triangle_right),
+                            contentDescription = "arrow",
+                            tint = MainThemeColor.White,
+                            modifier = Modifier.clickable { }
                         )
                     }
                 }
@@ -398,9 +417,9 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
 
             Spacer(modifier = Modifier.height(47.dp))
 
-            ScrapSection()
-
-            Spacer(modifier = Modifier.height(20.dp))
+//            ScrapSection()
+//
+//            Spacer(modifier = Modifier.height(20.dp))
 
             HorizontalDivider(thickness = 10.dp, color = MainThemeColor.Gray1)
 
