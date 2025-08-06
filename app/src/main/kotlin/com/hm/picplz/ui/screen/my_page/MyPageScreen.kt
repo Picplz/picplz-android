@@ -128,7 +128,7 @@ fun ProfileSection(navController: NavHostController) {
 }
 
 @Composable
-fun ReservationSection() {
+fun ReservationSection(navController: NavHostController) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -146,7 +146,7 @@ fun ReservationSection() {
                 horizontalPadding = 0.dp,
                 verticalPadding = 0.dp,
                 gap = 8.dp,
-                onClick = { },
+                onClick = { navController.navigate("mypage-shooting-history") },
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -409,7 +409,7 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
 
             Spacer(modifier = Modifier.height(28.5.dp))
 
-            ReservationSection()
+            ReservationSection(navController)
 
             Spacer(modifier = Modifier.height(47.dp))
 
