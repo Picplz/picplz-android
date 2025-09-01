@@ -114,7 +114,11 @@ fun ChatScreen(
                       val isSelected = tabType == currentState.selectedTab
                       Tab(
                           selected = isSelected,
-                          onClick = {},
+                          onClick = {
+                              viewModel.handleIntent(
+                                  ChatIntent.SetSelectedTab(tabType)
+                              )
+                          },
                           text = {
                               Text(
                                   text = tabText,

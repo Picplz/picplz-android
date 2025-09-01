@@ -26,6 +26,9 @@ class ChatViewModel @Inject constructor(): ViewModel() {
                     _sideEffect.emit(ChatSideEffect.NavigateToChatRoom(chatId = intent.chatId))
                 }
             }
+            is ChatIntent.SetSelectedTab -> {
+                _state.value = _state.value.copy(selectedTab = intent.tabType)
+            }
         }
     }
 }
