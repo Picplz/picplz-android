@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat
+package com.hm.picplz.ui.screen.chat_room
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,16 +34,16 @@ import androidx.compose.ui.unit.sp
 import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
-import com.hm.picplz.ui.screen.chat.composable.ChatInput
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChatMessageBubble
-import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
-import com.hm.picplz.ui.screen.chat.composable.ReservationStep
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChangeTimeBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChatSuggest
-import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.DealConfirmationBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.ImageChat
-import com.hm.picplz.ui.screen.chat.composable.bubble.NotificationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatMessageBubble
+import com.hm.picplz.ui.screen.chat_room.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChangeTimeBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatSuggest
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.CompleteBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.DealConfirmationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ImageChat
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.NotificationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.ChatInput
+import com.hm.picplz.ui.screen.chat_room.composable.ReservationStep
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor

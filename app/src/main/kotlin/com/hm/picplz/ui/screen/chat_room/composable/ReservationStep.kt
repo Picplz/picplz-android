@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat.composable
+package com.hm.picplz.ui.screen.chat_room.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.R
-import com.hm.picplz.ui.screen.chat.ReservationStep
+import com.hm.picplz.ui.screen.chat_room.ReservationStep
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 

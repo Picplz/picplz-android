@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat.composable.bubble
+package com.hm.picplz.ui.screen.chat_room.composable.bubble
 
 import android.net.Uri
 import androidx.compose.foundation.layout.padding
