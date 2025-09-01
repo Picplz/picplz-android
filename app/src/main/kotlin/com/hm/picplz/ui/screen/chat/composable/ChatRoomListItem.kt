@@ -180,11 +180,31 @@ fun ChatRoomListItemPreview() {
                 chatStatus = ChatStatus.PENDING,
                 packageType = "인스타 종합 패키지",
                 lastMessage = Message(
-                    profileImageUrl = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+                    profileImageUrl = "https://api.dicebear.com/7.x/avataaars/png?seed=John",
                     nickname = "합정동 불주먹",
                     message = "촬영 예약이 도착했습니다. 60분 이내에 답변 안 할 시 예약이 취소될 수 있습니다.",
                 ),
                 unreadMessageCount = 1
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChatRoomListItemOverThousandPreview() {
+    PicplzTheme {
+        ChatRoomListItem(
+            chatRoomInfo = ChatRoomInfo(
+                id = "1",
+                chatStatus = ChatStatus.PENDING,
+                packageType = "프로필 Only.",
+                lastMessage = Message(
+                    profileImageUrl = "https://api.dicebear.com/7.x/avataaars/png?seed=John",
+                    nickname = "합정동 불주먹",
+                    message = "촬영 예약이 도착했습니다. 60분 이내에 답변 안 할 시 예약이 취소될 수 있습니다.",
+                ),
+                unreadMessageCount = 12312
             )
         )
     }
