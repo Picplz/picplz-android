@@ -37,7 +37,7 @@ fun ChatStatusTag(
                 shape = RoundedCornerShape(20.dp)
             )
             .background(
-                color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray1,
+                color = if (isActive == true) MainThemeColor.White else MainThemeColor.Gray1,
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(horizontal = 8.dp)
@@ -56,7 +56,7 @@ fun ChatStatusTag(
             text = label,
             style = MainThemeFont.InnerTag,
             fontWeight = if (isActive == false) FontWeight.Normal else MainThemeFont.InnerTag.fontWeight,
-            color = if (isActive == true) MainThemeColor.White else MainThemeColor.Gray4
+            color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray4
         )
     }
 }
