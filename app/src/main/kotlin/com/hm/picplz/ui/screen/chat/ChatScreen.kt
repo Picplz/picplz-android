@@ -149,7 +149,8 @@ fun ChatScreen(
             Spacer(modifier = Modifier.height(10.dp))
             ChatRoomList(
                 chatRooms = dummyChatRooms,
-                chatTabType = currentState.selectedTab
+                chatTabType = currentState.selectedTab,
+                navController = navController
             )
         }
     }

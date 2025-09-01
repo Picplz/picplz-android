@@ -122,15 +122,15 @@ fun MainNavHost(
             route = "chat/{roomId}",
             arguments = listOf(
                 navArgument("roomId") {
-                    type = NavType.IntType
+                    type = NavType.StringType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
-            val roomId = backStackEntry.arguments?.getInt("roomId")
+            val roomId = backStackEntry.arguments?.getString("roomId")
             ChatRoomScreen(
                 navController = navController,
-                roomId = roomId ?: 0
+                roomId = roomId ?: ""
             )
         }
 

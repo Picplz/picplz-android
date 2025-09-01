@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,19 +28,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import com.hm.picplz.ui.model.ChatRoomInfo
 import com.hm.picplz.ui.screen.chat.ChatTabType
 import com.hm.picplz.ui.screen.chat.dummyChatRooms
+import com.hm.picplz.ui.screen.chat.ChatIntent
+import com.hm.picplz.ui.screen.chat.ChatSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
+import com.hm.picplz.viewmodel.ChatRoomViewModel
 
 @Composable
 fun ChatRoomList (
     modifier: Modifier = Modifier,
     chatRooms: List<ChatRoomInfo>,
-    chatTabType: ChatTabType = ChatTabType.ONGOING
+    chatTabType: ChatTabType = ChatTabType.ONGOING,
+    viewModel: ChatRoomViewModel = hiltViewModel(),
+    navController: NavHostController,
 ) {
     if (chatRooms.isEmpty()) {
         Box(
@@ -113,7 +122,9 @@ fun ChatRoomList (
             modifier = modifier.fillMaxWidth()
         ) {
             items(chatRooms) { chatRoom ->
-                ChatRoomListItem(chatRoomInfo = chatRoom)
+                ChatRoomListItem(chatRoomInfo = chatRoom, onClick = {
+                    viewModel.handleIntent(ChatIntent.NavigateToChatRoom(chatRoom.id))
+                })
                 if (chatRoom !== dummyChatRooms.last()) {
                     HorizontalDivider(
                         thickness = 6.dp,
@@ -123,20 +134,34 @@ fun ChatRoomList (
             }
         }
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when(sideEffect) {
+                is ChatSideEffect.NavigateToChatRoom -> {
+                    navController.navigate("chat/${sideEffect.chatId}")
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ChatRoomListPreview() {
+    val navController = rememberNavController()
+
     PicplzTheme {
-        ChatRoomList(chatRooms = dummyChatRooms)
+        ChatRoomList(chatRooms = dummyChatRooms, navController = navController)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun EmptyChatListPreview() {
+    val navController = rememberNavController()
+
     PicplzTheme {
-        ChatRoomList(chatRooms = emptyList())
+        ChatRoomList(chatRooms = emptyList(), navController = navController)
     }
 }

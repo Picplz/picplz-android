@@ -57,7 +57,7 @@ fun ChatRoomScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatRoomViewModel = hiltViewModel(),
     navController: NavHostController,
-    roomId: Int,
+    roomId: String,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
@@ -251,7 +251,7 @@ fun ChatRoomScreenPreview() {
     PicplzTheme {
         ChatRoomScreen(
             navController = navController,
-            roomId = 1
+            roomId = "1"
         )
     }
 }
