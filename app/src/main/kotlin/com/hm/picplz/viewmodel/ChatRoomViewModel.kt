@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.ui.screen.chat.ChatIntent
 import com.hm.picplz.ui.screen.chat.ChatSideEffect
+import com.hm.picplz.ui.screen.chat_room.ChatRoomIntent
+import com.hm.picplz.ui.screen.chat_room.ChatRoomSideEffect
 import com.hm.picplz.ui.screen.chat_room.ChatRoomState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,14 +20,14 @@ class ChatRoomViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(ChatRoomState.idle())
     val state: StateFlow<ChatRoomState> = _state
 
-    private val _sideEffect = MutableSharedFlow<ChatSideEffect>()
-    val sideEffect: SharedFlow<ChatSideEffect> get() = _sideEffect
+    private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
+    val sideEffect: SharedFlow<ChatRoomSideEffect> = _sideEffect
 
-    fun handleIntent(intent: ChatIntent) {
+    fun handleIntent(intent: ChatRoomIntent) {
         when (intent) {
-            is ChatIntent.NavigateToChatRoom -> {
+            is ChatRoomIntent.NavigateToPrev -> {
                 viewModelScope.launch {
-                    _sideEffect.emit(ChatSideEffect.NavigateToChatRoom(chatId = intent.chatId))
+                    _sideEffect.emit(ChatRoomSideEffect.NavigateToPrev)
                 }
             }
         }

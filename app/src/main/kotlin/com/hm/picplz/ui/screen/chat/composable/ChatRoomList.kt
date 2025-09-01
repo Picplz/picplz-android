@@ -41,13 +41,14 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.viewmodel.ChatRoomViewModel
+import com.hm.picplz.viewmodel.ChatViewModel
 
 @Composable
 fun ChatRoomList (
     modifier: Modifier = Modifier,
     chatRooms: List<ChatRoomInfo>,
     chatTabType: ChatTabType = ChatTabType.ONGOING,
-    viewModel: ChatRoomViewModel = hiltViewModel(),
+    viewModel: ChatViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
     if (chatRooms.isEmpty()) {

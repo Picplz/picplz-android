@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -68,7 +69,11 @@ fun ChatRoomScreen(
                 text = "유가영 작가",
                 subText = "당장 촬영 가능",
                 subTextStyle = caption.copy(color = MainThemeColor.Green120),
-                onClickBack = {},
+                onClickBack = {
+                    viewModel.handleIntent(
+                        ChatRoomIntent.NavigateToPrev
+                    )
+                },
                 showMenuIcon = true,
             )
         },
@@ -240,6 +245,16 @@ fun ChatRoomScreen(
                 }
             }
             ChatInput()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChatRoomSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 }
