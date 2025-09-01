@@ -10,16 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
@@ -38,10 +36,10 @@ import com.hm.picplz.ui.screen.chat.ChatTabType
 import com.hm.picplz.ui.screen.chat.dummyChatRooms
 import com.hm.picplz.ui.screen.chat.ChatIntent
 import com.hm.picplz.ui.screen.chat.ChatSideEffect
+import com.hm.picplz.ui.screen.chat_room.composable.AlarmSwipe
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.viewmodel.ChatRoomViewModel
 import com.hm.picplz.viewmodel.ChatViewModel
 
 @Composable
@@ -49,9 +47,10 @@ fun ChatRoomList (
     modifier: Modifier = Modifier,
     chatRooms: List<ChatRoomInfo>,
     chatTabType: ChatTabType = ChatTabType.ONGOING,
-    viewModel: ChatViewModel = hiltViewModel(),
+    viewModel: ChatViewModel,
     navController: NavHostController,
 ) {
+    val currentState = viewModel.state.collectAsState().value
     if (chatRooms.isEmpty()) {
         Box(
             modifier = modifier
@@ -120,17 +119,20 @@ fun ChatRoomList (
             )
         }
     } else {
-        LazyColumn(
-            modifier = modifier.fillMaxWidth()
-        ) {
-            items(chatRooms) { chatRoom ->
-                ChatRoomListItem(chatRoomInfo = chatRoom, onClick = {
-                    viewModel.handleIntent(ChatIntent.NavigateToChatRoom(chatRoom.id))
-                })
-                if (chatRoom !== dummyChatRooms.last()) {
-                    HorizontalDivider(
-                        thickness = 6.dp,
-                        color = MainThemeColor.Gray1
+        LazyColumn(modifier = modifier.fillMaxWidth()) {
+            items(chatRooms, key = { it.id }) { chatRoom ->
+                val isMuted = currentState.mutedRoomIds.contains(chatRoom.id)
+                AlarmSwipe(
+                    isMuted = isMuted,
+                    onSwipe = {
+                        viewModel.handleIntent(
+                            ChatIntent.ToggleChatRoomMute(chatRoom.id)
+                        )
+                    }
+                ) {
+                    ChatRoomListItem(
+                        chatRoomInfo = chatRoom,
+                        onClick = { viewModel.handleIntent(ChatIntent.NavigateToChatRoom(chatRoom.id)) }
                     )
                 }
             }
@@ -154,7 +156,11 @@ fun ChatRoomListPreview() {
     val navController = rememberNavController()
 
     PicplzTheme {
-        ChatRoomList(chatRooms = dummyChatRooms, navController = navController)
+        ChatRoomList(
+            chatRooms = dummyChatRooms,
+            navController = navController,
+            viewModel = ChatViewModel()
+        )
     }
 }
 
@@ -164,6 +170,10 @@ fun EmptyChatListPreview() {
     val navController = rememberNavController()
 
     PicplzTheme {
-        ChatRoomList(chatRooms = emptyList(), navController = navController)
+        ChatRoomList(
+            chatRooms = emptyList(),
+            navController = navController,
+            viewModel = ChatViewModel()
+        )
     }
 }

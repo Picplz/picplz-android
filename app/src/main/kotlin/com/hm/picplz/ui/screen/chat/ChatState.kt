@@ -13,6 +13,7 @@ data class ChatState (
     val statusTags: List<ChatStatus> = ChatStatus.entries,
     val selectedStatusTag: ChatStatus? = null,
     val chatRooms: List<ChatRoomInfo> = dummyChatRooms,
+    val mutedRoomIds: Set<String> = emptySet()
 ) {
     companion object {
         fun idle(): ChatState {
@@ -54,7 +55,7 @@ val dummyChatRooms =
         unreadMessageCount = 1,
     ),
     ChatRoomInfo(
-        id = "chat1",
+        id = "chat2",
         chatStatus = ChatStatus.CONFIRMED,
         packageType = "인스타 종합 패키지",
         lastMessage = Message(
@@ -65,7 +66,7 @@ val dummyChatRooms =
         )
     ),
     ChatRoomInfo(
-        id = "chat1",
+        id = "chat3",
         chatStatus = ChatStatus.CONFIRMED,
         packageType = "인스타 종합 패키지",
         lastMessage = Message(

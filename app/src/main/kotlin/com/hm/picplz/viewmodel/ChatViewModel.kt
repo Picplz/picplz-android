@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,16 +28,31 @@ class ChatViewModel @Inject constructor(): ViewModel() {
                 }
             }
             is ChatIntent.SetSelectedTab -> {
-                _state.value = _state.value.copy(
-                    selectedTab = intent.tabType,
-                    selectedStatusTag = null
-                )
+                _state.update {
+                    it.copy(
+                        selectedTab = intent.tabType,
+                        selectedStatusTag = null
+                    )
+                }
             }
             is ChatIntent.SetStatusTags -> {
-                val cur = _state.value
-                _state.value = cur.copy(
-                    selectedStatusTag = if (cur.selectedStatusTag == intent.statusTag) null else intent.statusTag
-                )
+                _state.update {
+                    it.copy(
+                        selectedStatusTag = if (it.selectedStatusTag == intent.statusTag) null else intent.statusTag
+                    )
+                }
+            }
+            is ChatIntent.ToggleChatRoomMute -> {
+                _state.update { current ->
+                    val isCurrentlyMuted = current.mutedRoomIds.contains(intent.chatId)
+                    current.copy(
+                        mutedRoomIds = if (isCurrentlyMuted) {
+                            current.mutedRoomIds - intent.chatId
+                        } else {
+                            current.mutedRoomIds + intent.chatId
+                        }
+                    )
+                }
             }
         }
     }

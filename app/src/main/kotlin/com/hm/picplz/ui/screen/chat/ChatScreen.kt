@@ -160,9 +160,10 @@ fun ChatScreen(
 
 
             ChatRoomList(
+                viewModel = viewModel,
                 chatRooms = currentState.filteredChatRooms,
                 chatTabType = currentState.selectedTab,
-                navController = navController
+                navController = navController,
             )
         }
     }
