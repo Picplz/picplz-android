@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.chat.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +67,7 @@ fun ChatRoomList (
             ) {
                 val chatStatusText = when (chatTabType) {
                     ChatTabType.ONGOING -> "진행중인 채팅이 없습니다"
-                    ChatTabType.COMPLETED -> "완료된 채팅이 없습니다"
+                    ChatTabType.COMPLETED -> "촬영 완료된 채팅이 없습니다"
                 }
 
                 Text(
@@ -78,7 +79,7 @@ fun ChatRoomList (
                         .height(2.dp)
                 )
                 Text(
-                    text = "작가님과 촬영을 시작해보세요",
+                    text = "작가/고객님과 촬영을 시작해보세요",
                     style = TextStyle(
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
@@ -94,8 +95,8 @@ fun ChatRoomList (
                 Button(
                     onClick = {},
                     modifier = Modifier
-                        .width(150.dp)
                         .height(60.dp),
+                    contentPadding = PaddingValues(horizontal = 40.dp),
                     shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MainThemeColor.Black,
