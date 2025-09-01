@@ -29,6 +29,9 @@ class ChatViewModel @Inject constructor(): ViewModel() {
             is ChatIntent.SetSelectedTab -> {
                 _state.value = _state.value.copy(selectedTab = intent.tabType)
             }
+            is ChatIntent.SetStatusTags -> {
+                _state.value = _state.value.copy(selectedStatusTag = intent.statusTag)
+            }
         }
     }
 }

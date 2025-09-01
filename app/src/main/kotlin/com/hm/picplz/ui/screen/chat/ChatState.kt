@@ -10,7 +10,8 @@ enum class ChatTabType {
 
 data class ChatState (
     val selectedTab : ChatTabType = ChatTabType.ONGOING,
-    val statusTags: List<ChatStatus> = ChatStatus.entries
+    val statusTags: List<ChatStatus> = ChatStatus.entries,
+    val selectedStatusTag: ChatStatus? = null,
 ) {
     companion object {
         fun idle(): ChatState {
