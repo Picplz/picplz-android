@@ -12,16 +12,30 @@ data class ChatState (
     val selectedTab : ChatTabType = ChatTabType.ONGOING,
     val statusTags: List<ChatStatus> = ChatStatus.entries,
     val selectedStatusTag: ChatStatus? = null,
+    val chatRooms: List<ChatRoomInfo> = dummyChatRooms,
 ) {
     companion object {
         fun idle(): ChatState {
             return ChatState()
         }
     }
+
     val currentStatusTags: List<ChatStatus>
         get() = when (selectedTab) {
             ChatTabType.ONGOING -> listOf(ChatStatus.PENDING, ChatStatus.CONFIRMED)
             ChatTabType.COMPLETED -> listOf(ChatStatus.REJECTED, ChatStatus.COMPLETED)
+        }
+
+    private val activeStatuses: Set<ChatStatus>
+        get() = selectedStatusTag?.let { setOf(it) } ?: when (selectedTab) {
+            ChatTabType.ONGOING -> setOf(ChatStatus.PENDING, ChatStatus.CONFIRMED)
+            ChatTabType.COMPLETED -> setOf(ChatStatus.REJECTED, ChatStatus.COMPLETED)
+        }
+
+
+    val filteredChatRooms: List<ChatRoomInfo>
+        get() = chatRooms.filter {
+            it.chatStatus in activeStatuses
         }
 }
 

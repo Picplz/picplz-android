@@ -47,11 +47,6 @@ fun ChatScreen(
     val tabs = ChatTabType.entries.toTypedArray()
     val selectedTabIndex = tabs.indexOf(currentState.selectedTab).takeIf { it >= 0 } ?: 0
 
-
-    val filteredRooms = dummyChatRooms.filter {
-        it.chatStatus in currentState.currentStatusTags
-    }
-
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
@@ -165,7 +160,7 @@ fun ChatScreen(
 
 
             ChatRoomList(
-                chatRooms = filteredRooms,
+                chatRooms = currentState.filteredChatRooms,
                 chatTabType = currentState.selectedTab,
                 navController = navController
             )
