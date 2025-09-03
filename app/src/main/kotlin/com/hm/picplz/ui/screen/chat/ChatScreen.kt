@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat
 
-import CommonStatusTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.model.ChatStatus
 import com.hm.picplz.ui.screen.chat.composable.ChatRoomList
+import com.hm.picplz.ui.screen.chat.composable.ChatStatusTag
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText
@@ -114,7 +114,11 @@ fun ChatScreen(
                       val isSelected = tabType == currentState.selectedTab
                       Tab(
                           selected = isSelected,
-                          onClick = {},
+                          onClick = {
+                              viewModel.handleIntent(
+                                  ChatIntent.SetSelectedTab(tabType)
+                              )
+                          },
                           text = {
                               Text(
                                   text = tabText,
@@ -136,20 +140,30 @@ fun ChatScreen(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(currentState.currentStatusTags) { statusTag ->
-                    CommonStatusTag(
+                    ChatStatusTag(
                         label = when (statusTag) {
                             ChatStatus.PENDING -> "예약 대기"
                             ChatStatus.CONFIRMED -> "예약 확정"
                             ChatStatus.REJECTED -> "촬영 거절"
                             ChatStatus.COMPLETED -> "촬영 완료"
-                        }
+                        },
+                        onClick = {
+                            viewModel.handleIntent(
+                                ChatIntent.SetStatusTags(statusTag)
+                            )
+                        },
+                        isActive = currentState.selectedStatusTag == statusTag
                     )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
+
+
             ChatRoomList(
-                chatRooms = dummyChatRooms,
-                chatTabType = currentState.selectedTab
+                viewModel = viewModel,
+                chatRooms = currentState.filteredChatRooms,
+                chatTabType = currentState.selectedTab,
+                navController = navController,
             )
         }
     }

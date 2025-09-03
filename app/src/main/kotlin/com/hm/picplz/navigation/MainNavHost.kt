@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.screen.chat.ChatRoomScreen
+import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
 import com.hm.picplz.ui.screen.chat.ChatScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoPortfoliosScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoReviewsScreen
@@ -41,7 +41,7 @@ fun MainNavHost(
 ) {
     val startDestination = when (uiState) {
         is MainActivityUiState.Success -> "main"
-        else -> "login"
+        else -> "chat"
     }
 
     NavHost(
@@ -122,15 +122,15 @@ fun MainNavHost(
             route = "chat/{roomId}",
             arguments = listOf(
                 navArgument("roomId") {
-                    type = NavType.IntType
+                    type = NavType.StringType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
-            val roomId = backStackEntry.arguments?.getInt("roomId")
+            val roomId = backStackEntry.arguments?.getString("roomId")
             ChatRoomScreen(
                 navController = navController,
-                roomId = roomId ?: 0
+                roomId = roomId ?: ""
             )
         }
 

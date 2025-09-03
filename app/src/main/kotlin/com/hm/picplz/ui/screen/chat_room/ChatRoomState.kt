@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat
+package com.hm.picplz.ui.screen.chat_room
 
 import android.net.Uri
 import com.hm.picplz.data.model.User

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat.composable
+package com.hm.picplz.ui.screen.chat_room.composable
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

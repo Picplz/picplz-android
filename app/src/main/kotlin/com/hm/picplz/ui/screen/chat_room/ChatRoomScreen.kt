@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.chat
+package com.hm.picplz.ui.screen.chat_room
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,22 +28,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.ui.model.ButtonActionType
 import com.hm.picplz.ui.model.MessageContent
 import com.hm.picplz.ui.model.MessageDirection
-import com.hm.picplz.ui.screen.chat.composable.ChatInput
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChatMessageBubble
-import com.hm.picplz.ui.screen.chat.composable.ChatMessageProfile
-import com.hm.picplz.ui.screen.chat.composable.ReservationStep
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChangeTimeBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.ChatSuggest
-import com.hm.picplz.ui.screen.chat.composable.bubble.CompleteBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.DealConfirmationBubble
-import com.hm.picplz.ui.screen.chat.composable.bubble.ImageChat
-import com.hm.picplz.ui.screen.chat.composable.bubble.NotificationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatMessageBubble
+import com.hm.picplz.ui.screen.chat_room.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChangeTimeBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatSuggest
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.CompleteBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.DealConfirmationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ImageChat
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.NotificationBubble
+import com.hm.picplz.ui.screen.chat_room.composable.ChatInput
+import com.hm.picplz.ui.screen.chat_room.composable.ReservationStep
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -57,7 +58,7 @@ fun ChatRoomScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatRoomViewModel = hiltViewModel(),
     navController: NavHostController,
-    roomId: Int,
+    roomId: String,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
@@ -68,7 +69,11 @@ fun ChatRoomScreen(
                 text = "유가영 작가",
                 subText = "당장 촬영 가능",
                 subTextStyle = caption.copy(color = MainThemeColor.Green120),
-                onClickBack = {},
+                onClickBack = {
+                    viewModel.handleIntent(
+                        ChatRoomIntent.NavigateToPrev
+                    )
+                },
                 showMenuIcon = true,
             )
         },
@@ -242,6 +247,16 @@ fun ChatRoomScreen(
             ChatInput()
         }
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChatRoomSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -251,7 +266,7 @@ fun ChatRoomScreenPreview() {
     PicplzTheme {
         ChatRoomScreen(
             navController = navController,
-            roomId = 1
+            roomId = "1"
         )
     }
 }

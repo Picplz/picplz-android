@@ -14,6 +14,7 @@ data class ChatRoomInfo(
     val packageType: String,
     val lastMessage: Message,
     val unreadMessageCount: Int = 0,
+    val isAlarmOn: Boolean = true,
 )
 
 data class Message (
