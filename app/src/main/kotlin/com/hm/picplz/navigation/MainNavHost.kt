@@ -22,7 +22,11 @@ import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleRevie
 import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.login.LoginIntroScreen
 import com.hm.picplz.ui.screen.main.MainScreen
+import com.hm.picplz.ui.screen.main.MainSearchScreen
+import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
+import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
+import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
 import com.hm.picplz.ui.screen.my_page.ReservationScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
@@ -188,6 +192,22 @@ fun MainNavHost(
         }
         composable("photographer-equipment-setting") {
             EquipmentSettingScreen(navController = navController)
+        }
+
+        composable("main-search") {
+            MainSearchScreen(navController = navController)
+        }
+
+        composable("mypage-modify-profile") {
+            MyPageModifyProfileScreen(navController = navController)
+        }
+
+        composable("mypage-shooting-history") {
+            MyPageShootingHistoryScreen(navController = navController)
+        }
+
+        composable("mypage-order-sheet") {
+            MyPageOrderSheetScreen(navController = navController)
         }
     }
 }

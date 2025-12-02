@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -86,7 +87,7 @@ fun LoginIntroScreen(
                     }
                 },
                 isIndicatorPositionAbsolute = true,
-                indicatorTopSpacing = imageHeight + 92.dp
+                indicatorTopSpacing = imageHeight + 92.dp + 34.dp
             )
         }
     }
@@ -170,11 +171,12 @@ fun LoginIntroPage(
                 contentDescription = "Background Image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally)
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                contentScale = ContentScale.Crop
             )
         }
 
-//        Spacer(modifier = Modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(34.dp))
 
         Text(
             text = page.text,

@@ -253,6 +253,22 @@ object MainThemeFont {
         lineHeight = 22.sp
     )
 
+    /** 더 작은 본문 · 13/140 */
+    val BodySmaller = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 13.sp,
+        lineHeight = 21.sp
+    )
+
+    /** 본문, 작은 버튼 2 · 15/140 */
+    val BodySmallButton2 = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 15.sp,
+        lineHeight = 23.sp
+    )
+
     /** 캡션 · 12/140 */
     val Caption = TextStyle(
         fontFamily = Pretendard,
