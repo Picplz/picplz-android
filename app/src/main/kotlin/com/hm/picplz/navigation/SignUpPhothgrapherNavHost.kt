@@ -14,7 +14,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDeviceSc
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpExperienceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpMainLocationScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpPhotographyVibeScreen
-import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 
 @Composable
 fun SignUpPhotographerNavHost(

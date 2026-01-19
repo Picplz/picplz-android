@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainIntent
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainSideEffect
-import com.hm.picplz.viewmodel.PhotographerMainViewModel
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

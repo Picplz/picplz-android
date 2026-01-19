@@ -45,7 +45,7 @@ import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentListItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.viewmodel.PhotographerMainViewModel
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 
 @Composable
 fun PhotographerMainScreen(

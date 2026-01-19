@@ -35,7 +35,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.viewmodel.ChatViewModel
+import com.hm.picplz.ui.screen.chat.ChatViewModel
 
 @Composable
 fun ChatScreen(

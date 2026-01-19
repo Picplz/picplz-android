@@ -16,8 +16,8 @@ import androidx.navigation.NavController
 import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.viewmodel.SignUpClientViewModel
-import com.hm.picplz.viewmodel.emptyUserData
+import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientViewModel
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

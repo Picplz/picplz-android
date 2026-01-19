@@ -1,7 +1,7 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_client
 
 import com.hm.picplz.data.model.User
-import com.hm.picplz.viewmodel.emptyUserData
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
 
 data class SignUpClientState(
     val isLoading: Boolean = false,

@@ -51,7 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.viewmodel.SearchPhotographerViewModel
+import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.hm.picplz.R
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar

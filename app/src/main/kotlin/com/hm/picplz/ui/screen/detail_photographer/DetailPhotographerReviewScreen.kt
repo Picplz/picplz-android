@@ -54,7 +54,7 @@ import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.utils.ReviewUtil
 import com.hm.picplz.utils.StarType
-import com.hm.picplz.viewmodel.DetailPhotographerViewModel
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

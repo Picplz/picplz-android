@@ -40,7 +40,7 @@ import com.hm.picplz.ui.screen.chat_room.composable.AlarmSwipe
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.viewmodel.ChatViewModel
+import com.hm.picplz.ui.screen.chat.ChatViewModel
 
 @Composable
 fun ChatRoomList (

@@ -29,7 +29,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
-import com.hm.picplz.viewmodel.SearchPhotographerViewModel
+import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
 
 @Composable
 fun PhotographerSheet(

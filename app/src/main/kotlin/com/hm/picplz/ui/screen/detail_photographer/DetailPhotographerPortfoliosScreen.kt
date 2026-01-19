@@ -21,7 +21,7 @@ import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.detail_photographer.portfolio.SinglePortfolio
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.utils.CommonUtil
-import com.hm.picplz.viewmodel.DetailPhotographerViewModel
+import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

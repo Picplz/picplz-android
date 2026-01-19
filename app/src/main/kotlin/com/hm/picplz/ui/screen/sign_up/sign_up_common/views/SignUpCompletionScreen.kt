@@ -44,8 +44,8 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.viewmodel.SignUpCommonViewModel
-import com.hm.picplz.viewmodel.emptyUserData
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

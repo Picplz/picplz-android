@@ -55,7 +55,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.Pretendard
-import com.hm.picplz.viewmodel.common.CommonChipViewModel
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipViewModel
 import java.util.UUID
 
 enum class ChipHeight {

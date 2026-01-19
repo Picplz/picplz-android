@@ -37,7 +37,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceIte
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.viewmodel.SignUpPhotographerViewModel
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

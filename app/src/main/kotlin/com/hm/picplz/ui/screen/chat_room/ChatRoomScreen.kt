@@ -51,7 +51,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.Pretendard
 import com.hm.picplz.utils.DateTimeUtil
-import com.hm.picplz.viewmodel.ChatRoomViewModel
+import com.hm.picplz.ui.screen.chat_room.ChatRoomViewModel
 
 @Composable
 fun ChatRoomScreen(

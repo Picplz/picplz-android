@@ -37,7 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
 import com.hm.picplz.data.model.ChipMode
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.viewmodel.SearchPhotographerViewModel
+import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
 
 data class StatusTagData(
     val label: String,
