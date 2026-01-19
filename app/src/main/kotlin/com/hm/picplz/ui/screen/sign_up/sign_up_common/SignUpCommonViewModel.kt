@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -71,11 +72,13 @@ class SignUpCommonViewModel @Inject constructor() : ViewModel() {
                     SelectionState.UNSELECTED
                 }
 
-                _state.value = _state.value.copy(
-                    selectedUserType = newUserType,
-                    photographerSelectionState = newPhotographerSelectionState,
-                    userSelectionState = newUserSelectionState
-                )
+                _state.update {
+                    it.copy(
+                        selectedUserType = newUserType,
+                        photographerSelectionState = newPhotographerSelectionState,
+                        userSelectionState = newUserSelectionState
+                    )
+                }
             }
 
             is NavigateToSelected -> {
@@ -107,22 +110,21 @@ class SignUpCommonViewModel @Inject constructor() : ViewModel() {
             }
 
             is ResetSelectedUserType -> {
-                _state.value = _state.value.copy(selectedUserType = null)
+                _state.update { it.copy(selectedUserType = null) }
             }
 
             is SetNickname -> {
                 val errors = validateNickname(intent.newNickname)
-                val newNicknameState = _state.value.copy(
-                    nickname = intent.newNickname,
-                    nicknameFieldErrors = errors
-                )
-                _state.value = newNicknameState
+                _state.update {
+                    it.copy(
+                        nickname = intent.newNickname,
+                        nicknameFieldErrors = errors
+                    )
+                }
             }
 
             is SetProfileImageUri -> {
-                val newProfileImageUriState =
-                    _state.value.copy(profileImageUri = intent.newProfileImageUri)
-                _state.value = newProfileImageUriState
+                _state.update { it.copy(profileImageUri = intent.newProfileImageUri) }
             }
 
             is Navigate -> {

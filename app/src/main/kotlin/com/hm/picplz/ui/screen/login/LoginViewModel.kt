@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,11 +32,11 @@ class LoginViewModel @Inject constructor(
         when (intent) {
             is LoginIntent.StartKakaoLogin -> {
                 viewModelScope.launch {
-                    _state.value = _state.value.copy(isLoading = true)
+                    _state.update { it.copy(isLoading = true) }
                     
                     loginWithKakaoUseCase(intent.context)
                         .onSuccess { response ->
-                            _state.value = _state.value.copy(isLoading = false)
+                            _state.update { it.copy(isLoading = false) }
                             Log.d(TAG, "로그인 성공: $response")
 
                             if (response.registered) {
@@ -45,7 +46,7 @@ class LoginViewModel @Inject constructor(
                             }
                         }
                         .onFailure { error ->
-                            _state.value = _state.value.copy(isLoading = false, error = error)
+                            _state.update { it.copy(isLoading = false, error = error) }
                             Log.e(TAG, "로그인 실패", error)
                             _sideEffect.emit(LoginSideEffect.LoginFailed(error))
                         }
