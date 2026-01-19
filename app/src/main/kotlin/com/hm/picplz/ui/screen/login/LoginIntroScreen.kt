@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.login
 
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -38,12 +37,12 @@ import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.collectLatest
 
 data class LoginIntroPageData(
-    val text: String, @DrawableRes val imageRes: Int, val isLast: Boolean = false // 마지막 페이지 여부
+    val text: String,
+    @DrawableRes val imageRes: Int,
+    val isLast: Boolean = false
 )
 
 object LoginIntroPageConfig {
@@ -56,11 +55,10 @@ object LoginIntroPageConfig {
     const val IMAGE_HEIGHT_FACTOR = 0.6f
 }
 
-val TAG = "LOGININTROSCREEN"
-
 @Composable
 fun LoginIntroScreen(
-    navController: NavController, viewModel: LoginViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
@@ -68,7 +66,8 @@ fun LoginIntroScreen(
     val imageHeight = screenHeight * LoginIntroPageConfig.IMAGE_HEIGHT_FACTOR
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(), containerColor = MainThemeColor.White
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MainThemeColor.White
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -81,10 +80,15 @@ fun LoginIntroScreen(
                 showIndicator = true,
                 itemContent = { page ->
                     LoginIntroPage(
-                        page, imageHeight
-                    ) {
-                        viewModel.handleIntent(LoginIntent.NavigateToKaKao)
-                    }
+                        page = page,
+                        imageHeight = imageHeight,
+                        onLoginClick = {
+                            viewModel.handleIntent(LoginIntent.StartKakaoLogin(context))
+                        },
+                        onLogoutClick = {
+                            viewModel.handleIntent(LoginIntent.UnlinkKakao)
+                        }
+                    )
                 },
                 isIndicatorPositionAbsolute = true,
                 indicatorTopSpacing = imageHeight + 92.dp + 34.dp
@@ -95,37 +99,12 @@ fun LoginIntroScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
-                is LoginSideEffect.NavigateToKaKao -> {
-                    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                        if (error != null) {
-                            viewModel.handleIntent(LoginIntent.LoginFailed(error))
-                        } else if (token != null) {
-                            viewModel.handleIntent(LoginIntent.LoginWithKaKao(token.accessToken))
-                        }
-                    }
-
-                    if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-                        UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                            if (token != null) {
-                                viewModel.handleIntent(LoginIntent.LoginWithKaKao(token.accessToken))
-                            } else if (error != null) {
-                                viewModel.handleIntent(LoginIntent.LoginFailed(error))
-                            }
-                        }
-                    } else {
-                        UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
-                    }
-                }
-
                 is LoginSideEffect.LoginFailed -> {
                     Toast.makeText(context, "로그인 실패", Toast.LENGTH_SHORT).show()
-                    Log.e("Kakao", "카카오톡 로그인 실패", sideEffect.error)
                 }
 
                 LoginSideEffect.LoginSuccess -> {
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
-
-                    // TODO: UserType에 따라 분기점 설정
                     navController.navigate("main") {
                         popUpTo(navController.graph.startDestinationId) {
                             inclusive = true
@@ -140,14 +119,14 @@ fun LoginIntroScreen(
                         "profileImageUri" to sideEffect.profileImageUrl
                     )
                     navController.navigateWithBundle("sign-up", profileImageUrlBundle)
+                }
 
-//                    navController.navigate("sign-up") {
-//                        popUpTo(navController.graph.startDestinationId) {
-//                            saveState = true
-//                        }
-//                        launchSingleTop = true
-//                        restoreState = true
-//                    }
+                LoginSideEffect.UnlinkSuccess -> {
+                    Toast.makeText(context, "연결 끊기 성공", Toast.LENGTH_SHORT).show()
+                }
+
+                is LoginSideEffect.UnlinkFailed -> {
+                    Toast.makeText(context, "연결 끊기 실패", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -156,10 +135,14 @@ fun LoginIntroScreen(
 
 @Composable
 fun LoginIntroPage(
-    page: LoginIntroPageData, imageHeight: Dp, onButtonClick: () -> Unit
+    page: LoginIntroPageData,
+    imageHeight: Dp,
+    onLoginClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
@@ -196,7 +179,7 @@ fun LoginIntroPage(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 contentColor = MainThemeColor.Black,
                 containerColor = MainThemeColor.Yellow,
-                onClick = onButtonClick
+                onClick = onLoginClick
             )
             Spacer(modifier = Modifier.height(10.dp))
             CommonBottomButton(
@@ -204,15 +187,8 @@ fun LoginIntroPage(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 contentColor = MainThemeColor.Black,
                 containerColor = MainThemeColor.Yellow,
-                onClick = {
-                    UserApiClient.instance.unlink { error ->
-                        if (error != null) {
-                            Log.e(TAG, "연결 끊기 실패", error)
-                        } else {
-                            Log.i(TAG, "연결 끊기 성공 - 동의 항목 UI 다시 표시 가능")
-                        }
-                    }
-                })
+                onClick = onLogoutClick
+            )
         }
     }
 }
