@@ -3,7 +3,9 @@ package com.hm.picplz.ui.screen.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.service.AuthService
+import com.hm.picplz.domain.usecase.GetKakaoUserInfoUseCase
+import com.hm.picplz.domain.usecase.LoginWithKakaoUseCase
+import com.hm.picplz.domain.usecase.UnlinkKakaoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authService: AuthService
+    private val loginWithKakaoUseCase: LoginWithKakaoUseCase,
+    private val getKakaoUserInfoUseCase: GetKakaoUserInfoUseCase,
+    private val unlinkKakaoUseCase: UnlinkKakaoUseCase
 ) : ViewModel() {
-    val TAG = "LOGININTROSCREEN"
+
     private val _state = MutableStateFlow(LoginState.idle())
     val state: StateFlow<LoginState> get() = _state
 
@@ -25,48 +29,32 @@ class LoginViewModel @Inject constructor(
 
     fun handleIntent(intent: LoginIntent) {
         when (intent) {
-            is LoginIntent.NavigateToKaKao -> {
+            is LoginIntent.StartKakaoLogin -> {
                 viewModelScope.launch {
-                    _sideEffect.emit(LoginSideEffect.NavigateToKaKao)
-                }
-            }
+                    _state.value = _state.value.copy(isLoading = true)
+                    
+                    loginWithKakaoUseCase(intent.context)
+                        .onSuccess { response ->
+                            _state.value = _state.value.copy(isLoading = false)
+                            Log.d(TAG, "로그인 성공: $response")
 
-            is LoginIntent.LoginSuccess -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(LoginSideEffect.LoginSuccess)
-                }
-            }
-
-            is LoginIntent.LoginFailed -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(LoginSideEffect.LoginFailed(intent.error))
-                }
-            }
-
-            is LoginIntent.LoginWithKaKao -> {
-                viewModelScope.launch {
-                    val result = authService.loginWithKaKao(intent.accessToken)
-                    result.onSuccess { res ->
-                        Log.d(TAG, "성공!!! ${res} ")
-
-                        // 이미 등록된 사용자라면 -> 고객으로 홈 화면 보내기
-                        if (res.registered) {
-                            _sideEffect.emit(LoginSideEffect.LoginSuccess)
-                            // TODO: 전달 받은 AccessToken 저장
+                            if (response.registered) {
+                                _sideEffect.emit(LoginSideEffect.LoginSuccess)
+                            } else {
+                                handleIntent(LoginIntent.FetchUserInfoFromKaKao)
+                            }
                         }
-                        // 등록되지 않은 사용자라면 동의 정보 가져오기 -> 회원가입 화면으로 보내기
-                        else {
-                            handleIntent(LoginIntent.FetchUserInfoFromKaKao)
+                        .onFailure { error ->
+                            _state.value = _state.value.copy(isLoading = false, error = error)
+                            Log.e(TAG, "로그인 실패", error)
+                            _sideEffect.emit(LoginSideEffect.LoginFailed(error))
                         }
-                    }.onFailure {
-                        Log.e(TAG, it.message ?: "Unknown error")
-                    }
                 }
             }
 
             is LoginIntent.FetchUserInfoFromKaKao -> {
                 viewModelScope.launch {
-                    authService.getKakaoUserInfo()
+                    getKakaoUserInfoUseCase()
                         .onSuccess { userInfo ->
                             Log.i(TAG, "사용자 정보 요청 성공\n프로필사진: ${userInfo.profileImageUrl}")
                             _sideEffect.emit(
@@ -79,6 +67,24 @@ class LoginViewModel @Inject constructor(
                         }
                 }
             }
+
+            is LoginIntent.UnlinkKakao -> {
+                viewModelScope.launch {
+                    unlinkKakaoUseCase()
+                        .onSuccess {
+                            Log.i(TAG, "연결 끊기 성공")
+                            _sideEffect.emit(LoginSideEffect.UnlinkSuccess)
+                        }
+                        .onFailure { error ->
+                            Log.e(TAG, "연결 끊기 실패", error)
+                            _sideEffect.emit(LoginSideEffect.UnlinkFailed(error))
+                        }
+                }
+            }
         }
+    }
+
+    companion object {
+        private const val TAG = "LoginViewModel"
     }
 }
