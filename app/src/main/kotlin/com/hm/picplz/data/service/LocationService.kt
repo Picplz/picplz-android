@@ -14,66 +14,69 @@ class LocationService @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     private var locationManager: LocationManager? = null
-    private val locationListeners = mutableListOf<LocationListener>()
+    private var currentListener: LocationListener? = null
 
     fun getCurrentLocation(
         onLocationReceived: (LatLng) -> Unit,
         onPermissionDenied: () -> Unit = {}
     ) {
-        // LocationManager 초기화
         if (locationManager == null) {
-            locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
         }
 
-        // 권한 체크
+        val manager = locationManager ?: return
+
         if (!PermissionUtil.hasLocationPermissions(context)) {
             onPermissionDenied()
             return
         }
 
+        cleanup()
+
         val gpsProvider = LocationManager.GPS_PROVIDER
         val networkProvider = LocationManager.NETWORK_PROVIDER
 
-        if (locationManager!!.isProviderEnabled(gpsProvider)) {
-            requestLocationUpdates(gpsProvider, onLocationReceived, onPermissionDenied)
-        } else if (locationManager!!.isProviderEnabled(networkProvider)) {
-            requestLocationUpdates(networkProvider, onLocationReceived, onPermissionDenied)
+        when {
+            manager.isProviderEnabled(gpsProvider) -> {
+                requestLocationOnce(manager, gpsProvider, onLocationReceived, onPermissionDenied)
+            }
+            manager.isProviderEnabled(networkProvider) -> {
+                requestLocationOnce(manager, networkProvider, onLocationReceived, onPermissionDenied)
+            }
         }
     }
 
-    private fun requestLocationUpdates(
+    private fun requestLocationOnce(
+        manager: LocationManager,
         provider: String,
         onLocationReceived: (LatLng) -> Unit,
         onPermissionDenied: () -> Unit
     ) {
         try {
-            val locationListener = LocationListener { location ->
-                onLocationReceived(LatLng.from(location.latitude, location.longitude))
-            }
-            locationListeners.add(locationListener)
-
-            locationManager!!.requestLocationUpdates(
-                provider,
-                1000L,
-                1.0f,
-                locationListener
-            )
-
-            val lastLocation = locationManager?.getLastKnownLocation(provider)
+            val lastLocation = manager.getLastKnownLocation(provider)
             if (lastLocation != null) {
                 onLocationReceived(LatLng.from(lastLocation.latitude, lastLocation.longitude))
+                return
             }
+
+            val listener = LocationListener { location ->
+                onLocationReceived(LatLng.from(location.latitude, location.longitude))
+                cleanup()
+            }
+            currentListener = listener
+
+            manager.requestLocationUpdates(provider, 0L, 0f, listener)
         } catch (securityException: SecurityException) {
             onPermissionDenied()
         }
     }
 
     fun cleanup() {
-        locationListeners.forEach { listener ->
+        currentListener?.let { listener ->
             try {
                 locationManager?.removeUpdates(listener)
             } catch (_: SecurityException) {}
         }
-        locationListeners.clear()
+        currentListener = null
     }
 }
