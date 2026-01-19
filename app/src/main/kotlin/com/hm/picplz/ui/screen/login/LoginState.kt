@@ -1,6 +1,12 @@
 package com.hm.picplz.ui.screen.login
 
-sealed class LoginState {
-    object Idle : LoginState()
-    data class Navigate(val url: String) : LoginState()
+data class LoginState(
+    val isLoading: Boolean = false,
+    val error: Throwable? = null
+) {
+    companion object {
+        fun idle(): LoginState {
+            return LoginState()
+        }
+    }
 }

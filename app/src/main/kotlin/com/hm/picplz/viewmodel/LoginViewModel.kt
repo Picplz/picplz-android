@@ -21,7 +21,7 @@ class LoginViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
     val TAG = "LOGININTROSCREEN"
-    private val _state = MutableStateFlow<LoginState>(LoginState.Idle)
+    private val _state = MutableStateFlow(LoginState.idle())
     val state: StateFlow<LoginState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
