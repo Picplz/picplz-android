@@ -1,7 +1,6 @@
 package com.hm.picplz.data.model
 import android.net.Uri
 import android.os.Parcelable
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
