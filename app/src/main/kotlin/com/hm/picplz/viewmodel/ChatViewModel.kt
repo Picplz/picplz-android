@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hm.picplz.ui.screen.chat.ChatIntent
 import com.hm.picplz.ui.screen.chat.ChatSideEffect
 import com.hm.picplz.ui.screen.chat.ChatState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ChatViewModel @Inject constructor(): ViewModel() {
+@HiltViewModel
+class ChatViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(ChatState.idle())
     val state: StateFlow<ChatState> get() = _state
 

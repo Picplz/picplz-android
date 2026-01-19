@@ -19,14 +19,17 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetProf
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ShowFileUploadDialog
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonState
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-class SignUpCommonViewModel : ViewModel() {
+@HiltViewModel
+class SignUpCommonViewModel @Inject constructor() : ViewModel() {
 
     private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
     val state: StateFlow<SignUpCommonState> get() = _state
