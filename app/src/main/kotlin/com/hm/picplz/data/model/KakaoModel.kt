@@ -11,6 +11,10 @@ data class KaKaoLoginResponse(
     val registered: Boolean
 )
 
+data class KakaoUserInfo(
+    val profileImageUrl: String?
+)
+
 data class KaKaoAddressRequest(
     val x: String,
     val y: String
