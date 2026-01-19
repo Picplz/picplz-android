@@ -1,5 +1,6 @@
 package com.hm.picplz.di
 
+import com.hm.picplz.BuildConfig
 import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.AuthApi
 import com.hm.picplz.data.api.KakaoMapApi
@@ -69,7 +70,7 @@ object NetworkModule {
     @PicplzApi
     fun providePicplzRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://3.36.183.87:8080/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
