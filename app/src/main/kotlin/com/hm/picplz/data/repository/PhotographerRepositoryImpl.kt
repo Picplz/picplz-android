@@ -2,17 +2,9 @@ package com.hm.picplz.data.repository
 
 import com.hm.picplz.data.service.PhotographerService
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.repository.PhotographerRepository
 import com.kakao.vectormap.LatLng
 import javax.inject.Inject
-
-interface PhotographerRepository {
-    suspend fun getNearbyPhotographers(
-        userLocation: LatLng,
-        distanceLimit: Int = 2,
-        countLimit: Int = 5,
-        userAddress: String
-    ): Result<FilteredPhotographers>
-}
 
 class PhotographerRepositoryImpl @Inject constructor(
     private val photographerService: PhotographerService

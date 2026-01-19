@@ -3,7 +3,7 @@ package com.hm.picplz.ui.screen.search_photographer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.repository.PhotographerRepository
+import com.hm.picplz.domain.repository.PhotographerRepository
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
