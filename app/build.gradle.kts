@@ -3,8 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -109,13 +109,13 @@ dependencies {
     implementation(libs.androidx.ui.v151)
     implementation(libs.androidx.material3.v110)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.hilt.android.v248)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose.v110)
 
     // Hilt Testing dependencies
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     // Navigation
     implementation(libs.androidx.navigation.compose.v260)
@@ -137,5 +137,3 @@ dependencies {
     // Material
     implementation("androidx.compose.material:material:1.5.1")
 }
-
-apply(plugin = "dagger.hilt.android.plugin")
