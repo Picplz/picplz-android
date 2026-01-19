@@ -3,96 +3,47 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_common
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.model.NicknameFieldError
-import com.hm.picplz.data.model.SelectionState
 import com.hm.picplz.data.model.User
-import com.hm.picplz.data.model.UserType.*
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ClickUserTypeButton
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToSelected
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ResetAllSignUpData
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ResetSelectedUserType
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetNickname
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetProfileImageUri
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ShowFileUploadDialog
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonState
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
+import com.hm.picplz.data.model.UserType
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserInfoHandler
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserTypeInfoHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpCommonViewModel @Inject constructor() : ViewModel() {
-
     private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
     val state: StateFlow<SignUpCommonState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
     val sideEffect: SharedFlow<SignUpSideEffect> get() = _sideEffect
 
-    /**
-     * 임시 데이터
-     * Todo: 카카오 로그인에서 반환받은 유저 정보 호출
-     */
+    private val userTypeInfoHandler = UserTypeInfoHandler()
+    private val userInfoHandler = UserInfoHandler()
 
     fun handleIntent(intent: SignUpCommonIntent) {
         when (intent) {
-            is NavigateToPrev -> {
+            is SignUpCommonIntent.NavigateToPrev -> {
                 viewModelScope.launch {
                     _sideEffect.emit(SignUpSideEffect.NavigateToPrev)
                 }
             }
 
-            is ClickUserTypeButton -> {
-                val newUserType = if (_state.value.selectedUserType == intent.userType) {
-                    null
-                } else {
-                    intent.userType
-                }
-                val newPhotographerSelectionState = if (newUserType == Photographer) {
-                    SelectionState.SELECTED
-                } else if (newUserType == User) {
-                    SelectionState.DESELECTED
-                } else {
-                    SelectionState.UNSELECTED
-                }
-                val newUserSelectionState = if (newUserType == User) {
-                    SelectionState.SELECTED
-                } else if (newUserType == Photographer) {
-                    SelectionState.DESELECTED
-                } else {
-                    SelectionState.UNSELECTED
-                }
-
-                _state.update {
-                    it.copy(
-                        selectedUserType = newUserType,
-                        photographerSelectionState = newPhotographerSelectionState,
-                        userSelectionState = newUserSelectionState
-                    )
-                }
-            }
-
-            is NavigateToSelected -> {
+            is SignUpCommonIntent.NavigateToSelected -> {
                 viewModelScope.launch {
                     _state.value.selectedUserType?.let { selectedUserType ->
                         val destination = when (selectedUserType) {
-                            User -> "sign-up-completion"
-                            Photographer -> "sign-up-photographer"
+                            UserType.User -> "sign-up-completion"
+                            UserType.Photographer -> "sign-up-photographer"
                         }
                         val userBundle = bundleOf(
                             "userInfo" to User(
-                                /**
-                                 * id 할당 방식은 차후 논의 후 설정
-                                 * **/
                                 id = UUID.randomUUID().toString(),
                                 nickname = _state.value.nickname,
                                 profileImageUri = _state.value.profileImageUri,
@@ -109,63 +60,28 @@ class SignUpCommonViewModel @Inject constructor() : ViewModel() {
                 }
             }
 
-            is ResetSelectedUserType -> {
-                _state.update { it.copy(selectedUserType = null) }
-            }
-
-            is SetNickname -> {
-                val errors = validateNickname(intent.newNickname)
-                _state.update {
-                    it.copy(
-                        nickname = intent.newNickname,
-                        nicknameFieldErrors = errors
-                    )
-                }
-            }
-
-            is SetProfileImageUri -> {
-                _state.update { it.copy(profileImageUri = intent.newProfileImageUri) }
-            }
-
-            is Navigate -> {
+            is SignUpCommonIntent.Navigate -> {
                 viewModelScope.launch {
                     _sideEffect.emit(SignUpSideEffect.Navigate(intent.destination))
                 }
             }
 
-            is ShowFileUploadDialog -> {
+            is SignUpCommonIntent.ShowFileUploadDialog -> {
                 viewModelScope.launch {
                     _sideEffect.emit(SignUpSideEffect.ShowFileUploadDialog)
                 }
             }
 
-            is ResetAllSignUpData -> {
+            is SignUpCommonIntent.ResetAllSignUpData -> {
                 _state.value = SignUpCommonState.idle()
             }
-        }
-    }
 
-    /** *
-     * Todo: 닉네임 유효성 검사 로직
-     *  중복 검사는 이후 api통신 필요
-     * **/
-    private fun validateNickname(newNickname: String): List<NicknameFieldError> {
-        val errors = mutableListOf<NicknameFieldError>()
-        if (newNickname.isEmpty()) {
-            errors.add(NicknameFieldError.Required())
+            else -> {
+                val newState = userTypeInfoHandler.process(intent, _state.value)
+                    ?: userInfoHandler.process(intent, _state.value)
+
+                newState?.let { _state.value = it }
+            }
         }
-        if (newNickname.length < 2 || newNickname.length > 15) {
-            errors.add(NicknameFieldError.Length())
-        }
-        if (!newNickname.matches(Regex("^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\\s]+$"))) {
-            errors.add(NicknameFieldError.InvalidChar())
-        }
-        if (newNickname.contains(Regex("[\\p{So}\\p{Cn}\\p{Sk}\\p{Sc}\\p{Sm}]"))) {
-            errors.add(NicknameFieldError.InvalidSpecialCharacter())
-        }
-        if (newNickname.startsWith(" ") || newNickname.endsWith(" ")) {
-            errors.add(NicknameFieldError.Whitespace())
-        }
-        return errors
     }
 }
