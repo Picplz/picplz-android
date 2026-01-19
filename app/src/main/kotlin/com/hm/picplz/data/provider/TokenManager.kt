@@ -22,15 +22,15 @@ class TokenManager @Inject constructor(
         private const val KEY_USER_TYPE = "user_type"
     }
 
-    enum class UserType(val value: String) {
+    enum class AuthRole(val value: String) {
         GUEST("ROLE_GUEST"),
         USER("ROLE_USER")
     }
 
-    private fun saveToken(token: String, userType: UserType) {
+    private fun saveToken(token: String, authRole: AuthRole) {
         prefs.edit()
             .putString(KEY_ACCESS_TOKEN, token)
-            .putString(KEY_USER_TYPE, userType.value)
+            .putString(KEY_USER_TYPE, authRole.value)
             .apply()
     }
 
@@ -38,9 +38,9 @@ class TokenManager @Inject constructor(
         return prefs.getString(KEY_ACCESS_TOKEN, null)
     }
 
-    fun getUserType(): UserType? {
-        val userTypeValue = prefs.getString(KEY_USER_TYPE, null)
-        return UserType.entries.find { it.value == userTypeValue }
+    fun getAuthRole(): AuthRole? {
+        val value = prefs.getString(KEY_USER_TYPE, null)
+        return AuthRole.entries.find { it.value == value }
     }
 
     fun clearToken() {
@@ -55,10 +55,10 @@ class TokenManager @Inject constructor(
     }
 
     fun setDevelopmentTokens() {
-        saveToken(BuildConfig.DEV_USER_TOKEN, UserType.USER)
+        saveToken(BuildConfig.DEV_USER_TOKEN, AuthRole.USER)
     }
 
     fun switchToGuestToken() {
-        saveToken(BuildConfig.DEV_GUEST_TOKEN, UserType.GUEST)
+        saveToken(BuildConfig.DEV_GUEST_TOKEN, AuthRole.GUEST)
     }
 } 
