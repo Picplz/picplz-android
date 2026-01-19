@@ -395,15 +395,15 @@ val dummyPhotographerInfo = PhotographerInfo(
     photoPortfolios = dummyPhotoPortfolio
 )
 
-data class DetailPhotographerReviewState(
+data class DetailPhotographerState(
     val profileInfo: PhotographerInfo = dummyPhotographerInfo,
     val reviewSummary: PhotographerReviewSummary = dummyReviewSummary,
     val reviews: List<PhotographerReview> = dummyReviews,
     val portfolios: List<PhotographerPortfolio> = dummyPortfolios,
 ) {
     companion object {
-        fun idle(): DetailPhotographerReviewState {
-            return DetailPhotographerReviewState()
+        fun idle(): DetailPhotographerState {
+            return DetailPhotographerState()
         }
     }
 }
