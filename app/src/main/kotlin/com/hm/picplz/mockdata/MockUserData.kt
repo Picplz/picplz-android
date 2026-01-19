@@ -1,4 +1,4 @@
-package com.hm.picplz.sampledata
+package com.hm.picplz.mockdata
 
 import com.hm.picplz.data.model.User
 

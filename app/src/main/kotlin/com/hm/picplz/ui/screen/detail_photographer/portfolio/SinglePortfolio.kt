@@ -27,7 +27,7 @@ import com.hm.picplz.ui.screen.common.CommonDropdownMenu
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.common.DropdownMenuItemData
-import com.hm.picplz.ui.screen.detail_photographer.dummyPhotoPortfolio
+import com.hm.picplz.mockdata.mockPhotoPortfolios
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -127,7 +127,7 @@ fun SinglePortfolioPreview() {
         title = "서울숲",
         location = "서울 까치산로",
         createdAt = "2024-02-01",
-        photoPortfolios = dummyPhotoPortfolio.slice(5..10),
+        photoPortfolios = mockPhotoPortfolios.slice(5..10),
         photoPortfolioCount = 6,
     )
 

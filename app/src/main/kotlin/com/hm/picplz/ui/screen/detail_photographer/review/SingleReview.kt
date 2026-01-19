@@ -41,7 +41,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.R
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.detail_photographer.dummyPhotoReviews
+import com.hm.picplz.mockdata.mockPhotoReviews
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -253,7 +253,7 @@ fun SingleReviewPreview() {
         rating = 4.0f,
         createdAt = "2025-02-26",
         isReported = true,
-        photoReviews = dummyPhotoReviews.slice(0..2),
+        photoReviews = mockPhotoReviews.slice(0..2),
         photoReviewCount = 3,
         option = "프로필 Only",
         location = "서울 강남",

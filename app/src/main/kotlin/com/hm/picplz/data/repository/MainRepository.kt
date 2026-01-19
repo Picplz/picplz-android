@@ -2,7 +2,7 @@ package com.hm.picplz.data.repository
 
 import com.hm.picplz.data.model.User
 import com.hm.picplz.data.source.UserDataSource
-import com.hm.picplz.sampledata.emptyUserData
+import com.hm.picplz.mockdata.emptyUserData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

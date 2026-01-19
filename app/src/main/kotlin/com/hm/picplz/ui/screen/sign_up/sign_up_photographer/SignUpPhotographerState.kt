@@ -5,7 +5,7 @@ import com.hm.picplz.data.model.User
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.Device
 import com.hm.picplz.domain.model.DeviceCategory
-import com.hm.picplz.sampledata.emptyUserData
+import com.hm.picplz.mockdata.emptyUserData
 
 enum class SelectorType {
     NONE,

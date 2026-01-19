@@ -36,7 +36,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
 import com.hm.picplz.ui.main.MainActivityUiState
-import com.hm.picplz.sampledata.emptyUserData
+import com.hm.picplz.mockdata.emptyUserData
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
