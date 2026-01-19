@@ -169,13 +169,3 @@ class SignUpCommonViewModel @Inject constructor() : ViewModel() {
         return errors
     }
 }
-
-val emptyUserData = User(
-    id = "0",
-    nickname = "Unknown",
-    email = "unknown@example.com",
-    userType = null,
-    profileImageUri = null,
-    photographyExperience = null,
-    photographyVibes = null,
-)

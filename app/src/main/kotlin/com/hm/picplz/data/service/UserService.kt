@@ -1,7 +1,7 @@
 package com.hm.picplz.data.service
 
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
+import com.hm.picplz.sampledata.emptyUserData
 import kotlinx.coroutines.delay
 
 import javax.inject.Inject

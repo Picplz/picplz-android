@@ -5,7 +5,7 @@ import com.hm.picplz.data.model.User
 import com.hm.picplz.ui.model.Area
 import com.hm.picplz.ui.model.Device
 import com.hm.picplz.ui.model.DeviceCategory
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
+import com.hm.picplz.sampledata.emptyUserData
 
 enum class SelectorType {
     NONE,

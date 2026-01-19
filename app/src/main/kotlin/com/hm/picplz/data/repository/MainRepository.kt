@@ -1,8 +1,8 @@
 package com.hm.picplz.data.repository
 
-import android.util.Log
 import com.hm.picplz.data.model.User
 import com.hm.picplz.data.source.UserDataSource
+import com.hm.picplz.sampledata.emptyUserData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,17 +23,5 @@ class MainRepository @Inject constructor(
     suspend fun fetchUserData() {
         val fetchedUserData = userDataSource.getUserData()
         _userData.emit(fetchedUserData)
-    }
-
-    companion object {
-        val emptyUserData = User(
-            id = "0",
-            nickname = "Unknown",
-            email = "unknown@example.com",
-            userType = null,
-            profileImageUri = null,
-            photographyExperience = null,
-            photographyVibes = null,
-        )
     }
 }

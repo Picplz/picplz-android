@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.data.model.User
 import com.hm.picplz.navigation.SignUpPhotographerNavHost
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.emptyUserData
+import com.hm.picplz.sampledata.emptyUserData
 
 @Composable
 fun SignUpPhotographerScreen(
