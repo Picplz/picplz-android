@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.hm.picplz.ui.model.ChatRoomInfo
-import com.hm.picplz.ui.model.ChatStatus
-import com.hm.picplz.ui.model.Message
+import com.hm.picplz.domain.model.ChatRoomInfo
+import com.hm.picplz.domain.model.ChatStatus
+import com.hm.picplz.domain.model.Message
 import com.hm.picplz.ui.screen.common.BadgeTheme
 import com.hm.picplz.ui.screen.common.CommonBadge
 import com.hm.picplz.ui.theme.MainFontFamily.caption

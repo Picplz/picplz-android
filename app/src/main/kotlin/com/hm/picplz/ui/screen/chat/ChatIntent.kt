@@ -1,6 +1,6 @@
 package com.hm.picplz.ui.screen.chat
 
-import com.hm.picplz.ui.model.ChatStatus
+import com.hm.picplz.domain.model.ChatStatus
 
 sealed interface ChatIntent {
     data class NavigateToChatRoom(val chatId: String) : ChatIntent

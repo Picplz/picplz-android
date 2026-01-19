@@ -32,9 +32,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.hm.picplz.ui.model.ButtonActionType
-import com.hm.picplz.ui.model.MessageContent
-import com.hm.picplz.ui.model.MessageDirection
+import com.hm.picplz.domain.model.ButtonActionType
+import com.hm.picplz.domain.model.MessageContent
+import com.hm.picplz.domain.model.MessageDirection
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat_room.composable.ChatMessageProfile
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChangeTimeBubble

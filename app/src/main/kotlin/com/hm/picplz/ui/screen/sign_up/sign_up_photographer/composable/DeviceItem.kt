@@ -25,8 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.R
-import com.hm.picplz.ui.model.Device
-import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.domain.model.Device
+import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme

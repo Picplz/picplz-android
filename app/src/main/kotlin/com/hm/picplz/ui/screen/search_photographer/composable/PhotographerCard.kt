@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import com.hm.picplz.ui.model.Photographer
+import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable

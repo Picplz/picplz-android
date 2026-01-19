@@ -1,4 +1,5 @@
-package com.hm.picplz.ui.model
+package com.hm.picplz.domain.model
+
 import com.hm.picplz.data.model.User
 
 enum class ChatStatus {
@@ -17,7 +18,7 @@ data class ChatRoomInfo(
     val isAlarmOn: Boolean = true,
 )
 
-data class Message (
+data class Message(
     val profileImageUrl: String,
     val nickname: String,
     val message: String,
@@ -60,18 +61,22 @@ sealed class MessageContent {
         val caption: String? = null,
         val type: NotificationType,
         val button: MessageButton? = null
-    ): MessageContent()
+    ) : MessageContent()
+
     data class Completion(
         val title: String,
         val deliveryMethod: DeliveryType,
         val deliveryDeadline: Long,
-    ): MessageContent()
+    ) : MessageContent()
+
     data class ChangeTime(
         val newScheduledTime: Long,
-    ): MessageContent()
+    ) : MessageContent()
+
     data class DealConfirmation(
         val button: MessageButton? = null
-    ): MessageContent()
+    ) : MessageContent()
+
     data class ChatSuggest(
         val suggestedChats: List<String>
     ) : MessageContent()

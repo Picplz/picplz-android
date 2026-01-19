@@ -16,8 +16,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.data.model.DeviceBrand
 import com.hm.picplz.data.model.DeviceData
-import com.hm.picplz.ui.model.Device
-import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.domain.model.Device
+import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*

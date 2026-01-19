@@ -2,12 +2,12 @@ package com.hm.picplz.ui.screen.chat_room
 
 import android.net.Uri
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.model.ButtonActionType
-import com.hm.picplz.ui.model.ChatMessage
-import com.hm.picplz.ui.model.MessageButton
-import com.hm.picplz.ui.model.MessageContent
-import com.hm.picplz.ui.model.MessageDirection
-import com.hm.picplz.ui.model.NotificationType
+import com.hm.picplz.domain.model.ButtonActionType
+import com.hm.picplz.domain.model.ChatMessage
+import com.hm.picplz.domain.model.MessageButton
+import com.hm.picplz.domain.model.MessageContent
+import com.hm.picplz.domain.model.MessageDirection
+import com.hm.picplz.domain.model.NotificationType
 
 sealed interface ChatListItem {
     data class DateHeader(val date: Long) : ChatListItem
@@ -244,7 +244,7 @@ val dummyChatMessages = listOf(
         ),
         content = MessageContent.Completion(
             title = "상품명",
-            deliveryMethod = com.hm.picplz.ui.model.DeliveryType.EMAIL,
+            deliveryMethod = com.hm.picplz.domain.model.DeliveryType.EMAIL,
             deliveryDeadline = System.currentTimeMillis() + 1000 * 60 * 60 * 24
         ),
         timestamp = System.currentTimeMillis() - 1000,
@@ -266,7 +266,7 @@ val dummyChatMessages = listOf(
         ),
         content = MessageContent.Completion(
             title = "상품명",
-            deliveryMethod = com.hm.picplz.ui.model.DeliveryType.EMAIL,
+            deliveryMethod = com.hm.picplz.domain.model.DeliveryType.EMAIL,
             deliveryDeadline = System.currentTimeMillis() + 1000 * 60 * 60 * 24
         ),
         timestamp = System.currentTimeMillis() - 1000,

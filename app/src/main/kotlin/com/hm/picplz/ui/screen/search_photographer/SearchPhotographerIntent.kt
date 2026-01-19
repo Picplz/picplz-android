@@ -3,7 +3,7 @@ package com.hm.picplz.ui.screen.search_photographer
 import android.content.Context
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Dp
-import com.hm.picplz.ui.model.FilteredPhotographers
+import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
 sealed interface SearchPhotographerIntent {

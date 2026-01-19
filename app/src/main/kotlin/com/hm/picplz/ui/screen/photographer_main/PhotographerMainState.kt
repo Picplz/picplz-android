@@ -1,6 +1,6 @@
 package com.hm.picplz.ui.screen.photographer_main
 
-import com.hm.picplz.ui.model.Equipment
+import com.hm.picplz.domain.model.Equipment
 
 data class PhotographerMainState(
     val isActive: Boolean = false,

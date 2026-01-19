@@ -1,6 +1,6 @@
 package com.hm.picplz.data.model
 
-import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.domain.model.DeviceCategory
 
 data class DeviceBrand(
     val name: String,

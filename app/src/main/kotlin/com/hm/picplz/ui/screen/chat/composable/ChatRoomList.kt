@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
-import com.hm.picplz.ui.model.ChatRoomInfo
+import com.hm.picplz.domain.model.ChatRoomInfo
 import com.hm.picplz.ui.screen.chat.ChatTabType
 import com.hm.picplz.ui.screen.chat.dummyChatRooms
 import com.hm.picplz.ui.screen.chat.ChatIntent

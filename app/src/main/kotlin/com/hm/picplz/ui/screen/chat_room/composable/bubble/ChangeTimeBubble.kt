@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.model.ChatMessage
-import com.hm.picplz.ui.model.MessageContent
-import com.hm.picplz.ui.model.MessageDirection
+import com.hm.picplz.domain.model.ChatMessage
+import com.hm.picplz.domain.model.MessageContent
+import com.hm.picplz.domain.model.MessageDirection
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme

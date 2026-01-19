@@ -14,7 +14,7 @@ import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.data.repository.PhotographerRepository
 import com.hm.picplz.data.service.KakaoMapService
 import com.hm.picplz.data.service.LocationService
-import com.hm.picplz.ui.model.FilteredPhotographers
+import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerSideEffect
 import com.hm.picplz.utils.DisplayMetricsUtil
 import dagger.hilt.android.lifecycle.HiltViewModel

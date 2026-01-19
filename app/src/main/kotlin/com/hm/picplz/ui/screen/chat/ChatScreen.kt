@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
-import com.hm.picplz.ui.model.ChatStatus
+import com.hm.picplz.domain.model.ChatStatus
 import com.hm.picplz.ui.screen.chat.composable.ChatRoomList
 import com.hm.picplz.ui.screen.chat.composable.ChatStatusTag
 import com.hm.picplz.ui.theme.MainThemeColor

@@ -3,8 +3,8 @@ package com.hm.picplz.data.service
 import com.hm.picplz.data.model.AreaSearchRequest
 import com.hm.picplz.data.source.AddressSource
 import com.hm.picplz.data.model.AreaNearbyRequest
-import com.hm.picplz.ui.model.Area
-import com.hm.picplz.ui.model.toUiModel
+import com.hm.picplz.domain.model.Area
+import com.hm.picplz.data.mapper.toDomain
 import javax.inject.Inject
 
 interface AddressService {
@@ -20,7 +20,7 @@ class AddressServiceImpl @Inject constructor(
             AreaSearchRequest(keyword = keyword)
         ).map { response ->
             response.data.map { areaData ->
-                areaData.toUiModel()
+                areaData.toDomain()
             }
         }
     }
@@ -33,7 +33,7 @@ class AddressServiceImpl @Inject constructor(
             AreaNearbyRequest(rad = rad, lat = lat, lng = lng)
         ).map { response ->
             response.data.map { areaData ->
-                areaData.toUiModel()
+                areaData.toDomain()
             }
         }
     }

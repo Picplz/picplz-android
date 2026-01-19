@@ -1,9 +1,9 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.model.Area
-import com.hm.picplz.ui.model.Device
-import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.domain.model.Area
+import com.hm.picplz.domain.model.Device
+import com.hm.picplz.domain.model.DeviceCategory
 
 sealed interface SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent

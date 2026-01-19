@@ -1,7 +1,7 @@
 package com.hm.picplz.data.repository
 
 import com.hm.picplz.data.service.PhotographerService
-import com.hm.picplz.ui.model.FilteredPhotographers
+import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 

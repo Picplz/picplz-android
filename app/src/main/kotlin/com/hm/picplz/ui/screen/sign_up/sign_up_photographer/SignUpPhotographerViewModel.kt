@@ -8,8 +8,8 @@ import com.hm.picplz.data.model.ChipItem
 import com.hm.picplz.data.model.PhotographyExperience
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.LocationService
-import com.hm.picplz.ui.model.Device
-import com.hm.picplz.ui.model.DeviceCategory
+import com.hm.picplz.domain.model.Device
+import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.CareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddCurrentDeviceToList

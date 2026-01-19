@@ -6,7 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.hm.picplz.ui.model.MessageDirection
+import com.hm.picplz.domain.model.MessageDirection
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable

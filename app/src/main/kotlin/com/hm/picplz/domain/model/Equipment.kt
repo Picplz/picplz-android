@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.model
+package com.hm.picplz.domain.model
 
 data class Equipment(
     val id: Int,

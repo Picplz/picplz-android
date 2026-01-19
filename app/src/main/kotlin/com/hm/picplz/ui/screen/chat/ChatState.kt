@@ -1,8 +1,8 @@
 package com.hm.picplz.ui.screen.chat
 
-import com.hm.picplz.ui.model.ChatRoomInfo
-import com.hm.picplz.ui.model.ChatStatus
-import com.hm.picplz.ui.model.Message
+import com.hm.picplz.domain.model.ChatRoomInfo
+import com.hm.picplz.domain.model.ChatStatus
+import com.hm.picplz.domain.model.Message
 
 enum class ChatTabType {
     ONGOING, COMPLETED
