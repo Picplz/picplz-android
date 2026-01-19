@@ -1,6 +1,6 @@
 package com.hm.picplz.ui.screen.search_photographer
 
-sealed class SearchPhotographerSideEffect {
-    data object NavigateToPrev : SearchPhotographerSideEffect()
-    data object RequestLocationPermission : SearchPhotographerSideEffect()
+sealed interface SearchPhotographerSideEffect {
+    data object NavigateToPrev : SearchPhotographerSideEffect
+    data object RequestLocationPermission : SearchPhotographerSideEffect
 }

@@ -1,5 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-sealed class DetailPhotographerSideEffect {
-    data object NavigateToPrev : DetailPhotographerSideEffect()
+sealed interface DetailPhotographerSideEffect {
+    data object NavigateToPrev : DetailPhotographerSideEffect
 }
