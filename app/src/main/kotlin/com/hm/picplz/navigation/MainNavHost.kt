@@ -106,10 +106,6 @@ fun MainNavHost(
             SearchPhotographerScreen(mainNavController = navController)
         }
 
-        composable("main") {
-            MainScreen(navController = navController)
-        }
-
         composable("reservation") {
             ReservationScreen(navController = navController)
         }
