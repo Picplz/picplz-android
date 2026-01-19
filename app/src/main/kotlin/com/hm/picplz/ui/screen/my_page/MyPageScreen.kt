@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.hm.picplz.navigation.Routes
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,7 +112,7 @@ fun ProfileSection(navController: NavHostController) {
             )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(
-                onClick = { navController.navigate("mypage-modify-profile") },
+                onClick = { navController.navigate(Routes.MY_PAGE_MODIFY_PROFILE) },
                 shape = RoundedCornerShape(5.dp),
                 border = BorderStroke(1.dp, MainThemeColor.Gray3),
                 modifier = Modifier.fillMaxWidth(),
@@ -146,7 +147,7 @@ fun ReservationSection(navController: NavHostController) {
                 horizontalPadding = 0.dp,
                 verticalPadding = 0.dp,
                 gap = 8.dp,
-                onClick = { navController.navigate("mypage-shooting-history") },
+                onClick = { navController.navigate(Routes.MY_PAGE_SHOOTING_HISTORY) },
             )
         }
         Spacer(modifier = Modifier.height(10.dp))

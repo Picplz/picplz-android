@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.hm.picplz.navigation.Routes
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
@@ -105,7 +106,7 @@ fun LoginIntroScreen(
 
                 LoginSideEffect.LoginSuccess -> {
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    navController.navigate("main") {
+                    navController.navigate(Routes.MAIN) {
                         popUpTo(navController.graph.startDestinationId) {
                             inclusive = true
                         }

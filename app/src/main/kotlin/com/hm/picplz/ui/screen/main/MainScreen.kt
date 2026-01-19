@@ -37,6 +37,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.R
+import com.hm.picplz.navigation.Routes
 import com.hm.picplz.navigation.bottom_navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.PhotographerStatus
 import com.hm.picplz.ui.screen.main.modalBottomSheet.DeviceModalBottomSheet
@@ -81,7 +82,7 @@ fun SearchBanner(navController: NavHostController) {
 
             SearchNavigateButton(
                 placeholder = "촬영을 하고 싶은 장소 또는 동을 검색해보세요",
-                onClick = { navController.navigate("main-search") })
+                onClick = { navController.navigate(Routes.MAIN_SEARCH) })
 
             Spacer(Modifier.height(20.dp))
 
@@ -318,10 +319,10 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 
 
 
-            Button(onClick = { navController.navigate("detail-photographer") }) {
+            Button(onClick = { navController.navigate(Routes.DETAIL_PHOTOGRAPHER) }) {
                 Text(text = "작사 상세 페이지 테스트 버튼")
             }
-            Button(onClick = { navController.navigate("photographer-main") }) {
+            Button(onClick = { navController.navigate(Routes.PHOTOGRAPHER_MAIN) }) {
                 Text(text = "작가 메인 페이지 테스트 버튼")
             }
             Button(onClick = { visible = true }) {

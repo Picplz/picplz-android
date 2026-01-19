@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.R
+import com.hm.picplz.navigation.Routes
 import com.hm.picplz.data.model.PhotoPortfolio
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -89,7 +90,7 @@ fun DetailPhotographerPhotoPortfoliosScreen(
                                         .aspectRatio(1f) // 1:1 비율
                                         .padding(2.dp)
                                         .clickable {
-                                            navController.navigate("detail-photographer-portfolios/${imageRes.portfolioId}/${imageRes.index}")
+                                            navController.navigate(Routes.detailPhotographerPortfolios(imageRes.portfolioId, imageRes.index))
                                         },
                                     contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
                                 )

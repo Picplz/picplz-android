@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.hm.picplz.navigation.Routes
 import com.hm.picplz.R
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.my_page.shootingHistoryCard.ShootingStatus
@@ -53,7 +54,7 @@ fun MyPageShootingHistoryScreen(modifier: Modifier = Modifier, navController: Na
                         status = ShootingStatus.COMPLEETED,
                         date = "5월 26일 오전 9시 30분",
                         location = "종로구 효자로 33",
-                        onClickOrderSheet = { navController.navigate("mypage-order-sheet") }
+                        onClickOrderSheet = { navController.navigate(Routes.MY_PAGE_ORDER_SHEET) }
                     )
                 }
                 item {
