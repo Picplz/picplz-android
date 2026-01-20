@@ -22,7 +22,7 @@ import com.hm.picplz.ui.theme.MainThemeFont
 enum class SortType(val label: String) {
     POPULAR("인기순"),
     RATING("별점순"),
-    FOLLOWER("팔로워순")
+    FOLLOWER("팔로워순"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -30,35 +30,37 @@ enum class SortType(val label: String) {
 fun SortFilterModalBottomSheet(
     visible: Boolean,
     onDismiss: () -> Unit,
-    onSelect: (SortType) -> Unit
+    onSelect: (SortType) -> Unit,
 ) {
     CommonModalBottomSheet(
         visible = visible,
         visibleCloseButton = false,
         onDismissRequest = onDismiss,
         dragHandle = null,
-        sheetMaxHeight = 222.dp + 84.dp
+        sheetMaxHeight = 222.dp + 84.dp,
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
         ) {
             SortType.entries.forEachIndexed { index, type ->
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(57.dp)
-                        .clickable {
-                            onSelect(type)
-                            onDismiss()
-                        },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(57.dp)
+                            .clickable {
+                                onSelect(type)
+                                onDismiss()
+                            },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = type.label,
-                        style = MainThemeFont.TitleSmall
+                        style = MainThemeFont.TitleSmall,
                     )
                 }
                 if (index != SortType.entries.toTypedArray().lastIndex) {

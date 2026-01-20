@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.Routes
 import com.hm.picplz.data.model.PhotographerReviewSummary
+import com.hm.picplz.navigation.model.ReviewPhotographer
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -28,23 +28,23 @@ import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
 
 data class ReviewItem(
-    val imageUri: Int, // 이미지 URI (리소스 ID)
-    val label: String, // 텍스트 레이블
-    val value: Int // 값 (예: "12"과 같은 숫자)
+    val imageUri: Int,
+    val label: String,
+    val value: Int,
 )
 
 @Composable
 fun ReviewSection(
     modifier: Modifier,
     navController: NavHostController,
-    reviewSummary: PhotographerReviewSummary
+    reviewSummary: PhotographerReviewSummary,
 ) {
     val totalRating = reviewSummary.averageRating
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN) // MathUtil에서 호출
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = "촬영 만족도", style = buttonText)
         Spacer(modifier = Modifier.height(10.dp))
@@ -54,7 +54,7 @@ fun ReviewSection(
             starList.forEach { star ->
                 Image(
                     painter = painterResource(id = star),
-                    contentDescription = "별점"
+                    contentDescription = "별점",
                 )
             }
             Spacer(modifier = Modifier.width(3.dp))
@@ -62,7 +62,7 @@ fun ReviewSection(
                 text = totalRating.toString(),
                 style = pretendardTypography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = MainThemeColor.Gray4
+                color = MainThemeColor.Gray4,
             )
         }
 
@@ -81,8 +81,8 @@ fun ReviewSection(
             horizontalPadding = 0.dp,
             verticalPadding = 0.dp,
             gap = 6.dp,
-            onClick = { navController.navigate(Routes.REVIEW_PHOTOGRAPHER) },
-            modifier = modifier.align(Alignment.End)
+            onClick = { navController.navigate(ReviewPhotographer) },
+            modifier = modifier.align(Alignment.End),
         )
     }
 }

@@ -79,26 +79,29 @@ fun CommonModalBottomSheet(
     dragHandle: @Composable (() -> Unit)? = { CustomDragHandle() },
     sheetMinHeight: Dp? = 0.dp,
     sheetMaxHeight: Dp? = Dp.Infinity,
-    windowInsets
-    : WindowInsets = BottomSheetDefaults.windowInsets,
+    windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val connection = remember {
-        object : NestedScrollConnection {
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                return available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
-            }
+    val connection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPostScroll(
+                    consumed: Offset,
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    return available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+                }
 
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                return available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+                override suspend fun onPostFling(
+                    consumed: Velocity,
+                    available: Velocity,
+                ): Velocity {
+                    return available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+                }
             }
         }
-    }
     val scope = rememberCoroutineScope()
 
     if (visible) {
@@ -116,14 +119,15 @@ fun CommonModalBottomSheet(
             properties = properties,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .nestedScroll(connection)
-                    .heightIn(
-                        min = sheetMinHeight ?: 0.dp,
-                        max = sheetMaxHeight ?: Dp.Infinity
-                    )
-                    .fillMaxHeight(0.9f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .nestedScroll(connection)
+                        .heightIn(
+                            min = sheetMinHeight ?: 0.dp,
+                            max = sheetMaxHeight ?: Dp.Infinity,
+                        )
+                        .fillMaxHeight(0.9f),
             ) {
                 // ✅ 메인 콘텐츠
                 Column(modifier = Modifier.fillMaxSize()) {
@@ -135,15 +139,16 @@ fun CommonModalBottomSheet(
                     Image(
                         painter = painterResource(id = R.drawable.modal_button_close),
                         contentDescription = "close-button",
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(top = 17.5.dp, end = 15.dp)
-                            .clickable {
-                                scope.launch {
-                                    sheetState.hide() // 👈 애니메이션으로 바텀시트 숨김
-                                    onDismissRequest() // 👈 숨김 완료 후 상태 갱신
-                                }
-                            }
+                        modifier =
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(top = 17.5.dp, end = 15.dp)
+                                .clickable {
+                                    scope.launch {
+                                        sheetState.hide() // 👈 애니메이션으로 바텀시트 숨김
+                                        onDismissRequest() // 👈 숨김 완료 후 상태 갱신
+                                    }
+                                },
                     )
                 }
             }
@@ -157,17 +162,19 @@ fun CommonModalBottomSheet(
 @Composable
 fun CustomDragHandle() {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Surface(
-            modifier = Modifier
-                .width(40.dp)
-                .height(4.dp),
+            modifier =
+                Modifier
+                    .width(40.dp)
+                    .height(4.dp),
             shape = RoundedCornerShape(6.dp),
-            color = MainThemeColor.Black
+            color = MainThemeColor.Black,
         ) {}
     }
 }

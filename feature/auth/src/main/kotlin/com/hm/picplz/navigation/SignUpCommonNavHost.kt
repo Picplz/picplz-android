@@ -6,10 +6,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpNicknameScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpProfileImageScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpSelectTypeScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 
 @Composable
 fun SignUpCommonNavHost(
@@ -26,21 +26,21 @@ fun SignUpCommonNavHost(
         composable("sign-up-nickname") {
             SignUpNicknameScreen(
                 signUpCommonNavController = signUpCommonNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-profile") {
             SignUpProfileImageScreen(
                 mainNavController = mainNavController,
                 signUpCommonNavController = signUpCommonNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-select-type") {
             SignUpSelectTypeScreen(
                 signUpCommonNavController = signUpCommonNavController,
                 mainNavController = mainNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
     }

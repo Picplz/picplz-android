@@ -6,13 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -44,65 +42,71 @@ fun CommonTopBar(
     subTextStyle: TextStyle = MainFontFamily.caption,
     paddingStart: Dp = 0.dp,
     iconSize: Dp = 16.dp,
-    spacerWidth: Dp = 50.dp
+    spacerWidth: Dp = 50.dp,
 ) {
     Box(
-        modifier = Modifier
-            .height(boxHeight)
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .height(boxHeight)
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier =
+                modifier
+                    .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             IconButton(
                 onClick = onClickBack,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(start = paddingStart)
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .padding(start = paddingStart),
             ) {
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
                     contentDescription = "arrow left",
-                    modifier = Modifier.size(iconSize)
+                    modifier = Modifier.size(iconSize),
                 )
             }
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                contentAlignment = Alignment.Center,
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = text,
-                        style = textStyle
+                        style = textStyle,
                     )
                     if (subText != null) {
                         Text(
                             text = subText,
                             style = subTextStyle,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 2.dp),
                         )
                     }
                 }
             }
             Box(
-                modifier = Modifier
-                    .size(spacerWidth)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(spacerWidth)
+                        .fillMaxHeight(),
+                contentAlignment = Alignment.Center,
             ) {
                 if (showMenuIcon) {
                     IconButton(onClick = onClickMenu) {
                         Icon(
-                            modifier = Modifier
-                                .size(18.dp),
+                            modifier =
+                                Modifier
+                                    .size(18.dp),
                             painter = painterResource(id = R.drawable.menu),
                             contentDescription = "상단바 메뉴 아이콘",
                         )
@@ -116,17 +120,18 @@ fun CommonTopBar(
 @Composable
 fun CommonFixedTopBar(
     title: String,
-    onClickBack: () -> Unit
+    onClickBack: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .background(MainThemeColor.White)
-            .zIndex(1f)
-            .height(44.dp)
+        modifier =
+            Modifier
+                .background(MainThemeColor.White)
+                .zIndex(1f)
+                .height(44.dp),
     ) {
         CommonTopBar(
             text = title,
-            onClickBack = { onClickBack() }
+            onClickBack = { onClickBack() },
         )
     }
 }
@@ -137,7 +142,7 @@ fun CommonTopBarPreview() {
     PicplzTheme {
         CommonTopBar(
             text = "제목",
-            onClickBack = {}
+            onClickBack = {},
         )
     }
 }
@@ -150,7 +155,7 @@ fun CommonTopBarSubtitlePreview() {
             text = "제목",
             subText = "부제목",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
-            onClickBack = {}
+            onClickBack = {},
         )
     }
 }
@@ -164,7 +169,7 @@ fun CommonTopBarSubtitleMenuPreview() {
             subText = "부제목",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
             onClickBack = {},
-            showMenuIcon = true
+            showMenuIcon = true,
         )
     }
 }

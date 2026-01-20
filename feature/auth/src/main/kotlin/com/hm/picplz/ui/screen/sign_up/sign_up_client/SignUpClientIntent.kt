@@ -4,5 +4,6 @@ import com.hm.picplz.common.model.User
 
 sealed interface SignUpClientIntent {
     data class SetUserInfo(val userInfo: User) : SignUpClientIntent
+
     data object NavigateToPrev : SignUpClientIntent
 }

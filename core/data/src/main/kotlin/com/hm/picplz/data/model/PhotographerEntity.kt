@@ -1,6 +1,5 @@
 package com.hm.picplz.data.model
 
-import com.hm.picplz.domain.model.Photographer
 import com.kakao.vectormap.LatLng
 
 data class PhotographerEntity(

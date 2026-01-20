@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
 import CommonChip
-import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,15 +33,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.ChipMode
-import com.hm.picplz.navigation.navigateWithBundle
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.util.SetStatusBarStyle
+import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddVibeChip
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateWithSubmit
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetEditingChipId
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetUserPhotographyVibe
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateSelectedVibeChipList
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.UpdateVibeChip
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -52,7 +57,7 @@ fun SignUpPhotographyVibeScreen(
     viewModel: SignUpPhotographerViewModel = hiltViewModel(),
     signUpPhotographerNavController: NavController,
     mainNavController: NavController,
-){
+) {
     SetStatusBarStyle()
 
     val currentState = viewModel.state.collectAsState().value
@@ -60,56 +65,63 @@ fun SignUpPhotographyVibeScreen(
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
-    Scaffold (
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                    viewModel.handleIntent(SetEditingChipId(null))
-                })
-            },
-        containerColor = MainThemeColor.White
-    ) { innerPadding ->
-        Column (
-            modifier = modifier
+    Scaffold(
+        modifier =
+            Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                        viewModel.handleIntent(SetEditingChipId(null))
+                    })
+                },
+        containerColor = MainThemeColor.White,
+    ) { innerPadding ->
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "경력 선택",
-                onClickBack = {viewModel.handleIntent(NavigateToPrev)}
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 15.dp)
-                    .imePadding()
-                    .verticalScroll(scrollState),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 15.dp)
+                        .imePadding()
+                        .verticalScroll(scrollState),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                 ) {
                     Spacer(
-                        modifier = Modifier
-                            .height(80.dp)
+                        modifier =
+                            Modifier
+                                .height(80.dp),
                     )
                     Text(
                         text = "자신 있는 촬영 감성을 선택해 주세요.",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(30.dp)
+                        modifier =
+                            Modifier
+                                .height(30.dp),
                     )
                     FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         currentState.vibeChipList.map { chip ->
                             CommonChip(
@@ -121,7 +133,9 @@ fun SignUpPhotographyVibeScreen(
                                 onClickDefaultMode = {
                                     focusManager.clearFocus()
                                     viewModel.handleIntent(SetEditingChipId(null))
-                                    viewModel.handleIntent(UpdateSelectedVibeChipList(chipId = chip.id, label = chip.label))
+                                    viewModel.handleIntent(
+                                        UpdateSelectedVibeChipList(chipId = chip.id, label = chip.label),
+                                    )
                                 },
                                 isSelected = currentState.selectedVibeChipList.any { it.id == chip.id },
                                 onUpdate = { value ->
@@ -134,7 +148,7 @@ fun SignUpPhotographyVibeScreen(
                                     focusManager.clearFocus()
                                     viewModel.handleIntent(SetEditingChipId(null))
                                 },
-                                height = ChipHeight.BIG
+                                height = ChipHeight.BIG,
                             )
                         }
                         CommonChip(
@@ -144,21 +158,22 @@ fun SignUpPhotographyVibeScreen(
                             onEdit = {
                                 viewModel.handleIntent(SetEditingChipId("ADD_1"))
                             },
-                            onAdd = {value ->
+                            onAdd = { value ->
                                 viewModel.handleIntent(AddVibeChip(value))
                                 viewModel.handleIntent(SetEditingChipId(null))
                             },
-                            height = ChipHeight.BIG
+                            height = ChipHeight.BIG,
                         )
                     }
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
@@ -167,7 +182,7 @@ fun SignUpPhotographyVibeScreen(
                         viewModel.handleIntent(NavigateWithSubmit("sign-up-completion"))
                     },
                     enabled = currentState.selectedVibeChipList != listOf<ChipItem>(),
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -182,17 +197,12 @@ fun SignUpPhotographyVibeScreen(
                 is SignUpPhotographerSideEffect.Navigate -> {
                     mainNavController.navigate(sideEffect.destination)
                 }
-                is SignUpPhotographerSideEffect.NavigateWithSubmit -> {
-                    mainNavController.navigateWithBundle(
-                        sideEffect.destination,
-                        sideEffect.userInfo
-                    )
+                is SignUpPhotographerSideEffect.NavigateToSignUpCompletion -> {
+                    mainNavController.navigate(SignUpCompletion(userInfo = sideEffect.userInfo))
                 }
-                else -> {}
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -204,7 +214,7 @@ fun SignUpPhotographyVibeScreenPreview() {
 
         SignUpPhotographyVibeScreen(
             signUpPhotographerNavController = signUpPhotographerNavController,
-            mainNavController = mainNavController
-    )
+            mainNavController = mainNavController,
+        )
     }
 }

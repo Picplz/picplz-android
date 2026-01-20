@@ -31,30 +31,32 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun NotificationBubble(
     modifier: Modifier = Modifier,
     chatMessage: ChatMessage,
-    onButtonClick: ((MessageButton) -> Unit)? = null
+    onButtonClick: ((MessageButton) -> Unit)? = null,
 ) {
     val messageContent = chatMessage.content as MessageContent.Notification
     ChatBubbleSurface(
-        modifier = modifier
-            .width(238.dp),
+        modifier =
+            modifier
+                .width(238.dp),
         direction = chatMessage.direction,
     ) {
         Column(
-            modifier = Modifier
-                .padding(18.dp)
+            modifier =
+                Modifier
+                    .padding(18.dp),
         ) {
             val title = messageContent.title
             val subtitle = messageContent.subtitle
             val caption = messageContent.caption
             val button = messageContent.button
-            
+
             if (title != null) {
                 Text(
                     text = title,
-                    style = pretendardTypography.titleSmall
+                    style = pretendardTypography.titleSmall,
                 )
                 Spacer(
-                    modifier = Modifier.height(4.dp)
+                    modifier = Modifier.height(4.dp),
                 )
             }
             if (subtitle != null) {
@@ -62,57 +64,60 @@ fun NotificationBubble(
                     text = subtitle,
                     color =
                         if (chatMessage.direction == MessageDirection.RECEIVED) {
-                            when(messageContent.type) {
+                            when (messageContent.type) {
                                 NotificationType.POSITIVE -> MainThemeColor.Green120
                                 NotificationType.NEGATIVE -> MainThemeColor.Red
                             }
                         } else {
                             MainThemeColor.Black
                         },
-                    style = MainFontFamily.bodyBold
+                    style = MainFontFamily.bodyBold,
                 )
                 Spacer(
-                    modifier = Modifier.height(10.dp)
+                    modifier = Modifier.height(10.dp),
                 )
             }
             Text(
                 text = messageContent.content,
                 style = MainFontFamily.caption,
                 color =
-                    if(chatMessage.direction == MessageDirection.SENT && title == null)
+                    if (chatMessage.direction == MessageDirection.SENT && title == null) {
                         Color(0xff5A6A76)
-                    else
+                    } else {
                         MainThemeColor.Gray5
+                    },
             )
             if (caption != null) {
                 Spacer(
-                    modifier = Modifier.height(20.dp)
+                    modifier = Modifier.height(20.dp),
                 )
                 Text(
                     text = caption,
-                    style = TextStyle(
-                        fontFamily = Pretendard,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 12.sp,
-                        letterSpacing = 0.sp,
-                    ),
-                    color = MainThemeColor.Gray4
+                    style =
+                        TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 12.sp,
+                            letterSpacing = 0.sp,
+                        ),
+                    color = MainThemeColor.Gray4,
                 )
             }
-            if(button != null && onButtonClick != null) {
+            if (button != null && onButtonClick != null) {
                 Spacer(
-                    modifier = Modifier
-                        .then(
-                            if (caption != null) {
-                                Modifier.height(6.dp)
-                            } else {
-                                Modifier.height(10.dp)
-                            }
-                        )
+                    modifier =
+                        Modifier
+                            .then(
+                                if (caption != null) {
+                                    Modifier.height(6.dp)
+                                } else {
+                                    Modifier.height(10.dp)
+                                },
+                            ),
                 )
                 ChatBubbleButton(
                     onClick = { onButtonClick(button) },
-                    text = button.text
+                    text = button.text,
                 )
             }
         }
@@ -124,31 +129,36 @@ fun NotificationBubble(
 fun NotificationBubblePreview() {
     PicplzTheme {
         NotificationBubble(
-            chatMessage = ChatMessage(
-                id = 1,
-                direction = MessageDirection.SENT,
-                content = MessageContent.Notification(
-                    title = "상품명",
-                    subtitle = "긍정적인 안내",
-                    content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
-                    type = NotificationType.POSITIVE,
-                    button = MessageButton(
-                        text = "확인",
-                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
-                    ),
+            chatMessage =
+                ChatMessage(
+                    id = 1,
+                    direction = MessageDirection.SENT,
+                    content =
+                        MessageContent.Notification(
+                            title = "상품명",
+                            subtitle = "긍정적인 안내",
+                            content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
+                            type = NotificationType.POSITIVE,
+                            button =
+                                MessageButton(
+                                    text = "확인",
+                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                ),
+                        ),
+                    sender =
+                        User(
+                            id = "1",
+                            nickname = "유가영 작가",
+                            profileImageUri = null,
+                        ),
+                    receiver =
+                        User(
+                            id = "2",
+                            nickname = "나",
+                            profileImageUri = null,
+                        ),
+                    timestamp = System.currentTimeMillis() - 100000,
                 ),
-                sender = User(
-                    id = "1",
-                    nickname = "유가영 작가",
-                    profileImageUri = null,
-                ),
-                receiver = User(
-                    id = "2",
-                    nickname = "나",
-                    profileImageUri = null,
-                ),
-                timestamp = System.currentTimeMillis() - 100000,
-            ),
         )
     }
 }
@@ -158,32 +168,37 @@ fun NotificationBubblePreview() {
 fun NotificationBubbleButtonPreview() {
     PicplzTheme {
         NotificationBubble(
-            chatMessage = ChatMessage(
-                id = 1,
-                direction = MessageDirection.RECEIVED,
-                content = MessageContent.Notification(
-                    title = "상품명",
-                    subtitle = "부정적인 안내",
-                    content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
-                    type = NotificationType.NEGATIVE,
-                    button = MessageButton(
-                        text = "확인",
-                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
-                    ),
+            chatMessage =
+                ChatMessage(
+                    id = 1,
+                    direction = MessageDirection.RECEIVED,
+                    content =
+                        MessageContent.Notification(
+                            title = "상품명",
+                            subtitle = "부정적인 안내",
+                            content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
+                            type = NotificationType.NEGATIVE,
+                            button =
+                                MessageButton(
+                                    text = "확인",
+                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                ),
+                        ),
+                    sender =
+                        User(
+                            id = "1",
+                            nickname = "유가영 작가",
+                            profileImageUri = null,
+                        ),
+                    receiver =
+                        User(
+                            id = "2",
+                            nickname = "나",
+                            profileImageUri = null,
+                        ),
+                    timestamp = System.currentTimeMillis() - 100000,
                 ),
-                sender = User(
-                    id = "1",
-                    nickname = "유가영 작가",
-                    profileImageUri = null,
-                ),
-                receiver = User(
-                    id = "2",
-                    nickname = "나",
-                    profileImageUri = null,
-                ),
-                timestamp = System.currentTimeMillis() - 100000,
-            ),
-            onButtonClick = {}
+            onButtonClick = {},
         )
     }
 }
@@ -193,33 +208,38 @@ fun NotificationBubbleButtonPreview() {
 fun NotificationBubbleSendPreview() {
     PicplzTheme {
         NotificationBubble(
-            chatMessage = ChatMessage(
-                id = 1,
-                direction = MessageDirection.SENT,
-                content = MessageContent.Notification(
-                    title = "상품명",
-                    subtitle = "긍정적인 안내",
-                    content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
-                    type = NotificationType.POSITIVE,
-                    button = MessageButton(
-                        text = "확인",
-                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
-                    ),
-                    caption = "캡션"
+            chatMessage =
+                ChatMessage(
+                    id = 1,
+                    direction = MessageDirection.SENT,
+                    content =
+                        MessageContent.Notification(
+                            title = "상품명",
+                            subtitle = "긍정적인 안내",
+                            content = "대통령은 헌법과 법률이 정하는 바에\n의하여 공무원을 임면한다.",
+                            type = NotificationType.POSITIVE,
+                            button =
+                                MessageButton(
+                                    text = "확인",
+                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                ),
+                            caption = "캡션",
+                        ),
+                    sender =
+                        User(
+                            id = "1",
+                            nickname = "유가영 작가",
+                            profileImageUri = null,
+                        ),
+                    receiver =
+                        User(
+                            id = "2",
+                            nickname = "나",
+                            profileImageUri = null,
+                        ),
+                    timestamp = System.currentTimeMillis() - 100000,
                 ),
-                sender = User(
-                    id = "1",
-                    nickname = "유가영 작가",
-                    profileImageUri = null,
-                ),
-                receiver = User(
-                    id = "2",
-                    nickname = "나",
-                    profileImageUri = null,
-                ),
-                timestamp = System.currentTimeMillis() - 100000,
-            ),
-            onButtonClick = {}
+            onButtonClick = {},
         )
     }
 }
@@ -229,32 +249,38 @@ fun NotificationBubbleSendPreview() {
 fun NotificationBubbleCaptionButtonPreview() {
     PicplzTheme {
         NotificationBubble(
-            chatMessage = ChatMessage(
-                id = 1,
-                direction = MessageDirection.SENT,
-                content = MessageContent.Notification(
-                    subtitle = "주문서를 전송했어요",
-                    content = "작가가 내용을 확인 중입니다. \n" +
-                            "최종 승인 후 촬영이 진행됩니다.",
-                    type = NotificationType.POSITIVE,
-                    button = MessageButton(
-                        text = "주문서 확인하기",
-                        actionType = ButtonActionType.FIND_ANOTHER_ARTIST
-                    ),
+            chatMessage =
+                ChatMessage(
+                    id = 1,
+                    direction = MessageDirection.SENT,
+                    content =
+                        MessageContent.Notification(
+                            subtitle = "주문서를 전송했어요",
+                            content =
+                                "작가가 내용을 확인 중입니다. \n" +
+                                    "최종 승인 후 촬영이 진행됩니다.",
+                            type = NotificationType.POSITIVE,
+                            button =
+                                MessageButton(
+                                    text = "주문서 확인하기",
+                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                ),
+                        ),
+                    sender =
+                        User(
+                            id = "1",
+                            nickname = "유가영 작가",
+                            profileImageUri = null,
+                        ),
+                    receiver =
+                        User(
+                            id = "2",
+                            nickname = "나",
+                            profileImageUri = null,
+                        ),
+                    timestamp = System.currentTimeMillis() - 100000,
                 ),
-                sender = User(
-                    id = "1",
-                    nickname = "유가영 작가",
-                    profileImageUri = null,
-                ),
-                receiver = User(
-                    id = "2",
-                    nickname = "나",
-                    profileImageUri = null,
-                ),
-                timestamp = System.currentTimeMillis() - 100000,
-            ),
-            onButtonClick = {}
+            onButtonClick = {},
         )
     }
 }

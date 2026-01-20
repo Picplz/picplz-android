@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.ui.screen.common.CommonToggleSwitch
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -28,28 +27,30 @@ fun EquipmentListItem(
     isPhotographerActive: Boolean = false,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(30.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(30.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box (
-            modifier = Modifier
-                .width(60.dp)
-        ){
+        Box(
+            modifier =
+                Modifier
+                    .width(60.dp),
+        ) {
             Text(
                 text = equipmentType,
                 modifier = Modifier.padding(end = 8.dp),
-                style = typography.bodyLarge
+                style = typography.bodyLarge,
             )
         }
-        Box (
-            modifier = Modifier.weight(1f)
+        Box(
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 text = deviceName,
                 style = typography.bodyMedium,
-                color = MainThemeColor.Gray5
+                color = MainThemeColor.Gray5,
             )
         }
 
@@ -65,7 +66,6 @@ fun EquipmentListItem(
 @Preview(showBackground = true)
 @Composable
 fun EquipmentListItemPreview() {
-    val navController = rememberNavController()
     PicplzTheme {
         EquipmentListItem(
             equipmentType = "내 폰",

@@ -6,8 +6,12 @@ import com.hm.picplz.common.model.ChipMode
 
 sealed interface CommonChipIntent {
     data class SetValue(val value: TextFieldValue) : CommonChipIntent
+
     data class SetChipMode(val newChipMode: ChipMode) : CommonChipIntent
+
     data class SetTextFieldWidth(val newWidth: Dp) : CommonChipIntent
+
     data class SetCalculatedWidth(val newWidth: Dp) : CommonChipIntent
+
     data class SetIsEditing(val isEditing: Boolean) : CommonChipIntent
 }

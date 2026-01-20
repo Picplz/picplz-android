@@ -16,16 +16,17 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSt
 class CareerHandler {
     fun handleIntent(
         intent: SignUpPhotographerIntent,
-        currentState: SignUpPhotographerState
+        currentState: SignUpPhotographerState,
     ): SignUpPhotographerState? {
         return when (intent) {
             is SetHasPhotographyExperience -> {
                 currentState.copy(
-                    hasPhotographyExperience = if (currentState.hasPhotographyExperience == intent.hasExperience) {
-                        null
-                    } else {
-                        intent.hasExperience
-                    }
+                    hasPhotographyExperience =
+                        if (currentState.hasPhotographyExperience == intent.hasExperience) {
+                            null
+                        } else {
+                            intent.hasExperience
+                        },
                 )
             }
 
@@ -34,27 +35,30 @@ class CareerHandler {
             }
 
             is SetUserPhotographyExperience -> {
-                val experience = when (currentState.selectedPhotographyExperienceId) {
-                    "1" -> PhotographyExperience.PHOTO_MAJOR
-                    "2" -> PhotographyExperience.INCOME_GENERATION
-                    "3" -> PhotographyExperience.SNS_OPERATION
-                    else -> null
-                }
+                val experience =
+                    when (currentState.selectedPhotographyExperienceId) {
+                        "1" -> PhotographyExperience.PHOTO_MAJOR
+                        "2" -> PhotographyExperience.INCOME_GENERATION
+                        "3" -> PhotographyExperience.SNS_OPERATION
+                        else -> null
+                    }
 
                 experience?.let { newExperience ->
                     currentState.copy(
-                        userInfo = currentState.userInfo.copy(
-                            photographyExperience = newExperience
-                        )
+                        userInfo =
+                            currentState.userInfo.copy(
+                                photographyExperience = newExperience,
+                            ),
                     )
                 } ?: currentState
             }
 
             is SetUserPhotographyVibe -> {
                 currentState.copy(
-                    userInfo = currentState.userInfo.copy(
-                        photographyVibes = currentState.selectedVibeChipList.map { chip -> chip.label }
-                    )
+                    userInfo =
+                        currentState.userInfo.copy(
+                            photographyVibes = currentState.selectedVibeChipList.map { chip -> chip.label },
+                        ),
                 )
             }
 
@@ -68,9 +72,12 @@ class CareerHandler {
 
             is SetCareerPeriod -> {
                 currentState.copy(
-                    careerPeriod = if (currentState.yearValue != null && currentState.monthValue != null) {
-                        CareerPeriod(years = currentState.yearValue, months = currentState.monthValue)
-                    } else null
+                    careerPeriod =
+                        if (currentState.yearValue != null && currentState.monthValue != null) {
+                            CareerPeriod(years = currentState.yearValue, months = currentState.monthValue)
+                        } else {
+                            null
+                        },
                 )
             }
 

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ripple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,48 +36,52 @@ fun CommonStatusTag(
     isActive: Boolean? = false,
 ) {
     Row(
-        modifier = modifier
-            .height(25.dp)
-            .border(
-                width = 1.dp,
-                color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray2,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .background(
-                color = MainThemeColor.Gray1,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(horizontal = 8.dp)
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple(bounded = true),
-                        onClick = onClick
-                    )
-                } else Modifier
-            ),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .height(25.dp)
+                .border(
+                    width = 1.dp,
+                    color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray2,
+                    shape = RoundedCornerShape(20.dp),
+                )
+                .background(
+                    color = MainThemeColor.Gray1,
+                    shape = RoundedCornerShape(20.dp),
+                )
+                .padding(horizontal = 8.dp)
+                .then(
+                    if (onClick != null) {
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(bounded = true),
+                            onClick = onClick,
+                        )
+                    } else {
+                        Modifier
+                    },
+                ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) {
             Icon(
                 painter = icon,
                 contentDescription = "tag-icon",
                 tint = MainThemeColor.Olive,
-                modifier = Modifier.height(14.dp)
+                modifier = Modifier.height(14.dp),
             )
             Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
             text = label,
-            style = TextStyle(
-                fontFamily = Pretendard,
-                fontWeight = if (isActive == true) FontWeight.SemiBold else FontWeight.Normal,
-                fontSize = 12.sp,
-                lineHeight = 12.sp * 1.4,
-                letterSpacing = 0.sp
-            ),
-            color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray4
+            style =
+                TextStyle(
+                    fontFamily = Pretendard,
+                    fontWeight = if (isActive == true) FontWeight.SemiBold else FontWeight.Normal,
+                    fontSize = 12.sp,
+                    lineHeight = 12.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
+            color = if (isActive == true) MainThemeColor.Black else MainThemeColor.Gray4,
         )
     }
 }

@@ -27,22 +27,23 @@ import com.hm.picplz.ui.theme.PicplzTheme
 fun AreaTag(
     modifier: Modifier = Modifier,
     label: String,
-    onRemove: () -> Unit = {}
+    onRemove: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier
-            .height(28.dp)
-            .background(
-                color = MainThemeColor.White,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = MainThemeColor.Black,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .padding(horizontal = 11.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .height(28.dp)
+                .background(
+                    color = MainThemeColor.White,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .border(
+                    width = 1.dp,
+                    color = MainThemeColor.Black,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .padding(horizontal = 11.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
@@ -53,12 +54,12 @@ fun AreaTag(
 
         IconButton(
             onClick = onRemove,
-            modifier = Modifier.size(14.dp)
+            modifier = Modifier.size(14.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.full_close),
                 contentDescription = "삭제",
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(14.dp),
             )
         }
     }
@@ -70,7 +71,7 @@ fun AreaTagPreview() {
     PicplzTheme {
         AreaTag(
             label = "연희동",
-            onRemove = {}
+            onRemove = {},
         )
     }
 }

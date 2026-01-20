@@ -4,10 +4,12 @@ import com.hm.picplz.domain.model.KakaoUserInfo
 import com.hm.picplz.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class GetKakaoUserInfoUseCase @Inject constructor(
-    private val authRepository: AuthRepository
-) {
-    suspend operator fun invoke(): Result<KakaoUserInfo> {
-        return authRepository.getKakaoUserInfo()
+class GetKakaoUserInfoUseCase
+    @Inject
+    constructor(
+        private val authRepository: AuthRepository,
+    ) {
+        suspend operator fun invoke(): Result<KakaoUserInfo> {
+            return authRepository.getKakaoUserInfo()
+        }
     }
-}

@@ -32,14 +32,14 @@ data class DropdownMenuItemData(
     val text: String,
     val textColor: Color,
     val textStyle: TextStyle = MainFontFamily.bodyLarge,
-    val itemOnClick: () -> Unit = {}
+    val itemOnClick: () -> Unit = {},
 )
 
 @Composable
 fun CommonDropdownMenu(
-    initialSelectedText: String? = null, // 초기 노출 텍스트, 없을 경우 null
-    triggerButton: @Composable (String) -> Unit, // triggerButton에서 selectedText를 받아서 표시
-    menuItems: List<DropdownMenuItemData> // 아이템 리스트
+    initialSelectedText: String? = null,
+    triggerButton: @Composable (String) -> Unit,
+    menuItems: List<DropdownMenuItemData>,
 ) {
     // 상태 값과 상태 변경 함수
     var expanded by remember { mutableStateOf(false) }
@@ -48,35 +48,37 @@ fun CommonDropdownMenu(
     Box {
         // 트리거 콘텐츠 클릭 시 드롭다운 메뉴 열기
         Box(
-            modifier = Modifier
-                .clickable(
-                    indication = null, // 클릭 효과 제거
-                    interactionSource = remember { MutableInteractionSource() } // 새로운 interaction source 사용
-                ) {
-                    expanded = !expanded // 드롭다운 토글
-                }
+            modifier =
+                Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                    ) {
+                        expanded = !expanded // 드롭다운 토글
+                    },
         ) {
             triggerButton(selectedText) // triggerButton에 selectedText 전달
         }
 
         MaterialTheme(
-            shapes = MaterialTheme.shapes.copy(
-                extraSmall = RoundedCornerShape(15.dp)
-            ),
-            colorScheme = lightColorScheme()
+            shapes =
+                MaterialTheme.shapes.copy(
+                    extraSmall = RoundedCornerShape(15.dp),
+                ),
+            colorScheme = lightColorScheme(),
         ) {
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 offset = DpOffset(0.dp, 10.dp),
-                modifier = Modifier.background(MainThemeColor.White)
+                modifier = Modifier.background(MainThemeColor.White),
             ) {
                 menuItems.forEachIndexed { index, item ->
                     DropdownMenuItem(text = {
                         Text(
                             text = item.text,
                             color = item.textColor,
-                            style = item.textStyle
+                            style = item.textStyle,
                         )
                     }, onClick = {
                         item.itemOnClick() // 클릭 시 지정된 이벤트 실행
@@ -95,9 +97,10 @@ fun CommonDropdownMenu(
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = MainThemeColor.Gray2,
-                            modifier = Modifier
-                                .fillMaxWidth(0.9f)
-                                .align(Alignment.CenterHorizontally)
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(0.9f)
+                                    .align(Alignment.CenterHorizontally),
                         )
                     }
                 }
@@ -111,15 +114,16 @@ fun CommonDropdownMenu(
 fun CommonDropdownMenuPreview() {
     PicplzTheme {
         CommonDropdownMenu(
-            initialSelectedText = "초기 텍스트", // 초기 텍스트를 전달,
+            initialSelectedText = "초기 텍스트",
             triggerButton = { selectedText ->
                 Text(text = selectedText) // selectedText 값으로 버튼 텍스트 동기화
             },
-            menuItems = listOf(
-                DropdownMenuItemData("추천순", MainThemeColor.Gray5),
-                DropdownMenuItemData("최신순", MainThemeColor.Gray5),
-                DropdownMenuItemData("대표이미지 설정", MainThemeColor.Olive)
-            )
+            menuItems =
+                listOf(
+                    DropdownMenuItemData("추천순", MainThemeColor.Gray5),
+                    DropdownMenuItemData("최신순", MainThemeColor.Gray5),
+                    DropdownMenuItemData("대표이미지 설정", MainThemeColor.Olive),
+                ),
         )
     }
 }

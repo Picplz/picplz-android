@@ -13,19 +13,21 @@ import com.hm.picplz.ui.theme.MainThemeColor
 fun ChatBubbleSurface(
     direction: MessageDirection,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        color = when (direction) {
-            MessageDirection.SENT -> MainThemeColor.Gray1
-            MessageDirection.RECEIVED -> MainThemeColor.White
-        },
-        border = when (direction) {
-            MessageDirection.SENT -> null
-            MessageDirection.RECEIVED -> BorderStroke(1.dp, MainThemeColor.Gray3)
-        }
+        color =
+            when (direction) {
+                MessageDirection.SENT -> MainThemeColor.Gray1
+                MessageDirection.RECEIVED -> MainThemeColor.White
+            },
+        border =
+            when (direction) {
+                MessageDirection.SENT -> null
+                MessageDirection.RECEIVED -> BorderStroke(1.dp, MainThemeColor.Gray3)
+            },
     ) {
         content()
     }

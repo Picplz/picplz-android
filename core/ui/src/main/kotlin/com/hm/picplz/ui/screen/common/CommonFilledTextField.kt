@@ -46,17 +46,18 @@ fun CommonFilledTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     singleLine: Boolean = true,
     enabled: Boolean = true,
-    shape: RoundedCornerShape = RoundedCornerShape(5.dp)
+    shape: RoundedCornerShape = RoundedCornerShape(5.dp),
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = Color.Transparent,
-        unfocusedBorderColor = Color.Transparent,
-        focusedLabelColor = MainThemeColor.Gray,
-        unfocusedLabelColor = MainThemeColor.Gray,
-        focusedPlaceholderColor = Color.Gray,
-        unfocusedPlaceholderColor = Color.Gray
-    )
+    val colors =
+        OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            focusedLabelColor = MainThemeColor.Gray,
+            unfocusedLabelColor = MainThemeColor.Gray,
+            focusedPlaceholderColor = Color.Gray,
+            unfocusedPlaceholderColor = Color.Gray,
+        )
 
     val isError = errors.isNotEmpty()
 
@@ -67,36 +68,40 @@ fun CommonFilledTextField(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MainThemeColor.Gray,
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier.padding(bottom = 4.dp),
             )
         }
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(shape)
-                .background(MainThemeColor.Gray2)
-                .border(
-                    width = 0.dp,
-                    color = Color.Transparent,
-                    shape = shape
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clip(shape)
+                    .background(MainThemeColor.Gray2)
+                    .border(
+                        width = 0.dp,
+                        color = Color.Transparent,
+                        shape = shape,
+                    ),
             singleLine = true,
             interactionSource = interactionSource,
             enabled = enabled,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = imeAction
-            ),
-            keyboardActions = KeyboardActions(
-                onAny = {
-                    keyboardActions()
-                }
-            ),
-            textStyle = MaterialTheme.typography.bodyLarge.copy(
-                color = MainThemeColor.Black
-            )
+            keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    imeAction = imeAction,
+                ),
+            keyboardActions =
+                KeyboardActions(
+                    onAny = {
+                        keyboardActions()
+                    },
+                ),
+            textStyle =
+                MaterialTheme.typography.bodyLarge.copy(
+                    color = MainThemeColor.Black,
+                ),
         ) {
             TextFieldDefaults.DecorationBox(
                 value = value,
@@ -110,11 +115,11 @@ fun CommonFilledTextField(
                         Text(
                             text = placeholder,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = Color.Gray
+                            color = Color.Gray,
                         )
                     }
                 },
-                colors = colors
+                colors = colors,
             )
         }
 
@@ -125,14 +130,13 @@ fun CommonFilledTextField(
                 fontWeight = FontWeight.Normal,
                 lineHeight = 12.sp * 1.4,
                 color = Color(0xFFFF0000),
-                modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+                modifier = Modifier.padding(top = 4.dp, start = 4.dp),
             )
         } else {
             Spacer(modifier = Modifier.height(21.dp))
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

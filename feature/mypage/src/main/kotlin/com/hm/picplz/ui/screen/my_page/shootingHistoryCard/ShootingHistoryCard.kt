@@ -50,12 +50,12 @@ enum class ReservationStatus(val label: String) {
 
 enum class ShootingStatus(val label: String) {
     COMPLEETED("촬영 완료"),
-    CANCLED("취소 완료")
+    CANCLED("취소 완료"),
 }
 
 enum class ReservationType(val label: String) {
     ASAP("바로 촬영"), // ASAP
-    NORMAL("일반 예약") // 일반예약
+    NORMAL("일반 예약"), // 일반예약
 }
 
 @Composable
@@ -67,71 +67,74 @@ fun ShootingHistoryCard(
     userName: String = "",
     userProfile: Int = R.drawable.default_profile,
     status: ShootingStatus = ShootingStatus.CANCLED,
-    type: ReservationType = ReservationType.NORMAL,
     packageType: PackageType = PackageType.PROFILE,
     paymentDate: String = "2025.03.01",
     date: String = "",
     location: String = "",
-    onClickOrderSheet : () -> Unit = {}
+    onClickOrderSheet: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .wrapContentSize()
-            .clip(RoundedCornerShape(borderRadius))
-            .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(borderRadius))
-            .background(MainThemeColor.Gray1)
+        modifier =
+            modifier
+                .wrapContentSize()
+                .clip(RoundedCornerShape(borderRadius))
+                .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(borderRadius))
+                .background(MainThemeColor.Gray1),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontalPadding, verticalPadding),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontalPadding, verticalPadding),
         ) {
             Column {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    )
-                    {
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
                         Image(
                             painter = painterResource(id = userProfile),
                             contentDescription = "user-profile",
-                            modifier = Modifier
-                                .size(40.dp)
-                                .border(1.dp, MainThemeColor.Gray3, CircleShape)
-                                .clip(CircleShape)
+                            modifier =
+                                Modifier
+                                    .size(40.dp)
+                                    .border(1.dp, MainThemeColor.Gray3, CircleShape)
+                                    .clip(CircleShape),
                         )
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
                         ) {
                             Text(text = userName, style = MainThemeFont.BodyBold)
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(2.5.dp)
+                                horizontalArrangement = Arrangement.spacedBy(2.5.dp),
                             ) {
                                 when (status) {
                                     ShootingStatus.CANCLED ->
                                         CommonBadge(
                                             label = status.label,
                                             theme = BadgeTheme.INACTIVE,
-                                            modifier = Modifier.border(
-                                                1.dp,
-                                                MainThemeColor.Pink2,
-                                                RoundedCornerShape(5.dp)
-                                            )
+                                            modifier =
+                                                Modifier.border(
+                                                    1.dp,
+                                                    MainThemeColor.Pink2,
+                                                    RoundedCornerShape(5.dp),
+                                                ),
                                         )
 
                                     ShootingStatus.COMPLEETED ->
                                         CommonBadge(
                                             label = status.label,
                                             theme = BadgeTheme.ACTIVE,
-                                            modifier = Modifier.border(
-                                                1.dp,
-                                                MainThemeColor.Olive,
-                                                RoundedCornerShape(5.dp)
-                                            )
+                                            modifier =
+                                                Modifier.border(
+                                                    1.dp,
+                                                    MainThemeColor.Olive,
+                                                    RoundedCornerShape(5.dp),
+                                                ),
                                         )
                                 }
                             }
@@ -140,29 +143,30 @@ fun ShootingHistoryCard(
                     Text(
                         text = "$paymentDate 결제",
                         style = MainThemeFont.Caption,
-                        color = MainThemeColor.Gray4
+                        color = MainThemeColor.Gray4,
                     )
                 }
                 Spacer(modifier = Modifier.height(13.5.dp))
                 Text(text = packageType.label, style = MainThemeFont.Title)
                 HorizontalDivider(
-                    thickness = 1.dp, color = MainThemeColor.Gray2,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    thickness = 1.dp,
+                    color = MainThemeColor.Gray2,
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.clock_green),
                             contentDescription = "clock",
-                            modifier = Modifier.size(13.dp)
+                            modifier = Modifier.size(13.dp),
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "촬영 일시",
                             style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray4
+                            color = MainThemeColor.Gray4,
                         )
                         Spacer(modifier = Modifier.width(14.dp))
                         Text(text = date, style = MainThemeFont.BodyBold)
@@ -170,19 +174,19 @@ fun ShootingHistoryCard(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Row {
                             Image(
                                 painter = painterResource(id = R.drawable.location_green),
                                 contentDescription = "clock",
-                                modifier = Modifier.size(13.dp)
+                                modifier = Modifier.size(13.dp),
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = "촬영 장소",
                                 style = MainThemeFont.Body,
-                                color = MainThemeColor.Gray4
+                                color = MainThemeColor.Gray4,
                             )
                             Spacer(modifier = Modifier.width(14.dp))
                             Text(text = location, style = MainThemeFont.BodyBold)
@@ -192,7 +196,7 @@ fun ShootingHistoryCard(
                             style = MainThemeFont.Caption,
                             color = MainThemeColor.Gray4,
                             textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable { onClickOrderSheet() }
+                            modifier = Modifier.clickable { onClickOrderSheet() },
                         )
                     }
                     Spacer(modifier = Modifier.height(23.dp))
@@ -202,7 +206,7 @@ fun ShootingHistoryCard(
                         containerColor = MainThemeColor.White,
                         contentColor = MainThemeColor.Black,
                         borderColor = MainThemeColor.Gray3,
-                        modifier = Modifier.height(49.dp)
+                        modifier = Modifier.height(49.dp),
                     )
                 }
             }

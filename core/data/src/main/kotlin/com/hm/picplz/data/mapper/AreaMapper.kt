@@ -8,6 +8,6 @@ fun AreaData.toDomain(): Area {
         id = id,
         name = name,
         dong = dong,
-        ri = ri
+        ri = ri,
     )
 }

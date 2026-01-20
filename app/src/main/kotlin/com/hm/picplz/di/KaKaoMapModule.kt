@@ -15,13 +15,9 @@ import javax.inject.Singleton
 abstract class KaKaoMapModule {
     @Binds
     @Singleton
-    abstract fun bindKaKaoMapService(
-        kaKaoMapServiceImpl: KakaoMapServiceImpl
-    ): KakaoMapService
+    abstract fun bindKaKaoMapService(kaKaoMapServiceImpl: KakaoMapServiceImpl): KakaoMapService
 
     @Binds
     @Singleton
-    abstract fun bindAddressSource(
-        kaKaoMapSourceImpl: KakaoMapSourceImpl
-    ): KakaoMapSource
+    abstract fun bindAddressSource(kaKaoMapSourceImpl: KakaoMapSourceImpl): KakaoMapSource
 }

@@ -40,7 +40,7 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
@@ -58,10 +58,11 @@ object NetworkModule {
             .build()
     }
 
-
     @Provides
     @Singleton
-    fun provideKakaoMapApi(@KakaoRetrofit retrofit: Retrofit): KakaoMapApi {
+    fun provideKakaoMapApi(
+        @KakaoRetrofit retrofit: Retrofit,
+    ): KakaoMapApi {
         return retrofit.create(KakaoMapApi::class.java)
     }
 
@@ -78,19 +79,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePhotographerApi(@PicplzApi retrofit: Retrofit): PhotographerApi {
+    fun providePhotographerApi(
+        @PicplzApi retrofit: Retrofit,
+    ): PhotographerApi {
         return retrofit.create(PhotographerApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideAddressApi(@PicplzApi retrofit: Retrofit): AddressApi {
+    fun provideAddressApi(
+        @PicplzApi retrofit: Retrofit,
+    ): AddressApi {
         return retrofit.create(AddressApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideAuthApi(@PicplzApi retrofit: Retrofit): AuthApi {
+    fun provideAuthApi(
+        @PicplzApi retrofit: Retrofit,
+    ): AuthApi {
         return retrofit.create(AuthApi::class.java)
     }
 }

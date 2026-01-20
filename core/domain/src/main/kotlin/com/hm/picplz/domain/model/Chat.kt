@@ -6,7 +6,7 @@ enum class ChatStatus {
     PENDING,
     CONFIRMED,
     REJECTED,
-    COMPLETED
+    COMPLETED,
 }
 
 data class ChatRoomInfo(
@@ -27,40 +27,43 @@ data class Message(
 
 enum class MessageDirection {
     SENT,
-    RECEIVED
+    RECEIVED,
 }
 
 enum class ButtonActionType {
     OPEN_ORDER_FORM,
     FIND_ANOTHER_ARTIST,
     CONFIRM_ORDER,
-    OPEN_URL
+    OPEN_URL,
 }
 
 data class MessageButton(
     val text: String,
     val actionType: ButtonActionType,
-    val actionPayload: String? = null
+    val actionPayload: String? = null,
 )
 
 enum class NotificationType {
-    POSITIVE, NEGATIVE
+    POSITIVE,
+    NEGATIVE,
 }
 
 enum class DeliveryType {
-    EMAIL
+    EMAIL,
 }
 
 sealed class MessageContent {
     data class Text(val message: String) : MessageContent()
+
     data class Image(val imageUris: List<String>) : MessageContent()
+
     data class Notification(
         val title: String? = null,
         val subtitle: String? = null,
         val content: String,
         val caption: String? = null,
         val type: NotificationType,
-        val button: MessageButton? = null
+        val button: MessageButton? = null,
     ) : MessageContent()
 
     data class Completion(
@@ -74,11 +77,11 @@ sealed class MessageContent {
     ) : MessageContent()
 
     data class DealConfirmation(
-        val button: MessageButton? = null
+        val button: MessageButton? = null,
     ) : MessageContent()
 
     data class ChatSuggest(
-        val suggestedChats: List<String>
+        val suggestedChats: List<String>,
     ) : MessageContent()
 }
 
@@ -89,5 +92,5 @@ data class ChatMessage(
     val timestamp: Long,
     val sender: User,
     val receiver: User,
-    val isRead: Boolean = false
+    val isRead: Boolean = false,
 )

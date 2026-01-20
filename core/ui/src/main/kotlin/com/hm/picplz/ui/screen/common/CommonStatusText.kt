@@ -26,24 +26,28 @@ enum class PhotographerStatus(val label: String) {
 @Composable
 fun CommonStatusText(
     modifier: Modifier = Modifier,
-    type: PhotographerStatus = PhotographerStatus.DISABLED
+    type: PhotographerStatus = PhotographerStatus.DISABLED,
 ) {
-    val iconRes = when (type) {
-        PhotographerStatus.DISABLED -> R.drawable.inactive_dot
-        PhotographerStatus.ENABLED,
-        PhotographerStatus.ASAP -> R.drawable.tag_circle
-    }
-    val textColor = when (type) {
-        PhotographerStatus.DISABLED -> MainThemeColor.Gray3
-        PhotographerStatus.ENABLED,
-        PhotographerStatus.ASAP -> MainThemeColor.Green120
-    }
+    val iconRes =
+        when (type) {
+            PhotographerStatus.DISABLED -> R.drawable.inactive_dot
+            PhotographerStatus.ENABLED,
+            PhotographerStatus.ASAP,
+            -> R.drawable.tag_circle
+        }
+    val textColor =
+        when (type) {
+            PhotographerStatus.DISABLED -> MainThemeColor.Gray3
+            PhotographerStatus.ENABLED,
+            PhotographerStatus.ASAP,
+            -> MainThemeColor.Green120
+        }
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Image(
             painter = painterResource(id = iconRes),
             contentDescription = "tag",
-            modifier = Modifier.size(10.dp)
+            modifier = Modifier.size(10.dp),
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(text = type.label, style = MainThemeFont.InnerTag, color = textColor)
@@ -55,7 +59,7 @@ fun CommonStatusText(
 fun CommonStatusTextPreview() {
     PicplzTheme {
         CommonStatusText(
-            type = PhotographerStatus.DISABLED
+            type = PhotographerStatus.DISABLED,
         )
     }
 }

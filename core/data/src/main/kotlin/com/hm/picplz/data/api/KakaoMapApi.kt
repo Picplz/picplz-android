@@ -10,6 +10,6 @@ interface KakaoMapApi {
     suspend fun getAddressFromCoords(
         @Header("Authorization") authorization: String,
         @Query("x") x: String,
-        @Query("y") y: String
+        @Query("y") y: String,
     ): KaKaoAddressResponse
 }

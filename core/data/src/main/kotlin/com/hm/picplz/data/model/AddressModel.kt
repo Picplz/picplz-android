@@ -15,7 +15,7 @@ data class AreaSearchResponse(
     val timeStamp: String,
     val statusCode: Int,
     val message: String,
-    val data: List<AreaData>
+    val data: List<AreaData>,
 )
 
 data class AreaNearbyRequest(
@@ -28,5 +28,5 @@ data class AreaNearbyResponse(
     val timeStamp: String,
     val statusCode: Int,
     val message: String,
-    val data: List<AreaData>
+    val data: List<AreaData>,
 )

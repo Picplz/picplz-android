@@ -25,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,16 +34,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.util.SetStatusBarStyle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetHasPhotographyExperience
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetIsOpenDialog
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
-
 
 @Composable
 fun SignUpExperienceScreen(
@@ -57,108 +58,120 @@ fun SignUpExperienceScreen(
 
     val currentState = viewModel.state.collectAsState().value
 
-    Scaffold (
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
-        Column (
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "경력 선택",
-                onClickBack = {viewModel.handleIntent(NavigateToPrev)}
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 15.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 15.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                 ) {
                     Spacer(
-                        modifier = Modifier
-                            .height(80.dp)
+                        modifier =
+                            Modifier
+                                .height(80.dp),
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
                     ) {
                         Text(
                             text = "사진 촬영 경험이 있으신가요?",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
                         )
                         Image(
                             painter = painterResource(id = R.drawable.info),
                             contentDescription = "info icon",
-                            modifier = Modifier
-                                .height(24.dp)
-                                .clickable {
-                                    viewModel.handleIntent(SetIsOpenDialog(true))
-                                }
+                            modifier =
+                                Modifier
+                                    .height(24.dp)
+                                    .clickable {
+                                        viewModel.handleIntent(SetIsOpenDialog(true))
+                                    },
                         )
                     }
                     Spacer(
-                        modifier = Modifier
-                            .height(15.dp)
+                        modifier =
+                            Modifier
+                                .height(15.dp),
                     )
                     Text(
                         text = "픽플즈는 사진 경력이 없는 금손님도 환영해요!",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(30.dp)
+                        modifier =
+                            Modifier
+                                .height(30.dp),
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         CommonSelectButton(
                             text = "있어요",
                             isSelected = currentState.hasPhotographyExperience == true,
-                            onClick = {viewModel.handleIntent(SetHasPhotographyExperience(hasExperience = true))},
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(60.dp)
+                            onClick = { viewModel.handleIntent(SetHasPhotographyExperience(hasExperience = true)) },
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .height(60.dp),
                         )
                         CommonSelectButton(
                             text = "없어요",
                             isSelected = currentState.hasPhotographyExperience == false,
-                            onClick = {viewModel.handleIntent(SetHasPhotographyExperience(hasExperience = false))},
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(60.dp)
+                            onClick = { viewModel.handleIntent(SetHasPhotographyExperience(hasExperience = false)) },
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .height(60.dp),
                         )
                     }
                 }
             }
 
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
                     onClick = {
                         if (currentState.hasPhotographyExperience == true) {
                             viewModel.handleIntent(Navigate("sign-up-detail-experience"))
-                        } else if (currentState.hasPhotographyExperience == false){
+                        } else if (currentState.hasPhotographyExperience == false) {
                             viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
                         }
                     },
                     enabled = currentState.hasPhotographyExperience != null,
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -168,42 +181,48 @@ fun SignUpExperienceScreen(
                 hasQuit = false,
                 onDismissRequest = {
                     viewModel.handleIntent(SetIsOpenDialog(false))
-                }
+                },
             ) {
                 Column {
                     Text(
                         text = "사진 촬영 경험이란?",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            lineHeight = 14.sp * 1.4,
-                            letterSpacing = 0.sp
-                        )
+                        style =
+                            TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                lineHeight = 14.sp * 1.4,
+                                letterSpacing = 0.sp,
+                            ),
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
+                        modifier =
+                            Modifier
+                                .height(20.dp),
                     )
                     Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    letterSpacing = 0.sp
-                                )
-                            ) {
-                                append("사진 전공 / 사진으로 수익 창출 / 사진 SNS계정 운영")
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    letterSpacing = 0.sp
-                                )                        ) {
-                                append("등의 경험이 있는 경우를 말해요.")
-                            }
-                        }
+                        text =
+                            buildAnnotatedString {
+                                withStyle(
+                                    style =
+                                        SpanStyle(
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            letterSpacing = 0.sp,
+                                        ),
+                                ) {
+                                    append("사진 전공 / 사진으로 수익 창출 / 사진 SNS계정 운영")
+                                }
+                                withStyle(
+                                    style =
+                                        SpanStyle(
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Normal,
+                                            letterSpacing = 0.sp,
+                                        ),
+                                ) {
+                                    append("등의 경험이 있는 경우를 말해요.")
+                                }
+                            },
                     )
                 }
             }
@@ -249,37 +268,43 @@ fun ExperienceDialogPreview() {
             Column {
                 Text(
                     text = "사진 촬영 경험이란?",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        lineHeight = 14.sp * 1.4,
-                        letterSpacing = 0.sp
-                    )
+                    style =
+                        TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            lineHeight = 14.sp * 1.4,
+                            letterSpacing = 0.sp,
+                        ),
                 )
                 Spacer(
-                    modifier = Modifier
-                        .height(20.dp)
+                    modifier =
+                        Modifier
+                            .height(20.dp),
                 )
                 Text(
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.sp
-                            )
-                        ) {
-                            append("사진 전공 / 사진으로 수익 창출 / 사진 SNS계정 운영")
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Normal,
-                                letterSpacing = 0.sp
-                            )                        ) {
-                            append("등의 경험이 있는 경우를 말해요.")
-                        }
-                    }
+                    text =
+                        buildAnnotatedString {
+                            withStyle(
+                                style =
+                                    SpanStyle(
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 0.sp,
+                                    ),
+                            ) {
+                                append("사진 전공 / 사진으로 수익 창출 / 사진 SNS계정 운영")
+                            }
+                            withStyle(
+                                style =
+                                    SpanStyle(
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        letterSpacing = 0.sp,
+                                    ),
+                            ) {
+                                append("등의 경험이 있는 경우를 말해요.")
+                            }
+                        },
                 )
             }
         }

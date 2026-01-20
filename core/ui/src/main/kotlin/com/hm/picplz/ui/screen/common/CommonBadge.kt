@@ -20,39 +20,41 @@ import com.hm.picplz.ui.theme.pretendardTypography
 enum class BadgeTheme {
     ACTIVE,
     INACTIVE,
-    DISABLED
+    DISABLED,
 }
 
 @Composable
 fun CommonBadge(
     modifier: Modifier = Modifier,
     label: String = "",
-    theme: BadgeTheme = BadgeTheme.ACTIVE
+    theme: BadgeTheme = BadgeTheme.ACTIVE,
 ) {
-    val (backgroundColor, textColor) = when (theme) {
-        BadgeTheme.ACTIVE -> Pair(Color(0xFFEBF9DD), MainThemeColor.Green120)
-        BadgeTheme.INACTIVE -> Pair(Color(0xFFFAE5E5), Color(0xFFDE4F69))
-        BadgeTheme.DISABLED -> Pair(MainThemeColor.Gray2, MainThemeColor.Gray4)
-    }
+    val (backgroundColor, textColor) =
+        when (theme) {
+            BadgeTheme.ACTIVE -> Pair(Color(0xFFEBF9DD), MainThemeColor.Green120)
+            BadgeTheme.INACTIVE -> Pair(Color(0xFFFAE5E5), Color(0xFFDE4F69))
+            BadgeTheme.DISABLED -> Pair(MainThemeColor.Gray2, MainThemeColor.Gray4)
+        }
 
     val fontWeight =
         if (theme == BadgeTheme.DISABLED) FontWeight.Normal else FontWeight.SemiBold
 
     Row(
-        modifier = modifier
-            .height(20.dp)
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ){
+        modifier =
+            modifier
+                .height(20.dp)
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
             text = label,
             style = pretendardTypography.labelMedium,
             color = textColor,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
     }
 }
@@ -63,7 +65,7 @@ fun CommonBadgeActivePreview() {
     PicplzTheme {
         CommonBadge(
             label = "예약 확정",
-            theme = BadgeTheme.ACTIVE
+            theme = BadgeTheme.ACTIVE,
         )
     }
 }
@@ -74,7 +76,7 @@ fun CommonBadgeInactivePreview() {
     PicplzTheme {
         CommonBadge(
             label = "예약 대기",
-            theme = BadgeTheme.INACTIVE
+            theme = BadgeTheme.INACTIVE,
         )
     }
 }
@@ -85,7 +87,7 @@ fun CommonBadgeDisabledPreview() {
     PicplzTheme {
         CommonBadge(
             label = "인스타 종합 패키지",
-            theme = BadgeTheme.DISABLED
+            theme = BadgeTheme.DISABLED,
         )
     }
 }

@@ -15,13 +15,9 @@ import javax.inject.Singleton
 abstract class AddressModule {
     @Binds
     @Singleton
-    abstract fun bindAddressService(
-        addressServiceImpl: AddressServiceImpl
-    ): AddressService
+    abstract fun bindAddressService(addressServiceImpl: AddressServiceImpl): AddressService
 
     @Binds
     @Singleton
-    abstract fun bindAddressSource(
-        addressSourceImpl: AddressSourceImpl
-    ): AddressSource
+    abstract fun bindAddressSource(addressSourceImpl: AddressSourceImpl): AddressSource
 }

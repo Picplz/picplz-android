@@ -24,18 +24,19 @@ fun CommonCheckbox(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .size(20.dp)
-            .clickable { onCheckedChange(!checked) }
-            .background(
-                color = if (checked) MainThemeColor.Black else MainThemeColor.Gray2,
-                shape = RoundedCornerShape(2.dp)
-            )
-            .border(
-                width = 1.dp,
-                color =  if (checked) MainThemeColor.Black else MainThemeColor.Gray3,
-                shape =  RoundedCornerShape(2.dp)
-            ),
+        modifier =
+            modifier
+                .size(20.dp)
+                .clickable { onCheckedChange(!checked) }
+                .background(
+                    color = if (checked) MainThemeColor.Black else MainThemeColor.Gray2,
+                    shape = RoundedCornerShape(2.dp),
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (checked) MainThemeColor.Black else MainThemeColor.Gray3,
+                    shape = RoundedCornerShape(2.dp),
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

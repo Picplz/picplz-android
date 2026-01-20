@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,9 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.PhotoPortfolio
-import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
@@ -32,23 +31,24 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun PortfolioSection(
     modifier: Modifier,
     navController: NavController,
-    photoPortfolios: List<PhotoPortfolio>
+    photoPortfolios: List<PhotoPortfolio>,
 ) {
     Column {
         // 포트폴리오
         Text(
             modifier = modifier.fillMaxWidth(),
             text = "포트폴리오",
-            style = buttonText
+            style = buttonText,
         )
 
         // 3열의 고정 그리드를 직접 구성
         val chunkedImages = photoPortfolios.take(9).chunked(3) // 3개씩 나눔, 최대 9개
 
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 7.dp)
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .padding(top = 7.dp),
         ) {
             chunkedImages.forEach { rowImages ->
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -56,20 +56,22 @@ fun PortfolioSection(
                         Image(
                             painter = rememberAsyncImagePainter(model = imageRes.photoPortfolioUri),
                             contentDescription = "포트폴리오 이미지",
-                            modifier = Modifier
-                                .weight(1f) // 각 이미지가 동일한 크기를 가짐
-                                .aspectRatio(1f) // 1:1 비율
-                                .padding(2.dp),
-                            contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
+                            modifier =
+                                Modifier
+                                    .weight(1f) // 각 이미지가 동일한 크기를 가짐
+                                    .aspectRatio(1f) // 1:1 비율
+                                    .padding(2.dp),
+                            contentScale = ContentScale.Crop,
                         )
                     }
                     // 남은 빈 공간 채우기
                     repeat(3 - rowImages.size) {
                         Spacer(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                                .padding(2.dp)
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f)
+                                    .padding(2.dp),
                         )
                     }
                 }
@@ -89,20 +91,9 @@ fun PortfolioSection(
             verticalPadding = 0.dp,
             gap = 6.dp,
             onClick = {
-                val bundle = Bundle().apply {
-                    putParcelableArrayList(
-                        "photo-portfolios",
-                        ArrayList(photoPortfolios)
-                    )
-                }
-
-                navController.navigateWithBundle(
-                    "detail-photographer-photo-portfolios",
-                    bundle
-                )
+                navController.navigate(DetailPhotographerPhotoPortfolios)
             },
-            modifier = modifier.align(Alignment.End)
+            modifier = modifier.align(Alignment.End),
         )
-
     }
 }

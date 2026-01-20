@@ -41,25 +41,20 @@ object PagerConfig {
 @Composable
 fun <T> CommonHorizontalPager(
     modifier: Modifier = Modifier,
-    items: List<T>, // 표시할 아이템 리스트
-    pageCount: Int, // 전체 아이템 개수
-    initialPage: Int = 0, // 처음 표시할 인덱스
-    showIndicator: Boolean = false,  // Indicator 표시 여부
-    isIndicatorPositionAbsolute: Boolean = false, // Indicator의 위치를 절대적으로 할 것인지, 상대적으로 할 것인지
-    /*
-    * Indicator 상단 여백을 정의하는 값(dp)
-    * - "상대적 위치"일 경우: HorizontalPager 아래에 위채, 해당 값을 기준으로 상단 여백이 적용됨
-    * - "절대적 위치"일 경우: 화면 상단에서부터의 여백을 기준으로 Indicator가 고정 위치로 표시됨
-    * */
+    items: List<T>,
+    pageCount: Int,
+    initialPage: Int = 0,
+    showIndicator: Boolean = false,
+    isIndicatorPositionAbsolute: Boolean = false,
     indicatorTopSpacing: Dp = 10.dp,
-    itemContent: @Composable (T) -> Unit, // 각 페이지의 UI를 구성하는 Composable 함수
+    itemContent: @Composable (T) -> Unit,
 ) {
     val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 
     Column(modifier = modifier) {
         HorizontalPager(
             state = pagerState,
-            userScrollEnabled = pageCount > 1 // 아이템이 한개 이상일 때만 스크롤 활성화
+            userScrollEnabled = pageCount > 1,
         ) { page ->
             itemContent(items[page])
         }
@@ -67,7 +62,7 @@ fun <T> CommonHorizontalPager(
         if (showIndicator && !isIndicatorPositionAbsolute) {
             CommonHorizontalPagerWithRelativeIndicator(
                 pagerState = pagerState,
-                indicatorTopSpacing = indicatorTopSpacing
+                indicatorTopSpacing = indicatorTopSpacing,
             )
         }
     }
@@ -75,7 +70,7 @@ fun <T> CommonHorizontalPager(
     if (showIndicator && isIndicatorPositionAbsolute) {
         CommonHorizontalPagerWithAbsoluteIndicator(
             pagerState = pagerState,
-            indicatorTopSpacing = indicatorTopSpacing
+            indicatorTopSpacing = indicatorTopSpacing,
         )
     }
 }
@@ -97,10 +92,11 @@ fun CommonHorizontalPagerWithAbsoluteIndicator(
     indicatorTopSpacing: Dp,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .zIndex(1f)
-            .padding(top = indicatorTopSpacing)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .zIndex(1f)
+                .padding(top = indicatorTopSpacing),
     ) {
         CommonHorizontalPagerIndicator(pagerState = pagerState)
     }
@@ -108,9 +104,7 @@ fun CommonHorizontalPagerWithAbsoluteIndicator(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CommonHorizontalPagerIndicator(
-    pagerState: PagerState,
-) {
+fun CommonHorizontalPagerIndicator(pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
     val pageCount = pagerState.pageCount
     val currentPage = pagerState.currentPage
@@ -124,16 +118,17 @@ fun CommonHorizontalPagerIndicator(
             val indicatorColor = if (isSelected) MainThemeColor.Black else MainThemeColor.White
 
             Box(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(indicatorColor)
-                    .border(1.dp, MainThemeColor.Black, CircleShape)
-                    .size(10.dp)
-                    .clickable {
-                        coroutineScope.launch {
-                            animatePageScroll(pagerState, currentPage, iteration, pageCount)
-                        }
-                    }
+                modifier =
+                    Modifier
+                        .clip(CircleShape)
+                        .background(indicatorColor)
+                        .border(1.dp, MainThemeColor.Black, CircleShape)
+                        .size(10.dp)
+                        .clickable {
+                            coroutineScope.launch {
+                                animatePageScroll(pagerState, currentPage, iteration, pageCount)
+                            }
+                        },
             )
         }
     }
@@ -144,23 +139,24 @@ private suspend fun animatePageScroll(
     pagerState: PagerState,
     currentPage: Int,
     targetPage: Int,
-    pageCount: Int
+    pageCount: Int,
 ) {
     // 이동 방향 계산
     val direction = if (currentPage < targetPage) 1 else -1
 
     // 페이지 이동 범위(오름차순/내림차순)
-    val range = if (direction == 1) {
-        currentPage until targetPage
-    } else {
-        currentPage downTo targetPage + 1
-    }
+    val range =
+        if (direction == 1) {
+            currentPage until targetPage
+        } else {
+            currentPage downTo targetPage + 1
+        }
 
     // 페이지를 순차적으로 애니메이션
     for (page in range) {
         pagerState.animateScrollToPage(
             page = (page + direction + pageCount) % pageCount,
-            animationSpec = tween(durationMillis = PagerConfig.BASE_DURATION)
+            animationSpec = tween(durationMillis = PagerConfig.BASE_DURATION),
         )
     }
 }
@@ -191,15 +187,16 @@ fun CommonHorizontalPagerPreview() {
             items = items,
             pageCount = pageCount,
             initialPage = initialPage,
-            showIndicator = showIndicator
+            showIndicator = showIndicator,
         ) { item ->
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .background(MainThemeColor.Black)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(MainThemeColor.Black)
+                        .padding(16.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(text = item, color = MainThemeColor.White)
             }

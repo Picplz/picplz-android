@@ -14,51 +14,50 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.hm.picplz.common.util.DateTimeUtil
 import com.hm.picplz.domain.model.ButtonActionType
 import com.hm.picplz.domain.model.MessageContent
 import com.hm.picplz.domain.model.MessageDirection
-import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatMessageBubble
+import com.hm.picplz.ui.screen.chat_room.composable.ChatInput
 import com.hm.picplz.ui.screen.chat_room.composable.ChatMessageProfile
+import com.hm.picplz.ui.screen.chat_room.composable.ReservationStep
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChangeTimeBubble
+import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatMessageBubble
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ChatSuggest
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.CompleteBubble
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.DealConfirmationBubble
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ImageChat
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.NotificationBubble
-import com.hm.picplz.ui.screen.chat_room.composable.ChatInput
-import com.hm.picplz.ui.screen.chat_room.composable.ReservationStep
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.Pretendard
-import com.hm.picplz.common.util.DateTimeUtil
-import com.hm.picplz.ui.screen.chat_room.ChatRoomViewModel
 
 @Composable
 fun ChatRoomScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatRoomViewModel = hiltViewModel(),
     navController: NavHostController,
-    roomId: String,
+    @Suppress("UNUSED_PARAMETER") _roomId: String,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
@@ -71,54 +70,61 @@ fun ChatRoomScreen(
                 subTextStyle = caption.copy(color = MainThemeColor.Green120),
                 onClickBack = {
                     viewModel.handleIntent(
-                        ChatRoomIntent.NavigateToPrev
+                        ChatRoomIntent.NavigateToPrev,
                     )
                 },
                 showMenuIcon = true,
             )
         },
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) {
-        innerPadding ->
+            innerPadding ->
         Column(
-            modifier = modifier
-                .padding(innerPadding)
+            modifier =
+                modifier
+                    .padding(innerPadding),
         ) {
             ReservationStep(
-                reservationStep = currentState.reservationStep
+                reservationStep = currentState.reservationStep,
             )
             Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(10.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Black.copy(alpha = 0.08f),
-                                Color.Transparent
-                            )
-                        )
-                    )
+                modifier =
+                    modifier
+                        .fillMaxWidth()
+                        .height(10.dp)
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors =
+                                        listOf(
+                                            Color.Black.copy(alpha = 0.08f),
+                                            Color.Transparent,
+                                        ),
+                                ),
+                        ),
             )
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
                 contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
-            ){
-                val chatListItem = dummyChatMessages
-                    .groupBy { chat ->
-                        DateTimeUtil.truncateToDate(chat.timestamp)
-                    }
-                    .flatMap { (date, rest) ->
-                        buildList {
-                            add(ChatListItem.DateHeader(date))
-                            addAll(rest.map { ChatListItem.MessageItem(it) })
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                val chatListItem =
+                    dummyChatMessages
+                        .groupBy { chat ->
+                            DateTimeUtil.truncateToDate(chat.timestamp)
                         }
-                    }
+                        .flatMap { (date, rest) ->
+                            buildList {
+                                add(ChatListItem.DateHeader(date))
+                                addAll(rest.map { ChatListItem.MessageItem(it) })
+                            }
+                        }
 
                 items(
                     items = chatListItem,
@@ -127,56 +133,64 @@ fun ChatRoomScreen(
                             is ChatListItem.DateHeader -> "date_${item.date}"
                             is ChatListItem.MessageItem -> "message_${item.message.id}"
                         }
-                    }
+                    },
                 ) { item ->
                     when (item) {
                         is ChatListItem.DateHeader -> {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 2.dp, bottom = 16.dp),
-                                contentAlignment = Alignment.Center
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 2.dp, bottom = 16.dp),
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = DateTimeUtil.getFormattedDate(item.date),
                                     style = caption,
-                                    color = MainThemeColor.Black
+                                    color = MainThemeColor.Black,
                                 )
                             }
                         }
                         is ChatListItem.MessageItem -> {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = when (item.message.content) {
-                                    is MessageContent.Text -> Alignment.CenterVertically
-                                    is MessageContent.Image -> Alignment.Top
-                                    is MessageContent.Notification -> Alignment.Top
-                                    is MessageContent.Completion -> Alignment.Top
-                                    is MessageContent.ChangeTime -> Alignment.Top
-                                    is MessageContent.DealConfirmation -> Alignment.Top
-                                    is MessageContent.ChatSuggest -> Alignment.Top
-                                },
-                                horizontalArrangement = if (item.message.direction === MessageDirection.RECEIVED) Arrangement.Start else Arrangement.End
+                                verticalAlignment =
+                                    when (item.message.content) {
+                                        is MessageContent.Text -> Alignment.CenterVertically
+                                        is MessageContent.Image -> Alignment.Top
+                                        is MessageContent.Notification -> Alignment.Top
+                                        is MessageContent.Completion -> Alignment.Top
+                                        is MessageContent.ChangeTime -> Alignment.Top
+                                        is MessageContent.DealConfirmation -> Alignment.Top
+                                        is MessageContent.ChatSuggest -> Alignment.Top
+                                    },
+                                horizontalArrangement =
+                                    if (item.message.direction === MessageDirection.RECEIVED) {
+                                        Arrangement.Start
+                                    } else {
+                                        Arrangement.End
+                                    },
                             ) {
                                 if (item.message.direction == MessageDirection.RECEIVED) {
                                     ChatMessageProfile(
-                                        profileImageUri = item.message.sender.profileImageUri
+                                        profileImageUri = item.message.sender.profileImageUri,
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                 }
                                 Row(
                                     verticalAlignment = Alignment.Bottom,
                                 ) {
-                                    val timeFontStyle = TextStyle(
-                                        fontFamily = Pretendard,
-                                        fontWeight = FontWeight.Normal,
-                                        fontSize = 8.sp,
-                                        lineHeight = 8.sp * 1.4,
-                                        letterSpacing = 0.sp,
-                                        color = MainThemeColor.Gray3
-                                    )
-                                    if (item.message.direction == MessageDirection.SENT
-                                        && item.message.content !is MessageContent.ChatSuggest
+                                    val timeFontStyle =
+                                        TextStyle(
+                                            fontFamily = Pretendard,
+                                            fontWeight = FontWeight.Normal,
+                                            fontSize = 8.sp,
+                                            lineHeight = 8.sp * 1.4,
+                                            letterSpacing = 0.sp,
+                                            color = MainThemeColor.Gray3,
+                                        )
+                                    if (item.message.direction == MessageDirection.SENT &&
+                                        item.message.content !is MessageContent.ChatSuggest
                                     ) {
                                         Text(
                                             text = DateTimeUtil.getFormattedTime(item.message.timestamp),
@@ -206,7 +220,7 @@ fun ChatRoomScreen(
                                                         ButtonActionType.CONFIRM_ORDER -> {}
                                                         ButtonActionType.OPEN_URL -> {}
                                                     }
-                                                }
+                                                },
                                             )
                                         }
                                         is MessageContent.Completion -> {
@@ -216,19 +230,19 @@ fun ChatRoomScreen(
                                         }
                                         is MessageContent.ChangeTime -> {
                                             ChangeTimeBubble(
-                                                chatMessage = item.message
+                                                chatMessage = item.message,
                                             )
                                         }
                                         is MessageContent.DealConfirmation -> {
                                             DealConfirmationBubble(
                                                 chatMessage = item.message,
-                                                onButtonClick = {}
+                                                onButtonClick = {},
                                             )
                                         }
                                         is MessageContent.ChatSuggest -> {
                                             val suggestContent = item.message.content as MessageContent.ChatSuggest
                                             ChatSuggest(
-                                                suggestedChats = suggestContent.suggestedChats
+                                                suggestedChats = suggestContent.suggestedChats,
                                             )
                                         }
                                     }
@@ -241,7 +255,6 @@ fun ChatRoomScreen(
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -268,7 +281,7 @@ fun ChatRoomScreenPreview() {
     PicplzTheme {
         ChatRoomScreen(
             navController = navController,
-            roomId = "1"
+            _roomId = "1",
         )
     }
 }

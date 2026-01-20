@@ -43,82 +43,88 @@ fun PortfolioCard(
     isBookMarked: Boolean = true,
     borderRadius: Dp = 5.dp,
     bookmarkClick: () -> Unit = {},
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .width(210.dp)
-            .clip(RoundedCornerShape(borderRadius))
-            .drawBehind {
-                drawRoundRect(
-                    color = MainThemeColor.Gray2,
-                    style = Stroke(width = 1.dp.toPx()),
-                    cornerRadius = CornerRadius(borderRadius.toPx())
-                )
-            }
-            .clickable { onClick() }
+        modifier =
+            modifier
+                .width(210.dp)
+                .clip(RoundedCornerShape(borderRadius))
+                .drawBehind {
+                    drawRoundRect(
+                        color = MainThemeColor.Gray2,
+                        style = Stroke(width = 1.dp.toPx()),
+                        cornerRadius = CornerRadius(borderRadius.toPx()),
+                    )
+                }
+                .clickable { onClick() },
     ) {
         Column {
             Image(
                 painter = painterResource(id = portfolioImage),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(210.dp)
-                    .clip(RoundedCornerShape(borderRadius)),
-                contentScale = ContentScale.Crop
+                modifier =
+                    Modifier
+                        .size(210.dp)
+                        .clip(RoundedCornerShape(borderRadius)),
+                contentScale = ContentScale.Crop,
             )
             Row(
                 verticalAlignment = Alignment.Top,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
             ) {
                 Image(
                     painter = painterResource(id = profileImage),
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
+                    modifier =
+                        Modifier
+                            .size(24.dp)
+                            .clip(CircleShape),
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Column {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             text = "$username 작가",
                             style = MainThemeFont.ButtonDefault,
-                            color = MainThemeColor.Gray5
+                            color = MainThemeColor.Gray5,
                         )
                         Row {
                             Text(text = bookmarkCnt.toString(), style = MainThemeFont.Caption)
                             Spacer(modifier = Modifier.width(5.dp))
                             Image(
-                                painter = painterResource(id = if (isBookMarked)
-                                    R.drawable.bookmark_active
-                                else
-                                    R.drawable.bookmark_inactive),
+                                painter =
+                                    painterResource(
+                                        id =
+                                            if (isBookMarked) {
+                                                R.drawable.bookmark_active
+                                            } else {
+                                                R.drawable.bookmark_inactive
+                                            },
+                                    ),
                                 contentDescription = "bookmark",
-                                modifier = modifier.width(13.dp).clickable { bookmarkClick()}
+                                modifier = modifier.width(13.dp).clickable { bookmarkClick() },
                             )
                         }
-
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.marker_map_gray),
                             contentDescription = "marker",
-                            modifier = Modifier.height(11.dp)
+                            modifier = Modifier.height(11.dp),
                         )
                         Spacer(modifier = Modifier.width(3.dp))
                         Text(
                             text = location,
                             style = MainThemeFont.Caption,
-                            color = MainThemeColor.Gray3
+                            color = MainThemeColor.Gray3,
                         )
                     }
                 }
-
             }
         }
     }
@@ -136,7 +142,7 @@ fun PortfolioCardPreview() {
             bookmarkCnt = 23,
             isBookMarked = false,
             bookmarkClick = {},
-            onClick = {}
+            onClick = {},
         )
     }
 }

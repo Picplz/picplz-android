@@ -8,10 +8,12 @@ interface AuthService {
     suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse>
 }
 
-class AuthServiceImpl @Inject constructor(
-    private val authSource: AuthSource
-) : AuthService {
-    override suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse> {
-        return authSource.loginWithKaKao(accessToken = accessToken)
+class AuthServiceImpl
+    @Inject
+    constructor(
+        private val authSource: AuthSource,
+    ) : AuthService {
+        override suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse> {
+            return authSource.loginWithKaKao(accessToken = accessToken)
+        }
     }
-}

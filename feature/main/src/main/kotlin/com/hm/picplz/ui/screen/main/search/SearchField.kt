@@ -50,7 +50,7 @@ fun SearchField(
     modifier: Modifier = Modifier,
     placeholder: String = "검색어를 입력하세요",
     onSearchClick: (() -> Unit)? = null,
-    onFocusChanged: ((Boolean) -> Unit)? = null,   // Boolean 인자 받도록 변경
+    onFocusChanged: ((Boolean) -> Unit)? = null,
     enabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Search,
     keyboardActions: (() -> Unit)? = null,
@@ -59,51 +59,55 @@ fun SearchField(
     var isFocused by remember { mutableStateOf(false) }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .clip(RoundedCornerShape(50.dp))
-            .border(
-                width = 1.dp,
-                color = if (isFocused) MainThemeColor.Olive else MainThemeColor.Gray6,
-                shape = RoundedCornerShape(50.dp)
-            )
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = { focusManager.clearFocus() })
-            }
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .clip(RoundedCornerShape(50.dp))
+                .border(
+                    width = 1.dp,
+                    color = if (isFocused) MainThemeColor.Olive else MainThemeColor.Gray6,
+                    shape = RoundedCornerShape(50.dp),
+                )
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
+                }
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
-                    .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused
-                        onFocusChanged?.invoke(focusState.isFocused)
-                    },
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                        .onFocusChanged { focusState ->
+                            isFocused = focusState.isFocused
+                            onFocusChanged?.invoke(focusState.isFocused)
+                        },
                 enabled = enabled,
                 textStyle = MainThemeFont.Body.copy(color = MainThemeColor.Black),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = imeAction
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        keyboardActions?.invoke()
-                        focusManager.clearFocus()
-                    },
-                    onDone = {
-                        keyboardActions?.invoke()
-                        focusManager.clearFocus()
-                    }
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = imeAction,
+                    ),
+                keyboardActions =
+                    KeyboardActions(
+                        onSearch = {
+                            keyboardActions?.invoke()
+                            focusManager.clearFocus()
+                        },
+                        onDone = {
+                            keyboardActions?.invoke()
+                            focusManager.clearFocus()
+                        },
+                    ),
                 cursorBrush = SolidColor(MainThemeColor.Black),
                 singleLine = true,
                 decorationBox = { inner ->
@@ -111,30 +115,31 @@ fun SearchField(
                         Text(
                             text = placeholder,
                             style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray3
+                            color = MainThemeColor.Gray3,
                         )
                     }
                     inner()
-                }
+                },
             )
 
             if (value.isNotEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(MainThemeColor.Gray2)
-                        .clickable {
-                            onValueChange("")
-                            focusManager.clearFocus()
-                        },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(MainThemeColor.Gray2)
+                            .clickable {
+                                onValueChange("")
+                                focusManager.clearFocus()
+                            },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "clear",
                         Modifier.size(13.dp),
-                        tint = MainThemeColor.Gray4
+                        tint = MainThemeColor.Gray4,
                     )
                 }
             }
@@ -144,14 +149,15 @@ fun SearchField(
             Icon(
                 painter = painterResource(id = R.drawable.search),
                 contentDescription = "검색",
-                modifier = Modifier
-                    .size(14.dp)
-                    .clickable {
-                        onSearchClick?.invoke()
-                            ?: keyboardActions?.invoke()
-                        focusManager.clearFocus()
-                    },
-                tint = if (isFocused) MainThemeColor.Olive else MainThemeColor.Black
+                modifier =
+                    Modifier
+                        .size(14.dp)
+                        .clickable {
+                            onSearchClick?.invoke()
+                                ?: keyboardActions?.invoke()
+                            focusManager.clearFocus()
+                        },
+                tint = if (isFocused) MainThemeColor.Olive else MainThemeColor.Black,
             )
         }
     }
@@ -165,7 +171,7 @@ fun SearchFieldPreview() {
             value = "",
             onValueChange = {},
             placeholder = "동명(동, 면)으로 검색 (ex, 연남동)",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         )
     }
 }
@@ -178,7 +184,7 @@ fun SearchFieldWithValuePreview() {
             value = "연남동",
             onValueChange = {},
             placeholder = "동명(동, 면)으로 검색 (ex, 연남동)",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         )
     }
 }

@@ -17,5 +17,5 @@ data class Photographer(
 
 data class FilteredPhotographers(
     val active: List<Photographer> = emptyList(),
-    val inactive: List<Photographer> = emptyList()
+    val inactive: List<Photographer> = emptyList(),
 )

@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.common.model.User
@@ -17,71 +16,75 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpCommonViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
-    val state: StateFlow<SignUpCommonState> get() = _state
+class SignUpCommonViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
+        val state: StateFlow<SignUpCommonState> get() = _state
 
-    private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
-    val sideEffect: SharedFlow<SignUpSideEffect> get() = _sideEffect
+        private val _sideEffect = MutableSharedFlow<SignUpSideEffect>()
+        val sideEffect: SharedFlow<SignUpSideEffect> get() = _sideEffect
 
-    private val userTypeInfoHandler = UserTypeInfoHandler()
-    private val userInfoHandler = UserInfoHandler()
+        private val userTypeInfoHandler = UserTypeInfoHandler()
+        private val userInfoHandler = UserInfoHandler()
 
-    fun handleIntent(intent: SignUpCommonIntent) {
-        when (intent) {
-            is SignUpCommonIntent.NavigateToPrev -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(SignUpSideEffect.NavigateToPrev)
-                }
-            }
-
-            is SignUpCommonIntent.NavigateToSelected -> {
-                viewModelScope.launch {
-                    _state.value.selectedUserType?.let { selectedUserType ->
-                        val destination = when (selectedUserType) {
-                            UserType.User -> "sign-up-completion"
-                            UserType.Photographer -> "sign-up-photographer"
-                        }
-                        val userBundle = bundleOf(
-                            "userInfo" to User(
-                                id = UUID.randomUUID().toString(),
-                                nickname = _state.value.nickname,
-                                profileImageUri = _state.value.profileImageUri,
-                                userType = _state.value.selectedUserType
-                            )
-                        )
-                        _sideEffect.emit(
-                            SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected(
-                                destination,
-                                userBundle
-                            )
-                        )
+        fun handleIntent(intent: SignUpCommonIntent) {
+            when (intent) {
+                is SignUpCommonIntent.NavigateToPrev -> {
+                    viewModelScope.launch {
+                        _sideEffect.emit(SignUpSideEffect.NavigateToPrev)
                     }
                 }
-            }
 
-            is SignUpCommonIntent.Navigate -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(SignUpSideEffect.Navigate(intent.destination))
+                is SignUpCommonIntent.NavigateToSelected -> {
+                    viewModelScope.launch {
+                        _state.value.selectedUserType?.let { selectedUserType ->
+                            val destination =
+                                when (selectedUserType) {
+                                    UserType.User -> "sign-up-completion"
+                                    UserType.Photographer -> "sign-up-photographer"
+                                }
+
+                            val user =
+                                User(
+                                    id = UUID.randomUUID().toString(),
+                                    nickname = _state.value.nickname,
+                                    profileImageUri = _state.value.profileImageUri,
+                                    userType = _state.value.selectedUserType,
+                                )
+                            _sideEffect.emit(
+                                SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected(
+                                    destination,
+                                    user,
+                                ),
+                            )
+                        }
+                    }
                 }
-            }
 
-            is SignUpCommonIntent.ShowFileUploadDialog -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(SignUpSideEffect.ShowFileUploadDialog)
+                is SignUpCommonIntent.Navigate -> {
+                    viewModelScope.launch {
+                        _sideEffect.emit(SignUpSideEffect.Navigate(intent.destination))
+                    }
                 }
-            }
 
-            is SignUpCommonIntent.ResetAllSignUpData -> {
-                _state.value = SignUpCommonState.idle()
-            }
+                is SignUpCommonIntent.ShowFileUploadDialog -> {
+                    viewModelScope.launch {
+                        _sideEffect.emit(SignUpSideEffect.ShowFileUploadDialog)
+                    }
+                }
 
-            else -> {
-                val newState = userTypeInfoHandler.process(intent, _state.value)
-                    ?: userInfoHandler.process(intent, _state.value)
+                is SignUpCommonIntent.ResetAllSignUpData -> {
+                    _state.value = SignUpCommonState.idle()
+                }
 
-                newState?.let { _state.value = it }
+                else -> {
+                    val newState =
+                        userTypeInfoHandler.process(intent, _state.value)
+                            ?: userInfoHandler.process(intent, _state.value)
+
+                    newState?.let { _state.value = it }
+                }
             }
         }
     }
-}

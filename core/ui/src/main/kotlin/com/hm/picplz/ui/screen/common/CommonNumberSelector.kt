@@ -25,43 +25,49 @@ fun CommonNumberSelector(
     maxValue: Int,
     minValue: Int = 0,
     onDismiss: () -> Unit,
-    visible: Boolean
+    visible: Boolean,
 ) {
     if (visible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             containerColor = Color.White,
             modifier = Modifier.height(400.dp),
-        ){
+        ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(400.dp),
             ) {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
                 ) {
                     items(maxValue - minValue + 1) { index ->
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .clickable {
-                                    onValueSelected(index + minValue)
-                                    onDismiss()
-                                },
-                            contentAlignment = Alignment.Center
-                        ){
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(40.dp)
+                                    .clickable {
+                                        onValueSelected(index + minValue)
+                                        onDismiss()
+                                    },
+                            contentAlignment = Alignment.Center,
+                        ) {
                             Text(
                                 text = (index + minValue).toString(),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    color = if (index + minValue == currentValue)
-                                        MainThemeColor.Black
-                                    else
-                                        MainThemeColor.Gray3
-                                ),
+                                style =
+                                    MaterialTheme.typography.titleMedium.copy(
+                                        color =
+                                            if (index + minValue == currentValue) {
+                                                MainThemeColor.Black
+                                            } else {
+                                                MainThemeColor.Gray3
+                                            },
+                                    ),
                             )
                         }
                     }

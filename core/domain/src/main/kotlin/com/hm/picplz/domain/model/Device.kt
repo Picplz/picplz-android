@@ -4,7 +4,7 @@ import java.util.UUID
 
 enum class DeviceCategory {
     CAMERA,
-    PHONE
+    PHONE,
 }
 
 sealed class Device {
@@ -15,7 +15,7 @@ sealed class Device {
     data class PhoneDevice(
         override val id: String = UUID.randomUUID().toString(),
         override val companyName: String,
-        val modelName: String? = null
+        val modelName: String? = null,
     ) : Device() {
         override val category = DeviceCategory.PHONE
     }
@@ -24,7 +24,7 @@ sealed class Device {
         override val id: String = UUID.randomUUID().toString(),
         override val companyName: String,
         val modelName: String? = null,
-        val cameraType: String? = null
+        val cameraType: String? = null,
     ) : Device() {
         override val category = DeviceCategory.CAMERA
     }

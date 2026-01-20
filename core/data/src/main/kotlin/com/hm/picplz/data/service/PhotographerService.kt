@@ -10,61 +10,66 @@ import javax.inject.Inject
 
 interface PhotographerService {
     suspend fun getPhotographers(): Result<List<Photographer>>
+
     suspend fun getNearbyPhotographers(
         userLocation: LatLng,
         distanceLimit: Int = 2,
         countLimit: Int = 5,
-        userAddress: String
+        userAddress: String,
     ): Result<FilteredPhotographers>
 }
 
-class PhotographerServiceImpl @Inject constructor(
-    private val photographerSource: PhotographerSource
-) : PhotographerService {
-    override suspend fun getPhotographers(): Result<List<Photographer>> {
-        return photographerSource.getPhotographers().map { response ->
-            response.map { it.toDomain() }
+class PhotographerServiceImpl
+    @Inject
+    constructor(
+        private val photographerSource: PhotographerSource,
+    ) : PhotographerService {
+        override suspend fun getPhotographers(): Result<List<Photographer>> {
+            return photographerSource.getPhotographers().map { response ->
+                response.map { it.toDomain() }
+            }
         }
-    }
 
-    override suspend fun getNearbyPhotographers(
-        userLocation: LatLng,
-        distanceLimit: Int,
-        countLimit: Int,
-        userAddress: String
-    ): Result<FilteredPhotographers> {
-        return photographerSource.getPhotographers().map { response ->
-            val photographers = response.toDomain()
+        override suspend fun getNearbyPhotographers(
+            userLocation: LatLng,
+            distanceLimit: Int,
+            countLimit: Int,
+            userAddress: String,
+        ): Result<FilteredPhotographers> {
+            return photographerSource.getPhotographers().map { response ->
+                val photographers = response.toDomain()
 
-            val activeNearbyPhotographers = photographers
-                .asSequence()
-                .filter { it.isActive }
-                .mapNotNull {
-                    it.location?.let { location ->
-                        it to getDistance(userLocation, location)
-                    }
+                val activeNearbyPhotographers =
+                    photographers
+                        .asSequence()
+                        .filter { it.isActive }
+                        .mapNotNull {
+                            it.location?.let { location ->
+                                it to getDistance(userLocation, location)
+                            }
+                        }
+                        .filter { (_, distance) -> distance <= distanceLimit }
+                        .sortedBy { (_, distance) -> distance }
+                        .take(countLimit)
+                        .map { (photographer, _) -> photographer }
+                        .toList()
+
+                if (activeNearbyPhotographers.size < countLimit) {
+                    val inactiveSameAreaPhotographers =
+                        photographers
+                            .filter { !it.isActive && it.workingArea == userAddress }
+                            .shuffled()
+                            .take(countLimit - activeNearbyPhotographers.size)
+
+                    FilteredPhotographers(
+                        active = activeNearbyPhotographers,
+                        inactive = inactiveSameAreaPhotographers,
+                    )
+                } else {
+                    FilteredPhotographers(
+                        active = activeNearbyPhotographers,
+                    )
                 }
-                .filter { (_, distance) -> distance <= distanceLimit }
-                .sortedBy { (_, distance) -> distance }
-                .take(countLimit)
-                .map { (photographer, _) -> photographer }
-                .toList()
-
-            if (activeNearbyPhotographers.size < countLimit) {
-                val inactiveSameAreaPhotographers = photographers
-                    .filter { !it.isActive && it.workingArea == userAddress }
-                    .shuffled()
-                    .take(countLimit - activeNearbyPhotographers.size)
-
-                FilteredPhotographers(
-                    active = activeNearbyPhotographers,
-                    inactive = inactiveSameAreaPhotographers
-                )
-            } else {
-                FilteredPhotographers(
-                    active = activeNearbyPhotographers
-                )
             }
         }
     }
-}

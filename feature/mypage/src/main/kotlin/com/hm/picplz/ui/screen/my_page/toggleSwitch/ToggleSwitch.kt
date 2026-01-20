@@ -48,7 +48,7 @@ fun ToggleSwitch(
     shadowOffsetX: Dp = 1.dp,
     shadowOffsetY: Dp = 1.dp,
     shadowBlur: Dp = 4.dp,
-    shadowColor: Color = Color.Black.copy(alpha = 0.25f)
+    shadowColor: Color = Color.Black.copy(alpha = 0.25f),
 ) {
     val padding = (height - thumbSize) / 2
     val targetX = if (checked) width - thumbSize - padding else padding
@@ -68,29 +68,30 @@ fun ToggleSwitch(
             .border(1.dp, trackStroke, RoundedCornerShape(height / 2))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
+                indication = null,
             ) {
                 onCheckedChange(!checked)
             },
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart,
     ) {
         Box(
             Modifier
                 .offset { IntOffset(pxOffsetX.toInt(), 0) }
                 .size(thumbSize)
                 .drawBehind {
-                    val paint = Paint().apply {
-                        color = shadowColor.toArgb()
-                        maskFilter = BlurMaskFilter(pxBlur, BlurMaskFilter.Blur.NORMAL)
-                    }
+                    val paint =
+                        Paint().apply {
+                            color = shadowColor.toArgb()
+                            maskFilter = BlurMaskFilter(pxBlur, BlurMaskFilter.Blur.NORMAL)
+                        }
                     drawContext.canvas.nativeCanvas.drawCircle(
                         pxThumb / 2 + pxShadowX,
                         pxThumb / 2 + pxShadowY,
                         pxThumb / 2,
-                        paint
+                        paint,
                     )
                 }
-                .background(thumbColor, CircleShape)
+                .background(thumbColor, CircleShape),
         )
     }
 }
@@ -103,7 +104,7 @@ fun ToggleSwitchPreview() {
     PicplzTheme {
         ToggleSwitch(
             checked = isToggled,
-            onCheckedChange = { isToggled = it }
+            onCheckedChange = { isToggled = it },
         )
     }
 }

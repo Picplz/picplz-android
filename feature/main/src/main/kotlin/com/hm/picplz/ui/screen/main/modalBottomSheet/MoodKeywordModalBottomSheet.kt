@@ -34,10 +34,11 @@ fun MoodKeywordModalBottomSheet(
     onDismiss: () -> Unit,
 ) {
 //    TODO: State, ViewModel 연결
-    val moodKeywords = listOf(
-        "캐주얼", "고급미", "심플", "단아", "몽환적",
-        "빈티지", "청량", "화려", "퇴폐적", "키치", "힙스터"
-    )
+    val moodKeywords =
+        listOf(
+            "캐주얼", "고급미", "심플", "단아", "몽환적",
+            "빈티지", "청량", "화려", "퇴폐적", "키치", "힙스터",
+        )
     var selectedMoodKeywords by remember { mutableStateOf(emptySet<String>()) }
 
     CommonModalBottomSheet(
@@ -45,7 +46,7 @@ fun MoodKeywordModalBottomSheet(
         visibleCloseButton = true,
         onDismissRequest = onDismiss,
         dragHandle = null,
-        sheetMaxHeight = 289.dp + 84.dp
+        sheetMaxHeight = 289.dp + 84.dp,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header()
@@ -53,9 +54,10 @@ fun MoodKeywordModalBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
             ) {
                 MoodKeywordContent(
                     keywords = moodKeywords,
@@ -63,9 +65,9 @@ fun MoodKeywordModalBottomSheet(
                     onToggleKeyword = {
                         toggleSelection(
                             it,
-                            selectedMoodKeywords
+                            selectedMoodKeywords,
                         ) { selectedMoodKeywords = it }
-                    }
+                    },
                 )
             }
 
@@ -75,7 +77,7 @@ fun MoodKeywordModalBottomSheet(
                 },
                 onSubmit = {
                     // TODO: 선택된 기기로 작가 필터링
-                }
+                },
             )
         }
     }
@@ -87,9 +89,10 @@ private fun Header() {
         Text(
             text = "분위기 키워드",
             style = MainThemeFont.TitleSmall,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 12.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 12.dp),
         )
     }
 }
@@ -99,11 +102,11 @@ private fun Header() {
 private fun MoodKeywordContent(
     keywords: List<String>,
     selectedKeywords: Set<String>,
-    onToggleKeyword: (String) -> Unit
+    onToggleKeyword: (String) -> Unit,
 ) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         keywords.forEach { keyword ->
             CommonChip(
@@ -111,7 +114,7 @@ private fun MoodKeywordContent(
                 isSelected = keyword in selectedKeywords,
                 onClickDefaultMode = {
                     onToggleKeyword(keyword)
-                }
+                },
             )
         }
     }
@@ -120,14 +123,15 @@ private fun MoodKeywordContent(
 @Composable
 private fun Footer(
     onReset: () -> Unit,
-    onSubmit: () -> Unit
+    onSubmit: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 45.dp, top = 30.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
+                .padding(bottom = 45.dp, top = 30.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         CommonBottomButton(
             text = "초기화",
@@ -135,12 +139,12 @@ private fun Footer(
             modifier = Modifier.weight(1f),
             contentColor = MainThemeColor.Black,
             borderColor = MainThemeColor.Gray3,
-            containerColor = MainThemeColor.White
+            containerColor = MainThemeColor.White,
         )
         CommonBottomButton(
             text = "{}명 작가보기",
             onClick = onSubmit,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(2f),
         )
     }
 }
@@ -148,9 +152,9 @@ private fun Footer(
 private fun toggleSelection(
     option: String,
     currentSet: Set<String>,
-    onUpdate: (Set<String>) -> Unit
+    onUpdate: (Set<String>) -> Unit,
 ) {
     onUpdate(
-        if (option in currentSet) currentSet - option else currentSet + option
+        if (option in currentSet) currentSet - option else currentSet + option,
     )
 }

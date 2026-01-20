@@ -50,86 +50,97 @@ fun PhotographerProfile(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     distance: Double?,
-){
+) {
     val formattedDistance = String.format("%.0f", distance)
 
     Column(
-        modifier = modifier
-            .offset(x = offset.x.dp, y = offset.y.dp)
-            .wrapContentSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .offset(x = offset.x.dp, y = offset.y.dp)
+                .wrapContentSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val imageSize by animateDpAsState(
             targetValue = if (isSelected) 90.dp else 74.dp,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            ),
-            label = "imageSize"
+            animationSpec =
+                spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow,
+                ),
+            label = "imageSize",
         )
 
         Image(
             painter = rememberAsyncImagePainter(model = profileImageUri),
             contentDescription = "작가 위치",
-            colorFilter = if (!isActive) ColorFilter.colorMatrix(
-                ColorMatrix().apply {
-                    setToSaturation(0f)
-                }
-            ) else null,
-            modifier = Modifier
-                .size(imageSize)
-                .then(
-                    if (isSelected) {
-                        Modifier.shadow(
-                            elevation = 8.dp,
-                            shape = CircleShape,
-                            spotColor = MainThemeColor.Black.copy(alpha = 0.25f)
-                        )
-                    } else {
-                        Modifier
-                    }
-                )
-                .clip(CircleShape)
-                .then(
-                    if (isSelected) {
-                        Modifier
-                            .border(2.dp, MainThemeColor.Olive, CircleShape)
-                            .border(4.dp, MainThemeColor.Black, CircleShape)
-                    } else {
-                        Modifier.border(2.dp, MainThemeColor.Black, CircleShape)
-                    }
-                )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClick
-                ),
+            colorFilter =
+                if (!isActive) {
+                    ColorFilter.colorMatrix(
+                        ColorMatrix().apply {
+                            setToSaturation(0f)
+                        },
+                    )
+                } else {
+                    null
+                },
+            modifier =
+                Modifier
+                    .size(imageSize)
+                    .then(
+                        if (isSelected) {
+                            Modifier.shadow(
+                                elevation = 8.dp,
+                                shape = CircleShape,
+                                spotColor = MainThemeColor.Black.copy(alpha = 0.25f),
+                            )
+                        } else {
+                            Modifier
+                        },
+                    )
+                    .clip(CircleShape)
+                    .then(
+                        if (isSelected) {
+                            Modifier
+                                .border(2.dp, MainThemeColor.Olive, CircleShape)
+                                .border(4.dp, MainThemeColor.Black, CircleShape)
+                        } else {
+                            Modifier.border(2.dp, MainThemeColor.Black, CircleShape)
+                        },
+                    )
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClick,
+                    ),
         )
         Spacer(
-            modifier = Modifier
-                .height(6.dp)
+            modifier =
+                Modifier
+                    .height(6.dp),
         )
-        Row (
-            modifier = Modifier
-                .zIndex(1f),
-            verticalAlignment = Alignment.CenterVertically
-        ){
+        Row(
+            modifier =
+                Modifier
+                    .zIndex(1f),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Spacer(
-                modifier = Modifier.width(11.dp)
+                modifier = Modifier.width(11.dp),
             )
             Text(
                 text = name,
-                style = TextStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    lineHeight = 12.sp * 1.4,
-                    letterSpacing = 0.sp
-                ),
-                color = MainThemeColor.Black
+                style =
+                    TextStyle(
+                        fontFamily = Pretendard,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        lineHeight = 12.sp * 1.4,
+                        letterSpacing = 0.sp,
+                    ),
+                color = MainThemeColor.Black,
             )
             Spacer(
-                modifier = Modifier.width(3.dp)
+                modifier = Modifier.width(3.dp),
             )
             if (isActive) {
                 Image(
@@ -145,17 +156,19 @@ fun PhotographerProfile(
         }
         if (isActive) {
             Text(
-                modifier = Modifier
-                    .zIndex(1f),
+                modifier =
+                    Modifier
+                        .zIndex(1f),
                 text = "${formattedDistance}m",
-                style = TextStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    lineHeight = 124.sp * 1.4,
-                    letterSpacing = 0.sp
-                ),
-                color = MainThemeColor.Gray4
+                style =
+                    TextStyle(
+                        fontFamily = Pretendard,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        lineHeight = 124.sp * 1.4,
+                        letterSpacing = 0.sp,
+                    ),
+                color = MainThemeColor.Gray4,
             )
         }
     }

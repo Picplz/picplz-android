@@ -6,7 +6,10 @@ import com.hm.picplz.domain.model.KakaoUserInfo
 
 interface AuthRepository {
     suspend fun loginWithKakao(context: Context): Result<KaKaoLoginResponse>
+
     suspend fun getKakaoUserInfo(): Result<KakaoUserInfo>
+
     suspend fun unlinkKakao(): Result<Unit>
+
     fun isKakaoTalkLoginAvailable(context: Context): Boolean
 }

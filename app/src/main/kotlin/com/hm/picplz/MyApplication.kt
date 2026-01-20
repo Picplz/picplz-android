@@ -2,8 +2,8 @@ package com.hm.picplz
 
 import android.app.Application
 import android.util.Log
-import com.kakao.sdk.common.KakaoSdk
 import com.hm.picplz.data.provider.TokenManager
+import com.kakao.sdk.common.KakaoSdk
 import com.kakao.vectormap.KakaoMapSdk
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject

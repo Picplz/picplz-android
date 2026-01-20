@@ -9,13 +9,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.kakao.vectormap.*
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.kakao.vectormap.GestureType
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.MapAuthException
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapView
 import com.kakao.vectormap.camera.CameraPosition
-
 
 @Composable
 fun KakaoMapView(
@@ -27,7 +32,8 @@ fun KakaoMapView(
     initialZoomLevel: Int = 17,
     onResume: () -> Unit = {},
     onPause: () -> Unit = {},
-    onCameraMoveEnd: (KakaoMap, CameraPosition, GestureType) -> Unit = { _: KakaoMap, _: CameraPosition, _: GestureType -> },
+    onCameraMoveEnd: (KakaoMap, CameraPosition, GestureType) -> Unit =
+        { _: KakaoMap, _: CameraPosition, _: GestureType -> },
     isGestureEnabled: Boolean = true,
     isOneFingerDoubleTapEnable: Boolean? = null,
     isTwoFingerSingleTapEnable: Boolean? = null,
@@ -45,10 +51,11 @@ fun KakaoMapView(
         modifier = modifier,
         factory = { context ->
             MapView(context).also { mapView = it }.apply {
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                )
+                layoutParams =
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
                 start(
                     object : MapLifeCycleCallback() {
                         override fun onMapDestroy() {
@@ -63,40 +70,47 @@ fun KakaoMapView(
                                 when (error.errorCode) {
                                     -1 -> Log.e("KakaoMapView", "인증 과정 중 원인을 알 수 없는 에러가 발생한 상태")
                                     -2 -> Log.e("KakaoMapView", "통신 연결 시도 중 발생하는 에러")
-                                    -3 -> Log.e(
-                                        "KakaoMapView",
-                                        "통신 연결 중 SocketTimeoutException 에러가 발생한 경우"
-                                    )
+                                    -3 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "통신 연결 중 SocketTimeoutException 에러가 발생한 경우",
+                                        )
 
-                                    -4 -> Log.e(
-                                        "KakaoMapView",
-                                        "통신 시도 중 ConnectTimeoutException 에러가 발생한 경우"
-                                    )
+                                    -4 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "통신 시도 중 ConnectTimeoutException 에러가 발생한 경우",
+                                        )
 
-                                    400 -> Log.e(
-                                        "KakaoMapView",
-                                        "일반적인 오류. 주로 API에 필요한 필수 파라미터와 관련하여 서버가 클라이언트 오류를 감지해 요청을 처리하지 못한 상태입니다."
-                                    )
+                                    400 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "일반적인 오류. 주로 API에 필요한 필수 파라미터와 관련하여 서버가 클라이언트 오류를 감지해 요청을 처리하지 못한 상태입니다.",
+                                        )
 
-                                    401 -> Log.e(
-                                        "KakaoMapView",
-                                        "인증 오류. 해당 리소스에 유효한 인증 자격 증명이 없어 요청에 실패한 상태"
-                                    )
+                                    401 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "인증 오류. 해당 리소스에 유효한 인증 자격 증명이 없어 요청에 실패한 상태",
+                                        )
 
-                                    403 -> Log.e(
-                                        "KakaoMapView",
-                                        "권한 오류. 서버에 요청이 전달되었지만, 권한 때문에 거절된 상태"
-                                    )
+                                    403 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "권한 오류. 서버에 요청이 전달되었지만, 권한 때문에 거절된 상태",
+                                        )
 
-                                    429 -> Log.e(
-                                        "KakaoMapView",
-                                        "쿼터 초과. 정해진 사용량이나 초당 요청 한도를 초과한 경우"
-                                    )
+                                    429 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "쿼터 초과. 정해진 사용량이나 초당 요청 한도를 초과한 경우",
+                                        )
 
-                                    499 -> Log.e(
-                                        "KakaoMapView",
-                                        "통신 실패 오류. 인터넷 연결 상태 확인이 필요한 경우"
-                                    )
+                                    499 ->
+                                        Log.e(
+                                            "KakaoMapView",
+                                            "통신 실패 오류. 인터넷 연결 상태 확인이 필요한 경우",
+                                        )
                                 }
                             }
                         }
@@ -109,20 +123,39 @@ fun KakaoMapView(
                                     onCameraMoveEnd(
                                         cameraListenerKakaoMap,
                                         cameraPosition,
-                                        gestureType
+                                        gestureType,
                                     )
                                 }
-                                setGestureEnable(GestureType.OneFingerDoubleTap, isOneFingerDoubleTapEnable ?: isGestureEnabled)
-                                setGestureEnable(GestureType.TwoFingerSingleTap, isTwoFingerSingleTapEnable ?: isGestureEnabled)
+                                setGestureEnable(
+                                    GestureType.OneFingerDoubleTap,
+                                    isOneFingerDoubleTapEnable ?: isGestureEnabled,
+                                )
+                                setGestureEnable(
+                                    GestureType.TwoFingerSingleTap,
+                                    isTwoFingerSingleTapEnable ?: isGestureEnabled,
+                                )
                                 setGestureEnable(GestureType.Pan, isPanEnable ?: isGestureEnabled)
-                                setGestureEnable(GestureType.Rotate, isRotateEnable ?: isGestureEnabled)
+                                setGestureEnable(
+                                    GestureType.Rotate,
+                                    isRotateEnable ?: isGestureEnabled,
+                                )
                                 setGestureEnable(GestureType.Zoom, isZoomEnable ?: isGestureEnabled)
                                 setGestureEnable(GestureType.Tilt, isTiltEnable ?: isGestureEnabled)
-                                setGestureEnable(GestureType.LongTapAndDrag, isLongTapAndDragEnable ?: isGestureEnabled)
-                                setGestureEnable(GestureType.RotateZoom, isRotateZoomEnable ?: isGestureEnabled)
-                                setGestureEnable(GestureType.OneFingerZoom, isOneFingerZoomEnable ?: isGestureEnabled)
+                                setGestureEnable(
+                                    GestureType.LongTapAndDrag,
+                                    isLongTapAndDragEnable ?: isGestureEnabled,
+                                )
+                                setGestureEnable(
+                                    GestureType.RotateZoom,
+                                    isRotateZoomEnable ?: isGestureEnabled,
+                                )
+                                setGestureEnable(
+                                    GestureType.OneFingerZoom,
+                                    isOneFingerZoomEnable ?: isGestureEnabled,
+                                )
                             }
                         }
+
                         override fun getPosition(): LatLng {
                             return initialPosition
                         }
@@ -130,26 +163,27 @@ fun KakaoMapView(
                         override fun getZoomLevel(): Int {
                             return initialZoomLevel
                         }
-                    }
+                    },
                 )
             }
-        }
+        },
     )
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(lifecycleOwner) {
-        val observer = object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                mapView?.resume()
-                onResume()
-            }
+        val observer =
+            object : DefaultLifecycleObserver {
+                override fun onResume(owner: LifecycleOwner) {
+                    mapView?.resume()
+                    onResume()
+                }
 
-            override fun onPause(owner: LifecycleOwner) {
-                mapView?.pause()
-                onPause()
+                override fun onPause(owner: LifecycleOwner) {
+                    mapView?.pause()
+                    onPause()
+                }
             }
-        }
 
         lifecycleOwner.lifecycle.addObserver(observer)
 

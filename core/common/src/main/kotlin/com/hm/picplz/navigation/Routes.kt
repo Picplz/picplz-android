@@ -33,7 +33,7 @@ object Routes {
     const val MY_PAGE_MODIFY_PROFILE = "mypage-modify-profile"
     const val MY_PAGE_SHOOTING_HISTORY = "mypage-shooting-history"
     const val MY_PAGE_ORDER_SHEET = "mypage-order-sheet"
-    
+
     // Others
     const val RESERVATION = "reservation"
     const val FEED = "feed"
@@ -46,9 +46,13 @@ object Routes {
 
     fun chatRoom(roomId: String) = "chat/$roomId"
 
-    fun detailPhotographerSingleReview(reviewId: Int, photoIndex: Int) =
-        "detail-photographer-single-review/$reviewId/$photoIndex"
+    fun detailPhotographerSingleReview(
+        reviewId: Int,
+        photoIndex: Int,
+    ) = "detail-photographer-single-review/$reviewId/$photoIndex"
 
-    fun detailPhotographerPortfolios(portfolioId: Int, photoIndex: Int) =
-        "detail-photographer-portfolios/$portfolioId/$photoIndex"
+    fun detailPhotographerPortfolios(
+        portfolioId: Int,
+        photoIndex: Int,
+    ) = "detail-photographer-portfolios/$portfolioId/$photoIndex"
 }

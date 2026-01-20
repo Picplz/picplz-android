@@ -49,19 +49,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
-import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
-import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.common.util.LocationUtil.getDistance
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
+import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
+import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerSheet
-import com.hm.picplz.ui.screen.common.RefetchButton
-import com.hm.picplz.common.util.LocationUtil.getDistance
+import com.hm.picplz.ui.theme.MainThemeColor
 import com.kakao.vectormap.LatLng
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,24 +75,25 @@ fun SearchPhotographerScreen(
     val context = LocalContext.current
     val currentState = viewModel.state.collectAsState().value
 
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        when {
-            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
+    val launcher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions(),
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
                     permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
-            }
+                    viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
+                }
 
-            else -> {
-                Toast.makeText(
-                    context,
-                    "위치 권한이 필요합니다",
-                    Toast.LENGTH_SHORT
-                ).show()
+                else -> {
+                    Toast.makeText(
+                        context,
+                        "위치 권한이 필요합니다",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
         }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
@@ -101,14 +101,16 @@ fun SearchPhotographerScreen(
 
     val scope = rememberCoroutineScope()
 
-    val bottomSheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.PartiallyExpanded,
-        skipHiddenState = true,
-    )
+    val bottomSheetState =
+        rememberStandardBottomSheetState(
+            initialValue = SheetValue.PartiallyExpanded,
+            skipHiddenState = true,
+        )
 
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = bottomSheetState
-    )
+    val scaffoldState =
+        rememberBottomSheetScaffoldState(
+            bottomSheetState = bottomSheetState,
+        )
 
     LaunchedEffect(currentState.selectedPhotographerId) {
         if (currentState.selectedPhotographerId != null) {
@@ -116,8 +118,8 @@ fun SearchPhotographerScreen(
             if (selectedOffset != null) {
                 viewModel.handleIntent(
                     SearchPhotographerIntent.CenterSelectedPhotographer(
-                        selectedOffset
-                    )
+                        selectedOffset,
+                    ),
                 )
             }
             scaffoldState.bottomSheetState.expand()
@@ -136,11 +138,12 @@ fun SearchPhotographerScreen(
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val topMargin = 60.dp
 
-    val calculatedSheetMaxHeight = if (currentState.selectedPhotographerId === null) {
-        screenHeight - topMargin
-    } else {
-        screenHeight
-    }
+    val calculatedSheetMaxHeight =
+        if (currentState.selectedPhotographerId === null) {
+            screenHeight - topMargin
+        } else {
+            screenHeight
+        }
 
     LaunchedEffect(calculatedSheetMaxHeight, currentState.selectedPhotographerId) {
         viewModel.handleIntent(SearchPhotographerIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
@@ -162,89 +165,97 @@ fun SearchPhotographerScreen(
             navigationBarPadding = true,
         ) {
             Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(MainThemeColor.White),
+                modifier =
+                    modifier
+                        .fillMaxSize()
+                        .background(MainThemeColor.White),
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = MainThemeColor.Gray1)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            scope.launch {
-                                scaffoldState.bottomSheetState.partialExpand()
-                                viewModel.handleIntent(
-                                    SearchPhotographerIntent.SetSelectedPhotographerId(
-                                        null
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(color = MainThemeColor.Gray1)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                scope.launch {
+                                    scaffoldState.bottomSheetState.partialExpand()
+                                    viewModel.handleIntent(
+                                        SearchPhotographerIntent.SetSelectedPhotographerId(
+                                            null,
+                                        ),
                                     )
-                                )
-                            }
-                        },
+                                }
+                            },
                 ) {
                     if (currentState.isFetchingGPS && currentState.userLocation == null) {
                         Box(
-                            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
+                                verticalArrangement = Arrangement.Center,
                             ) {
                                 CircularProgressIndicator(
-                                    color = MainThemeColor.Black
+                                    color = MainThemeColor.Black,
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "위치 정보 로딩",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MainThemeColor.Black
+                                    color = MainThemeColor.Black,
                                 )
                             }
                         }
                     } else {
                         Row(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+                            modifier =
+                                modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 10.dp, start = 5.dp, end = 3.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             AddressMarker(
-                                address = currentState.address
+                                address = currentState.address,
                             )
-                            RefetchButton(onClick = {
-                                viewModel.handleIntent(SearchPhotographerIntent.RefetchNearbyPhotographers)
-                            }
+                            RefetchButton(
+                                onClick = {
+                                    viewModel.handleIntent(SearchPhotographerIntent.RefetchNearbyPhotographers)
+                                },
                             )
                         }
 
                         val boxOffset by animateOffsetAsState(
                             targetValue = currentState.centerOffset ?: Offset.Zero,
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            ),
-                            label = "boxAnimation"
+                            animationSpec =
+                                spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                ),
+                            label = "boxAnimation",
                         )
 
                         Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .offset(boxOffset.x.dp, boxOffset.y.dp),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .offset(boxOffset.x.dp, boxOffset.y.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.multicircle),
                                 contentDescription = "범위 지정 이미지",
                                 contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                    .scale(1.5f)
+                                modifier =
+                                    Modifier
+                                        .scale(1.5f),
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.center_char),
-                                contentDescription = "작가 탐색 중앙 캐릭터"
+                                contentDescription = "작가 탐색 중앙 캐릭터",
                             )
                             val entirePhotographer =
                                 currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
@@ -253,9 +264,10 @@ fun SearchPhotographerScreen(
                             entirePhotographer.forEach { (id, name, photographerLocation, profileImageUri, isActive) ->
                                 val offset = currentState.randomOffsets[id] ?: return@forEach
                                 val isSelected = id == currentState.selectedPhotographerId
-                                val distanceInMeters = photographerLocation?.let { location ->
-                                    getDistance(dummyUserLocation, location) * 1000
-                                }
+                                val distanceInMeters =
+                                    photographerLocation?.let { location ->
+                                        getDistance(dummyUserLocation, location) * 1000
+                                    }
                                 PhotographerProfile(
                                     name = name,
                                     profileImageUri = profileImageUri,
@@ -268,16 +280,16 @@ fun SearchPhotographerScreen(
                                             scaffoldState.bottomSheetState.partialExpand()
                                             viewModel.handleIntent(
                                                 SearchPhotographerIntent.SetSelectedPhotographerId(
-                                                    id
-                                                )
+                                                    id,
+                                                ),
                                             )
                                             viewModel.handleIntent(
                                                 SearchPhotographerIntent.CenterSelectedPhotographer(
-                                                    offset
-                                                )
+                                                    offset,
+                                                ),
                                             )
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -295,8 +307,8 @@ fun SearchPhotographerScreen(
                         launcher.launch(
                             arrayOf(
                                 Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            )
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                            ),
                         )
                     }
                 }

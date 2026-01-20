@@ -44,14 +44,15 @@ fun CommonScrollableTabRow(
     selectedTextColor: Color = MainThemeColor.Black,
     unselectedTextColor: Color = MainThemeColor.Gray,
     indicatorColor: Color = MainThemeColor.Black,
-    dividerColor: Color = MainThemeColor.Gray2
+    dividerColor: Color = MainThemeColor.Gray2,
 ) {
     val density = LocalDensity.current
-    val tabWidths = remember {
-        mutableStateListOf<Dp>().apply {
-            repeat(tabTitles.size) { add(0.dp) }
+    val tabWidths =
+        remember {
+            mutableStateListOf<Dp>().apply {
+                repeat(tabTitles.size) { add(0.dp) }
+            }
         }
-    }
 
     ScrollableTabRow(
         modifier = modifier,
@@ -63,21 +64,22 @@ fun CommonScrollableTabRow(
             HorizontalDivider(thickness = 1.dp, color = dividerColor)
         },
         indicator = { tabPositions ->
-            val indicatorModifier = if (isIndicatorMatchTextWidth) {
-                Modifier.customTabIndicatorOffset(
-                    currentTabPosition = tabPositions[selectedTabIndex],
-                    tabWidth = tabWidths[selectedTabIndex]
-                )
-            } else {
-                Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
-            }
+            val indicatorModifier =
+                if (isIndicatorMatchTextWidth) {
+                    Modifier.customTabIndicatorOffset(
+                        currentTabPosition = tabPositions[selectedTabIndex],
+                        tabWidth = tabWidths[selectedTabIndex],
+                    )
+                } else {
+                    Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+                }
 
             TabRowDefaults.SecondaryIndicator(
                 modifier = indicatorModifier,
                 color = indicatorColor,
-                height = indicatorHeight
+                height = indicatorHeight,
             )
-        }
+        },
     ) {
         tabTitles.forEachIndexed { index, title ->
             val isSelected = selectedTabIndex == index
@@ -92,9 +94,9 @@ fun CommonScrollableTabRow(
                         onTextLayout = {
                             tabWidths[index] = with(density) { it.size.width.toDp() }
                         },
-                        style = textStyle
+                        style = textStyle,
                     )
-                }
+                },
             )
         }
     }
@@ -102,23 +104,25 @@ fun CommonScrollableTabRow(
 
 fun Modifier.customTabIndicatorOffset(
     currentTabPosition: TabPosition,
-    tabWidth: Dp
-): Modifier = composed(
-    inspectorInfo = debugInspectorInfo {
-        name = "customTabIndicatorOffset"
-        value = currentTabPosition
+    tabWidth: Dp,
+): Modifier =
+    composed(
+        inspectorInfo =
+            debugInspectorInfo {
+                name = "customTabIndicatorOffset"
+                value = currentTabPosition
+            },
+    ) {
+        val currentTabWidth by animateDpAsState(
+            targetValue = tabWidth,
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+        )
+        val indicatorOffset by animateDpAsState(
+            targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+        )
+        fillMaxWidth()
+            .wrapContentSize(Alignment.BottomStart)
+            .offset(x = indicatorOffset)
+            .width(currentTabWidth)
     }
-) {
-    val currentTabWidth by animateDpAsState(
-        targetValue = tabWidth,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    val indicatorOffset by animateDpAsState(
-        targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
-    )
-    fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
-        .offset(x = indicatorOffset)
-        .width(currentTabWidth)
-}

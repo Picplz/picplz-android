@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
-data class SearchPhotographerState (
+data class SearchPhotographerState(
     val address: String? = null,
     val centerCoords: LatLng = LatLng.from(37.406960, 127.115587),
     val userLocation: LatLng? = null,
@@ -16,8 +16,8 @@ data class SearchPhotographerState (
     val randomOffsets: Map<Int, Offset> = emptyMap(),
     val selectedPhotographerId: Int? = null,
     val sheetMaxHeight: Dp = 750.dp,
-    val sheetPeekHeight: Dp? = 114.dp, // 하단 네비게이션 높이(84.dp)만큼 추가
-    val centerOffset: Offset? = null
+    val sheetPeekHeight: Dp? = 114.dp,
+    val centerOffset: Offset? = null,
 ) {
     companion object {
         fun idle(): SearchPhotographerState {

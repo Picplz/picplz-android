@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.ui.screen.common.AreaTag
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.main.modalBottomSheet.DeviceModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.MoodKeywordModalBottomSheet
@@ -53,16 +54,17 @@ import com.hm.picplz.ui.screen.main.modalBottomSheet.SortFilterModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.SortType
 import com.hm.picplz.ui.screen.main.search.SearchField
 import com.hm.picplz.ui.screen.main.search.SearchFilterButton
-import com.hm.picplz.ui.screen.common.AreaTag
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 
 // 3가지 상태를 표현하는 sealed class
 sealed class SearchUiState {
-    object Empty : SearchUiState()              // 아무 입력도 없는 초기 상태
-    object Typing : SearchUiState()              // 포커스가 있고 입력 중인 상태
-    data class Complete(                                // 완료(검색) 버튼을 눌러야 보여줄 상태
-        val query: String
+    object Empty : SearchUiState() // 아무 입력도 없는 초기 상태
+
+    object Typing : SearchUiState() // 포커스가 있고 입력 중인 상태
+
+    data class Complete(
+        val query: String,
     ) : SearchUiState()
 }
 
@@ -73,31 +75,34 @@ fun Header(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearchClick: () -> Unit,
-    onFocusChanged: (Boolean) -> Unit
+    onFocusChanged: (Boolean) -> Unit,
 ) {
     var visibleRegion by remember { mutableStateOf(false) }
     var visibleDevice by remember { mutableStateOf(false) }
     var visibleDeviceMood by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .zIndex(1f)
-            .wrapContentSize()
+        modifier =
+            Modifier
+                .zIndex(1f)
+                .wrapContentSize(),
     ) {
         Column {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     painter = painterResource(R.drawable.triangle_left),
                     contentDescription = "arrow left",
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickable { navController.popBackStack() }
+                    modifier =
+                        Modifier
+                            .size(18.dp)
+                            .clickable { navController.popBackStack() },
                 )
                 Spacer(modifier = Modifier.width(17.dp))
                 SearchField(
@@ -109,7 +114,7 @@ fun Header(
                     keyboardActions = {
                         onSearchClick()
                     },
-                    onFocusChanged = onFocusChanged
+                    onFocusChanged = onFocusChanged,
                 )
             }
 
@@ -117,27 +122,28 @@ fun Header(
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    contentPadding = PaddingValues(end = 16.dp)
+                    contentPadding = PaddingValues(end = 16.dp),
                 ) {
                     item {
                         SearchFilterButton(
                             label = "촬영 지역",
                             isSelected = false,
-                            onClick = { visibleRegion = true })
+                            onClick = { visibleRegion = true },
+                        )
                     }
                     item {
                         SearchFilterButton(
                             label = "촬영 기기",
                             isSelected = false,
-                            onClick = { visibleDevice = true })
-
+                            onClick = { visibleDevice = true },
+                        )
                     }
                     item {
                         SearchFilterButton(
                             label = "분위기 태그",
                             isSelected = false,
-                            onClick = { visibleDeviceMood = true })
-
+                            onClick = { visibleDeviceMood = true },
+                        )
                     }
                 }
 
@@ -148,24 +154,23 @@ fun Header(
 
                 DeviceModalBottomSheet(
                     onDismiss = { visibleDevice = false },
-                    visible = visibleDevice
+                    visible = visibleDevice,
                 )
 
                 MoodKeywordModalBottomSheet(
                     onDismiss = { visibleDeviceMood = false },
-                    visible = visibleDeviceMood
+                    visible = visibleDeviceMood,
                 )
             }
         }
     }
 }
 
-
 @Composable
 fun RecentSearchSection(
     recentSearchQueries: SnapshotStateList<String>,
     onRemove: (String) -> Unit,
-    onClearAll: () -> Unit
+    onClearAll: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val listState = rememberLazyListState()
@@ -181,18 +186,20 @@ fun RecentSearchSection(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
         ) {
             Text(
                 text = "최근 검색어",
-                style = MainThemeFont.ButtonDefault
+                style = MainThemeFont.ButtonDefault,
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -200,10 +207,11 @@ fun RecentSearchSection(
                 style = MainThemeFont.InnerTag,
                 color = MainThemeColor.Gray4,
                 textDecoration = TextDecoration.Underline,
-                modifier = Modifier.clickable {
-                    focusManager.clearFocus()
-                    onClearAll()
-                }
+                modifier =
+                    Modifier.clickable {
+                        focusManager.clearFocus()
+                        onClearAll()
+                    },
             )
         }
 
@@ -212,22 +220,23 @@ fun RecentSearchSection(
         if (recentSearchQueries.isNotEmpty()) {
             LazyRow(
                 state = listState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(end = 16.dp)
+                contentPadding = PaddingValues(end = 16.dp),
             ) {
                 items(
                     items = recentSearchQueries,
-                    key = { it }
+                    key = { it },
                 ) { area ->
                     AreaTag(
                         label = area,
                         onRemove = {
                             focusManager.clearFocus()
                             onRemove(area)
-                        }
+                        },
                     )
                 }
             }
@@ -240,20 +249,21 @@ fun RecentSearchSection(
 @Composable
 fun PopularSpotSection(
     popularSpots: List<String>,
-    onSpotClick: (String) -> Unit
+    onSpotClick: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = "인기 촬영지",
-                style = MainThemeFont.ButtonDefault
+                style = MainThemeFont.ButtonDefault,
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -267,21 +277,22 @@ fun PopularSpotSection(
 
         popularSpots.forEachIndexed { index, spot ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onSpotClick(spot) }
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onSpotClick(spot) }
+                        .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "${index + 1}",
-                    style = MainThemeFont.ButtonDefault
+                    style = MainThemeFont.ButtonDefault,
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = spot,
                     style = MainThemeFont.Body,
-                    color = MainThemeColor.Gray5
+                    color = MainThemeColor.Gray5,
                 )
             }
         }
@@ -291,12 +302,12 @@ fun PopularSpotSection(
 @Composable
 fun PhotographerListItem() {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .background(MainThemeColor.Olive)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(MainThemeColor.Olive),
     ) {
-
     }
 }
 
@@ -306,8 +317,9 @@ fun SearchResultSection() {
     var selectedSortType by remember { mutableStateOf(SortType.POPULAR) }
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp),
     ) {
         // TODO: 폰트시스템 추가
         CommonIconButton(
@@ -317,7 +329,7 @@ fun SearchResultSection() {
             iconResId = R.drawable.arrow_down,
             horizontalPadding = 0.dp,
             location = "right",
-            onClick = { visibleSortFilter = true }
+            onClick = { visibleSortFilter = true },
         )
 
         // 검색 결과가 있을 때
@@ -356,16 +368,18 @@ fun SearchResultSection() {
 
         // 검색 결과가 없을 때
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 163.dp), contentAlignment = Alignment.TopCenter
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 163.dp),
+            contentAlignment = Alignment.TopCenter,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "검색 결과가 없습니다", style = MainThemeFont.TitleSmall)
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(
                     painter = painterResource(id = R.drawable.user_undefined),
-                    contentDescription = "user-undefined"
+                    contentDescription = "user-undefined",
                 )
             }
         }
@@ -375,40 +389,40 @@ fun SearchResultSection() {
             visible = visibleSortFilter,
             onSelect = { selectedType ->
                 selectedSortType = selectedType
-            }
+            },
         )
     }
 }
 
 @Composable
-fun TypingResultSection(
-    onSuggestionClick: (String) -> Unit
-
-) {
+fun TypingResultSection(onSuggestionClick: (String) -> Unit) {
     // 더미 데이터
-    val dummyList = listOf(
-        mapOf("type" to "location", "label" to "서울 강남구 도곡동"),
-        mapOf("type" to "location", "label" to "서울 강남구 도곡1동"),
-        mapOf("type" to "location", "label" to "서울 강남구 도곡2동"),
-        mapOf("type" to "photographer", "profileImage" to R.drawable.logo, "label" to "강주은 작가"),
-        mapOf("type" to "photographer", "profileImage" to R.drawable.logo, "label" to "강아지 작가"),
-        mapOf("type" to "tag", "label" to "강아지랑 촬영"),
-        mapOf("type" to "tag", "label" to "강한 컨셉")
-    )
+    val dummyList =
+        listOf(
+            mapOf("type" to "location", "label" to "서울 강남구 도곡동"),
+            mapOf("type" to "location", "label" to "서울 강남구 도곡1동"),
+            mapOf("type" to "location", "label" to "서울 강남구 도곡2동"),
+            mapOf("type" to "photographer", "profileImage" to R.drawable.logo, "label" to "강주은 작가"),
+            mapOf("type" to "photographer", "profileImage" to R.drawable.logo, "label" to "강아지 작가"),
+            mapOf("type" to "tag", "label" to "강아지랑 촬영"),
+            mapOf("type" to "tag", "label" to "강한 컨셉"),
+        )
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
     ) {
         items(dummyList) { item ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onSuggestionClick(item["label"].toString()) }
-                    .padding(vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onSuggestionClick(item["label"].toString()) }
+                        .padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 when (item["type"]) {
                     "location" -> {
@@ -416,7 +430,7 @@ fun TypingResultSection(
                             painter = painterResource(id = R.drawable.marker_map_gray),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp),
-                            tint = MainThemeColor.Gray3
+                            tint = MainThemeColor.Gray3,
                         )
                         Text(
                             text = item["label"].toString(),
@@ -428,9 +442,10 @@ fun TypingResultSection(
                         Image(
                             painter = painterResource(id = R.drawable.user_undefined),
                             contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
+                            modifier =
+                                Modifier
+                                    .size(20.dp)
+                                    .clip(CircleShape),
                         )
                         Text(
                             text = item["label"].toString(),
@@ -454,7 +469,7 @@ fun TypingResultSection(
 @Composable
 fun MainSearchScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
@@ -463,7 +478,6 @@ fun MainSearchScreen(
     val recentSearchQueries = remember { mutableStateListOf("연희동", "성수", "홍익대", "연남동", "송파구") }
     val popularSpots = listOf("성수동", "연남동", "서교동", "합정동", "망원동")
     val focusManager = LocalFocusManager.current
-
 
     val doSearch: (String) -> Unit = { newQuery ->
         query = newQuery
@@ -474,23 +488,25 @@ fun MainSearchScreen(
         }
     }
 
-
-    val uiState: SearchUiState = when {
-        hasSearched -> SearchUiState.Complete(query)
-        isFocused && query.isNotEmpty() -> SearchUiState.Typing
-        else -> SearchUiState.Empty
-    }
+    val uiState: SearchUiState =
+        when {
+            hasSearched -> SearchUiState.Complete(query)
+            isFocused && query.isNotEmpty() -> SearchUiState.Typing
+            else -> SearchUiState.Empty
+        }
 
     Scaffold(
         containerColor = MainThemeColor.White,
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth(),
         ) {
             Header(
                 navController = navController,
@@ -501,7 +517,7 @@ fun MainSearchScreen(
                     hasSearched = false
                 },
                 onSearchClick = { doSearch(query) },
-                onFocusChanged = { isFocused = it }
+                onFocusChanged = { isFocused = it },
             )
 
             when (uiState) {
@@ -517,12 +533,12 @@ fun MainSearchScreen(
                         onClearAll = {
                             focusManager.clearFocus()
                             recentSearchQueries.clear()
-                        }
+                        },
                     )
 
                     PopularSpotSection(
                         popularSpots = popularSpots,
-                        onSpotClick = { spot -> doSearch(spot) }
+                        onSpotClick = { spot -> doSearch(spot) },
                     )
                 }
 
@@ -536,12 +552,10 @@ fun MainSearchScreen(
                     Spacer(modifier = Modifier.height(20.dp))
 
                     TypingResultSection(
-                        onSuggestionClick = { sug -> doSearch(sug) }
+                        onSuggestionClick = { sug -> doSearch(sug) },
                     )
                 }
             }
-
-
         }
     }
 }

@@ -15,9 +15,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +39,10 @@ import com.hm.picplz.ui.theme.MainThemeFont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun MyPageModifyProfileScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     var nickname by rememberSaveable { mutableStateOf("임두현") }
     var introText by rememberSaveable { mutableStateOf("안녕하세요, 임두현 사진작가입니다.") }
     var instagramId by rememberSaveable { mutableStateOf("@duduhyeon") }
@@ -61,37 +64,42 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
                 )
             }
         },
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(10.05.dp))
 
             Box(
-                modifier = Modifier
-                    .size(102.dp),
-                contentAlignment = Alignment.BottomEnd
+                modifier =
+                    Modifier
+                        .size(102.dp),
+                contentAlignment = Alignment.BottomEnd,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "profile-image",
-                    modifier = Modifier
-                        .size(102.dp)
-                        .clip(CircleShape)
+                    modifier =
+                        Modifier
+                            .size(102.dp)
+                            .clip(CircleShape),
                 )
                 Image(
                     painter = painterResource(id = R.drawable.profile_modify),
                     contentDescription = "profile-modify",
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.BottomEnd)
-                        .offset(x = (-5).dp, y = (-5).dp)
+                    modifier =
+                        Modifier
+                            .size(24.dp)
+                            .align(Alignment.BottomEnd)
+                            .offset(x = (-5).dp, y = (-5).dp),
                 )
             }
 
@@ -99,36 +107,41 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
 
             // 닉네임 입력
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 Text(text = "닉네임", style = MainThemeFont.TitleSmall)
                 Spacer(Modifier.height(8.dp))
 
                 // 1) 유효성 체크
-                val isNicknameValid = remember(nickname) {
-                    nickname.matches(Regex("^[가-힣A-Za-z0-9 ]*$"))
-                }
+                val isNicknameValid =
+                    remember(nickname) {
+                        nickname.matches(Regex("^[가-힣A-Za-z0-9 ]*$"))
+                    }
 
                 OutlinedTextField(
                     value = nickname,
                     onValueChange = { input ->
                         nickname = input
                     },
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
                     placeholder = { Text("닉네임을 입력하세요") },
                     singleLine = true,
                     textStyle = MainThemeFont.BodySmaller.copy(color = MainThemeColor.Black),
-                    isError = !isNicknameValid,  // 에러 상태일 때 경계선이 빨개짐
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MainThemeColor.Gray1,
-                        unfocusedContainerColor = MainThemeColor.Gray1,
-                        focusedBorderColor = if (isNicknameValid) MainThemeColor.Gray3 else MainThemeColor.Green120,
-                        unfocusedBorderColor = if (isNicknameValid) MainThemeColor.Gray2 else MainThemeColor.Green120,
-                    ),
-                    shape = RoundedCornerShape(5.dp)
+                    isError = !isNicknameValid,
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MainThemeColor.Gray1,
+                            unfocusedContainerColor = MainThemeColor.Gray1,
+                            focusedBorderColor = if (isNicknameValid) MainThemeColor.Gray3 else MainThemeColor.Green120,
+                            unfocusedBorderColor =
+                                if (isNicknameValid) MainThemeColor.Gray2 else MainThemeColor.Green120,
+                        ),
+                    shape = RoundedCornerShape(5.dp),
                 )
 
                 Spacer(Modifier.height(5.dp))
@@ -140,7 +153,7 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
                         style = MainThemeFont.Caption,
                         color = MainThemeColor.Green120,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
                     )
                 }
             }
@@ -149,9 +162,10 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
 
             // 자기 소개 입력
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 Text(text = "자기 소개", style = MainThemeFont.TitleSmall)
                 Spacer(Modifier.height(8.dp))
@@ -160,26 +174,28 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
                     onValueChange = {
                         if (it.length <= introMaxLength) introText = it
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(140.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(140.dp),
                     placeholder = { Text("자신을 소개하는 글을 입력해보세요.") },
                     maxLines = 5,
                     textStyle = MainThemeFont.BodySmaller.copy(color = MainThemeColor.Black),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MainThemeColor.Gray1,
-                        unfocusedContainerColor = MainThemeColor.Gray1,
-                        focusedBorderColor = MainThemeColor.Gray3,
-                        unfocusedBorderColor = MainThemeColor.Gray2
-                    ),
-                    shape = RoundedCornerShape(5.dp)
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MainThemeColor.Gray1,
+                            unfocusedContainerColor = MainThemeColor.Gray1,
+                            focusedBorderColor = MainThemeColor.Gray3,
+                            unfocusedBorderColor = MainThemeColor.Gray2,
+                        ),
+                    shape = RoundedCornerShape(5.dp),
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = "${introText.length}/$introMaxLength",
                     style = MainThemeFont.Caption,
                     color = MainThemeColor.Gray4,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier.align(Alignment.End),
                 )
             }
 
@@ -187,9 +203,10 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
 
             // 인스타그램 입력
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
             ) {
                 Text(text = "인스타그램", style = MainThemeFont.TitleSmall)
                 Spacer(Modifier.height(8.dp))
@@ -200,13 +217,14 @@ fun MyPageModifyProfileScreen(modifier: Modifier = Modifier, navController: NavH
                     placeholder = { Text("@username") },
                     singleLine = true,
                     textStyle = MainThemeFont.BodySmaller.copy(color = MainThemeColor.Black),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MainThemeColor.Gray1,
-                        unfocusedContainerColor = MainThemeColor.Gray1,
-                        focusedBorderColor = MainThemeColor.Gray3,
-                        unfocusedBorderColor = MainThemeColor.Gray2
-                    ),
-                    shape = RoundedCornerShape(5.dp)
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MainThemeColor.Gray1,
+                            unfocusedContainerColor = MainThemeColor.Gray1,
+                            focusedBorderColor = MainThemeColor.Gray3,
+                            unfocusedBorderColor = MainThemeColor.Gray2,
+                        ),
+                    shape = RoundedCornerShape(5.dp),
                 )
             }
         }

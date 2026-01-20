@@ -30,20 +30,21 @@ fun SearchFilterButton(
     modifier: Modifier = Modifier,
     label: String,
     isSelected: Boolean,
-    onClick: () -> Unit = { }
+    onClick: () -> Unit = { },
 ) {
     Box(
-        modifier = modifier
-            .wrapContentSize()
-            .border(
-                1.dp,
-                if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
-                RoundedCornerShape(5.dp)
-            )
-            .clip(RoundedCornerShape(5.dp))
-            .clickable { onClick() }
-            .padding(horizontal = 12.dp, vertical = 10.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .wrapContentSize()
+                .border(
+                    1.dp,
+                    if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
+                    RoundedCornerShape(5.dp),
+                )
+                .clip(RoundedCornerShape(5.dp))
+                .clickable { onClick() }
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -51,15 +52,14 @@ fun SearchFilterButton(
             Text(
                 text = label,
                 style = MainThemeFont.Body.copy(fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal),
-                color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray4
+                color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray4,
             )
             Spacer(modifier = Modifier.width(10.dp))
             Icon(
                 painter = painterResource(id = R.drawable.triangle_down),
                 contentDescription = "검색",
                 modifier = Modifier.size(18.dp),
-                tint = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3
-
+                tint = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
             )
         }
     }

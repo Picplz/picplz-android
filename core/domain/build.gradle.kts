@@ -23,15 +23,15 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    
+
     implementation(libs.androidx.core.ktx)
-    
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    
+
     // Inject annotation
     implementation("javax.inject:javax.inject:1")
-    
+
     // Kakao (for LatLng - TODO: abstract this later)
     implementation(libs.kakao.maps)
 }

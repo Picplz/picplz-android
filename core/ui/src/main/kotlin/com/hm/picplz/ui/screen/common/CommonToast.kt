@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +31,7 @@ import kotlinx.coroutines.delay
 enum class ToastPosition {
     TOP,
     CENTER,
-    BOTTOM
+    BOTTOM,
 }
 
 @Composable
@@ -56,60 +55,67 @@ fun CommonToast(
         }
     }
 
-    val alignment = when (position) {
-        ToastPosition.TOP -> Alignment.TopCenter
-        ToastPosition.CENTER -> Alignment.Center
-        ToastPosition.BOTTOM -> Alignment.BottomCenter
-    }
+    val alignment =
+        when (position) {
+            ToastPosition.TOP -> Alignment.TopCenter
+            ToastPosition.CENTER -> Alignment.Center
+            ToastPosition.BOTTOM -> Alignment.BottomCenter
+        }
 
-    val (slideIn, slideOut) = when (position) {
-        ToastPosition.TOP -> Pair(
-            slideInVertically { -it },
-            slideOutVertically { -it }
-        )
-        ToastPosition.CENTER -> Pair(
-            slideInVertically { it / 2 },
-            slideOutVertically { it / 2 }
-        )
-        ToastPosition.BOTTOM -> Pair(
-            slideInVertically { it },
-            slideOutVertically { it }
-        )
-    }
+    val (slideIn, slideOut) =
+        when (position) {
+            ToastPosition.TOP ->
+                Pair(
+                    slideInVertically { -it },
+                    slideOutVertically { -it },
+                )
+            ToastPosition.CENTER ->
+                Pair(
+                    slideInVertically { it / 2 },
+                    slideOutVertically { it / 2 },
+                )
+            ToastPosition.BOTTOM ->
+                Pair(
+                    slideInVertically { it },
+                    slideOutVertically { it },
+                )
+        }
 
     AnimatedVisibility(
         visible = showToast,
         enter = slideIn + fadeIn(),
-        exit = slideOut + fadeOut()
+        exit = slideOut + fadeOut(),
     ) {
         Box(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = 17.dp)
-                .then(
-                    when (position) {
-                        ToastPosition.BOTTOM -> Modifier.padding(bottom = offset)
-                        ToastPosition.TOP -> Modifier.padding(top = offset)
-                        ToastPosition.CENTER -> Modifier
-                    }
-                ),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 17.dp)
+                    .then(
+                        when (position) {
+                            ToastPosition.BOTTOM -> Modifier.padding(bottom = offset)
+                            ToastPosition.TOP -> Modifier.padding(top = offset)
+                            ToastPosition.CENTER -> Modifier
+                        },
+                    ),
             contentAlignment = alignment,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = Color.Black.copy(alpha = 0.8f),
-                        shape = RoundedCornerShape(50.dp)
-                    )
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = Color.Black.copy(alpha = 0.8f),
+                            shape = RoundedCornerShape(50.dp),
+                        )
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
             ) {
                 Text(
                     text = message,
                     modifier = Modifier.fillMaxWidth(),
                     style = pretendardTypography.bodyMedium,
                     color = MainThemeColor.White,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }

@@ -4,7 +4,7 @@ data class Area(
     val id: Long,
     val name: String,
     val dong: String,
-    val ri: String?
+    val ri: String?,
 ) {
     val displayName: String
         get() = ri?.let { "$dong $it" } ?: dong

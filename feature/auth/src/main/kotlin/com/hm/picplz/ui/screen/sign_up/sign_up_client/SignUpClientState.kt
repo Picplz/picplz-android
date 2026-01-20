@@ -1,13 +1,13 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_client
 
-import com.hm.picplz.common.model.User
 import com.hm.picplz.common.mockdata.emptyUserData
+import com.hm.picplz.common.model.User
 
 data class SignUpClientState(
     val isLoading: Boolean = false,
     val error: Throwable? = null,
     val userInfo: User = emptyUserData,
-){
+) {
     companion object {
         fun idle(): SignUpClientState {
             return SignUpClientState(

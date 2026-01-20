@@ -27,14 +27,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipMode
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.util.SetStatusBarStyle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetPhotographyExperience
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetUserPhotographyExperience
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -42,63 +45,71 @@ import kotlinx.coroutines.flow.collectLatest
 fun SignUpDetailExpScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpPhotographerViewModel = hiltViewModel(),
-    signUpPhotographerNavController: NavController
-){
+    signUpPhotographerNavController: NavController,
+) {
     SetStatusBarStyle()
 
     val currentState = viewModel.state.collectAsState().value
 
-    Scaffold (
-        modifier = Modifier
-            .fillMaxSize(),
-        containerColor = MainThemeColor.White
+    Scaffold(
+        modifier =
+            Modifier
+                .fillMaxSize(),
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
-        Column (
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "경력 선택",
-                onClickBack = {viewModel.handleIntent(NavigateToPrev)}
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 15.dp)
-                    .imePadding(),
-                ) {
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 15.dp)
+                        .imePadding(),
+            ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                 ) {
                     Spacer(
-                        modifier = Modifier
-                            .height(80.dp)
+                        modifier =
+                            Modifier
+                                .height(80.dp),
                     )
                     Text(
                         text = "해당되는 경험을 골라주세요.",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(15.dp)
+                        modifier =
+                            Modifier
+                                .height(15.dp),
                     )
                     Text(
                         text = "픽플즈는 사진 경력이 없는 금손님도 환영해요!",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(30.dp)
+                        modifier =
+                            Modifier
+                                .height(30.dp),
                     )
                     FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         currentState.experienceChipList.map { chip ->
                             CommonChip(
@@ -109,18 +120,19 @@ fun SignUpDetailExpScreen(
                                     viewModel.handleIntent(SetPhotographyExperience(chip.id))
                                 },
                                 isSelected = currentState.selectedPhotographyExperienceId === chip.id,
-                                height = ChipHeight.BIG
+                                height = ChipHeight.BIG,
                             )
                         }
                     }
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
@@ -129,7 +141,7 @@ fun SignUpDetailExpScreen(
                         viewModel.handleIntent(Navigate("sign-up-career-period"))
                     },
                     enabled = currentState.selectedPhotographyExperienceId != null,
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -148,7 +160,6 @@ fun SignUpDetailExpScreen(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -157,7 +168,7 @@ fun SinUpDetailExpScreenPreview() {
     PicplzTheme {
         val signUpPhotographerNavController = rememberNavController()
         SignUpDetailExpScreen(
-            signUpPhotographerNavController = signUpPhotographerNavController
+            signUpPhotographerNavController = signUpPhotographerNavController,
         )
     }
 }

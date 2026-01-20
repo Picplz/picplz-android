@@ -8,10 +8,12 @@ interface PhotographerSource {
     suspend fun getPhotographers(): Result<PhotographerListResponse>
 }
 
-class PhotographerSourceImpl @Inject constructor(
+class PhotographerSourceImpl
+    @Inject
+    constructor(
 //    private val photographerApi: PhotographerApi,
-    private val photographerApi: DummyPhotographerProvider
-) : PhotographerSource {
-    override suspend fun getPhotographers(): Result<PhotographerListResponse> =
-        runCatching { photographerApi.getPhotographers() }
-}
+        private val photographerApi: DummyPhotographerProvider,
+    ) : PhotographerSource {
+        override suspend fun getPhotographers(): Result<PhotographerListResponse> =
+            runCatching { photographerApi.getPhotographers() }
+    }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-parcelize")
 }
 
@@ -35,7 +36,10 @@ dependencies {
     implementation(libs.androidx.foundation)
 
     // Navigation
-    implementation(libs.androidx.navigation.compose)
+    api(libs.androidx.navigation.compose)
+
+    // Serialization
+    api(libs.kotlinx.serialization.json)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -43,4 +47,11 @@ dependencies {
 
     // Kakao (for LatLng)
     implementation(libs.kakao.maps)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3")
+        force("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    }
 }

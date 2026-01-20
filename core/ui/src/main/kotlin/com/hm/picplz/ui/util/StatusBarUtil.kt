@@ -10,10 +10,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+@Suppress("DEPRECATION")
 @Composable
 fun SetStatusBarStyle(
     statusBarColor: Color = Color.Transparent,
-    isLightStatusBar: Boolean = true
+    isLightStatusBar: Boolean = true,
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -27,10 +28,11 @@ fun SetStatusBarStyle(
     }
 }
 
+@Suppress("DEPRECATION")
 fun Activity.setStatusBarStyle(
     view: View,
     statusBarColor: Color = Color.Transparent,
-    isLightStatusBar: Boolean = true
+    isLightStatusBar: Boolean = true,
 ) {
     window?.apply {
         this.statusBarColor = statusBarColor.toArgb()

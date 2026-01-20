@@ -8,6 +8,6 @@ interface PhotographerRepository {
         userLocation: LatLng,
         distanceLimit: Int = 2,
         countLimit: Int = 5,
-        userAddress: String
+        userAddress: String,
     ): Result<FilteredPhotographers>
 }
