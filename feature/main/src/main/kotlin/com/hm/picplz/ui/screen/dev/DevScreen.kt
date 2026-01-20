@@ -105,16 +105,16 @@ fun DevScreen(navController: NavHostController) {
 
             // === Detail Photographer ===
             SectionTitle("Detail Photographer")
-            DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer) }
-            DevButton("ReviewPhotographer") { navController.navigate(ReviewPhotographer) }
+            DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer(1)) }
+            DevButton("ReviewPhotographer") { navController.navigate(ReviewPhotographer(1)) }
             DevButton("DetailPhotographerPhotoReviews") {
                 navController.navigate(
-                    DetailPhotographerPhotoReviews,
+                    DetailPhotographerPhotoReviews(1),
                 )
             }
             DevButton("DetailPhotographerPhotoPortfolios") {
                 navController.navigate(
-                    DetailPhotographerPhotoPortfolios,
+                    DetailPhotographerPhotoPortfolios(1),
                 )
             }
 

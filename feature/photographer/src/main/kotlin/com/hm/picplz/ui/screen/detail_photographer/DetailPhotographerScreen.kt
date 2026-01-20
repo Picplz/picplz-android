@@ -81,6 +81,7 @@ fun DetailPhotographerScreen(
                         modifier = paddingModifier,
                         navController = navController,
                         reviewSummary = reviewSummary,
+                        photographerId = viewModel.photographerId,
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))
@@ -89,6 +90,7 @@ fun DetailPhotographerScreen(
                         modifier = paddingModifier,
                         navController = navController,
                         photoPortfolios = photoPortfolios,
+                        photographerId = viewModel.photographerId,
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))

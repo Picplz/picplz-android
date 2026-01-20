@@ -51,10 +51,12 @@ import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
 import kotlinx.coroutines.flow.collectLatest
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun DetailPhotographerReviewScreen(
-    viewModel: DetailPhotographerViewModel = hiltViewModel(),
     navController: NavController,
+    photographerId: Int,
+    viewModel: DetailPhotographerViewModel = hiltViewModel(),
 ) {
     val currentState = viewModel.state.collectAsState().value
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
@@ -148,7 +150,7 @@ fun DetailPhotographerReviewScreen(
                                             .weight(1f)
                                             .aspectRatio(1f)
                                             .clickable {
-                                                navController.navigate(DetailPhotographerPhotoReviews)
+                                                navController.navigate(DetailPhotographerPhotoReviews(photographerId))
                                             },
                                     contentAlignment = Alignment.Center,
                                 ) {
@@ -262,6 +264,6 @@ fun DetailPhotographerReviewScreenPreview() {
     val navController = rememberNavController()
 
     PicplzTheme {
-        DetailPhotographerReviewScreen(navController = navController)
+        DetailPhotographerReviewScreen(navController = navController, photographerId = 1)
     }
 }

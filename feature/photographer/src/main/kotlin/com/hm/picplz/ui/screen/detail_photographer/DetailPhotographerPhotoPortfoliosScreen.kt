@@ -20,17 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.data.mockdata.mockPhotographerInfo
 import com.hm.picplz.navigation.model.DetailPhotographerPortfolioDetail
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun DetailPhotographerPhotoPortfoliosScreen(
     navController: NavController,
-    photoPortfolios: List<PhotoPortfolio>,
+    photographerId: Int,
 ) {
+    val photoPortfolios = mockPhotographerInfo.photoPortfolios
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
     val chunkedImages = photoPortfolios.chunked(3)

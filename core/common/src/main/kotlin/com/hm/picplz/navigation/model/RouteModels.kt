@@ -55,15 +55,17 @@ data class SignUpCompletion(val userInfo: User)
 @Serializable object PhotographerEquipmentSetting
 
 // === Detail Screens ===
-@Serializable object DetailPhotographer
-
-@Serializable object ReviewPhotographer
+@Serializable
+data class DetailPhotographer(val photographerId: Int)
 
 @Serializable
-object DetailPhotographerPhotoReviews
+data class ReviewPhotographer(val photographerId: Int)
 
 @Serializable
-object DetailPhotographerPhotoPortfolios
+data class DetailPhotographerPhotoReviews(val photographerId: Int)
+
+@Serializable
+data class DetailPhotographerPhotoPortfolios(val photographerId: Int)
 
 // === Screens with Arguments ===
 @Serializable

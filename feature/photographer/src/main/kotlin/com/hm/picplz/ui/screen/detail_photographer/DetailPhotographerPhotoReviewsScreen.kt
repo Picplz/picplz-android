@@ -25,18 +25,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.hm.picplz.common.model.PhotoReview
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.data.mockdata.mockReviewSummary
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
     navController: NavController,
-    photoReviews: List<PhotoReview>,
+    photographerId: Int,
 ) {
+    // TODO: photographerId로 데이터 로드
+    val photoReviews = mockReviewSummary.photoReviews
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
     val chunkedImages = photoReviews.chunked(3)
 

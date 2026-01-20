@@ -38,6 +38,7 @@ fun ReviewSection(
     modifier: Modifier,
     navController: NavHostController,
     reviewSummary: PhotographerReviewSummary,
+    photographerId: Int,
 ) {
     val totalRating = reviewSummary.averageRating
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN) // MathUtil에서 호출
@@ -81,7 +82,7 @@ fun ReviewSection(
             horizontalPadding = 0.dp,
             verticalPadding = 0.dp,
             gap = 6.dp,
-            onClick = { navController.navigate(ReviewPhotographer) },
+            onClick = { navController.navigate(ReviewPhotographer(photographerId)) },
             modifier = modifier.align(Alignment.End),
         )
     }
