@@ -3,8 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -17,7 +17,7 @@ val localProperties = Properties().apply {
 
 android {
     namespace = "com.hm.picplz"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         compose = true
@@ -43,6 +43,7 @@ android {
         buildConfigField("String", "KAKAO_REST_API_KEY", "${localProperties["kakao_rest_api_key"]}")
         buildConfigField("String", "DEV_GUEST_TOKEN", "${localProperties["dev_guest_token"]}")
         buildConfigField("String", "DEV_USER_TOKEN", "${localProperties["dev_user_token"]}")
+        buildConfigField("String", "API_BASE_URL", "${localProperties["api_base_url"]}")
 
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = localProperties["kakao_native_app_key"] ?: ""
     }
@@ -81,6 +82,17 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:chat"))
+    implementation(project(":feature:photographer"))
+    implementation(project(":feature:mypage"))
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:main"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -108,13 +120,13 @@ dependencies {
     implementation(libs.androidx.ui.v151)
     implementation(libs.androidx.material3.v110)
     implementation(libs.ui.tooling.preview)
-    implementation(libs.hilt.android.v248)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose.v110)
 
     // Hilt Testing dependencies
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     // Navigation
     implementation(libs.androidx.navigation.compose.v260)
@@ -134,7 +146,5 @@ dependencies {
     implementation(libs.kakao.maps)
 
     // Material
-    implementation("androidx.compose.material:material:1.5.1")
+    // implementation("androidx.compose.material:material:1.5.1")
 }
-
-apply(plugin = "dagger.hilt.android.plugin")

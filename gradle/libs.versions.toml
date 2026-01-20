@@ -1,14 +1,16 @@
 [versions]
 activityComposeVersion = "1.3.1"
-agp = "8.5.1"
-hiltAndroidVersion = "2.48"
+agp = "8.13.2"
+foundation = "1.10.1"
+fragmentKtx = "1.8.9"
+hilt = "2.51.1"
 hiltNavigationComposeVersion = "1.1.0"
 kakaoMaps = "2.12.8"
 kakaoUser = "2.21.2"
 androidxActivityCompose = "1.7.2"
 coilCompose = "2.1.0"
 converterGson = "2.9.0"
-hiltAndroid = "2.48"
+ksp = "1.9.0-1.0.13"
 hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
@@ -17,21 +19,25 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
-composeBom = "2024.04.01"
+composeBom = "2024.09.00"
 coreSplashscreen = "1.0.1"
 loggingInterceptor = "4.9.3"
-material3 = "1.2.1"
-material3Version = "1.1.0"
+material3 = "1.3.0"
+material3Version = "1.3.0"
 navigationCompose = "2.7.7"
 navigationComposeVersion = "2.6.0"
 retrofit = "2.9.0"
-ui = "1.6.8"
-uiVersion = "1.5.1"
+ui = "1.7.0"
+uiVersion = "1.7.0"
 
 [libraries]
+androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-hilt-navigation-compose-v110 = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidVersion" }
-hilt-android-v248 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 kakao-maps = { module = "com.kakao.maps.open:android", version.ref = "kakaoMaps" }
 kakao-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 androidx-activity-compose-v131 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -45,9 +51,6 @@ androidx-navigation-compose-v260 = { module = "androidx.navigation:navigation-co
 androidx-ui-v151 = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -70,5 +73,9 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", versio
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 

@@ -1,0 +1,265 @@
+package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
+
+import CommonOutlinedTextField
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonModalBottomSheet
+import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.SingleNumberScrollPicker
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SelectorType
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCareerPeriod
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetSelectedSelector
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
+import kotlinx.coroutines.flow.collectLatest
+
+@Composable
+fun SignUpCareerPeriodScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpPhotographerViewModel = hiltViewModel(),
+    signUpPhotographerNavController: NavController
+) {
+    val currentState = viewModel.state.collectAsState().value
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = MainThemeColor.White
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+        ) {
+            CommonTopBar(
+                text = "경력 선택",
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) }
+            )
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 15.dp)
+                    .imePadding(),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(80.dp)
+                    )
+                    Text(
+                        text = "경력 기간을 입력해주세요.",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(15.dp)
+                    )
+                    Text(
+                        text = "1년 미만일 경우 0년 n개월로 입력해주세요.",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(30.dp),
+                    )
+                    Row(
+                        modifier = Modifier
+                            .height(40.dp),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        CommonOutlinedTextField(
+                            modifier = Modifier.width(85.dp),
+                            value = currentState.yearValue?.toString() ?: "",
+                            onValueChange = {},
+                            placeholder = "0",
+                            imeAction = ImeAction.Next,
+                            keyboardActions = {},
+                            readOnly = true,
+                            showError = false,
+                            textStyle = MaterialTheme.typography.titleMedium.copy(
+                                textAlign = TextAlign.Center
+                            ),
+                            placeholderStyle = MaterialTheme.typography.titleMedium.copy(
+                                textAlign = TextAlign.Center,
+                                color = MainThemeColor.Gray
+                            ),
+                            onClick = {
+                                viewModel.handleIntent(SetSelectedSelector(SelectorType.YEAR))
+                            },
+                        )
+                        Spacer(modifier = modifier.width(7.dp))
+                        Text(
+                            text = "년",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(modifier = modifier.width(20.dp))
+                        CommonOutlinedTextField(
+                            modifier = Modifier.width(85.dp),
+                            value = currentState.monthValue?.toString() ?: "",
+                            onValueChange = {},
+                            placeholder = "0",
+                            imeAction = ImeAction.Next,
+                            keyboardActions = {},
+                            readOnly = true,
+                            showError = false,
+                            textStyle = MaterialTheme.typography.titleMedium.copy(
+                                textAlign = TextAlign.Center
+                            ),
+                            placeholderStyle = MaterialTheme.typography.titleMedium.copy(
+                                textAlign = TextAlign.Center,
+                                color = MainThemeColor.Gray
+                            ),
+                            onClick = {
+                                viewModel.handleIntent(SetSelectedSelector(SelectorType.MONTH))
+                            },
+                        )
+                        Spacer(modifier = modifier.width(7.dp))
+                        Text(
+                            text = "개월",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .height(120.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CommonBottomButton(
+                    text = "다음",
+                    onClick = {
+                        viewModel.handleIntent(SetCareerPeriod)
+                        viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
+                    },
+                    enabled = currentState.yearValue != null && currentState.monthValue != null,
+                    containerColor = MainThemeColor.Black
+                )
+            }
+        }
+    }
+
+    fun closeBottomSheet() {
+        viewModel.handleIntent(SetSelectedSelector(SelectorType.NONE))
+    }
+
+    CareerModalBottomSheet(
+        onDismiss = { closeBottomSheet() },
+        visible = currentState.selectedSelector === SelectorType.YEAR,
+        initialNumber = currentState.yearValue ?: 0,
+        numberRange = 0..99,
+        onValueSelected = {
+            viewModel.handleIntent(SignUpPhotographerIntent.SetYearValue(it))
+            closeBottomSheet()
+        },
+    )
+    CareerModalBottomSheet(
+        onDismiss = { closeBottomSheet() },
+
+        visible = currentState.selectedSelector === SelectorType.MONTH,
+        initialNumber = currentState.monthValue ?: 0,
+        numberRange = 0..12,
+        onValueSelected = {
+            viewModel.handleIntent(SignUpPhotographerIntent.SetMonthValue(it))
+            closeBottomSheet()
+        },
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is SignUpPhotographerSideEffect.NavigateToPrev -> {
+                    signUpPhotographerNavController.popBackStack()
+                }
+
+                is SignUpPhotographerSideEffect.Navigate -> {
+                    signUpPhotographerNavController.navigate(sideEffect.destination)
+                }
+
+                else -> {}
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CareerModalBottomSheet(
+    onDismiss: () -> Unit,
+    visible: Boolean,
+    initialNumber: Int,
+    numberRange: IntRange,
+    onValueSelected: (Int) -> Unit,
+) {
+    CommonModalBottomSheet(
+        onDismissRequest = onDismiss,
+        dragHandle = null,
+        visible = visible,
+        sheetMaxHeight = 380.dp
+    ) {
+        var selectedNum by remember { mutableIntStateOf(initialNumber) }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            SingleNumberScrollPicker(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                initialNumber = initialNumber,
+                numberRange = numberRange
+            ) {
+                selectedNum = it
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            CommonBottomButton(text = "확인", onClick = {
+                onValueSelected(selectedNum)
+            })
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SignUpCareerPeriodScreenPreview() {
+    PicplzTheme {
+        val signUpPhotographerNavController = rememberNavController()
+        SignUpCareerPeriodScreen(
+            signUpPhotographerNavController = signUpPhotographerNavController
+        )
+    }
+}

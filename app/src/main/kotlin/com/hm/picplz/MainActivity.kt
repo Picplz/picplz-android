@@ -25,9 +25,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.MainNavHost
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.viewmodel.MainActivityUiState
-import com.hm.picplz.viewmodel.MainActivityUiState.Loading
-import com.hm.picplz.viewmodel.MainActivityViewModel
+import com.hm.picplz.ui.main.MainActivityUiState
+import com.hm.picplz.ui.main.MainActivityUiState.Loading
+import com.hm.picplz.ui.main.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach

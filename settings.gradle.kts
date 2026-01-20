@@ -24,4 +24,19 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "picplz"
+
 include(":app")
+
+// Core modules
+include(":core:domain")
+include(":core:data")
+include(":core:ui")
+include(":core:common")
+
+// Feature modules
+include(":feature:auth")
+include(":feature:photographer")
+include(":feature:chat")
+include(":feature:mypage")
+include(":feature:feed")
+include(":feature:main")

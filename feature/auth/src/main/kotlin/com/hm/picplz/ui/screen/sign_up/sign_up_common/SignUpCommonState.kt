@@ -1,0 +1,34 @@
+package com.hm.picplz.ui.screen.sign_up.sign_up_common
+
+import android.net.Uri
+import com.hm.picplz.common.model.NicknameFieldError
+import com.hm.picplz.common.model.SelectionState
+import com.hm.picplz.common.model.UserType
+
+data class SignUpCommonState(
+    val currentStep: Int = 0,
+    val selectedUserType: UserType? = null,
+    val isLoading: Boolean = false,
+    val error: Throwable? = null,
+    val nickname: String = "",
+    val profileImageUri: Uri? = null,
+    val nicknameFieldErrors: List<NicknameFieldError> = emptyList(),
+    val photographerSelectionState: SelectionState,
+    val userSelectionState: SelectionState,
+) {
+    companion object {
+        fun idle(): SignUpCommonState {
+            return SignUpCommonState(
+                currentStep = 0,
+                selectedUserType = null,
+                isLoading = false,
+                error = null,
+                nickname = "",
+                profileImageUri = null,
+                nicknameFieldErrors = emptyList(),
+                photographerSelectionState = SelectionState.UNSELECTED,
+                userSelectionState = SelectionState.UNSELECTED
+            )
+        }
+    }
+}
