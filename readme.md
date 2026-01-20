@@ -47,7 +47,7 @@ core:ui → core:common
 
 ### Requirements
 
-- Android Studio Ladybug (2024.2.1) 이상
+- Android Studio Otter 3 
 - JDK 17
 - Android SDK 35
 - Gradle 8.9
