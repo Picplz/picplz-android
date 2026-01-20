@@ -58,7 +58,7 @@ private val DISTRICTS =
         "북촌동", "신사동", "서교동", "합정동",
         "논현동", "잠실동",
     )
-private val TODAY_DISTRICT: String by lazy { DISTRICTS.random() }
+private val TodayDistrict: String by lazy { DISTRICTS.random() }
 
 @Composable
 fun SearchBanner(navController: NavHostController) {
@@ -90,7 +90,7 @@ fun SearchBanner(navController: NavHostController) {
             Spacer(Modifier.height(20.dp))
 
             Text(
-                text = "오늘은 $TODAY_DISTRICT 나들이 어때요?",
+                text = "오늘은 $TodayDistrict 나들이 어때요?",
                 style = MainThemeFont.TitleSmall,
                 color = MainThemeColor.White,
             )

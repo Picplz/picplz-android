@@ -10,7 +10,7 @@ sealed interface SearchPhotographerIntent {
 
     data class SetAddress(val address: String) : SearchPhotographerIntent
 
-    data class GetAddress(val Coords: LatLng) : SearchPhotographerIntent
+    data class GetAddress(val coords: LatLng) : SearchPhotographerIntent
 
     data class SetCenterCoords(val centerCoords: LatLng) : SearchPhotographerIntent
 

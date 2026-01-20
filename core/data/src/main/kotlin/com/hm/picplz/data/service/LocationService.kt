@@ -42,8 +42,14 @@ class LocationService
                 manager.isProviderEnabled(gpsProvider) -> {
                     requestLocationOnce(manager, gpsProvider, onLocationReceived, onPermissionDenied)
                 }
+
                 manager.isProviderEnabled(networkProvider) -> {
-                    requestLocationOnce(manager, networkProvider, onLocationReceived, onPermissionDenied)
+                    requestLocationOnce(
+                        manager,
+                        networkProvider,
+                        onLocationReceived,
+                        onPermissionDenied,
+                    )
                 }
             }
         }
@@ -69,7 +75,7 @@ class LocationService
                 currentListener = listener
 
                 manager.requestLocationUpdates(provider, 0L, 0f, listener)
-            } catch (securityException: SecurityException) {
+            } catch (_: SecurityException) {
                 onPermissionDenied()
             }
         }
@@ -79,6 +85,7 @@ class LocationService
                 try {
                     locationManager?.removeUpdates(listener)
                 } catch (_: SecurityException) {
+                    // Intentionally ignored: cleanup failure is not critical
                 }
             }
             currentListener = null

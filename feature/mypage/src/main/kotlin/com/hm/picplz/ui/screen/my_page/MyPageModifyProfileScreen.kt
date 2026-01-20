@@ -138,7 +138,8 @@ fun MyPageModifyProfileScreen(
                             focusedContainerColor = MainThemeColor.Gray1,
                             unfocusedContainerColor = MainThemeColor.Gray1,
                             focusedBorderColor = if (isNicknameValid) MainThemeColor.Gray3 else MainThemeColor.Green120,
-                            unfocusedBorderColor = if (isNicknameValid) MainThemeColor.Gray2 else MainThemeColor.Green120,
+                            unfocusedBorderColor =
+                                if (isNicknameValid) MainThemeColor.Gray2 else MainThemeColor.Green120,
                         ),
                     shape = RoundedCornerShape(5.dp),
                 )

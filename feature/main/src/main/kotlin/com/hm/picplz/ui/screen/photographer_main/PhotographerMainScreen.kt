@@ -101,7 +101,11 @@ fun PhotographerMainScreen(
                     Image(
                         painter =
                             painterResource(
-                                if (currentState.isActive) R.drawable.double_circle_active else R.drawable.double_circle_inactive,
+                                if (currentState.isActive) {
+                                    R.drawable.double_circle_active
+                                } else {
+                                    R.drawable.double_circle_inactive
+                                },
                             ),
                         contentDescription = "범위 이미지",
                         modifier = Modifier,
@@ -257,7 +261,12 @@ fun PhotographerMainScreen(
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Text(
-                                    text = if (currentState.isActive) "바로 촬영을 종료할까요?" else "2km 이내 고객에게\n내 위치 정보가 나타납니다",
+                                    text =
+                                        if (currentState.isActive) {
+                                            "바로 촬영을 종료할까요?"
+                                        } else {
+                                            "2km 이내 고객에게\n내 위치 정보가 나타납니다"
+                                        },
                                     textAlign = TextAlign.Center,
                                     style = pretendardTypography.titleSmall,
                                 )

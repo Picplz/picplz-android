@@ -49,7 +49,8 @@ class KakaoAuthServiceImpl
                 }
             }
 
-        override fun isKakaoTalkLoginAvailable(context: Context): Boolean = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
+        override fun isKakaoTalkLoginAvailable(context: Context): Boolean =
+            UserApiClient.instance.isKakaoTalkLoginAvailable(context)
 
         override suspend fun getUserInfo(): Result<KakaoUserInfo> =
             suspendCancellableCoroutine { cont ->

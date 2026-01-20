@@ -18,9 +18,10 @@ class AuthSourceImpl
             return runCatching {
                 val response = authApi.loginWithKaKao(KaKaoLoginRequest(accessToken))
                 if (response.isSuccessful) {
-                    response.body()?.toDomain() ?: throw Exception("Response body is null")
+                    response.body()?.toDomain()
+                        ?: error("Response body is null")
                 } else {
-                    throw Exception("Login failed: ${response.code()} ${response.errorBody()?.string()}")
+                    error("Login failed: ${response.code()} ${response.errorBody()?.string()}")
                 }
             }
         }

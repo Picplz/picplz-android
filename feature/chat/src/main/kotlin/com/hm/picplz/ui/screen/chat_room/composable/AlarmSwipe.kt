@@ -105,7 +105,10 @@ fun AlarmSwipe(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painter = if (isMuted) painterResource(R.drawable.bell_on) else painterResource(R.drawable.bell_off),
+                        painter =
+                            painterResource(
+                                if (isMuted) R.drawable.bell_on else R.drawable.bell_off,
+                            ),
                         contentDescription = null,
                         modifier = Modifier.width(20.dp),
                     )

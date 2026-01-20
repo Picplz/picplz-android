@@ -1,6 +1,5 @@
 package com.hm.picplz.data.repository
 
-import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
 import com.hm.picplz.data.source.UserDataSource
 import kotlinx.coroutines.channels.BufferOverflow
@@ -14,9 +13,11 @@ class MainRepository
     constructor(
         private val userDataSource: UserDataSource,
     ) {
-        private val _userData = MutableSharedFlow<User>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-
-        private val currentUserData get() = _userData.replayCache.firstOrNull() ?: emptyUserData
+        private val _userData =
+            MutableSharedFlow<User>(
+                replay = 1,
+                onBufferOverflow = BufferOverflow.DROP_OLDEST,
+            )
 
         val userData: Flow<User> = _userData.filterNotNull()
 

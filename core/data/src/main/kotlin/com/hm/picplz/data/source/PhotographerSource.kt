@@ -14,5 +14,6 @@ class PhotographerSourceImpl
 //    private val photographerApi: PhotographerApi,
         private val photographerApi: DummyPhotographerProvider,
     ) : PhotographerSource {
-        override suspend fun getPhotographers(): Result<PhotographerListResponse> = runCatching { photographerApi.getPhotographers() }
+        override suspend fun getPhotographers(): Result<PhotographerListResponse> =
+            runCatching { photographerApi.getPhotographers() }
     }

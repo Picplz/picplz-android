@@ -9,10 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.kakao.vectormap.GestureType
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
@@ -32,7 +32,8 @@ fun KakaoMapView(
     initialZoomLevel: Int = 17,
     onResume: () -> Unit = {},
     onPause: () -> Unit = {},
-    onCameraMoveEnd: (KakaoMap, CameraPosition, GestureType) -> Unit = { _: KakaoMap, _: CameraPosition, _: GestureType -> },
+    onCameraMoveEnd: (KakaoMap, CameraPosition, GestureType) -> Unit =
+        { _: KakaoMap, _: CameraPosition, _: GestureType -> },
     isGestureEnabled: Boolean = true,
     isOneFingerDoubleTapEnable: Boolean? = null,
     isTwoFingerSingleTapEnable: Boolean? = null,

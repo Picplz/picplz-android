@@ -1,13 +1,11 @@
 package com.hm.picplz.ui.screen.search_photographer.handler
 
 import androidx.compose.ui.geometry.Offset
-import com.hm.picplz.common.util.DisplayMetricsUtil
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
 import com.hm.picplz.ui.screen.search_photographer.util.OffsetGenerator
 
 class PhotographerSearchHandler(
-    private val displayMetricsUtil: DisplayMetricsUtil,
     private val offsetGenerator: OffsetGenerator,
 ) {
     fun process(
@@ -25,7 +23,12 @@ class PhotographerSearchHandler(
 
             is SearchPhotographerIntent.SetSelectedPhotographerId -> {
                 state.copy(
-                    selectedPhotographerId = if (state.selectedPhotographerId == intent.photographerId) null else intent.photographerId,
+                    selectedPhotographerId =
+                        if (state.selectedPhotographerId == intent.photographerId) {
+                            null
+                        } else {
+                            intent.photographerId
+                        },
                 )
             }
 

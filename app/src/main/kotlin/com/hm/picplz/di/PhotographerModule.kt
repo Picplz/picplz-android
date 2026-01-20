@@ -17,7 +17,9 @@ import javax.inject.Singleton
 abstract class PhotographerModule {
     @Binds
     @Singleton
-    abstract fun bindPhotographerRepository(photographerRepositoryImpl: PhotographerRepositoryImpl): PhotographerRepository
+    abstract fun bindPhotographerRepository(
+        photographerRepositoryImpl: PhotographerRepositoryImpl,
+    ): PhotographerRepository
 
     @Binds
     @Singleton

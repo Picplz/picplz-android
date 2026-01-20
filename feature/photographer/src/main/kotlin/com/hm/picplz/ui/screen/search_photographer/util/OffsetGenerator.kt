@@ -9,11 +9,12 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
     fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Int, Offset> {
         val maxAttempts = 1000
 
-        for (attempt in 1..maxAttempts) {
+        @Suppress("SwallowedException")
+        repeat(maxAttempts) {
             try {
                 return tryGenerateOffsets(photographers)
-            } catch (e: OffsetGenerationException) {
-                continue
+            } catch (_: OffsetGenerationException) {
+                // Retry
             }
         }
 
@@ -27,15 +28,45 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
         val minDistance = 110f
         val maxSingleAttempts = 100
 
-        val (maxOffsetX, innerCircleMaxOffsetX, outerCircleMinOffsetX) = displayMetricsUtil.calculateOffsetLimits()
+        val (maxOffsetX, innerCircleMaxOffsetX, outerCircleMinOffsetX) =
+            displayMetricsUtil.calculateOffsetLimits()
         val center = Offset(0f, 0f)
 
-        fun generateOffset(): Offset {
-            return Offset(
+        fun generateOffset(): Offset =
+            Offset(
                 (Random.nextFloat() * 2 - 1) * maxOffsetX,
                 (Random.nextFloat() * 2 - 1) * maxOffsetX,
             )
-        }
+
+        fun distanceToCenter(offset: Offset) = displayMetricsUtil.calculateScreenDistance(center, offset)
+
+        fun isTooCloseToExisting(offset: Offset) =
+            offsets.values.any { existing ->
+                displayMetricsUtil.calculateScreenDistance(existing, offset) < minDistance
+            }
+
+        fun isInvalidInnerCircle(
+            index: Int,
+            offset: Offset,
+        ) = index < 3 && (
+            distanceToCenter(offset) < minDistance ||
+                distanceToCenter(offset) > innerCircleMaxOffsetX
+        )
+
+        fun isInvalidOuterCircle(
+            index: Int,
+            offset: Offset,
+        ) = index >= 3 && distanceToCenter(offset) < outerCircleMinOffsetX
+
+        fun isInvalidActiveOffset(
+            index: Int,
+            offset: Offset,
+        ) = isTooCloseToExisting(offset) ||
+            isInvalidInnerCircle(index, offset) ||
+            isInvalidOuterCircle(index, offset)
+
+        fun isInvalidInactiveOffset(offset: Offset) =
+            isTooCloseToExisting(offset) || distanceToCenter(offset) < outerCircleMinOffsetX
 
         if (photographers.inactive.isEmpty()) {
             photographers.active.forEachIndexed { index, photographer ->
@@ -49,14 +80,7 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
                     if (attempts >= maxSingleAttempts) {
                         throw OffsetGenerationException()
                     }
-                } while (
-                    offsets.values.any { existingOffset ->
-                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
-                    } ||
-                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < minDistance) ||
-                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
-                    (index >= 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
-                )
+                } while (isInvalidActiveOffset(index, newOffset))
                 offsets[photographer.id] = newOffset
             }
         } else {
@@ -71,14 +95,7 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
                     if (attempts >= maxSingleAttempts) {
                         throw OffsetGenerationException()
                     }
-                } while (
-                    offsets.values.any { existingOffset ->
-                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
-                    } ||
-                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < minDistance) ||
-                    (index < 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) > innerCircleMaxOffsetX) ||
-                    (index >= 3 && displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX)
-                )
+                } while (isInvalidActiveOffset(index, newOffset))
                 offsets[photographer.id] = newOffset
             }
             photographers.inactive.forEach { photographer ->
@@ -92,12 +109,7 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
                     if (attempts >= maxSingleAttempts) {
                         throw OffsetGenerationException()
                     }
-                } while (
-                    offsets.values.any { existingOffset ->
-                        displayMetricsUtil.calculateScreenDistance(existingOffset, newOffset) < minDistance
-                    } ||
-                    displayMetricsUtil.calculateScreenDistance(center, newOffset) < outerCircleMinOffsetX
-                )
+                } while (isInvalidInactiveOffset(newOffset))
                 offsets[photographer.id] = newOffset
             }
         }

@@ -34,7 +34,7 @@ class SearchPhotographerViewModel
 
         private val locationHandler = LocationHandler()
         private val offsetGenerator = OffsetGenerator(displayMetricsUtil)
-        private val photographerSearchHandler = PhotographerSearchHandler(displayMetricsUtil, offsetGenerator)
+        private val photographerSearchHandler = PhotographerSearchHandler(offsetGenerator)
 
         init {
             handleIntent(SearchPhotographerIntent.FetchNearbyPhotographers)

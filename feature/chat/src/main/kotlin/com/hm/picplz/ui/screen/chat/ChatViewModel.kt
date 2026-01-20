@@ -39,7 +39,8 @@ class ChatViewModel
                 is ChatIntent.SetStatusTags -> {
                     _state.update {
                         it.copy(
-                            selectedStatusTag = if (it.selectedStatusTag == intent.statusTag) null else intent.statusTag,
+                            selectedStatusTag =
+                                if (it.selectedStatusTag == intent.statusTag) null else intent.statusTag,
                         )
                     }
                 }

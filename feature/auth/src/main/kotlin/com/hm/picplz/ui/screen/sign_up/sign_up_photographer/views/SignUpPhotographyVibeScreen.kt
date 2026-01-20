@@ -133,7 +133,9 @@ fun SignUpPhotographyVibeScreen(
                                 onClickDefaultMode = {
                                     focusManager.clearFocus()
                                     viewModel.handleIntent(SetEditingChipId(null))
-                                    viewModel.handleIntent(UpdateSelectedVibeChipList(chipId = chip.id, label = chip.label))
+                                    viewModel.handleIntent(
+                                        UpdateSelectedVibeChipList(chipId = chip.id, label = chip.label),
+                                    )
                                 },
                                 isSelected = currentState.selectedVibeChipList.any { it.id == chip.id },
                                 onUpdate = { value ->
