@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomButton
@@ -175,7 +176,7 @@ fun PhotographerMainScreen(
                         onClick = {
                             if (currentState.isActive.not()) {
                                 viewModel.handleIntent(
-                                    PhotographerMainIntent.Navigate("photographer-equipment-setting"),
+                                    PhotographerMainIntent.Navigate(PhotographerEquipmentSetting),
                                 )
                             }
                         },
