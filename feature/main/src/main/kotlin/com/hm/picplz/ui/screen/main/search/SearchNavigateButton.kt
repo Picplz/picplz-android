@@ -28,28 +28,29 @@ import com.hm.picplz.ui.theme.PicplzTheme
 fun SearchNavigateButton(
     modifier: Modifier = Modifier,
     placeholder: String,
-    onClick: () -> Unit = { }
+    onClick: () -> Unit = { },
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(46.dp)
-            .clickable { onClick() }
-            .clip(RoundedCornerShape(50.dp))
-            .background(MainThemeColor.White)
-            .padding(horizontal = 18.dp, vertical = 13.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(46.dp)
+                .clickable { onClick() }
+                .clip(RoundedCornerShape(50.dp))
+                .background(MainThemeColor.White)
+                .padding(horizontal = 18.dp, vertical = 13.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = placeholder, style = MainThemeFont.Body, color = MainThemeColor.Gray3)
             Icon(
                 painter = painterResource(id = R.drawable.search),
                 contentDescription = "검색",
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(14.dp),
             )
         }
     }
@@ -61,7 +62,7 @@ fun SearchNavigateButtonPreview() {
     PicplzTheme {
         SearchNavigateButton(
             placeholder = "촬영을 하고 싶은 장소 또는 동을 검색해보세요",
-            onClick = {}
+            onClick = {},
         )
     }
 }

@@ -1,8 +1,13 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,27 +24,30 @@ fun AreaListItem(
     modifier: Modifier = Modifier,
     area: Area,
     isSelected: Boolean = false,
-    onItemClick: (Area) -> Unit
+    onItemClick: (Area) -> Unit,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(area) },
-        colors = CardDefaults.cardColors(
-            containerColor = MainThemeColor.White
-        ),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable { onItemClick(area) },
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MainThemeColor.White,
+            ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 15.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = area.name,
                 style = pretendardTypography.bodyMedium,
-                color = MainThemeColor.Black
+                color = MainThemeColor.Black,
             )
             CommonCheckbox(
                 checked = isSelected,
@@ -54,13 +62,14 @@ fun AreaListItem(
 fun AreaListItemPreview() {
     PicplzTheme {
         AreaListItem(
-            area = Area(
-                id = 1,
-                name = "서울 서대문구 연희동",
-                dong = "무악",
-                ri = null,
-            ),
-            onItemClick = {}
+            area =
+                Area(
+                    id = 1,
+                    name = "서울 서대문구 연희동",
+                    dong = "무악",
+                    ri = null,
+                ),
+            onItemClick = {},
         )
     }
 }
@@ -70,12 +79,13 @@ fun AreaListItemPreview() {
 fun AreaListItemCheckedPreview() {
     PicplzTheme {
         AreaListItem(
-            area = Area(
-                id = 1,
-                name = "서울 서대문구 연희동",
-                dong = "무악",
-                ri = null,
-            ),
+            area =
+                Area(
+                    id = 1,
+                    name = "서울 서대문구 연희동",
+                    dong = "무악",
+                    ri = null,
+                ),
             onItemClick = {},
             isSelected = true,
         )

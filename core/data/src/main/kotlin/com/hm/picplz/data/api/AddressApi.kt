@@ -8,13 +8,13 @@ import retrofit2.http.Query
 interface AddressApi {
     @GET("api/v1/areas/search")
     suspend fun searchAreas(
-        @Query("keyword") keyword: String
+        @Query("keyword") keyword: String,
     ): AreaSearchResponse
 
     @GET("api/v1/areas/nearby")
     suspend fun getNearbyAreas(
         @Query("rad") rad: Int,
         @Query("lat") lat: Double,
-        @Query("lng") lng: Double
+        @Query("lng") lng: Double,
     ): AreaNearbyResponse
 }

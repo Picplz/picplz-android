@@ -4,13 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +25,7 @@ fun ActiveStatusBadge(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.height(20.dp)
+        modifier = modifier.height(20.dp),
     ) {
         Image(
             painter = painterResource(id = R.drawable.active_dot),
@@ -37,13 +35,14 @@ fun ActiveStatusBadge(
         Text(
             text = text,
             color = MainThemeColor.Olive,
-            style = TextStyle(
-                fontFamily = Pretendard,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp,
-                lineHeight = 12.sp * 1.4,
-                letterSpacing = 0.sp
-            )
+            style =
+                TextStyle(
+                    fontFamily = Pretendard,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                    lineHeight = 12.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
         )
     }
 }

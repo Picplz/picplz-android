@@ -27,21 +27,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.domain.model.ChatStatus
+import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.chat.composable.ChatRoomList
 import com.hm.picplz.ui.screen.chat.composable.ChatStatusTag
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.ui.screen.chat.ChatViewModel
 
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: ChatViewModel = hiltViewModel()
+    viewModel: ChatViewModel = hiltViewModel(),
 ) {
     val currentState = viewModel.state.collectAsState().value
     val tabs = ChatTabType.entries.toTypedArray()
@@ -51,15 +50,16 @@ fun ChatScreen(
         containerColor = MainThemeColor.White,
         topBar = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
+                        .padding(horizontal = 16.dp),
             ) {
                 Text(
                     text = "채팅",
                     style = pretendardTypography.titleMedium,
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier.padding(bottom = 10.dp),
                 )
             }
         },
@@ -68,19 +68,22 @@ fun ChatScreen(
                 navController = navController,
             )
         },
-        modifier = modifier
-            .fillMaxSize()
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
@@ -89,75 +92,78 @@ fun ChatScreen(
                     indicator = { tabPositions ->
                         if (selectedTabIndex < tabPositions.size) {
                             Box(
-                                modifier = Modifier
-                                    .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                    .height(2.dp)
-                                    .background(
-                                        color = MainThemeColor.Black,
-                                        shape = RoundedCornerShape(percent = 50)
-                                    )
+                                modifier =
+                                    Modifier
+                                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                                        .height(2.dp)
+                                        .background(
+                                            color = MainThemeColor.Black,
+                                            shape = RoundedCornerShape(percent = 50),
+                                        ),
                             )
                         }
                     },
                     divider = {
                         HorizontalDivider(
                             thickness = 1.dp,
-                            color = MainThemeColor.Gray3
+                            color = MainThemeColor.Gray3,
                         )
                     },
                 ) {
-                  tabs.forEach {tabType ->
-                      val tabText = when (tabType) {
-                        ChatTabType.ONGOING -> "진행중"
-                        ChatTabType.COMPLETED -> "완료됨"
-                      }
-                      val isSelected = tabType == currentState.selectedTab
-                      Tab(
-                          selected = isSelected,
-                          onClick = {
-                              viewModel.handleIntent(
-                                  ChatIntent.SetSelectedTab(tabType)
-                              )
-                          },
-                          text = {
-                              Text(
-                                  text = tabText,
-                                  style = if (isSelected) buttonText else pretendardTypography.bodyLarge,
-                                  color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
-                              )
-                          }
-                      )
-                  }
+                    tabs.forEach { tabType ->
+                        val tabText =
+                            when (tabType) {
+                                ChatTabType.ONGOING -> "진행중"
+                                ChatTabType.COMPLETED -> "완료됨"
+                            }
+                        val isSelected = tabType == currentState.selectedTab
+                        Tab(
+                            selected = isSelected,
+                            onClick = {
+                                viewModel.handleIntent(
+                                    ChatIntent.SetSelectedTab(tabType),
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = tabText,
+                                    style = if (isSelected) buttonText else pretendardTypography.bodyLarge,
+                                    color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
+                                )
+                            },
+                        )
+                    }
                 }
             }
             LazyRow(
-                modifier = Modifier
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 4.dp
-                    )
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                modifier =
+                    Modifier
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 4.dp,
+                        )
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 items(currentState.currentStatusTags) { statusTag ->
                     ChatStatusTag(
-                        label = when (statusTag) {
-                            ChatStatus.PENDING -> "예약 대기"
-                            ChatStatus.CONFIRMED -> "예약 확정"
-                            ChatStatus.REJECTED -> "촬영 거절"
-                            ChatStatus.COMPLETED -> "촬영 완료"
-                        },
+                        label =
+                            when (statusTag) {
+                                ChatStatus.PENDING -> "예약 대기"
+                                ChatStatus.CONFIRMED -> "예약 확정"
+                                ChatStatus.REJECTED -> "촬영 거절"
+                                ChatStatus.COMPLETED -> "촬영 완료"
+                            },
                         onClick = {
                             viewModel.handleIntent(
-                                ChatIntent.SetStatusTags(statusTag)
+                                ChatIntent.SetStatusTags(statusTag),
                             )
                         },
-                        isActive = currentState.selectedStatusTag == statusTag
+                        isActive = currentState.selectedStatusTag == statusTag,
                     )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
-
 
             ChatRoomList(
                 viewModel = viewModel,
@@ -175,7 +181,7 @@ fun ChatScreenPreview() {
     val navController = rememberNavController()
     PicplzTheme {
         ChatScreen(
-            navController = navController
+            navController = navController,
         )
     }
 }

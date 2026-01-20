@@ -22,21 +22,23 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
 import com.hm.picplz.ui.theme.pretendardTypography
 
+@Suppress("DEPRECATION")
 @Composable
 fun PhotoPriceSection(modifier: Modifier) {
     // 촬영 가격
     Text(
         text = "촬영 가격",
         style = buttonText,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     )
     var state by remember { mutableStateOf(0) }
     val tabTitles = listOf("프로필 Only", "카카오톡 패키지", "인스타그램 패키지")
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
     ) {
         TabRow(
             selectedTabIndex = state,
@@ -47,19 +49,20 @@ fun PhotoPriceSection(modifier: Modifier) {
                     modifier = Modifier.tabIndicatorOffset(tabPositions[state]),
                     color = MainThemeColor.Black,
                 )
-            }
+            },
         ) {
             tabTitles.forEachIndexed { index, title ->
                 Tab(
                     selected = state == index,
                     onClick = { state = index },
-                    modifier = Modifier
-                        .height(23.dp),
+                    modifier =
+                        Modifier
+                            .height(23.dp),
                     text = {
                         Text(
                             text = title,
                             style = pretendardTypography.bodySmall,
-                            fontSize = 11.5.sp
+                            fontSize = 11.5.sp,
                         )
                     },
                 )
@@ -67,7 +70,7 @@ fun PhotoPriceSection(modifier: Modifier) {
         }
         Text(
             text = "Secondary tab ${state + 1} selected",
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }

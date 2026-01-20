@@ -35,28 +35,36 @@ fun CommonSelectButton(
     selectedContentColor: Color = MainThemeColor.White,
 ) {
     Button(
-        modifier = modifier
-            .width(width)
-            .height(60.dp),
+        modifier =
+            modifier
+                .width(width)
+                .height(60.dp),
         onClick = onClick,
         shape = shape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) selectedContainerColor else unselectedContainerColor,
-            contentColor = if (isSelected) selectedContentColor else unselectedContentColor
-        ),
-        border = if (isSelected) null else BorderStroke(
-            width = 1.dp,
-            color = MainThemeColor.Gray3
-        )
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = if (isSelected) selectedContainerColor else unselectedContainerColor,
+                contentColor = if (isSelected) selectedContentColor else unselectedContentColor,
+            ),
+        border =
+            if (isSelected) {
+                null
+            } else {
+                BorderStroke(
+                    width = 1.dp,
+                    color = MainThemeColor.Gray3,
+                )
+            },
     ) {
         Text(
             text = text,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 16.sp * 1.4,
-                letterSpacing = 0.sp
-            ),
+            style =
+                TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 16.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
         )
     }
 }
@@ -72,7 +80,7 @@ fun CommonSelectButtonPreview() {
             isSelected = isSelected,
             onClick = {
                 isSelected = !isSelected
-            }
+            },
         )
     }
 }

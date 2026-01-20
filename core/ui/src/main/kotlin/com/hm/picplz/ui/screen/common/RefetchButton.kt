@@ -28,58 +28,61 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 
 @Composable
-fun RefetchButton (
+fun RefetchButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-){
+) {
     Box(
-        modifier = modifier
-            .size(width = 166.dp, height = 48.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick= onClick
-            ),
-        contentAlignment = Alignment.Center
-    ){
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MainThemeColor.White,
-                    shape = RoundedCornerShape(50.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = MainThemeColor.Gray2,
-                    shape = RoundedCornerShape(50.dp)
+        modifier =
+            modifier
+                .size(width = 166.dp, height = 48.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClick,
                 ),
-            contentAlignment = Alignment.Center,
-
-            ) {
-            Row (
-                modifier = Modifier
-                    .padding(
-                        horizontal = 15.dp,
-                        vertical = 6.dp
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier =
+                Modifier
+                    .background(
+                        color = MainThemeColor.White,
+                        shape = RoundedCornerShape(50.dp),
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = MainThemeColor.Gray2,
+                        shape = RoundedCornerShape(50.dp),
                     ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                modifier =
+                    Modifier
+                        .padding(
+                            horizontal = 15.dp,
+                            vertical = 6.dp,
+                        ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-            ){
+            ) {
                 Text(
                     text = "내 위치 새로고침",
-                    style = TextStyle(
-                        fontFamily = Pretendard,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 14.sp,
-                        lineHeight = 14.sp * 1.4,
-                        letterSpacing = 0.sp
-                    ),
-                    color = MainThemeColor.Gray4
+                    style =
+                        TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
+                            lineHeight = 14.sp * 1.4,
+                            letterSpacing = 0.sp,
+                        ),
+                    color = MainThemeColor.Gray4,
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 Image(
                     painter = painterResource(id = R.drawable.arrow_rotate_left),
-                    contentDescription = "circles"
+                    contentDescription = "circles",
                 )
             }
         }

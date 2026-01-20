@@ -24,65 +24,70 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.domain.model.Photographer
-import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.navigation.model.DetailPhotographer
+import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
 fun PhotographerCard(
     modifier: Modifier = Modifier,
     photographer: Photographer,
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
 ) {
     Row(
-        modifier = modifier
-            .background(color = MainThemeColor.White)
-            .height(140.dp)
-            .padding(vertical = 20.dp)
-            .width(345.dp)
-            .clickable { mainNavController.navigate(DetailPhotographer) }
+        modifier =
+            modifier
+                .background(color = MainThemeColor.White)
+                .height(140.dp)
+                .padding(vertical = 20.dp)
+                .width(345.dp)
+                .clickable { mainNavController.navigate(DetailPhotographer) },
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = photographer.profileImageUri),
             contentDescription = "작가 카드 프로필",
-            modifier = Modifier
-                .size(90.dp)
+            modifier =
+                Modifier
+                    .size(90.dp),
         )
         Spacer(modifier = Modifier.width(10.dp))
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Row(
-                modifier = Modifier
-                    .padding(horizontal = 2.dp)
-                    .fillMaxSize()
-                    .weight(1f),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 2.dp)
+                        .fillMaxSize()
+                        .weight(1f),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column {
                     Text(
                         text = photographer.name,
-                        style = TextStyle(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp,
-                            lineHeight = 16.sp * 1.4,
-                            letterSpacing = 0.sp,
-                        )
+                        style =
+                            TextStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                lineHeight = 16.sp * 1.4,
+                                letterSpacing = 0.sp,
+                            ),
                     )
                     DistanceText(
                         distance = photographer.distance.toString(),
-                        duration = "도보 3분"
+                        duration = "도보 3분",
                     )
                 }
                 if (photographer.isActive) {
                     ActiveStatusBadge(text = "바로 촬영")
                 }
             }
-            val vibeTags = listOf(
-                "#을지로 감성",
-                "#키치 감성",
-                "#MZ 감성",
-                "#퇴폐 감성"
-            )
+            val vibeTags =
+                listOf(
+                    "#을지로 감성",
+                    "#키치 감성",
+                    "#MZ 감성",
+                    "#퇴폐 감성",
+                )
             VibeTags(tags = vibeTags)
         }
     }
@@ -93,18 +98,19 @@ fun PhotographerCard(
 fun PhotographerCardPreview() {
     val mainNavController = rememberNavController()
     PhotographerCard(
-        photographer = Photographer(
-            id = 1,
-            name = "작가1",
-            location = null,
-            profileImageUri = "https://picsum.photos/200",
-            isActive = false,
-            workingArea = "마포구 서교동",
-            distance = 100,
-            followers = listOf(1, 2, 3),
-            socialAccount = "@account",
-            portfolioPhotos = List(5) { "https://picsum.photos/100" },
-        ),
-        mainNavController = mainNavController
+        photographer =
+            Photographer(
+                id = 1,
+                name = "작가1",
+                location = null,
+                profileImageUri = "https://picsum.photos/200",
+                isActive = false,
+                workingArea = "마포구 서교동",
+                distance = 100,
+                followers = listOf(1, 2, 3),
+                socialAccount = "@account",
+                portfolioPhotos = List(5) { "https://picsum.photos/100" },
+            ),
+        mainNavController = mainNavController,
     )
 }

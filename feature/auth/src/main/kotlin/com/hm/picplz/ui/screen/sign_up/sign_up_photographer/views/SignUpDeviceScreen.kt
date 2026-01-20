@@ -22,18 +22,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.ui.util.SetStatusBarStyle
-
 import com.hm.picplz.ui.screen.common.CommonAddButton
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.RemoveDeviceFromCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -48,60 +49,65 @@ fun SignUpDeviceScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "활용 기기 선택",
-                onClickBack = { viewModel.handleIntent(NavigateToPrev) }
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 16.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(top = 16.dp),
                 ) {
                     Text(
                         text = "활용 기기를 선택해 주세요.",
-                        style = pretendardTypography.titleMedium
+                        style = pretendardTypography.titleMedium,
                     )
                     Spacer(modifier = Modifier.height(30.dp))
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(220.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(220.dp),
                     ) {
                         Text(
                             text = "내 핸드폰",
-                            style = pretendardTypography.titleSmall
+                            style = pretendardTypography.titleSmall,
                         )
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState())
-                                .padding(top = 10.dp, end = 10.dp),
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(top = 10.dp, end = 10.dp),
                         ) {
                             Column(
-                                verticalArrangement = Arrangement.spacedBy(17.dp)
+                                verticalArrangement = Arrangement.spacedBy(17.dp),
                             ) {
                                 currentState.phoneDevices.forEach { device ->
                                     DeviceItem(
                                         device = device,
                                         onRemove = {
                                             viewModel.handleIntent(RemoveDeviceFromCategory(device))
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -110,35 +116,37 @@ fun SignUpDeviceScreen(
                                 text = "추가하기 +",
                                 onClick = {
                                     viewModel.handleIntent(Navigate("sign-up-add-device?category=phone"))
-                                }
+                                },
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(220.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(220.dp),
                     ) {
                         Text(
                             text = "내 카메라",
-                            style = pretendardTypography.titleSmall
+                            style = pretendardTypography.titleSmall,
                         )
                         Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState())
-                                .padding(top = 10.dp, end = 10.dp),
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(top = 10.dp, end = 10.dp),
                         ) {
                             Column(
-                                verticalArrangement = Arrangement.spacedBy(17.dp)
+                                verticalArrangement = Arrangement.spacedBy(17.dp),
                             ) {
                                 currentState.cameraDevices.forEach { device ->
                                     DeviceItem(
                                         device = device,
                                         onRemove = {
                                             viewModel.handleIntent(RemoveDeviceFromCategory(device))
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -147,18 +155,19 @@ fun SignUpDeviceScreen(
                                 text = "추가하기 +",
                                 onClick = {
                                     viewModel.handleIntent(Navigate("sign-up-add-device?category=camera"))
-                                }
+                                },
                             )
                         }
                     }
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
@@ -166,7 +175,7 @@ fun SignUpDeviceScreen(
                         viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
                     },
                     enabled = currentState.phoneDevices.isNotEmpty() || currentState.cameraDevices.isNotEmpty(),
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }

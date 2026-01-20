@@ -34,44 +34,49 @@ fun CommonDialog(
     content: @Composable () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = { onDismissRequest() }
+        onDismissRequest = { onDismissRequest() },
     ) {
         Surface(
-            modifier = modifier
-                .width(dialogWidth),
+            modifier =
+                modifier
+                    .width(dialogWidth),
             shape = dialogShape,
             color = backgroundColor,
             tonalElevation = dialogElevation,
         ) {
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
+                modifier =
+                    Modifier
+                        .padding(8.dp),
             ) {
                 Row {
                     Box(
-                        modifier = Modifier
-                            .width(if(hasQuit) (dialogWidth - 36.dp) else (dialogWidth - 18.dp))
-                            .padding(
-                                start = 18.dp,
-                                top = 18.dp,
-                                bottom = 18.dp,
-                                end = if(hasQuit) 0.dp else 18.dp
-                            ),
+                        modifier =
+                            Modifier
+                                .width(if (hasQuit) (dialogWidth - 36.dp) else (dialogWidth - 18.dp))
+                                .padding(
+                                    start = 18.dp,
+                                    top = 18.dp,
+                                    bottom = 18.dp,
+                                    end = if (hasQuit) 0.dp else 18.dp,
+                                ),
                     ) {
                         content()
                     }
                     if (hasQuit) {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.TopCenter
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
+                            contentAlignment = Alignment.TopCenter,
                         ) {
                             Image(
-                                modifier = Modifier
-                                    .size(18.dp)
-                                    .clickable { onDismissRequest() },
+                                modifier =
+                                    Modifier
+                                        .size(18.dp)
+                                        .clickable { onDismissRequest() },
                                 painter = painterResource(id = R.drawable.close),
-                                contentDescription = "Close Dialog"
+                                contentDescription = "Close Dialog",
                             )
                         }
                     }
@@ -87,8 +92,7 @@ fun CommonDialogPreview() {
     CommonDialog(
         onDismissRequest = {},
     ) {
-        Column(
-        ) {
+        Column {
             Text(text = "∙ 한글, 영문, 숫자 입력 가능 (2~15자)")
             Text(text = "∙ 중복 닉네임은 불가")
             Text(text = "∙ 이모티콘, 특수문자 사용 불가")
@@ -104,8 +108,7 @@ fun CommonDialogNoQuitPreview() {
         onDismissRequest = {},
         hasQuit = false,
     ) {
-        Column(
-        ) {
+        Column {
             Text(text = "∙ 한글, 영문, 숫자 입력 가능 (2~15자)")
             Text(text = "∙ 중복 닉네임은 불가")
             Text(text = "∙ 이모티콘, 특수문자 사용 불가")

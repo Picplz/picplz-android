@@ -30,16 +30,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.ui.util.SetStatusBarStyle
-import com.hm.picplz.ui.screen.common.CommonFilledTextField
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonFilledTextField
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -55,47 +55,50 @@ fun SignUpNicknameScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = {
-                        focusManager.clearFocus()
-                    })
-                },
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .imePadding()
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            focusManager.clearFocus()
+                        })
+                    },
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "닉네임 설정하기",
                 onClickBack = { viewModel.handleIntent(SignUpCommonIntent.NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = {
-                            focusManager.clearFocus()
-                        })
-                    },
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(onTap = {
+                                focusManager.clearFocus()
+                            })
+                        },
+                contentAlignment = Alignment.Center,
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = "닉네임을 설정해주세요",
                         modifier = Modifier,
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineMedium,
                     )
                     Spacer(modifier = modifier.height(14.dp))
                     CommonFilledTextField(
@@ -112,36 +115,40 @@ fun SignUpNicknameScreen(
                         },
                     )
                     Text(
-                        modifier = Modifier
-                            .padding(top = 5.dp),
-                        text = buildAnnotatedString {
-                            append("∙  한글, 영문, 숫자 입력 가능 (2~15자)\n")
-                            append("∙  중복 닉네임은 불가\n")
-                            append("∙  이모티콘, 특수문자 사용이 불가\n")
-                            append("∙  닉네임의 처음과 마지막 부분 공백 사용 불가")
-                        },
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp,
-                            lineHeight = 16.8.sp,
-                            letterSpacing = 0.sp,
-                            color = MainThemeColor.Gray3,
-                        )
+                        modifier =
+                            Modifier
+                                .padding(top = 5.dp),
+                        text =
+                            buildAnnotatedString {
+                                append("∙  한글, 영문, 숫자 입력 가능 (2~15자)\n")
+                                append("∙  중복 닉네임은 불가\n")
+                                append("∙  이모티콘, 특수문자 사용이 불가\n")
+                                append("∙  닉네임의 처음과 마지막 부분 공백 사용 불가")
+                            },
+                        style =
+                            TextStyle(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 12.sp,
+                                lineHeight = 16.8.sp,
+                                letterSpacing = 0.sp,
+                                color = MainThemeColor.Gray3,
+                            ),
                     )
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
                     onClick = { viewModel.handleIntent(Navigate("sign-up-profile")) },
                     enabled = currentState.nickname.isNotEmpty() && currentState.nicknameFieldErrors.isEmpty(),
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }

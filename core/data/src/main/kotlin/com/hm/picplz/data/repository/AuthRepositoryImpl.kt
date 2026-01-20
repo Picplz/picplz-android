@@ -8,32 +8,33 @@ import com.hm.picplz.domain.model.KakaoUserInfo
 import com.hm.picplz.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
-    private val authService: AuthService,
-    private val kakaoAuthService: KakaoAuthService
-) : AuthRepository {
-
-    override suspend fun loginWithKakao(context: Context): Result<KaKaoLoginResponse> {
-        return getKakaoOAuthToken(context)
-            .mapCatching { token -> authService.loginWithKaKao(token.accessToken).getOrThrow() }
-    }
-
-    private suspend fun getKakaoOAuthToken(context: Context) =
-        if (kakaoAuthService.isKakaoTalkLoginAvailable(context)) {
-            kakaoAuthService.loginWithKakaoTalk(context)
-        } else {
-            kakaoAuthService.loginWithKakaoAccount(context)
+class AuthRepositoryImpl
+    @Inject
+    constructor(
+        private val authService: AuthService,
+        private val kakaoAuthService: KakaoAuthService,
+    ) : AuthRepository {
+        override suspend fun loginWithKakao(context: Context): Result<KaKaoLoginResponse> {
+            return getKakaoOAuthToken(context)
+                .mapCatching { token -> authService.loginWithKaKao(token.accessToken).getOrThrow() }
         }
 
-    override suspend fun getKakaoUserInfo(): Result<KakaoUserInfo> {
-        return kakaoAuthService.getUserInfo()
-    }
+        private suspend fun getKakaoOAuthToken(context: Context) =
+            if (kakaoAuthService.isKakaoTalkLoginAvailable(context)) {
+                kakaoAuthService.loginWithKakaoTalk(context)
+            } else {
+                kakaoAuthService.loginWithKakaoAccount(context)
+            }
 
-    override suspend fun unlinkKakao(): Result<Unit> {
-        return kakaoAuthService.unlink()
-    }
+        override suspend fun getKakaoUserInfo(): Result<KakaoUserInfo> {
+            return kakaoAuthService.getUserInfo()
+        }
 
-    override fun isKakaoTalkLoginAvailable(context: Context): Boolean {
-        return kakaoAuthService.isKakaoTalkLoginAvailable(context)
+        override suspend fun unlinkKakao(): Result<Unit> {
+            return kakaoAuthService.unlink()
+        }
+
+        override fun isKakaoTalkLoginAvailable(context: Context): Boolean {
+            return kakaoAuthService.isKakaoTalkLoginAvailable(context)
+        }
     }
-}

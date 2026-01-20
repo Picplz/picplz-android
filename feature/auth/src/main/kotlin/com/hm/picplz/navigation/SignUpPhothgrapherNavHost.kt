@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hm.picplz.domain.model.DeviceCategory
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpAddDeviceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpCareerPeriodScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDetailExpScreen
@@ -14,14 +15,13 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpDeviceSc
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpExperienceScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpMainLocationScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views.SignUpPhotographyVibeScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 
 @Composable
 fun SignUpPhotographerNavHost(
     mainNavController: NavHostController,
     signUpPhotographerNavController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: SignUpPhotographerViewModel = viewModel()
+    viewModel: SignUpPhotographerViewModel = viewModel(),
 ) {
     NavHost(
         navController = signUpPhotographerNavController,
@@ -40,7 +40,7 @@ fun SignUpPhotographerNavHost(
             SignUpDetailExpScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-photography-vibe") {
@@ -48,14 +48,14 @@ fun SignUpPhotographerNavHost(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
                 mainNavController = mainNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-career-period") {
             SignUpCareerPeriodScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-main-location") {
@@ -63,28 +63,29 @@ fun SignUpPhotographerNavHost(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
                 mainNavController = mainNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-device") {
             SignUpDeviceScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("sign-up-add-device?category={category}") { backStackEntry ->
             val categoryString = backStackEntry.arguments?.getString("category") ?: "phone"
-            val category = when (categoryString.lowercase()) {
-                "camera" -> DeviceCategory.CAMERA
-                "phone" -> DeviceCategory.PHONE
-                else -> DeviceCategory.PHONE
-            }
+            val category =
+                when (categoryString.lowercase()) {
+                    "camera" -> DeviceCategory.CAMERA
+                    "phone" -> DeviceCategory.PHONE
+                    else -> DeviceCategory.PHONE
+                }
             SignUpAddDeviceScreen(
                 modifier = modifier,
                 signUpPhotographerNavController = signUpPhotographerNavController,
                 viewModel = viewModel,
-                category = category
+                category = category,
             )
         }
     }

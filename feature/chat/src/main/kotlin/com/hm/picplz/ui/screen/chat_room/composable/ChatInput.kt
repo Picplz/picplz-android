@@ -30,42 +30,45 @@ fun ChatInput(
     onClickMenu: () -> Unit = {},
     onClickSend: () -> Unit = {},
     inputText: String = "",
-    onInputChanged: (String) -> Unit = {}
+    onInputChanged: (String) -> Unit = {},
 ) {
     Row(
-        modifier = modifier
-            .height(80.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 15.dp),
+        modifier =
+            modifier
+                .height(80.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Box(
-            modifier = Modifier
-                .size(30.dp)
-                .clip(CircleShape)
-                .border(
-                    width = 1.dp,
-                    color = MainThemeColor.Black,
-                    shape = CircleShape
-                )
-                .clickable{
-                    onClickMenu()
-                },
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MainThemeColor.Black,
+                        shape = CircleShape,
+                    )
+                    .clickable {
+                        onClickMenu()
+                    },
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.plus_icon),
                 contentDescription = null,
-                tint = MainThemeColor.Black
+                tint = MainThemeColor.Black,
             )
         }
 
         Spacer(modifier = Modifier.width(10.dp))
 
         ChatTextField(
-            modifier = Modifier
-                .weight(1f),
+            modifier =
+                Modifier
+                    .weight(1f),
             inputText = inputText,
             onInputChanged = onInputChanged,
         )
@@ -73,23 +76,24 @@ fun ChatInput(
         Spacer(modifier = Modifier.width(10.dp))
 
         Box(
-            modifier = Modifier
-                .size(30.dp)
-                .clip(CircleShape)
-                .border(
-                    width = 1.dp,
-                    color = MainThemeColor.Black,
-                    shape = CircleShape
-                )
-                .clickable{
-                    onClickSend()
-                },
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MainThemeColor.Black,
+                        shape = CircleShape,
+                    )
+                    .clickable {
+                        onClickSend()
+                    },
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.triangle_arrow_icon),
                 contentDescription = null,
-                tint = MainThemeColor.Black
+                tint = MainThemeColor.Black,
             )
         }
     }

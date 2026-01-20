@@ -39,30 +39,32 @@ fun CommonIconButton(
     borderRadius: Dp = 0.dp,
     @DrawableRes iconResId: Int? = null,
     iconSize: Dp = 8.dp,
-    location: String = "left",                // left || right
-    gap: Dp = 4.dp,                           // 텍스트, 아이콘 사이의 간격
+    location: String = "left",
+    gap: Dp = 4.dp,
     onClick: (() -> Unit)? = null,
 ) {
-    val clickableModifier = onClick?.let {
-        Modifier.clickable { it() }
-    } ?: Modifier // onClick이 null일 경우 clickable modifier를 적용하지 않음
+    val clickableModifier =
+        onClick?.let {
+            Modifier.clickable { it() }
+        } ?: Modifier // onClick이 null일 경우 clickable modifier를 적용하지 않음
 
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(borderRadius))
-            .then(clickableModifier)
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(borderRadius))
+                .then(clickableModifier)
+                .background(backgroundColor),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontalPadding, verticalPadding)
+            modifier = Modifier.padding(horizontalPadding, verticalPadding),
         ) {
             if (location == "left" && iconResId != null) {
                 Image(
                     painter = painterResource(id = iconResId),
                     contentDescription = "icon Button image",
-                    modifier = Modifier.size(iconSize)
+                    modifier = Modifier.size(iconSize),
                 )
                 Spacer(modifier = Modifier.width(gap))
             }
@@ -70,14 +72,14 @@ fun CommonIconButton(
             Text(
                 text = label,
                 color = textColor,
-                style = textStyle
+                style = textStyle,
             )
 
             if (location == "right" && iconResId != null) {
                 Spacer(modifier = Modifier.width(gap))
                 Image(
                     painter = painterResource(id = iconResId),
-                    contentDescription = "icon Button image"
+                    contentDescription = "icon Button image",
                 )
             }
         }
@@ -94,7 +96,7 @@ fun CommonIconButtonPreview() {
             backgroundColor = MainThemeColor.Gray2,
             textColor = MainThemeColor.Gray4,
             iconResId = R.drawable.follow,
-            location = "right"
+            location = "right",
         )
     }
 }
@@ -108,7 +110,7 @@ fun CommonIconButtonPreview2() {
             backgroundColor = MainThemeColor.Black,
             textColor = MainThemeColor.White,
             iconResId = R.drawable.following,
-            location = "left"
+            location = "left",
         )
     }
 }

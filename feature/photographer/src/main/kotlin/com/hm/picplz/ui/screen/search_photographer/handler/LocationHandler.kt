@@ -4,7 +4,10 @@ import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
 
 class LocationHandler {
-    fun process(intent: SearchPhotographerIntent, state: SearchPhotographerState): SearchPhotographerState? {
+    fun process(
+        intent: SearchPhotographerIntent,
+        state: SearchPhotographerState,
+    ): SearchPhotographerState? {
         return when (intent) {
             is SearchPhotographerIntent.SetAddress -> {
                 state.copy(address = intent.address)
@@ -17,7 +20,7 @@ class LocationHandler {
             is SearchPhotographerIntent.SetCurrentLocation -> {
                 state.copy(
                     userLocation = intent.location,
-                    isFetchingGPS = false
+                    isFetchingGPS = false,
                 )
             }
 

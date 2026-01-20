@@ -6,20 +6,22 @@ import com.hm.picplz.domain.repository.PhotographerRepository
 import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
-class PhotographerRepositoryImpl @Inject constructor(
-    private val photographerService: PhotographerService
-) : PhotographerRepository {
-    override suspend fun getNearbyPhotographers(
-        userLocation: LatLng,
-        distanceLimit: Int,
-        countLimit: Int,
-        userAddress: String
-    ): Result<FilteredPhotographers> {
-        return photographerService.getNearbyPhotographers(
-            userLocation,
-            distanceLimit,
-            countLimit,
-            userAddress
-        )
+class PhotographerRepositoryImpl
+    @Inject
+    constructor(
+        private val photographerService: PhotographerService,
+    ) : PhotographerRepository {
+        override suspend fun getNearbyPhotographers(
+            userLocation: LatLng,
+            distanceLimit: Int,
+            countLimit: Int,
+            userAddress: String,
+        ): Result<FilteredPhotographers> {
+            return photographerService.getNearbyPhotographers(
+                userLocation,
+                distanceLimit,
+                countLimit,
+                userAddress,
+            )
+        }
     }
-}

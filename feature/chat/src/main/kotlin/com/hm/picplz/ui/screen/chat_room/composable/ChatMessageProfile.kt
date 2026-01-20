@@ -20,17 +20,19 @@ fun ChatMessageProfile(
     profileImageUri: String?,
 ) {
     AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(profileImageUri ?: R.drawable.active_dot)
-            .crossfade(true)
-            .placeholder(R.drawable.active_dot)
-            .error(R.drawable.active_dot)
-            .build(),
+        model =
+            ImageRequest.Builder(LocalContext.current)
+                .data(profileImageUri ?: R.drawable.active_dot)
+                .crossfade(true)
+                .placeholder(R.drawable.active_dot)
+                .error(R.drawable.active_dot)
+                .build(),
         contentDescription = "메세지 프로필",
-        modifier = Modifier
-            .size(30.dp)
-            .clip(CircleShape),
-        contentScale = ContentScale.Crop
+        modifier =
+            modifier
+                .size(30.dp)
+                .clip(CircleShape),
+        contentScale = ContentScale.Crop,
     )
 }
 
@@ -39,7 +41,7 @@ fun ChatMessageProfile(
 fun ChatMessageProfilePreview() {
     PicplzTheme {
         ChatMessageProfile(
-            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large",
         )
     }
 }

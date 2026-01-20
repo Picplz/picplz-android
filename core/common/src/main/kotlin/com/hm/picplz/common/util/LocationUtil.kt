@@ -10,21 +10,28 @@ import kotlin.math.sqrt
 object LocationUtil {
     private const val EARTH_RADIUS_KM = 6371.0
 
-    fun getDistance(location1: LatLng, location2: LatLng): Double {
+    fun getDistance(
+        location1: LatLng,
+        location2: LatLng,
+    ): Double {
         val earthRadius = EARTH_RADIUS_KM
         val deltaLat = Math.toRadians(location2.latitude - location1.latitude)
         val deltaLng = Math.toRadians(location2.longitude - location1.longitude)
 
-        val haversine = sin(deltaLat/2).pow(2) +
+        val haversine =
+            sin(deltaLat / 2).pow(2) +
                 cos(Math.toRadians(location1.latitude)) *
                 cos(Math.toRadians(location2.latitude)) *
-                sin(deltaLng/2).pow(2)
+                sin(deltaLng / 2).pow(2)
 
-        val angularDistance = 2 * atan2(sqrt(haversine), sqrt(1-haversine))
+        val angularDistance = 2 * atan2(sqrt(haversine), sqrt(1 - haversine))
         return earthRadius * angularDistance
     }
 
-    fun calculateRelativeDistance(from: LatLng, to: LatLng): Pair<Double, Double> {
+    fun calculateRelativeDistance(
+        from: LatLng,
+        to: LatLng,
+    ): Pair<Double, Double> {
         val latKmPerDegree = 111.0
         val lngKmPerDegree = 111.0 * cos(Math.toRadians(from.latitude))
 

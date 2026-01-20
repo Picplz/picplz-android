@@ -34,20 +34,22 @@ fun ScheduleCardNone(
     horizontalPadding: Dp = 18.dp,
     verticalPadding: Dp = 20.dp,
     borderRadius: Dp = 5.dp,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(borderRadius))
-            .border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(borderRadius))
-            .clickable { onClick() }
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(borderRadius))
+                .border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(borderRadius))
+                .clickable { onClick() },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontalPadding, verticalPadding),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontalPadding, verticalPadding),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column {
@@ -57,7 +59,7 @@ fun ScheduleCardNone(
             }
             Image(
                 painter = painterResource(id = R.drawable.triangle_right),
-                contentDescription = "triangle_right"
+                contentDescription = "triangle_right",
             )
         }
     }
@@ -70,7 +72,7 @@ fun ScheduleCardNonePreview() {
         ScheduleCardNone(
             mainText = "진행중인 촬영이 없어요",
             subText = "촬영지를 검색하고 작가들을 둘러보세요",
-            onClick = {}
+            onClick = {},
         )
     }
 }

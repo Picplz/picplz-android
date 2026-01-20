@@ -20,35 +20,37 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 
 @Composable
-fun AddressMarker (
+fun AddressMarker(
     modifier: Modifier = Modifier,
     address: String?,
 ) {
     Row(
-        modifier = modifier
-            .padding(
-                horizontal = 15.dp,
-            ),
+        modifier =
+            modifier
+                .padding(
+                    horizontal = 15.dp,
+                ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.End,
     ) {
         Image(
             painter = painterResource(id = R.drawable.marker_map),
-            contentDescription = "지도 표시 마커"
+            contentDescription = "지도 표시 마커",
         )
         Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text = address?: "대한민국 어딘가",
+            text = address ?: "대한민국 어딘가",
             modifier = Modifier,
             color = MainThemeColor.Black,
-            style = TextStyle(
-                fontFamily = Pretendard,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
-                lineHeight = 18.sp * 1.4,
-                letterSpacing = 0.sp
-            ),
-            maxLines = 1
+            style =
+                TextStyle(
+                    fontFamily = Pretendard,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                    lineHeight = 18.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
+            maxLines = 1,
         )
     }
 }

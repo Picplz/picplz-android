@@ -42,66 +42,74 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIn
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetCareerPeriod
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetSelectedSelector
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpCareerPeriodScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpPhotographerViewModel = hiltViewModel(),
-    signUpPhotographerNavController: NavController
+    signUpPhotographerNavController: NavController,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        containerColor = MainThemeColor.White
+        modifier =
+            Modifier
+                .fillMaxSize(),
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .padding(innerPadding)
+            modifier =
+                modifier
+                    .padding(innerPadding),
         ) {
             CommonTopBar(
                 text = "경력 선택",
-                onClickBack = { viewModel.handleIntent(NavigateToPrev) }
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 15.dp)
-                    .imePadding(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 15.dp)
+                        .imePadding(),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                 ) {
                     Spacer(
-                        modifier = Modifier
-                            .height(80.dp)
+                        modifier =
+                            Modifier
+                                .height(80.dp),
                     )
                     Text(
                         text = "경력 기간을 입력해주세요.",
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(15.dp)
+                        modifier =
+                            Modifier
+                                .height(15.dp),
                     )
                     Text(
                         text = "1년 미만일 경우 0년 n개월로 입력해주세요.",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(30.dp),
+                        modifier =
+                            Modifier
+                                .height(30.dp),
                     )
                     Row(
-                        modifier = Modifier
-                            .height(40.dp),
-                        verticalAlignment = Alignment.Bottom
+                        modifier =
+                            Modifier
+                                .height(40.dp),
+                        verticalAlignment = Alignment.Bottom,
                     ) {
                         CommonOutlinedTextField(
                             modifier = Modifier.width(85.dp),
@@ -112,13 +120,15 @@ fun SignUpCareerPeriodScreen(
                             keyboardActions = {},
                             readOnly = true,
                             showError = false,
-                            textStyle = MaterialTheme.typography.titleMedium.copy(
-                                textAlign = TextAlign.Center
-                            ),
-                            placeholderStyle = MaterialTheme.typography.titleMedium.copy(
-                                textAlign = TextAlign.Center,
-                                color = MainThemeColor.Gray
-                            ),
+                            textStyle =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    textAlign = TextAlign.Center,
+                                ),
+                            placeholderStyle =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    textAlign = TextAlign.Center,
+                                    color = MainThemeColor.Gray,
+                                ),
                             onClick = {
                                 viewModel.handleIntent(SetSelectedSelector(SelectorType.YEAR))
                             },
@@ -138,13 +148,15 @@ fun SignUpCareerPeriodScreen(
                             keyboardActions = {},
                             readOnly = true,
                             showError = false,
-                            textStyle = MaterialTheme.typography.titleMedium.copy(
-                                textAlign = TextAlign.Center
-                            ),
-                            placeholderStyle = MaterialTheme.typography.titleMedium.copy(
-                                textAlign = TextAlign.Center,
-                                color = MainThemeColor.Gray
-                            ),
+                            textStyle =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    textAlign = TextAlign.Center,
+                                ),
+                            placeholderStyle =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    textAlign = TextAlign.Center,
+                                    color = MainThemeColor.Gray,
+                                ),
                             onClick = {
                                 viewModel.handleIntent(SetSelectedSelector(SelectorType.MONTH))
                             },
@@ -158,11 +170,12 @@ fun SignUpCareerPeriodScreen(
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
@@ -171,7 +184,7 @@ fun SignUpCareerPeriodScreen(
                         viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
                     },
                     enabled = currentState.yearValue != null && currentState.monthValue != null,
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -193,7 +206,6 @@ fun SignUpCareerPeriodScreen(
     )
     CareerModalBottomSheet(
         onDismiss = { closeBottomSheet() },
-
         visible = currentState.selectedSelector === SelectorType.MONTH,
         initialNumber = currentState.monthValue ?: 0,
         numberRange = 0..12,
@@ -233,7 +245,7 @@ fun CareerModalBottomSheet(
         onDismissRequest = onDismiss,
         dragHandle = null,
         visible = visible,
-        sheetMaxHeight = 380.dp
+        sheetMaxHeight = 380.dp,
     ) {
         var selectedNum by remember { mutableIntStateOf(initialNumber) }
 
@@ -241,7 +253,7 @@ fun CareerModalBottomSheet(
             SingleNumberScrollPicker(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 initialNumber = initialNumber,
-                numberRange = numberRange
+                numberRange = numberRange,
             ) {
                 selectedNum = it
             }
@@ -259,7 +271,7 @@ fun SignUpCareerPeriodScreenPreview() {
     PicplzTheme {
         val signUpPhotographerNavController = rememberNavController()
         SignUpCareerPeriodScreen(
-            signUpPhotographerNavController = signUpPhotographerNavController
+            signUpPhotographerNavController = signUpPhotographerNavController,
         )
     }
 }

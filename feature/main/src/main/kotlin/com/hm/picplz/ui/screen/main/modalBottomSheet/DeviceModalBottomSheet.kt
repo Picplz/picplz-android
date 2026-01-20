@@ -45,15 +45,16 @@ fun DeviceModalBottomSheet(
         visibleCloseButton = true,
         onDismissRequest = onDismiss,
         dragHandle = null,
-        sheetMaxHeight = 339.dp + 84.dp
+        sheetMaxHeight = 339.dp + 84.dp,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header()
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
             ) {
                 DeviceContent(
                     phoneOptions = phoneOptions,
@@ -65,7 +66,7 @@ fun DeviceModalBottomSheet(
                         toggleSelection(it, selectedCameras) {
                             selectedCameras = it
                         }
-                    }
+                    },
                 )
             }
 
@@ -76,7 +77,7 @@ fun DeviceModalBottomSheet(
                 },
                 onSubmit = {
                     // TODO: 선택된 기기로 작가 필터링
-                }
+                },
             )
         }
     }
@@ -88,9 +89,10 @@ private fun Header() {
         Text(
             text = "촬영 기기",
             style = MainThemeFont.TitleSmall,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 12.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 12.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -103,7 +105,7 @@ private fun DeviceContent(
     selectedPhones: Set<String>,
     selectedCameras: Set<String>,
     onTogglePhone: (String) -> Unit,
-    onToggleCamera: (String) -> Unit
+    onToggleCamera: (String) -> Unit,
 ) {
     Column {
         DeviceChipSection(
@@ -141,13 +143,14 @@ private fun DeviceChipSection(
 
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         options.forEach { option ->
             CommonChip(
                 label = option,
                 isSelected = option in selected,
-                onClickDefaultMode = { onToggle(option) })
+                onClickDefaultMode = { onToggle(option) },
+            )
         }
     }
 }
@@ -155,14 +158,15 @@ private fun DeviceChipSection(
 @Composable
 private fun Footer(
     onReset: () -> Unit,
-    onSubmit: () -> Unit
+    onSubmit: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 45.dp, top = 30.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
+                .padding(bottom = 45.dp, top = 30.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         CommonBottomButton(
             text = "초기화",
@@ -170,12 +174,12 @@ private fun Footer(
             modifier = Modifier.weight(1f),
             contentColor = MainThemeColor.Black,
             borderColor = MainThemeColor.Gray3,
-            containerColor = MainThemeColor.White
+            containerColor = MainThemeColor.White,
         )
         CommonBottomButton(
             text = "{}명 작가보기",
             onClick = onSubmit,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(2f),
         )
     }
 }
@@ -183,9 +187,9 @@ private fun Footer(
 private fun toggleSelection(
     option: String,
     currentSet: Set<String>,
-    onUpdate: (Set<String>) -> Unit
+    onUpdate: (Set<String>) -> Unit,
 ) {
     onUpdate(
-        if (option in currentSet) currentSet - option else currentSet + option
+        if (option in currentSet) currentSet - option else currentSet + option,
     )
 }

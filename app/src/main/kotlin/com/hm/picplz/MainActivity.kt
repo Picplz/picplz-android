@@ -24,10 +24,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.MainNavHost
-import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.main.MainActivityUiState
 import com.hm.picplz.ui.main.MainActivityUiState.Loading
 import com.hm.picplz.ui.main.MainActivityViewModel
+import com.hm.picplz.ui.theme.PicplzTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainActivityViewModel by viewModels()
     private var isBackPressedOnce = false
     private val handler = Handler(Looper.getMainLooper())
@@ -47,7 +46,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         var uiState: MainActivityUiState by mutableStateOf(Loading)
-
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -68,12 +66,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
             setOnExitAnimationListener { screen ->
-                val fadeOut = ObjectAnimator.ofFloat(
-                    screen.iconView,
-                    View.ALPHA,
-                    1.0f,
-                    0.0f
-                )
+                val fadeOut =
+                    ObjectAnimator.ofFloat(
+                        screen.iconView,
+                        View.ALPHA,
+                        1.0f,
+                        0.0f,
+                    )
                 fadeOut.duration = 1000L
 
                 val animatorSet = AnimatorSet()
@@ -99,16 +98,14 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 MainNavHost(
                     navController = navController,
-                    uiState = uiState,
+                    _uiState = uiState,
                 )
             }
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(resetDoubleBackFlag)
     }
-
 }

@@ -41,25 +41,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.hm.picplz.core.ui.R
 import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.common.model.ChipMode.ADD
 import com.hm.picplz.common.model.ChipMode.DEFAULT
 import com.hm.picplz.common.model.ChipMode.EDIT
+import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetCalculatedWidth
 import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetChipMode
 import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetIsEditing
 import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetTextFieldWidth
 import com.hm.picplz.ui.screen.common.common_chip.CommonChipIntent.SetValue
+import com.hm.picplz.ui.screen.common.common_chip.CommonChipViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.Pretendard
-import com.hm.picplz.ui.screen.common.common_chip.CommonChipViewModel
 import java.util.UUID
 
 enum class ChipHeight {
-    MEDIUM, BIG
+    MEDIUM,
+    BIG,
 }
 
 @Composable
@@ -83,7 +84,6 @@ fun CommonChip(
     onEndEdit: () -> Unit = {},
     height: ChipHeight? = ChipHeight.MEDIUM,
 ) {
-
     val currentState = viewModel.state.collectAsState().value
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -99,9 +99,9 @@ fun CommonChip(
                 SetValue(
                     TextFieldValue(
                         text = currentState.value.text,
-                        selection = TextRange(currentState.value.text.length)
-                    )
-                )
+                        selection = TextRange(currentState.value.text.length),
+                    ),
+                ),
             )
         } else {
             if (currentState.value.text.isNotEmpty()) {
@@ -119,7 +119,6 @@ fun CommonChip(
             viewModel.handleIntent(SetChipMode(initialMode))
         }
     }
-
 
     LaunchedEffect(currentState.chipMode) {
         if (currentState.chipMode == EDIT) {
@@ -142,53 +141,62 @@ fun CommonChip(
         }
     }
 
-    val chipHeight = when (height ?: ChipHeight.MEDIUM) {
-        ChipHeight.MEDIUM -> 30.dp
-        ChipHeight.BIG -> 40.dp
-    }
+    val chipHeight =
+        when (height ?: ChipHeight.MEDIUM) {
+            ChipHeight.MEDIUM -> 30.dp
+            ChipHeight.BIG -> 40.dp
+        }
 
     when (currentState.chipMode) {
         DEFAULT -> {
-            Row(modifier = Modifier
-                .clickable {
-                    onClickDefaultMode()
-                }
-                .height(chipHeight)
-                .background(
-                    color = backgroundColor, shape = RoundedCornerShape(5.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = if (isSelected) selectedBorderColor else unselectedBorderColor,
-                    shape = RoundedCornerShape(5.dp)
-                )
-                .widthIn(min = 20.dp)) {
+            Row(
+                modifier =
+                    Modifier
+                        .clickable {
+                            onClickDefaultMode()
+                        }
+                        .height(chipHeight)
+                        .background(
+                            color = backgroundColor,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = if (isSelected) selectedBorderColor else unselectedBorderColor,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .widthIn(min = 20.dp),
+            ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 12.dp)
-                        .onGloballyPositioned { layoutCoordinates ->
-                            val widthInPx = layoutCoordinates.size.width
-                            val widthInDp = with(density) { widthInPx.toDp() }
-                            viewModel.handleIntent(SetCalculatedWidth(widthInDp))
-                        }, verticalAlignment = CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 12.dp)
+                            .onGloballyPositioned { layoutCoordinates ->
+                                val widthInPx = layoutCoordinates.size.width
+                                val widthInDp = with(density) { widthInPx.toDp() }
+                                viewModel.handleIntent(SetCalculatedWidth(widthInDp))
+                            },
+                    verticalAlignment = CenterVertically,
                 ) {
                     Text(
                         text = label,
-                        style = MainThemeFont.Body.copy(
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                        ),
+                        style =
+                            MainThemeFont.Body.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                            ),
                         color = if (isSelected) selectedTextColor else unselectedTextColor,
                     )
                     if (isEditable) {
                         Spacer(modifier = Modifier.width(3.dp))
                         IconButton(
-                            onClick = { onEdit() }, modifier = Modifier.size(12.dp)
+                            onClick = { onEdit() },
+                            modifier = Modifier.size(12.dp),
                         ) {
                             Image(
                                 painter = painterResource(if (isSelected) R.drawable.edit else R.drawable.edit_grey4),
                                 contentDescription = "edit",
-                                modifier = Modifier.size(12.dp)
+                                modifier = Modifier.size(12.dp),
                             )
                         }
                     }
@@ -197,24 +205,31 @@ fun CommonChip(
         }
 
         ADD -> {
-            Row(modifier = Modifier
-                .clickable { onEdit() }
-                .height(chipHeight)
-                .border(
-                    width = 1.dp, color = MainThemeColor.Gray3, shape = RoundedCornerShape(5.dp)
-                )
-                .background(color = MainThemeColor.Gray1)) {
+            Row(
+                modifier =
+                    Modifier
+                        .clickable { onEdit() }
+                        .height(chipHeight)
+                        .border(
+                            width = 1.dp,
+                            color = MainThemeColor.Gray3,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .background(color = MainThemeColor.Gray1),
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxHeight(), verticalAlignment = CenterVertically
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalAlignment = CenterVertically,
                 ) {
                     Text(
                         text = "+직접 적어주세요",
                         modifier = Modifier.padding(horizontal = 12.dp),
-                        style = TextStyle(
-                            fontFamily = Pretendard,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 14.sp,
-                        ),
+                        style =
+                            TextStyle(
+                                fontFamily = Pretendard,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                            ),
                         color = MainThemeColor.Gray3,
                     )
                 }
@@ -222,12 +237,14 @@ fun CommonChip(
         }
 
         EDIT -> {
-            BasicTextField(modifier = Modifier.focusRequester(focusRequester),
+            BasicTextField(
+                modifier = Modifier.focusRequester(focusRequester),
                 value = currentState.value,
                 onValueChange = { newValue ->
-                    val textWidthInDp = with(density) {
-                        (newValue.text.length * 20).toDp()
-                    }
+                    val textWidthInDp =
+                        with(density) {
+                            (newValue.text.length * 20).toDp()
+                        }
 
                     if (textWidthInDp > currentState.textFieldWidth) {
                         viewModel.handleIntent(SetTextFieldWidth(textWidthInDp))
@@ -236,43 +253,48 @@ fun CommonChip(
                     viewModel.handleIntent(SetValue(newValue))
                 },
                 singleLine = true,
-                textStyle = MainThemeFont.Body.copy(
-                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                ),
+                textStyle =
+                    MainThemeFont.Body.copy(
+                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                    ),
                 cursorBrush = SolidColor(Color.Black),
-                keyboardActions = KeyboardActions(onDone = {
-                    viewModel.handleIntent(SetIsEditing(false))
-                    onEndEdit()
-                    viewModel.handleIntent(SetChipMode(initialMode))
-                    keyboardController?.hide()
-                }),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done, keyboardType = KeyboardType.Text
-                ),
+                keyboardActions =
+                    KeyboardActions(onDone = {
+                        viewModel.handleIntent(SetIsEditing(false))
+                        onEndEdit()
+                        viewModel.handleIntent(SetChipMode(initialMode))
+                        keyboardController?.hide()
+                    }),
+                keyboardOptions =
+                    KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text,
+                    ),
                 decorationBox = { innerTextField ->
                     Box(
-                        modifier = Modifier
-                            .border(
-                                width = 1.dp,
-                                color = if (isSelected) selectedBorderColor else unselectedBorderColor,
-                                shape = RoundedCornerShape(5.dp)
-                            )
-                            .height(chipHeight)
-                            .width(currentState.textFieldWidth + 24.dp)
-                            .padding(horizontal = 12.dp),
+                        modifier =
+                            Modifier
+                                .border(
+                                    width = 1.dp,
+                                    color = if (isSelected) selectedBorderColor else unselectedBorderColor,
+                                    shape = RoundedCornerShape(5.dp),
+                                )
+                                .height(chipHeight)
+                                .width(currentState.textFieldWidth + 24.dp)
+                                .padding(horizontal = 12.dp),
                     ) {
                         Row(
                             modifier = Modifier.fillMaxHeight(),
-                            verticalAlignment = CenterVertically
+                            verticalAlignment = CenterVertically,
                         ) {
                             innerTextField()
                         }
                     }
-                })
+                },
+            )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -10,16 +10,18 @@ interface KakaoMapSource {
     suspend fun getAddressFromCoords(request: KaKaoAddressRequest): Result<KaKaoAddressResponse>
 }
 
-class KakaoMapSourceImpl @Inject constructor(
-    private val kakaoMapApi: KakaoMapApi,
-    private val configProvider: ConfigProvider
-) : KakaoMapSource {
-    override suspend fun getAddressFromCoords(request: KaKaoAddressRequest): Result<KaKaoAddressResponse> =
-        runCatching {
-            kakaoMapApi.getAddressFromCoords(
-                authorization = "KakaoAK ${configProvider.kakaoRestApiKey}",
-                x = request.x,
-                y = request.y
-            )
-        }
-}
+class KakaoMapSourceImpl
+    @Inject
+    constructor(
+        private val kakaoMapApi: KakaoMapApi,
+        private val configProvider: ConfigProvider,
+    ) : KakaoMapSource {
+        override suspend fun getAddressFromCoords(request: KaKaoAddressRequest): Result<KaKaoAddressResponse> =
+            runCatching {
+                kakaoMapApi.getAddressFromCoords(
+                    authorization = "KakaoAK ${configProvider.kakaoRestApiKey}",
+                    x = request.x,
+                    y = request.y,
+                )
+            }
+    }

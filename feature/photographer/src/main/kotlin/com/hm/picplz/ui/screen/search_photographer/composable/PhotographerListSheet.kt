@@ -34,57 +34,65 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.core.ui.R
 import com.hm.picplz.common.model.ChipMode
-import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
+import com.hm.picplz.ui.theme.MainThemeColor
 
 data class StatusTagData(
     val label: String,
-    val iconResId: Int
+    val iconResId: Int,
 )
 
-private val statusTags = listOf(
-    StatusTagData("바로 촬영", R.drawable.tag_circle),
-    StatusTagData("팔로우", R.drawable.tag_check),
-    StatusTagData("바로 촬영 가능", R.drawable.tag_camera),
-)
+private val statusTags =
+    listOf(
+        StatusTagData("바로 촬영", R.drawable.tag_circle),
+        StatusTagData("팔로우", R.drawable.tag_check),
+        StatusTagData("바로 촬영 가능", R.drawable.tag_camera),
+    )
 
-private val vibeTags = listOf(
-    "#을지로 감성",
-    "#키치 감성",
-    "#MZ 감성",
-    "#퇴폐 감성"
-)
+private val vibeTags =
+    listOf(
+        "#을지로 감성",
+        "#키치 감성",
+        "#MZ 감성",
+        "#퇴폐 감성",
+    )
 
 @Composable
 fun PhotographerListSheet(
     viewModel: SearchPhotographerViewModel = hiltViewModel(),
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
     val listState = rememberLazyListState()
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val isAtTop = listState.firstVisibleItemIndex == 0 &&
-                        (listState.firstVisibleItemScrollOffset == 0)
-                return if (available.y > 0 && isAtTop) available else Offset.Zero
+    val nestedScrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    val isAtTop =
+                        listState.firstVisibleItemIndex == 0 &&
+                            (listState.firstVisibleItemScrollOffset == 0)
+                    return if (available.y > 0 && isAtTop) available else Offset.Zero
+                }
             }
         }
-    }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     ) {
         Row {
             statusTags.forEach { statusTag ->
                 CommonStatusTag(
                     label = statusTag.label,
-                    icon = painterResource(id = statusTag.iconResId)
+                    icon = painterResource(id = statusTag.iconResId),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
             }
@@ -105,31 +113,31 @@ fun PhotographerListSheet(
         }
         Spacer(modifier = Modifier.height(10.dp))
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "거리순",
-                color = MainThemeColor.Gray5
+                color = MainThemeColor.Gray5,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 painter = painterResource(id = R.drawable.arrow_down),
                 contentDescription = "정렬 방식 선택",
                 modifier = Modifier.size(12.dp),
-                tint = MainThemeColor.Gray5
+                tint = MainThemeColor.Gray5,
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
         LazyColumn(
             state = listState,
             modifier = Modifier.nestedScroll(nestedScrollConnection),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             currentState.nearbyPhotographers.let { photographers ->
                 items(photographers.active + photographers.inactive) { photographer ->
                     PhotographerCard(
                         photographer = photographer,
-                        mainNavController = mainNavController
+                        mainNavController = mainNavController,
                     )
                 }
             }
@@ -144,4 +152,3 @@ fun PhotographerListScreenPreview() {
 
     PhotographerListSheet(mainNavController = mainNavController)
 }
-

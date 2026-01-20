@@ -35,7 +35,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
-    
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
@@ -44,20 +44,20 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    
+
     // Navigation
     implementation(libs.androidx.navigation.compose)
-    
+
     // Coil
     implementation(libs.coil.compose)
-    
+
     // Kakao Map
     implementation(libs.kakao.maps)
-    
+
     debugImplementation(libs.androidx.ui.tooling)
 }

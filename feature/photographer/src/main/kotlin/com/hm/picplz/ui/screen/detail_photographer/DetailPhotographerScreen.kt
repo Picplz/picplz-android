@@ -24,13 +24,12 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun DetailPhotographerScreen(
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val currentState = viewModel.state.collectAsState().value
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
@@ -53,32 +52,35 @@ fun DetailPhotographerScreen(
         },
         content = { innerPadding ->
             Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .fillMaxWidth(),
             ) {
                 CommonFixedTopBar(title = "") {
                     viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState()) // verticalScroll을 적용
+                    modifier =
+                        Modifier
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     DetailProfileSection(modifier = paddingModifier, profileInfo = profileInfo)
 
                     HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 20.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 20.dp),
                         thickness = 10.dp,
-                        color = MainThemeColor.Gray2
+                        color = MainThemeColor.Gray2,
                     )
 
                     ReviewSection(
                         modifier = paddingModifier,
                         navController = navController,
-                        reviewSummary = reviewSummary
+                        reviewSummary = reviewSummary,
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))
@@ -86,7 +88,7 @@ fun DetailPhotographerScreen(
                     PortfolioSection(
                         modifier = paddingModifier,
                         navController = navController,
-                        photoPortfolios = photoPortfolios
+                        photoPortfolios = photoPortfolios,
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))
@@ -96,7 +98,8 @@ fun DetailPhotographerScreen(
                     Spacer(modifier = Modifier.height(130.dp))
                 }
             }
-        })
+        },
+    )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
@@ -104,8 +107,6 @@ fun DetailPhotographerScreen(
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
-
-                else -> {}
             }
         }
     }

@@ -42,8 +42,8 @@ import kotlin.math.absoluteValue
 
 private val PickerHeight = 200.dp
 private val PickerItemHeight = 40.dp
-private const val FontSizeMax = 18f
-private const val FontSizeMin = 14f
+private const val FONT_SIZE_MAX = 18f
+private const val FONT_SIZE_MIN = 14f
 
 /**
  * PickerColumnConfig
@@ -57,7 +57,7 @@ private const val FontSizeMin = 14f
 data class PickerColumnConfig<T>(
     val items: List<T>,
     val initialIndex: Int = 0,
-    val labelFormatter: (T) -> String
+    val labelFormatter: (T) -> String,
 )
 
 /**
@@ -79,13 +79,14 @@ data class PickerColumnConfig<T>(
 fun <T> CommonScrollPicker(
     columns: List<PickerColumnConfig<T>>,
     onValuesSelected: (List<T>) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val itemHeightPx = with(LocalDensity.current) { PickerItemHeight.toPx() }
 
-    val listStates = columns.map { config ->
-        rememberLazyListState(config.initialIndex)
-    }
+    val listStates =
+        columns.map { config ->
+            rememberLazyListState(config.initialIndex)
+        }
 
     val selectedValues by remember {
         derivedStateOf {
@@ -104,32 +105,34 @@ fun <T> CommonScrollPicker(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MainThemeColor.White),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(MainThemeColor.White),
+        contentAlignment = Alignment.Center,
     ) {
         // 하이라이트 박스 (선택 라인)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(PickerItemHeight)
-                .background(Color(0xFFF4F4F5), RoundedCornerShape(8.dp))
-                .zIndex(0f)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(PickerItemHeight)
+                    .background(Color(0xFFF4F4F5), RoundedCornerShape(8.dp))
+                    .zIndex(0f),
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .height(PickerHeight),
-
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier =
+                Modifier
+                    .fillMaxWidth(0.6f)
+                    .height(PickerHeight),
+            horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             columns.forEachIndexed { index, config ->
                 CommonPickerColumn(
                     config = config,
                     state = listStates[index],
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
@@ -142,7 +145,7 @@ fun <T> CommonScrollPicker(
 fun <T> CommonPickerColumn(
     config: PickerColumnConfig<T>,
     state: LazyListState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val itemHeightPx = with(LocalDensity.current) { PickerItemHeight.toPx() }
     val scrollOffsetPx by remember {
@@ -156,7 +159,7 @@ fun <T> CommonPickerColumn(
         contentPadding = PaddingValues(vertical = 80.dp),
         flingBehavior = rememberSnapFlingBehavior(state),
         modifier = modifier.height(PickerHeight),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         itemsIndexed(config.items) { index, item ->
             val currentItemOffset = index * itemHeightPx
@@ -165,18 +168,19 @@ fun <T> CommonPickerColumn(
             val distanceRatio = distanceFromCenterPx / itemHeightPx
 
             val alpha = (1f - distanceRatio * 0.55f).coerceIn(0.2f, 1f)
-            val fontSize = (FontSizeMax - distanceRatio * 2f).coerceAtLeast(FontSizeMin).sp
+            val fontSize = (FONT_SIZE_MAX - distanceRatio * 2f).coerceAtLeast(FONT_SIZE_MIN).sp
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(PickerItemHeight),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(PickerItemHeight),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = config.labelFormatter(item),
                     fontSize = fontSize,
-                    color = Color.Black.copy(alpha = alpha)
+                    color = Color.Black.copy(alpha = alpha),
                 )
             }
         }
@@ -188,7 +192,7 @@ fun <T> CommonPickerColumn(
 fun DateScrollPicker(
     modifier: Modifier = Modifier,
     initialDate: LocalDate = LocalDate.now(),
-    onDateSelected: (LocalDate) -> Unit
+    onDateSelected: (LocalDate) -> Unit,
 ) {
     val currentYear = LocalDate.now().year
     val yearList = (1980..currentYear).toList()
@@ -198,96 +202,102 @@ fun DateScrollPicker(
     var selectedYear by remember { mutableStateOf(initialDate.year) }
     var selectedMonth by remember { mutableStateOf(initialDate.monthValue) }
 
-    val maxDay = remember(selectedYear, selectedMonth) {
-        YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()
-    }
+    val maxDay =
+        remember(selectedYear, selectedMonth) {
+            YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()
+        }
 
     val dayList = (1..maxDay).toList()
 
     CommonScrollPicker(
-        columns = listOf(
-            PickerColumnConfig(
-                items = yearList,
-                initialIndex = initialDate.year - 1980,
-                labelFormatter = { "${it}년" }
+        columns =
+            listOf(
+                PickerColumnConfig(
+                    items = yearList,
+                    initialIndex = initialDate.year - 1980,
+                    labelFormatter = { "${it}년" },
+                ),
+                PickerColumnConfig(
+                    items = monthList,
+                    initialIndex = initialDate.monthValue - 1,
+                    labelFormatter = { "${it}월" },
+                ),
+                PickerColumnConfig(
+                    items = dayList,
+                    initialIndex = initialDate.dayOfMonth - 1,
+                    labelFormatter = { "${it}일" },
+                ),
             ),
-            PickerColumnConfig(
-                items = monthList,
-                initialIndex = initialDate.monthValue - 1,
-                labelFormatter = { "${it}월" }
-            ),
-            PickerColumnConfig(
-                items = dayList,
-                initialIndex = initialDate.dayOfMonth - 1,
-                labelFormatter = { "${it}일" }
-            )
-        ),
         onValuesSelected = { values ->
-            val year = values[0] as Int
-            val month = values[1] as Int
-            val day = (values[2] as Int).coerceAtMost(
-                YearMonth.of(year, month).lengthOfMonth()
-            )
+            val year = values[0]
+            val month = values[1]
+            val day =
+                values[2].coerceAtMost(
+                    YearMonth.of(year, month).lengthOfMonth(),
+                )
 
             selectedYear = year
             selectedMonth = month
             onDateSelected(LocalDate.of(year, month, day))
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
 @Composable
 fun TimeScrollPicker(
     modifier: Modifier = Modifier,
-    initialHour24: Int = 14, // 24시간 형식
+    initialHour24: Int = 14,
     initialMinute: Int = 30,
-    onTimeSelected: (hour24: Int, minute: Int) -> Unit
+    onTimeSelected: (hour24: Int, minute: Int) -> Unit,
 ) {
     val amPmList = listOf("AM", "PM")
     val minuteList = (0..59).toList()
     val hourList12 = (1..12).toList()
 
     val isPM = initialHour24 >= 12
-    val hour12 = when {
-        initialHour24 == 0 -> 12
-        initialHour24 > 12 -> initialHour24 - 12
-        else -> initialHour24
-    }
+    val hour12 =
+        when {
+            initialHour24 == 0 -> 12
+            initialHour24 > 12 -> initialHour24 - 12
+            else -> initialHour24
+        }
 
     CommonScrollPicker(
-        columns = listOf(
-            PickerColumnConfig(
-                items = amPmList,
-                initialIndex = if (isPM) 1 else 0,
-                labelFormatter = { "$it" }
+        columns =
+            listOf(
+                PickerColumnConfig(
+                    items = amPmList,
+                    initialIndex = if (isPM) 1 else 0,
+                    labelFormatter = { "$it" },
+                ),
+                PickerColumnConfig(
+                    items = hourList12,
+                    initialIndex = hourList12.indexOf(hour12),
+                    labelFormatter = { "%02d".format(it) },
+                ),
+                PickerColumnConfig(
+                    items = minuteList,
+                    initialIndex = initialMinute,
+                    labelFormatter = { "%02d".format(it) },
+                ),
             ),
-            PickerColumnConfig(
-                items = hourList12,
-                initialIndex = hourList12.indexOf(hour12),
-                labelFormatter = { "%02d".format(it) }
-            ),
-            PickerColumnConfig(
-                items = minuteList,
-                initialIndex = initialMinute,
-                labelFormatter = { "%02d".format(it) }
-            )
-        ),
         onValuesSelected = { values ->
             val ampm = values[0] as String
             val hour = values[1] as Int
             val minute = values[2] as Int
 
-            val hour24 = when {
-                ampm == "AM" && hour == 12 -> 0
-                ampm == "AM" -> hour
-                ampm == "PM" && hour == 12 -> 12
-                else -> hour + 12
-            }
+            val hour24 =
+                when {
+                    ampm == "AM" && hour == 12 -> 0
+                    ampm == "AM" -> hour
+                    ampm == "PM" && hour == 12 -> 12
+                    else -> hour + 12
+                }
 
             onTimeSelected(hour24, minute)
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -296,19 +306,22 @@ fun SingleNumberScrollPicker(
     modifier: Modifier = Modifier,
     numberRange: IntRange = 0..1000,
     initialNumber: Int,
-    onNumberSelected: (Int) -> Unit
+    onNumberSelected: (Int) -> Unit,
 ) {
-    CommonScrollPicker(columns = listOf(
-        PickerColumnConfig(
-            items = numberRange.toList(),
-            initialIndex = numberRange.indexOf(initialNumber),
-            labelFormatter = { "$it" }
-        )
-    ), onValuesSelected = { values ->
-        val number = values.first() as Int
-        onNumberSelected(number)
-    },
-        modifier = modifier
+    CommonScrollPicker(
+        columns =
+            listOf(
+                PickerColumnConfig(
+                    items = numberRange.toList(),
+                    initialIndex = numberRange.indexOf(initialNumber),
+                    labelFormatter = { "$it" },
+                ),
+            ),
+        onValuesSelected = { values ->
+            val number = values.first()
+            onNumberSelected(number)
+        },
+        modifier = modifier,
     )
 }
 
@@ -334,7 +347,7 @@ fun TimeScrollPickerPreview() {
     PicplzTheme {
         TimeScrollPicker(
             initialHour24 = 15,
-            initialMinute = 59
+            initialMinute = 59,
         ) { hour, minute ->
             timeText = "%02d:%02d".format(hour, minute)
         }
@@ -351,7 +364,7 @@ fun SingleNumberScrollPickerPreview() {
         SingleNumberScrollPicker(
             numberRange = 0..50,
             initialNumber = count,
-            modifier = Modifier.padding(40.dp)
+            modifier = Modifier.padding(40.dp),
         ) {
             count = it
         }

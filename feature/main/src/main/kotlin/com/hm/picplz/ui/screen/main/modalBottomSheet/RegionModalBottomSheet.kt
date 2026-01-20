@@ -55,23 +55,25 @@ fun RegionModalBottomSheet(
 ) {
 //    TODO: State, ViewModel 연결
     val tabTitles = listOf("서울", "경기", "인천", "부산", "제주")
-    val regions = mapOf(
-        "서울" to mapOf(
-            "강남구" to listOf("신사동", "논현동", "압구정동", "청담동"),
-            "강동구" to listOf("천호동", "명일동", "고덕동"),
-            "강북구" to listOf("수유동", "미아동"),
-            "강서구" to listOf("화곡동", "방화동"),
-            "광진구" to listOf("구의동", "자양동"),
-            "구로구" to listOf("구로동", "가리봉동"),
-            "동작구" to listOf("상도동", "사당동"),
-            "서초구" to listOf("서초동", "반포동"),
-            "송파구" to listOf("잠실동", "문정동")
-        ),
-        "경기" to mapOf("성남시" to listOf("분당동", "정자동")),
-        "인천" to mapOf("연수구" to listOf("송도동")),
-        "부산" to mapOf("해운대구" to listOf("우동", "좌동")),
-        "제주" to mapOf("제주시" to listOf("이도동"))
-    )
+    val regions =
+        mapOf(
+            "서울" to
+                mapOf(
+                    "강남구" to listOf("신사동", "논현동", "압구정동", "청담동"),
+                    "강동구" to listOf("천호동", "명일동", "고덕동"),
+                    "강북구" to listOf("수유동", "미아동"),
+                    "강서구" to listOf("화곡동", "방화동"),
+                    "광진구" to listOf("구의동", "자양동"),
+                    "구로구" to listOf("구로동", "가리봉동"),
+                    "동작구" to listOf("상도동", "사당동"),
+                    "서초구" to listOf("서초동", "반포동"),
+                    "송파구" to listOf("잠실동", "문정동"),
+                ),
+            "경기" to mapOf("성남시" to listOf("분당동", "정자동")),
+            "인천" to mapOf("연수구" to listOf("송도동")),
+            "부산" to mapOf("해운대구" to listOf("우동", "좌동")),
+            "제주" to mapOf("제주시" to listOf("이도동")),
+        )
 
     var selectedTab by remember { mutableIntStateOf(0) }
     val selectedRegion = tabTitles[selectedTab]
@@ -82,28 +84,35 @@ fun RegionModalBottomSheet(
     var selectedRegions by remember { mutableStateOf(listOf<String>()) }
 
     fun toggleRegion(region: String) {
-        selectedRegions = when (region) {
-            "$selectedDistrict 전체" -> {
-                val allSelected = realSubDistricts.all { it in selectedRegions }
-                if (allSelected) selectedRegions - realSubDistricts.toSet()
-                else selectedRegions + realSubDistricts.filterNot { it in selectedRegions }
-            }
+        selectedRegions =
+            when (region) {
+                "$selectedDistrict 전체" -> {
+                    val allSelected = realSubDistricts.all { it in selectedRegions }
+                    if (allSelected) {
+                        selectedRegions - realSubDistricts.toSet()
+                    } else {
+                        selectedRegions + realSubDistricts.filterNot { it in selectedRegions }
+                    }
+                }
 
-            in selectedRegions -> selectedRegions - region
-            else -> selectedRegions + region
-        }
+                in selectedRegions -> selectedRegions - region
+                else -> selectedRegions + region
+            }
     }
 
     fun isRegionChecked(region: String): Boolean =
-        if (region == "$selectedDistrict 전체") realSubDistricts.all { it in selectedRegions }
-        else region in selectedRegions
+        if (region == "$selectedDistrict 전체") {
+            realSubDistricts.all { it in selectedRegions }
+        } else {
+            region in selectedRegions
+        }
 
     CommonModalBottomSheet(
         visible = visible,
         visibleCloseButton = true,
         onDismissRequest = onDismiss,
         dragHandle = null,
-        sheetMaxHeight = 724.dp
+        sheetMaxHeight = 724.dp,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Header()
@@ -116,7 +125,7 @@ fun RegionModalBottomSheet(
                     selectedTab = index
                     selectedDistrict = regions[tabTitles[index]]?.keys?.firstOrNull().orEmpty()
                 },
-                textStyle = MainThemeFont.BodyBold
+                textStyle = MainThemeFont.BodyBold,
             )
 
             Box(modifier = Modifier.weight(1f)) {
@@ -126,18 +135,18 @@ fun RegionModalBottomSheet(
                     onDistrictSelected = { selectedDistrict = it },
                     subDistricts = subDistricts,
                     toggleRegion = ::toggleRegion,
-                    isRegionChecked = ::isRegionChecked
+                    isRegionChecked = ::isRegionChecked,
                 )
             }
 
             SelectedRegionChips(
                 selectedRegions = selectedRegions,
-                onRemove = { selectedRegions = selectedRegions - it }
+                onRemove = { selectedRegions = selectedRegions - it },
             )
 
             Footer(
                 onReset = { selectedRegions = emptyList() },
-                onSubmit = { /* TODO: 작가 search API 연동 */ }
+                onSubmit = { /* TODO: 작가 search API 연동 */ },
             )
         }
     }
@@ -149,9 +158,10 @@ private fun Header() {
         Text(
             text = "지역",
             style = MainThemeFont.TitleSmall,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 12.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 12.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -164,37 +174,40 @@ private fun RegionSelector(
     onDistrictSelected: (String) -> Unit,
     subDistricts: List<String>,
     toggleRegion: (String) -> Unit,
-    isRegionChecked: (String) -> Boolean
+    isRegionChecked: (String) -> Boolean,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .background(MainThemeColor.Gray1)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(MainThemeColor.Gray1),
         ) {
             items(districts) { district ->
                 val isSelected = selectedDistrict == district
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(if (isSelected) MainThemeColor.White else MainThemeColor.Gray1)
-                        .clickable { onDistrictSelected(district) }
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(if (isSelected) MainThemeColor.White else MainThemeColor.Gray1)
+                            .clickable { onDistrictSelected(district) }
+                            .padding(16.dp),
                 ) {
                     Text(
                         text = district,
-                        style = MainThemeFont.Body.copy(
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray4
-                        )
+                        style =
+                            MainThemeFont.Body.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray4,
+                            ),
                     )
                     if (isSelected) {
                         Image(
                             painter = painterResource(id = R.drawable.region_modal_depth_arrow),
-                            contentDescription = "depth-arrow"
+                            contentDescription = "depth-arrow",
                         )
                     }
                 }
@@ -202,30 +215,33 @@ private fun RegionSelector(
         }
 
         LazyColumn(
-            modifier = Modifier
-                .weight(2f)
-                .fillMaxHeight()
+            modifier =
+                Modifier
+                    .weight(2f)
+                    .fillMaxHeight(),
         ) {
             items(subDistricts) { sub ->
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { toggleRegion(sub) },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { toggleRegion(sub) },
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         sub,
                         modifier = Modifier.padding(start = 8.dp),
-                        style = MainThemeFont.Body
+                        style = MainThemeFont.Body,
                     )
                     Checkbox(
                         checked = isRegionChecked(sub),
                         onCheckedChange = { toggleRegion(sub) },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = MainThemeColor.Black,
-                            uncheckedColor = MainThemeColor.Gray3
-                        )
+                        colors =
+                            CheckboxDefaults.colors(
+                                checkedColor = MainThemeColor.Black,
+                                uncheckedColor = MainThemeColor.Gray3,
+                            ),
                     )
                 }
                 HorizontalDivider(color = MainThemeColor.Gray2, thickness = 1.dp)
@@ -237,14 +253,15 @@ private fun RegionSelector(
 @Composable
 private fun SelectedRegionChips(
     selectedRegions: List<String>,
-    onRemove: (String) -> Unit
+    onRemove: (String) -> Unit,
 ) {
     if (selectedRegions.isEmpty()) return
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 21.dp, top = 19.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 21.dp, top = 19.dp),
     ) {
         Text(
             buildAnnotatedString {
@@ -252,11 +269,11 @@ private fun SelectedRegionChips(
                     append("선택한 지역 ")
                 }
                 withStyle(
-                    MainThemeFont.ButtonDefault.toSpanStyle().copy(color = MainThemeColor.Olive)
+                    MainThemeFont.ButtonDefault.toSpanStyle().copy(color = MainThemeColor.Olive),
                 ) {
                     append(selectedRegions.size.toString())
                 }
-            }
+            },
         )
         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             items(selectedRegions) { region ->
@@ -268,9 +285,9 @@ private fun SelectedRegionChips(
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "삭제"
+                            contentDescription = "삭제",
                         )
-                    }
+                    },
                 )
             }
         }
@@ -280,14 +297,15 @@ private fun SelectedRegionChips(
 @Composable
 private fun Footer(
     onReset: () -> Unit,
-    onSubmit: () -> Unit
+    onSubmit: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp)
-            .padding(bottom = 45.dp, top = 30.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp)
+                .padding(bottom = 45.dp, top = 30.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         CommonBottomButton(
             text = "초기화",
@@ -295,12 +313,12 @@ private fun Footer(
             modifier = Modifier.weight(1f),
             contentColor = MainThemeColor.Black,
             borderColor = MainThemeColor.Gray3,
-            containerColor = MainThemeColor.White
+            containerColor = MainThemeColor.White,
         )
         CommonBottomButton(
             text = "{}명 작가보기",
             onClick = onSubmit,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(2f),
         )
     }
 }

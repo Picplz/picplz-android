@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.domain.model.Device
-import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -37,35 +36,37 @@ import java.util.UUID
 fun DeviceItem(
     device: Device,
     onRemove: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(42.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(42.dp),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(42.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(MainThemeColor.Gray1)
-                .border(
-                    width = 1.dp,
-                    color = MainThemeColor.Gray2,
-                    shape = RoundedCornerShape(5.dp)
-                )
-                .padding(horizontal = 10.dp),
-            contentAlignment = Alignment.CenterStart
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(42.dp)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(MainThemeColor.Gray1)
+                    .border(
+                        width = 1.dp,
+                        color = MainThemeColor.Gray2,
+                        shape = RoundedCornerShape(5.dp),
+                    )
+                    .padding(horizontal = 10.dp),
+            contentAlignment = Alignment.CenterStart,
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
                     modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = device.companyName,
@@ -74,10 +75,11 @@ fun DeviceItem(
                     )
                     Spacer(modifier = Modifier.width(14.dp))
                     Text(
-                        text = when (device) {
-                            is Device.PhoneDevice -> device.modelName ?: "모델명 없음"
-                            is Device.CameraDevice -> "${device.modelName ?: "모델명 없음"} (${device.cameraType})"
-                        },
+                        text =
+                            when (device) {
+                                is Device.PhoneDevice -> device.modelName ?: "모델명 없음"
+                                is Device.CameraDevice -> "${device.modelName ?: "모델명 없음"} (${device.cameraType})"
+                            },
                         style = MainFontFamily.bodyBold,
                         color = MainThemeColor.Gray5,
                     )
@@ -87,11 +89,12 @@ fun DeviceItem(
         Image(
             painter = painterResource(id = R.drawable.close_circle),
             contentDescription = "삭제",
-            modifier = Modifier
-                .size(22.dp)
-                .offset(x = (10).dp, y = (-10).dp)
-                .align(Alignment.TopEnd)
-                .clickable { onRemove() },
+            modifier =
+                Modifier
+                    .size(22.dp)
+                    .offset(x = (10).dp, y = (-10).dp)
+                    .align(Alignment.TopEnd)
+                    .clickable { onRemove() },
         )
     }
 }
@@ -102,21 +105,23 @@ fun DeviceItemPreview() {
     PicplzTheme {
         Column {
             DeviceItem(
-                device = Device.PhoneDevice(
-                    id = UUID.randomUUID().toString(),
-                    companyName = "애플",
-                    modelName = "아이폰 16 Pro"
-                ),
-                onRemove = {}
+                device =
+                    Device.PhoneDevice(
+                        id = UUID.randomUUID().toString(),
+                        companyName = "애플",
+                        modelName = "아이폰 16 Pro",
+                    ),
+                onRemove = {},
             )
             DeviceItem(
-                device = Device.CameraDevice(
-                    id = UUID.randomUUID().toString(),
-                    companyName = "소니",
-                    modelName = "a7m3",
-                    cameraType = "DSLR 카메라"
-                ),
-                onRemove = {}
+                device =
+                    Device.CameraDevice(
+                        id = UUID.randomUUID().toString(),
+                        companyName = "소니",
+                        modelName = "a7m3",
+                        cameraType = "DSLR 카메라",
+                    ),
+                onRemove = {},
             )
         }
     }

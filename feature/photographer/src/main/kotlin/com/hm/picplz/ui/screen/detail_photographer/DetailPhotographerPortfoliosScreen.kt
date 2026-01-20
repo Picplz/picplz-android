@@ -16,12 +16,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.hm.picplz.common.util.CommonUtil
 import com.hm.picplz.data.model.PhotographerPortfolio
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.detail_photographer.portfolio.SinglePortfolio
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.common.util.CommonUtil
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -29,7 +28,7 @@ fun DetailPhotographerPortfoliosScreen(
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
     navController: NavController,
     portfolioId: Int,
-    photoIndex: Int = 0
+    photoIndex: Int = 0,
 ) {
     val currentState = viewModel.state.collectAsState().value
     val portfolios = currentState.portfolios
@@ -45,18 +44,19 @@ fun DetailPhotographerPortfoliosScreen(
         content = { innerPadding ->
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .fillMaxWidth(),
                 ) {
                     CommonFixedTopBar(title = "") {
                         viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                     }
 
-                    PortfolioList(portfolios, navController, portfolioId, photoIndex, listState)
+                    PortfolioList(portfolios, portfolioId, photoIndex, listState)
                 }
             }
-        }
+        },
     )
 
     // 해당 포트폴리오로 스크롤
@@ -80,18 +80,16 @@ fun DetailPhotographerPortfoliosScreen(
 @Composable
 fun PortfolioList(
     portfolios: List<PhotographerPortfolio>,
-    navController: NavController,
     portfolioId: Int,
     photoIndex: Int,
-    listState: LazyListState
+    listState: LazyListState,
 ) {
     LazyColumn(state = listState, modifier = CommonUtil.paddingModifier) {
         items(portfolios) { portfolio ->
             val currentPhotoIndex = if (portfolio.portfolioId == portfolioId) photoIndex else 0
             SinglePortfolio(
-                navController = navController,
                 portfolio = portfolio,
-                photoIndex = currentPhotoIndex
+                photoIndex = currentPhotoIndex,
             )
         }
     }

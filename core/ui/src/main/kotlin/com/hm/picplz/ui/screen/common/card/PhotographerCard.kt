@@ -30,26 +30,27 @@ fun PhotographerCard(
     profileImage: Int = R.drawable.default_profile,
     username: String = "",
     status: PhotographerStatus = PhotographerStatus.ENABLED,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .width(74.dp)
-            .clickable { onClick() }
+        modifier =
+            modifier
+                .width(74.dp)
+                .clickable { onClick() },
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 painter = painterResource(id = profileImage),
                 contentDescription = "profile-image",
-                modifier = Modifier
-                    .size(74.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, MainThemeColor.Black, CircleShape),
+                modifier =
+                    Modifier
+                        .size(74.dp)
+                        .clip(CircleShape)
+                        .border(1.dp, MainThemeColor.Black, CircleShape),
             )
             Spacer(modifier = Modifier.height(9.58.dp))
             Text(text = username)
             CommonStatusText(type = status)
-
         }
     }
 }
@@ -62,7 +63,7 @@ fun PhotographerCardPreview() {
             profileImage = R.drawable.user_undefined,
             username = "유가영",
             status = PhotographerStatus.ENABLED,
-            onClick = {}
+            onClick = {},
         )
     }
 }

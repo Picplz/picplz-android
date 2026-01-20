@@ -17,28 +17,19 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AuthModule {
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(
-        authRepositoryImpl: AuthRepositoryImpl
-    ): AuthRepository
+    abstract fun bindAuthService(authServiceImpl: AuthServiceImpl): AuthService
 
     @Binds
     @Singleton
-    abstract fun bindAuthService(
-        authServiceImpl: AuthServiceImpl
-    ): AuthService
+    abstract fun bindKakaoAuthService(kakaoAuthServiceImpl: KakaoAuthServiceImpl): KakaoAuthService
 
     @Binds
     @Singleton
-    abstract fun bindKakaoAuthService(
-        kakaoAuthServiceImpl: KakaoAuthServiceImpl
-    ): KakaoAuthService
-
-    @Binds
-    @Singleton
-    abstract fun bindAuthSource(
-        authSourceImpl: AuthSourceImpl
-    ): AuthSource
+    abstract fun bindAuthSource(authSourceImpl: AuthSourceImpl): AuthSource
 }

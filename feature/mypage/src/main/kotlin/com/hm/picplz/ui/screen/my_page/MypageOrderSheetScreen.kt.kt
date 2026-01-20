@@ -55,24 +55,27 @@ data class OrderInfo(
 )
 
 @Composable
-fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHostController) {
-    val orderDummyInfo = OrderInfo(
-        orderNum = "nnnnmmmmdd123456",
-        orderDate = "2025-03-09 19:09:14",
-        clientName = "주은강",
-        clientPhoneNumber = "01012345678",
-        photographerName = "주로그",
-        packageType = PackageType.PROFILE,
-        packageCost = 12000,
-        packageInfo = "본인이 해놓은 한줄 소개 길어지면 이렇게 처리해주세요ㅇ모ㅓㅏ로망리ㅗㅁ어라ㅣ멍;ㅣㄹ",
-        saleCost = 0,
-        cost = 12000,
-        shootingTime = "25.01.09 - 오후 02:00",
-        shootingLocation = "서울특별시 종로구 효자로 33, 네번째 테이블 창문 앞",
-        packageImage = R.drawable.ic_launcher_background
-    )
+fun MyPageOrderSheetScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
+    val orderDummyInfo =
+        OrderInfo(
+            orderNum = "nnnnmmmmdd123456",
+            orderDate = "2025-03-09 19:09:14",
+            clientName = "주은강",
+            clientPhoneNumber = "01012345678",
+            photographerName = "주로그",
+            packageType = PackageType.PROFILE,
+            packageCost = 12000,
+            packageInfo = "본인이 해놓은 한줄 소개 길어지면 이렇게 처리해주세요ㅇ모ㅓㅏ로망리ㅗㅁ어라ㅣ멍;ㅣㄹ",
+            saleCost = 0,
+            cost = 12000,
+            shootingTime = "25.01.09 - 오후 02:00",
+            shootingLocation = "서울특별시 종로구 효자로 33, 네번째 테이블 창문 앞",
+            packageImage = R.drawable.ic_launcher_background,
+        )
     val scrollState = rememberScrollState()
-
 
     Scaffold(
         containerColor = MainThemeColor.White,
@@ -81,15 +84,17 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 navController.popBackStack()
             }
         },
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding)
-                .verticalScroll(scrollState),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding)
+                    .verticalScroll(scrollState),
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = 15.dp),
@@ -99,12 +104,12 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                     Text(
                         text = orderDummyInfo.orderNum,
                         style = MainThemeFont.BodyBold,
-                        color = Color(0XFFEF4747)
+                        color = Color(0XFFEF4747),
                     )
                     Text(
                         text = orderDummyInfo.orderDate,
                         style = MainThemeFont.Caption,
-                        color = MainThemeColor.Gray4
+                        color = MainThemeColor.Gray4,
                     )
                 }
 
@@ -121,7 +126,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                     Text(
                         text = "휴대폰 번호",
                         style = MainThemeFont.InnerTag,
-                        color = MainThemeColor.Gray4
+                        color = MainThemeColor.Gray4,
                     )
                     Text(text = orderDummyInfo.clientPhoneNumber, style = MainThemeFont.Body)
                 }
@@ -137,7 +142,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Text(
                     text = orderDummyInfo.photographerName,
                     style = MainThemeFont.Body,
-                    color = MainThemeColor.Gray5
+                    color = MainThemeColor.Gray5,
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -145,28 +150,30 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Text(text = "주문 상품 정보", style = MainThemeFont.ButtonDefault)
                 Spacer(modifier = Modifier.height(8.dp))
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, MainThemeColor.Black, RoundedCornerShape(5.dp))
-                        .padding(14.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MainThemeColor.Black, RoundedCornerShape(5.dp))
+                            .padding(14.dp),
                 ) {
                     Row {
                         Image(
                             painter = painterResource(id = orderDummyInfo.packageImage),
                             contentDescription = "package-image",
-                            modifier = Modifier
-                                .size(68.dp)
-                                .clip(RoundedCornerShape(5.dp))
+                            modifier =
+                                Modifier
+                                    .size(68.dp)
+                                    .clip(RoundedCornerShape(5.dp)),
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
                                 text = orderDummyInfo.packageType.label,
-                                style = MainThemeFont.TitleSmall
+                                style = MainThemeFont.TitleSmall,
                             )
                             Text(
-                                text = "${orderDummyInfo.packageCost.toString()}₩",
-                                style = MainThemeFont.Body
+                                text = "${orderDummyInfo.packageCost}₩",
+                                style = MainThemeFont.Body,
                             )
                             Spacer(modifier = Modifier.height(9.dp))
                             Text(
@@ -175,7 +182,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                                 color = MainThemeColor.Gray4,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     }
@@ -188,7 +195,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Text(
                     text = orderDummyInfo.orderDate,
                     style = MainThemeFont.Body,
-                    color = MainThemeColor.Gray5
+                    color = MainThemeColor.Gray5,
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -196,15 +203,17 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Text(text = "촬영 장소", style = MainThemeFont.ButtonDefault)
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = orderDummyInfo.shootingLocation, style = MainThemeFont.Body,
-                    color = MainThemeColor.Gray5
+                    text = orderDummyInfo.shootingLocation,
+                    style = MainThemeFont.Body,
+                    color = MainThemeColor.Gray5,
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Box(
-                    modifier = Modifier
-                        .height(95.dp)
-                        .fillMaxWidth()
-                        .background(MainThemeColor.Black)
+                    modifier =
+                        Modifier
+                            .height(95.dp)
+                            .fillMaxWidth()
+                            .background(MainThemeColor.Black),
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -220,7 +229,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "상품 금액")
                     Text(text = "${orderDummyInfo.packageCost}원")
@@ -231,7 +240,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "총 할인 금액")
                     Text(text = "${orderDummyInfo.saleCost}원")
@@ -244,57 +253,58 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "결제 금액", style = MainThemeFont.ButtonDefault)
                     Text(
                         text = "${orderDummyInfo.cost}원(취소 완료)",
                         style = MainThemeFont.ButtonDefault,
-                        color = MainThemeColor.Red
+                        color = MainThemeColor.Red,
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(5.dp))
-                        .background(MainThemeColor.Gray1)
-                        .padding(horizontal = 13.dp, vertical = 10.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(5.dp))
+                            .background(MainThemeColor.Gray1)
+                            .padding(horizontal = 13.dp, vertical = 10.dp),
                 ) {
                     Column {
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
                                 text = "신용/체크카드",
                                 style = MainThemeFont.BodyBold,
-                                color = MainThemeColor.Gray5
+                                color = MainThemeColor.Gray5,
                             )
                             Text(
                                 text = "${orderDummyInfo.cost}원",
                                 style = MainThemeFont.Body,
-                                color = MainThemeColor.Gray5
+                                color = MainThemeColor.Gray5,
                             )
                         }
                         Row {
                             Text(
                                 text = "신한카드(*********5199)",
                                 style = MainThemeFont.Caption,
-                                color = MainThemeColor.Gray5
+                                color = MainThemeColor.Gray5,
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = "일시불",
                                 style = MainThemeFont.Caption,
-                                color = MainThemeColor.Gray5
+                                color = MainThemeColor.Gray5,
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = orderDummyInfo.orderDate,
                             style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray3
+                            color = MainThemeColor.Gray3,
                         )
                     }
                 }
@@ -307,7 +317,7 @@ fun MyPageOrderSheetScreen(modifier: Modifier = Modifier, navController: NavHost
                     contentColor = MainThemeColor.Black,
                     containerColor = MainThemeColor.White,
                     borderColor = MainThemeColor.Gray3,
-                    modifier = Modifier.height(42.dp)
+                    modifier = Modifier.height(42.dp),
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))

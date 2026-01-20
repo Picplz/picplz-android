@@ -27,11 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.hm.picplz.navigation.model.Main
-import com.hm.picplz.navigation.model.SignUpIntro
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.Main
+import com.hm.picplz.navigation.model.SignUpIntro
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.theme.MainFontFamily
@@ -42,15 +42,16 @@ import kotlinx.coroutines.flow.collectLatest
 data class LoginIntroPageData(
     val text: String,
     @DrawableRes val imageRes: Int,
-    val isLast: Boolean = false
+    val isLast: Boolean = false,
 )
 
 object LoginIntroPageConfig {
-    val PAGES = listOf(
-        LoginIntroPageData("내 인생샷 찍어줄\n작가님과 위치기반 매칭!", R.drawable.intro1),
-        LoginIntroPageData("작가와 고객 모두 걱정 없는\n정찰제, 안전 결제 시스템!", R.drawable.intro2),
-        LoginIntroPageData("나의 인생 프사,\n이젠 픽플즈가 함께", R.drawable.intro3, isLast = true)
-    )
+    val PAGES =
+        listOf(
+            LoginIntroPageData("내 인생샷 찍어줄\n작가님과 위치기반 매칭!", R.drawable.intro1),
+            LoginIntroPageData("작가와 고객 모두 걱정 없는\n정찰제, 안전 결제 시스템!", R.drawable.intro2),
+            LoginIntroPageData("나의 인생 프사,\n이젠 픽플즈가 함께", R.drawable.intro3, isLast = true),
+        )
 
     const val IMAGE_HEIGHT_FACTOR = 0.6f
 }
@@ -58,7 +59,7 @@ object LoginIntroPageConfig {
 @Composable
 fun LoginIntroScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
@@ -67,12 +68,13 @@ fun LoginIntroScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxWidth(),
         ) {
             CommonHorizontalPager(
                 items = LoginIntroPageConfig.PAGES,
@@ -87,11 +89,11 @@ fun LoginIntroScreen(
                         },
                         onLogoutClick = {
                             viewModel.handleIntent(LoginIntent.UnlinkKakao)
-                        }
+                        },
                     )
                 },
                 isIndicatorPositionAbsolute = true,
-                indicatorTopSpacing = imageHeight + 92.dp + 34.dp
+                indicatorTopSpacing = imageHeight + 92.dp + 34.dp,
             )
         }
     }
@@ -135,24 +137,26 @@ fun LoginIntroPage(
     page: LoginIntroPageData,
     imageHeight: Dp,
     onLoginClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(imageHeight)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(imageHeight),
         ) {
             Image(
                 painter = painterResource(id = page.imageRes),
                 contentDescription = "Background Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                contentScale = ContentScale.Crop
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
+                contentScale = ContentScale.Crop,
             )
         }
 
@@ -162,10 +166,11 @@ fun LoginIntroPage(
             text = page.text,
             style = MainFontFamily.titleLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp)
-                .wrapContentHeight(Alignment.CenterVertically)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(68.dp)
+                    .wrapContentHeight(Alignment.CenterVertically),
         )
 
         if (page.isLast) {
@@ -176,7 +181,7 @@ fun LoginIntroPage(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 contentColor = MainThemeColor.Black,
                 containerColor = MainThemeColor.Yellow,
-                onClick = onLoginClick
+                onClick = onLoginClick,
             )
             Spacer(modifier = Modifier.height(10.dp))
             CommonBottomButton(
@@ -184,7 +189,7 @@ fun LoginIntroPage(
                 modifier = Modifier.padding(horizontal = 15.dp),
                 contentColor = MainThemeColor.Black,
                 containerColor = MainThemeColor.Yellow,
-                onClick = onLogoutClick
+                onClick = onLogoutClick,
             )
         }
     }

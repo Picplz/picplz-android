@@ -19,20 +19,22 @@ fun ChatBubbleButton(
     text: String,
 ) {
     Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .padding(0.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .padding(0.dp),
         shape = RoundedCornerShape(5.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MainThemeColor.Black,
-            contentColor = MainThemeColor.White
-        ),
-        onClick = onClick
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MainThemeColor.Black,
+                contentColor = MainThemeColor.White,
+            ),
+        onClick = onClick,
     ) {
         Text(
             text = text,
-            style = MainFontFamily.buttonChat
+            style = MainFontFamily.buttonChat,
         )
     }
 }

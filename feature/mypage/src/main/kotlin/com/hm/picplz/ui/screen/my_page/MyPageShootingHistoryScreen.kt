@@ -15,15 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.my_page.shootingHistoryCard.ShootingStatus
 import com.hm.picplz.ui.screen.my_page.shootingHistoryCard.SwipeableShootingHistoryCard
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun MyPageShootingHistoryScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun MyPageShootingHistoryScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
@@ -31,21 +34,23 @@ fun MyPageShootingHistoryScreen(modifier: Modifier = Modifier, navController: Na
                 navController.popBackStack()
             }
         },
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
             LazyColumn(
                 modifier = Modifier.padding(horizontal = 15.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 item {
                     SwipeableShootingHistoryCard(
@@ -54,7 +59,7 @@ fun MyPageShootingHistoryScreen(modifier: Modifier = Modifier, navController: Na
                         status = ShootingStatus.COMPLEETED,
                         date = "5월 26일 오전 9시 30분",
                         location = "종로구 효자로 33",
-                        onClickOrderSheet = { navController.navigate(MyPageOrderSheet) }
+                        onClickOrderSheet = { navController.navigate(MyPageOrderSheet) },
                     )
                 }
                 item {

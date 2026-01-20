@@ -1,21 +1,20 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
+import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.User
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.Device
-import com.hm.picplz.domain.model.DeviceCategory
-import com.hm.picplz.common.mockdata.emptyUserData
 
 enum class SelectorType {
     NONE,
     YEAR,
-    MONTH
+    MONTH,
 }
 
 data class CareerPeriod(
     val years: Int = 0,
-    val months: Int = 0
+    val months: Int = 0,
 )
 
 data class SignUpPhotographerState(
@@ -69,7 +68,7 @@ data class SignUpPhotographerState(
                 ChipItem(id = "2", label = "을지로 감성"),
                 ChipItem(id = "3", label = "키치 감성"),
                 ChipItem(id = "4", label = "퇴폐 감성"),
-                ChipItem(id = "5", label = "올드머니 감성")
+                ChipItem(id = "5", label = "올드머니 감성"),
             )
         }
 

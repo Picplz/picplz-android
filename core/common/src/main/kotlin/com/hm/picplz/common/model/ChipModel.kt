@@ -5,7 +5,7 @@ import java.util.UUID
 enum class ChipMode {
     DEFAULT,
     ADD,
-    EDIT
+    EDIT,
 }
 
 data class ChipItem(

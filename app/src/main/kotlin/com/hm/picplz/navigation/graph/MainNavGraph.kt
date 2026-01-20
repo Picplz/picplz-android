@@ -4,9 +4,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.hm.picplz.navigation.model.*
+import com.hm.picplz.navigation.model.Chat
+import com.hm.picplz.navigation.model.ChatRoom
+import com.hm.picplz.navigation.model.Dev
+import com.hm.picplz.navigation.model.Feed
+import com.hm.picplz.navigation.model.Main
+import com.hm.picplz.navigation.model.MainSearch
+import com.hm.picplz.navigation.model.MyPage
+import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPageShootingHistory
+import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.screen.chat.ChatScreen
 import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
+import com.hm.picplz.ui.screen.dev.DevScreen
 import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.main.MainSearchScreen
@@ -14,7 +25,6 @@ import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
-import com.hm.picplz.ui.screen.dev.DevScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -40,7 +50,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<ChatRoom> { backStackEntry ->
         val args = backStackEntry.toRoute<ChatRoom>()
-        ChatRoomScreen(navController = navController, roomId = args.roomId)
+        ChatRoomScreen(navController = navController, _roomId = args.roomId)
     }
 
     composable<MyPage> {

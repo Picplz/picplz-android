@@ -6,12 +6,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class UserDataSource @Inject constructor(
-    private val userService: UserService
-) {
-    suspend fun getUserData(): User {
-        return withContext(Dispatchers.IO) {
-            userService.getUser()
+class UserDataSource
+    @Inject
+    constructor(
+        private val userService: UserService,
+    ) {
+        suspend fun getUserData(): User {
+            return withContext(Dispatchers.IO) {
+                userService.getUser()
+            }
         }
     }
-}

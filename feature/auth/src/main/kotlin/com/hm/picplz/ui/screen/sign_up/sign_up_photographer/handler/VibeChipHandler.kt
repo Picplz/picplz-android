@@ -12,7 +12,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSt
 class VibeChipHandler {
     fun handleIntent(
         intent: SignUpPhotographerIntent,
-        currentState: SignUpPhotographerState
+        currentState: SignUpPhotographerState,
     ): SignUpPhotographerState? {
         return when (intent) {
             is SetEditingChipId -> {
@@ -20,8 +20,9 @@ class VibeChipHandler {
             }
 
             is AddVibeChip -> {
-                val maxId = currentState.vibeChipList
-                    .maxByOrNull { it.id.toIntOrNull() ?: 0 }?.id?.toIntOrNull() ?: 0
+                val maxId =
+                    currentState.vibeChipList
+                        .maxByOrNull { it.id.toIntOrNull() ?: 0 }?.id?.toIntOrNull() ?: 0
                 val newId = (maxId + 1).toString()
 
                 val newChip = ChipItem(id = newId, label = intent.label, isEditable = true)
@@ -30,19 +31,20 @@ class VibeChipHandler {
 
             is DeleteVibeChip -> {
                 currentState.copy(
-                    vibeChipList = currentState.vibeChipList.filter { it.id != intent.chipId }
+                    vibeChipList = currentState.vibeChipList.filter { it.id != intent.chipId },
                 )
             }
 
             is UpdateVibeChip -> {
                 currentState.copy(
-                    vibeChipList = currentState.vibeChipList.map { chip ->
-                        if (chip.id == intent.chipId) {
-                            chip.copy(label = intent.label)
-                        } else {
-                            chip
-                        }
-                    }
+                    vibeChipList =
+                        currentState.vibeChipList.map { chip ->
+                            if (chip.id == intent.chipId) {
+                                chip.copy(label = intent.label)
+                            } else {
+                                chip
+                            }
+                        },
                 )
             }
 
@@ -51,10 +53,11 @@ class VibeChipHandler {
                     if (currentState.selectedVibeChipList.any { it.id == intent.chipId }) {
                         currentState.selectedVibeChipList.filter { it.id != intent.chipId }
                     } else {
-                        currentState.selectedVibeChipList + ChipItem(
-                            id = intent.chipId,
-                            label = intent.label
-                        )
+                        currentState.selectedVibeChipList +
+                            ChipItem(
+                                id = intent.chipId,
+                                label = intent.label,
+                            )
                     }
                 currentState.copy(selectedVibeChipList = updateSelectedChipList)
             }

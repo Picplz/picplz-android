@@ -29,9 +29,8 @@ import com.hm.picplz.ui.theme.PicplzTheme
 @Composable
 fun ImageChat(
     modifier: Modifier = Modifier,
-    imageUris: List<String>
+    imageUris: List<String>,
 ) {
-
     when {
         imageUris.isEmpty() -> {}
         imageUris.size == 1 -> {
@@ -58,28 +57,32 @@ fun ImageChat(
 @Composable
 private fun SingleImageChat(
     imageUri: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .width(200.dp)
-            .clip(RoundedCornerShape(20.dp))
+        modifier =
+            modifier
+                .width(200.dp)
+                .clip(RoundedCornerShape(20.dp)),
     ) {
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUri)
-                .crossfade(true)
-                .build()
-        )
+        val painter =
+            rememberAsyncImagePainter(
+                model =
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(imageUri)
+                        .crossfade(true)
+                        .build(),
+            )
 
         when (painter.state) {
             is AsyncImagePainter.State.Loading -> {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .align(Alignment.Center),
+                    modifier =
+                        Modifier
+                            .size(20.dp)
+                            .align(Alignment.Center),
                     color = MainThemeColor.Gray5,
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
                 )
             }
             is AsyncImagePainter.State.Error -> {}
@@ -89,44 +92,49 @@ private fun SingleImageChat(
             painter = rememberAsyncImagePainter(imageUri),
             contentDescription = "채팅 이미지",
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .aspectRatio(1f)
+            modifier =
+                Modifier
+                    .aspectRatio(1f),
         )
     }
 }
 
-
 @Composable
 fun DoubleImageChat(
     modifier: Modifier,
-    imageUris: List<String>
+    imageUris: List<String>,
 ) {
     Row(
-        modifier = modifier
-            .width(200.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        modifier =
+            modifier
+                .width(200.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         imageUris.forEach { imageUri ->
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(16.dp))
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(16.dp)),
             ) {
-                val painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageUri)
-                        .crossfade(true)
-                        .build()
-                )
+                val painter =
+                    rememberAsyncImagePainter(
+                        model =
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(imageUri)
+                                .crossfade(true)
+                                .build(),
+                    )
 
                 when (painter.state) {
                     is AsyncImagePainter.State.Loading -> {
                         CircularProgressIndicator(
-                            modifier = Modifier
-                                .size(10.dp)
-                                .align(Alignment.Center),
+                            modifier =
+                                Modifier
+                                    .size(10.dp)
+                                    .align(Alignment.Center),
                             color = MainThemeColor.Gray5,
-                            strokeWidth = 2.dp
+                            strokeWidth = 2.dp,
                         )
                     }
                     is AsyncImagePainter.State.Error -> {}
@@ -137,8 +145,9 @@ fun DoubleImageChat(
                     painter = rememberAsyncImagePainter(imageUri),
                     contentDescription = "채팅 이미지",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .aspectRatio(1f)
+                    modifier =
+                        Modifier
+                            .aspectRatio(1f),
                 )
             }
         }
@@ -148,42 +157,48 @@ fun DoubleImageChat(
 @Composable
 fun GridImageChat(
     modifier: Modifier,
-    imageUris: List<String>
+    imageUris: List<String>,
 ) {
     val imageRows = (imageUris.size + 2) / 3
     Column(
-        modifier = modifier
-            .width(200.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        modifier =
+            modifier
+                .width(200.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         for (imageRow in 0 until imageRows) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 for (col in 0 until 3) {
                     val index = imageRow * 3 + col
                     if (index < imageUris.size) {
                         Box(
-                            modifier = Modifier
-                                .weight(1f)
+                            modifier =
+                                Modifier
+                                    .weight(1f),
                         ) {
-                            val painter = rememberAsyncImagePainter(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(imageUris[index])
-                                    .crossfade(true)
-                                    .build()
-                            )
+                            val painter =
+                                rememberAsyncImagePainter(
+                                    model =
+                                        ImageRequest.Builder(LocalContext.current)
+                                            .data(imageUris[index])
+                                            .crossfade(true)
+                                            .build(),
+                                )
 
                             when (painter.state) {
                                 is AsyncImagePainter.State.Loading -> {
                                     CircularProgressIndicator(
-                                        modifier = Modifier
-                                            .size(8.dp)
-                                            .align(Alignment.Center),
+                                        modifier =
+                                            Modifier
+                                                .size(8.dp)
+                                                .align(Alignment.Center),
                                         color = MainThemeColor.Gray5,
-                                        strokeWidth = 2.dp
+                                        strokeWidth = 2.dp,
                                     )
                                 }
                                 is AsyncImagePainter.State.Error -> {}
@@ -191,9 +206,10 @@ fun GridImageChat(
                             }
 
                             Image(
-                                modifier = Modifier
-                                    .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(12.dp)),
+                                modifier =
+                                    Modifier
+                                        .aspectRatio(1f)
+                                        .clip(RoundedCornerShape(12.dp)),
                                 painter = rememberAsyncImagePainter(imageUris[index]),
                                 contentDescription = "전송된 이미지",
                                 contentScale = ContentScale.Crop,
@@ -213,9 +229,10 @@ fun GridImageChat(
 fun SingleImageChatPreview() {
     PicplzTheme {
         ImageChat(
-            imageUris = listOf(
-                "https://picsum.photos/id/243/300/300",
-            )
+            imageUris =
+                listOf(
+                    "https://picsum.photos/id/243/300/300",
+                ),
         )
     }
 }
@@ -225,10 +242,11 @@ fun SingleImageChatPreview() {
 fun DoubleImageChatPreview() {
     PicplzTheme {
         ImageChat(
-            imageUris = listOf(
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-            )
+            imageUris =
+                listOf(
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                ),
         )
     }
 }
@@ -238,15 +256,16 @@ fun DoubleImageChatPreview() {
 fun GridImageChatPreview() {
     PicplzTheme {
         ImageChat(
-            imageUris = listOf(
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-                "https://picsum.photos/id/243/300/300",
-            )
+            imageUris =
+                listOf(
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                    "https://picsum.photos/id/243/300/300",
+                ),
         )
     }
 }

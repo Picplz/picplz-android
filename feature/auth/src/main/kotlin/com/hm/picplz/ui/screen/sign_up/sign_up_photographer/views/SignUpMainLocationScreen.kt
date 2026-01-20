@@ -14,13 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,42 +29,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.ui.screen.common.CommonSearchField
-import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
-import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import kotlinx.coroutines.flow.collectLatest
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.runtime.remember
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.ui.screen.common.CommonBottomButton
-import com.hm.picplz.ui.screen.common.CommonToast
-import com.hm.picplz.ui.screen.common.ToastPosition
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.screen.common.AreaTag
+import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonSearchField
+import com.hm.picplz.ui.screen.common.CommonToast
+import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.ToastPosition
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.theme.MainFontFamily
+import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -79,77 +76,82 @@ fun SignUpMainLocationScreen(
         if (currentState.searchQuery.isNotBlank()) {
             delay(200L)
             viewModel.handleIntent(
-                SignUpPhotographerIntent.SearchArea(currentState.searchQuery)
+                SignUpPhotographerIntent.SearchArea(currentState.searchQuery),
             )
         } else {
             viewModel.handleIntent(
-                SignUpPhotographerIntent.SearchArea("")
+                SignUpPhotographerIntent.SearchArea(""),
             )
         }
     }
 
     Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .imePadding(),
-        containerColor = MainThemeColor.White
-    ){
-        innerPadding ->
+        modifier =
+            modifier
+                .fillMaxSize()
+                .imePadding(),
+        containerColor = MainThemeColor.White,
+    ) {
+            innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {
-                    focusManager.clearFocus()
-                }
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                    ) {
+                        focusManager.clearFocus()
+                    },
         ) {
             CommonTopBar(
                 text = "주 촬영지",
-                onClickBack = {viewModel.handleIntent(NavigateToPrev)}
+                onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 15.dp)
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .padding(horizontal = 15.dp)
+                        .weight(1f),
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 16.dp),
+                    modifier =
+                        Modifier
+                            .padding(top = 16.dp),
                     text = "주 촬영지(동)를 선택해 주세요.",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 CommonSearchField(
                     modifier = Modifier.padding(top = 30.dp),
                     value = currentState.searchQuery,
                     onValueChange = { searchText ->
                         viewModel.handleIntent(
-                            SignUpPhotographerIntent.UpdateSearchQuery(searchText)
+                            SignUpPhotographerIntent.UpdateSearchQuery(searchText),
                         )
                     },
                     placeholder = "동명(동, 면)으로 검색 (ex, 연남동)",
                     onSearchClick = {
                         viewModel.handleIntent(
                             SignUpPhotographerIntent.SearchArea(
-                                currentState.searchQuery
-                            )
+                                currentState.searchQuery,
+                            ),
                         )
                     },
                     keyboardActions = {
                         viewModel.handleIntent(
                             SignUpPhotographerIntent.SearchArea(
-                                currentState.searchQuery
-                            )
+                                currentState.searchQuery,
+                            ),
                         )
-                    }
+                    },
                 )
                 if (currentState.selectedAreas.isNotEmpty()) {
                     LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(currentState.selectedAreas) { area ->
                             AreaTag(
@@ -157,48 +159,53 @@ fun SignUpMainLocationScreen(
                                 onRemove = {
                                     focusManager.clearFocus()
                                     viewModel.handleIntent(
-                                        SignUpPhotographerIntent.RemoveSelectedArea(area)
+                                        SignUpPhotographerIntent.RemoveSelectedArea(area),
                                     )
                                 },
                             )
                         }
                     }
-                } else Spacer(modifier = Modifier.height(10.dp))
+                } else {
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
                 Spacer(modifier = Modifier.height(30.dp))
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.marker_icon),
                         contentDescription = "아이콘",
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(16.dp),
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = when {
-                            currentState.searchQuery.isBlank() -> "근처 동네"
-                            else -> "'${currentState.searchQuery}' 검색 결과"
-                        },
+                        text =
+                            when {
+                                currentState.searchQuery.isBlank() -> "근처 동네"
+                                else -> "'${currentState.searchQuery}' 검색 결과"
+                            },
                         style = MainFontFamily.buttonDefault,
                         fontWeight = FontWeight.SemiBold,
-                        color = MainThemeColor.Black
+                        color = MainThemeColor.Black,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp)
-                    ) {
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 15.dp),
+                ) {
                     when {
                         currentState.isSearching -> {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 16.dp),
-                                contentAlignment = Alignment.Center
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp),
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator()
                             }
@@ -207,7 +214,7 @@ fun SignUpMainLocationScreen(
                         currentState.searchResults.isNotEmpty() -> {
                             Column {
                                 LazyColumn(
-                                    modifier = Modifier.padding(top = 16.dp)
+                                    modifier = Modifier.padding(top = 16.dp),
                                 ) {
                                     itemsIndexed(currentState.searchResults) { index, area ->
                                         val isSelected = currentState.selectedAreas.any { it.id == area.id }
@@ -218,14 +225,14 @@ fun SignUpMainLocationScreen(
                                             onItemClick = { selectedArea ->
                                                 focusManager.clearFocus()
                                                 viewModel.handleIntent(
-                                                    SignUpPhotographerIntent.ToggleAreaSelection(selectedArea)
+                                                    SignUpPhotographerIntent.ToggleAreaSelection(selectedArea),
                                                 )
-                                            }
+                                            },
                                         )
                                         if (index < currentState.searchResults.size - 1) {
                                             HorizontalDivider(
                                                 thickness = 0.98.dp,
-                                                color = MainThemeColor.Gray2
+                                                color = MainThemeColor.Gray2,
                                             )
                                         }
                                     }
@@ -234,38 +241,43 @@ fun SignUpMainLocationScreen(
                         }
 
                         currentState.searchQuery.isNotBlank() &&
-                                currentState.searchResults.isEmpty() &&
-                                !currentState.isSearching &&
-                                currentState.hasSearchCompleted -> {
+                            currentState.searchResults.isEmpty() &&
+                            !currentState.isSearching &&
+                            currentState.hasSearchCompleted -> {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.TopCenter
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth(),
+                                contentAlignment = Alignment.TopCenter,
                             ) {
                                 Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 60.dp)
-                                        .requiredHeight(166.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 60.dp)
+                                            .requiredHeight(166.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     Text(
                                         text = "검색 결과가 없어요",
                                         style = pretendardTypography.titleSmall,
                                         color = MainThemeColor.Gray6,
                                     )
-                                    Spacer(modifier = Modifier
-                                        .height(18.dp)
+                                    Spacer(
+                                        modifier =
+                                            Modifier
+                                                .height(18.dp),
                                     )
                                     Box(
-                                        modifier = Modifier
-                                            .height(60.68.dp)
-                                            .width(52.39.dp)
+                                        modifier =
+                                            Modifier
+                                                .height(60.68.dp)
+                                                .width(52.39.dp),
                                     ) {
                                         Image(
                                             painter = painterResource(id = R.drawable.user_undefined),
                                             contentDescription = "아이콘",
-                                            modifier = Modifier.fillMaxSize()
+                                            modifier = Modifier.fillMaxSize(),
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(22.dp))
@@ -273,7 +285,7 @@ fun SignUpMainLocationScreen(
                                         text = "다른 지역으로\n이동해 보는 건 어때요?",
                                         style = pretendardTypography.bodyMedium,
                                         color = MainThemeColor.Gray5,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
                                     )
                                 }
                             }
@@ -282,11 +294,12 @@ fun SignUpMainLocationScreen(
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
@@ -294,7 +307,7 @@ fun SignUpMainLocationScreen(
                         viewModel.handleIntent(Navigate("sign-up-device"))
                     },
                     enabled = currentState.selectedAreas.isNotEmpty(),
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -306,7 +319,7 @@ fun SignUpMainLocationScreen(
                 offset = 120.dp,
                 onDismiss = {
                     viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
-                }
+                },
             )
         }
     }
@@ -325,9 +338,7 @@ fun SignUpMainLocationScreen(
     }
 }
 
-
-
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun SignUpMainLocationScreenPreview() {
     PicplzTheme {
@@ -336,7 +347,7 @@ fun SignUpMainLocationScreenPreview() {
 
         SignUpMainLocationScreen(
             mainNavController = mainNavController,
-            signUpPhotographerNavController = signUpPhotographerNavController
+            signUpPhotographerNavController = signUpPhotographerNavController,
         )
     }
 }

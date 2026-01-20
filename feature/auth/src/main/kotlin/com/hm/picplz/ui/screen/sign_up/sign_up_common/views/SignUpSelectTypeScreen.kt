@@ -24,18 +24,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.core.ui.R
-import com.hm.picplz.ui.util.SetStatusBarStyle
 import com.hm.picplz.common.model.UserType
-
+import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSelectImageButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.*
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ClickUserTypeButton
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ResetAllSignUpData
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
+import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -46,7 +48,7 @@ fun SignUpSelectTypeScreen(
     signUpCommonNavController: NavController,
 ) {
     SetStatusBarStyle()
-    
+
     LaunchedEffect(Unit) {
         viewModel.handleIntent(ResetAllSignUpData)
     }
@@ -55,88 +57,96 @@ fun SignUpSelectTypeScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "회원 타입 선택",
                 onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = buildAnnotatedString {
-                            append("가입하실 회원 타입을\n")
-                            append("선택해주세요.")
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        text =
+                            buildAnnotatedString {
+                                append("가입하실 회원 타입을\n")
+                                append("선택해주세요.")
+                            },
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
                         style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                     Spacer(
-                        modifier = Modifier
-                            .height(30.dp)
+                        modifier =
+                            Modifier
+                                .height(30.dp),
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(horizontal = 10.dp)
-                        ,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(horizontal = 10.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Bottom
+                        verticalAlignment = Alignment.Bottom,
                     ) {
                         CommonSelectImageButton(
                             text = "찍사",
-                            selectionState =currentState.photographerSelectionState,
+                            selectionState = currentState.photographerSelectionState,
                             onClick = { viewModel.handleIntent(ClickUserTypeButton(UserType.Photographer)) },
                             selectedIconResId = R.drawable.photographer_selected,
                             deSelectedIconResId = R.drawable.photographer_deselected,
                         )
                         CommonSelectImageButton(
                             text = "고객",
-                            selectionState =currentState.userSelectionState,
+                            selectionState = currentState.userSelectionState,
                             onClick = { viewModel.handleIntent(ClickUserTypeButton(UserType.User)) },
                             selectedIconResId = R.drawable.user_selected,
                             deSelectedIconResId = R.drawable.user_deselected,
                         )
                     }
                     Spacer(
-                        modifier = Modifier
-                            .height(170.dp)
+                        modifier =
+                            Modifier
+                                .height(170.dp),
                     )
                 }
             }
             Box(
-                modifier = Modifier
-                    .height(120.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(120.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = { viewModel.handleIntent( Navigate("sign-up-nickname")) },
+                    onClick = { viewModel.handleIntent(Navigate("sign-up-nickname")) },
                     enabled = currentState.selectedUserType != null,
-                    containerColor = MainThemeColor.Black
+                    containerColor = MainThemeColor.Black,
                 )
             }
         }
@@ -166,7 +176,7 @@ fun SignUpSelectTypeScreenPreview() {
 
         SignUpSelectTypeScreen(
             mainNavController = mainNavController,
-            signUpCommonNavController = signUpCommonNavController
+            signUpCommonNavController = signUpCommonNavController,
         )
     }
 }

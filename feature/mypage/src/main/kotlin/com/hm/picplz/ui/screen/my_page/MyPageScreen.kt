@@ -23,18 +23,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.hm.picplz.navigation.model.MyPageModifyProfile
-import com.hm.picplz.navigation.model.MyPageShootingHistory
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.common.PhotographerStatus
@@ -59,36 +55,40 @@ data class Profile(
     val profileImage: Int,
     val userName: String,
     val instagram: String,
-    val introduction: String
+    val introduction: String,
 )
 
 @Composable
 fun ProfileSection(navController: NavHostController) {
-    val dummyProfile = Profile(
-        profileImage = R.drawable.logo,
-        userName = "임두현",
-        instagram = "duduhyeon",
-        introduction = "합정사는 임두현입니다."
-    )
+    val dummyProfile =
+        Profile(
+            profileImage = R.drawable.logo,
+            userName = "임두현",
+            instagram = "duduhyeon",
+            introduction = "합정사는 임두현입니다.",
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .padding(top = 15.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 15.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = dummyProfile.profileImage),
                     contentDescription = "profile-image",
-                    modifier = Modifier
-                        .size(70.dp)
-                        .border(1.dp, MainThemeColor.Gray2, CircleShape)
-                        .clip(CircleShape)
+                    modifier =
+                        Modifier
+                            .size(70.dp)
+                            .border(1.dp, MainThemeColor.Gray2, CircleShape)
+                            .clip(CircleShape),
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Column {
@@ -97,7 +97,7 @@ fun ProfileSection(navController: NavHostController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.instagram),
-                            contentDescription = "instagram"
+                            contentDescription = "instagram",
                         )
                         Spacer(modifier = Modifier.width(2.4.dp))
                         Text(text = dummyProfile.instagram, color = MainThemeColor.Gray4)
@@ -108,7 +108,7 @@ fun ProfileSection(navController: NavHostController) {
             Text(
                 text = dummyProfile.introduction,
                 style = MainThemeFont.Caption,
-                color = MainThemeColor.Gray6
+                color = MainThemeColor.Gray6,
             )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(
@@ -116,12 +116,12 @@ fun ProfileSection(navController: NavHostController) {
                 shape = RoundedCornerShape(5.dp),
                 border = BorderStroke(1.dp, MainThemeColor.Gray3),
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 15.dp)
+                contentPadding = PaddingValues(vertical = 15.dp),
             ) {
                 Text(
                     text = "프로필 수정",
                     style = MainThemeFont.ButtonDefault,
-                    color = MainThemeColor.Black
+                    color = MainThemeColor.Black,
                 )
             }
         }
@@ -134,7 +134,7 @@ fun ReservationSection(navController: NavHostController) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "진행중인 촬영", style = MainThemeFont.TitleSmall)
             CommonIconButton(
@@ -165,20 +165,21 @@ fun ReservationSection(navController: NavHostController) {
         ScheduleCardNone(
             mainText = "진행중인 촬영이 없어요",
             subText = "촬영지를 검색하고 작가들을 둘러보세요",
-            onClick = { /* TODO */ })
+            onClick = { /* TODO */ },
+        )
     }
 }
-
 
 @Composable
 fun FollowPhotographerSection() {
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "팔로우 작가", style = MainThemeFont.TitleSmall)
             CommonIconButton(
@@ -198,7 +199,7 @@ fun FollowPhotographerSection() {
         LazyRow(
             modifier = Modifier.padding(start = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(30.dp),
-            contentPadding = PaddingValues(end = 16.dp)
+            contentPadding = PaddingValues(end = 16.dp),
         ) {
 //            TODO: 작가 데이터 연동
             item {
@@ -206,7 +207,7 @@ fun FollowPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -214,7 +215,7 @@ fun FollowPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -222,7 +223,7 @@ fun FollowPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -230,7 +231,7 @@ fun FollowPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -238,7 +239,7 @@ fun FollowPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.DISABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
         }
@@ -249,11 +250,12 @@ fun FollowPhotographerSection() {
 fun ScrapSection() {
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "스크랩", style = MainThemeFont.TitleSmall)
             CommonIconButton(
@@ -273,7 +275,7 @@ fun ScrapSection() {
         LazyRow(
             modifier = Modifier.padding(start = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(11.dp),
-            contentPadding = PaddingValues(end = 16.dp)
+            contentPadding = PaddingValues(end = 16.dp),
         ) {
 //            TODO: 작가 데이터 연동
             item {
@@ -285,7 +287,7 @@ fun ScrapSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -297,7 +299,7 @@ fun ScrapSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -309,7 +311,7 @@ fun ScrapSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
         }
@@ -321,7 +323,7 @@ fun EtcSection() {
     // TODO: 디자인 작업 완료 후 적용
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Text(text = "내 리뷰", style = MainThemeFont.ButtonDefault)
         Text(text = "문의하기", style = MainThemeFont.ButtonDefault)
@@ -331,23 +333,25 @@ fun EtcSection() {
 }
 
 @Composable
-fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController) {
-    var isToggled by remember { mutableStateOf(false) }
-
+fun MyPageScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
             ) {
                 Column {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp, 11.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp, 11.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
                             text = "마이 페이지",
@@ -355,16 +359,17 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "setting"
+                            contentDescription = "setting",
                         )
                     }
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MainThemeColor.Green120)
-                            .padding(horizontal = 16.dp, vertical = 15.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MainThemeColor.Green120)
+                                .padding(horizontal = 16.dp, vertical = 15.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
 //                        TODO: 분기 처리
 //                        Text(
@@ -379,13 +384,13 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
                         Text(
                             text = "작가로도 활동하기",
                             style = MainThemeFont.BodyBold,
-                            color = MainThemeColor.White
+                            color = MainThemeColor.White,
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.triangle_right),
                             contentDescription = "arrow",
                             tint = MainThemeColor.White,
-                            modifier = Modifier.clickable { }
+                            modifier = Modifier.clickable { },
                         )
                     }
                 }
@@ -396,15 +401,16 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
                 navController = navController,
             )
         },
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
         ) {
             ProfileSection(navController)
 
@@ -430,7 +436,6 @@ fun MyPageScreen(modifier: Modifier = Modifier, navController: NavHostController
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -33,32 +33,36 @@ fun CommonBottomButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .let { mod ->
-                if (borderColor != null) {
-                    mod.border(width = 1.dp, color = borderColor, shape = shape)
-                } else {
-                    mod
-                }
-            },        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
-            disabledContainerColor = disabledContainerColor,
-            disabledContentColor = disabledContentColor
-        ),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .let { mod ->
+                    if (borderColor != null) {
+                        mod.border(width = 1.dp, color = borderColor, shape = shape)
+                    } else {
+                        mod
+                    }
+                },
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                contentColor = contentColor,
+                disabledContainerColor = disabledContainerColor,
+                disabledContentColor = disabledContentColor,
+            ),
         shape = shape,
-        enabled = enabled
+        enabled = enabled,
     ) {
         Text(
             text = text,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 16.sp * 1.4,
-                letterSpacing = 0.sp
-            ),
+            style =
+                TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 16.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
         )
     }
 }

@@ -17,22 +17,23 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun EquipmentSettingScreen(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     viewModel: PhotographerMainViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Scaffold {
-        innerPadding ->
+            innerPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             CommonTopBar(
                 text = "촬영 기기 설정",
                 onClickBack = {
                     viewModel.handleIntent(PhotographerMainIntent.NavigateToPrev)
-                }
+                },
             )
         }
     }

@@ -22,32 +22,52 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.hm.picplz.common.mockdata.emptyUserData
-import com.hm.picplz.navigation.model.*
+import com.hm.picplz.navigation.model.Chat
+import com.hm.picplz.navigation.model.ChatRoom
+import com.hm.picplz.navigation.model.DetailPhotographer
+import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
+import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
+import com.hm.picplz.navigation.model.Feed
+import com.hm.picplz.navigation.model.Login
+import com.hm.picplz.navigation.model.Main
+import com.hm.picplz.navigation.model.MainSearch
+import com.hm.picplz.navigation.model.MyPage
+import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPageShootingHistory
+import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
+import com.hm.picplz.navigation.model.PhotographerMain
+import com.hm.picplz.navigation.model.Reservation
+import com.hm.picplz.navigation.model.ReviewPhotographer
+import com.hm.picplz.navigation.model.SearchPhotographer
+import com.hm.picplz.navigation.model.SignUpClient
+import com.hm.picplz.navigation.model.SignUpCompletion
+import com.hm.picplz.navigation.model.SignUpIntro
+import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun DevScreen(
-    navController: NavHostController
-) {
+fun DevScreen(navController: NavHostController) {
     Scaffold(
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Text(
                 text = "🛠 DEV MENU",
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
 
             // === Auth ===
@@ -77,14 +97,26 @@ fun DevScreen(
             SectionTitle("Photographer")
             DevButton("SearchPhotographer (지도)") { navController.navigate(SearchPhotographer) }
             DevButton("PhotographerMain (작가홈)") { navController.navigate(PhotographerMain) }
-            DevButton("PhotographerEquipmentSetting") { navController.navigate(PhotographerEquipmentSetting) }
+            DevButton("PhotographerEquipmentSetting") {
+                navController.navigate(
+                    PhotographerEquipmentSetting,
+                )
+            }
 
             // === Detail Photographer ===
             SectionTitle("Detail Photographer")
             DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer) }
             DevButton("ReviewPhotographer") { navController.navigate(ReviewPhotographer) }
-            DevButton("DetailPhotographerPhotoReviews") { navController.navigate(DetailPhotographerPhotoReviews) }
-            DevButton("DetailPhotographerPhotoPortfolios") { navController.navigate(DetailPhotographerPhotoPortfolios) }
+            DevButton("DetailPhotographerPhotoReviews") {
+                navController.navigate(
+                    DetailPhotographerPhotoReviews,
+                )
+            }
+            DevButton("DetailPhotographerPhotoPortfolios") {
+                navController.navigate(
+                    DetailPhotographerPhotoPortfolios,
+                )
+            }
 
             // === Chat ===
             SectionTitle("Chat")
@@ -105,7 +137,7 @@ private fun SectionTitle(title: String) {
             text = title,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
-            color = MainThemeColor.Gray5
+            color = MainThemeColor.Gray5,
         )
     }
 }
@@ -113,15 +145,16 @@ private fun SectionTitle(title: String) {
 @Composable
 private fun DevButton(
     label: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MainThemeColor.Black,
-            contentColor = Color.White
-        )
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MainThemeColor.Black,
+                contentColor = Color.White,
+            ),
     ) {
         Text(text = label)
     }

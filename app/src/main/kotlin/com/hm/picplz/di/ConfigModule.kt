@@ -11,12 +11,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ConfigModule {
-
     @Provides
     @Singleton
-    fun provideConfigProvider(): ConfigProvider = object : ConfigProvider {
-        override val devGuestToken: String = BuildConfig.DEV_GUEST_TOKEN
-        override val devUserToken: String = BuildConfig.DEV_USER_TOKEN
-        override val kakaoRestApiKey: String = BuildConfig.KAKAO_REST_API_KEY
-    }
+    fun provideConfigProvider(): ConfigProvider =
+        object : ConfigProvider {
+            override val devGuestToken: String = BuildConfig.DEV_GUEST_TOKEN
+            override val devUserToken: String = BuildConfig.DEV_USER_TOKEN
+            override val kakaoRestApiKey: String = BuildConfig.KAKAO_REST_API_KEY
+        }
 }

@@ -1,13 +1,13 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import com.hm.picplz.data.model.PhotographerInfo
-import com.hm.picplz.data.model.PhotographerPortfolio
-import com.hm.picplz.data.model.PhotographerReview
-import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.data.mockdata.mockPhotographerInfo
 import com.hm.picplz.data.mockdata.mockPortfolios
 import com.hm.picplz.data.mockdata.mockReviewSummary
 import com.hm.picplz.data.mockdata.mockReviews
+import com.hm.picplz.data.model.PhotographerInfo
+import com.hm.picplz.data.model.PhotographerPortfolio
+import com.hm.picplz.data.model.PhotographerReview
+import com.hm.picplz.data.model.PhotographerReviewSummary
 
 data class DetailPhotographerState(
     val profileInfo: PhotographerInfo = mockPhotographerInfo,

@@ -48,7 +48,7 @@ enum class ReservationStatus(val label: String) {
 
 enum class ReservationType(val label: String) {
     ASAP("바로 촬영"), // ASAP
-    NORMAL("일반 예약") // 일반예약
+    NORMAL("일반 예약"), // 일반예약
 }
 
 @Composable
@@ -64,64 +64,69 @@ fun ScheduleCard(
     packageType: PackageType = PackageType.PROFILE,
     date: String = "",
     location: String = "",
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .wrapContentSize()
-            .clip(RoundedCornerShape(borderRadius))
-            .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(borderRadius))
-            .background(MainThemeColor.Gray1)
-            .clickable { onClick() }
+        modifier =
+            modifier
+                .wrapContentSize()
+                .clip(RoundedCornerShape(borderRadius))
+                .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(borderRadius))
+                .background(MainThemeColor.Gray1)
+                .clickable { onClick() },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontalPadding, verticalPadding),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontalPadding, verticalPadding),
         ) {
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                )
-                {
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                     Image(
                         painter = painterResource(id = userProfile),
                         contentDescription = "user-profile",
-                        modifier = Modifier
-                            .size(40.dp)
-                            .border(1.dp, MainThemeColor.Gray3, CircleShape)
-                            .clip(CircleShape)
+                        modifier =
+                            Modifier
+                                .size(40.dp)
+                                .border(1.dp, MainThemeColor.Gray3, CircleShape)
+                                .clip(CircleShape),
                     )
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
                     ) {
                         Text(text = userName, style = MainThemeFont.BodyBold)
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(2.5.dp)
+                            horizontalArrangement = Arrangement.spacedBy(2.5.dp),
                         ) {
                             when (status) {
                                 ReservationStatus.PENDING ->
                                     CommonBadge(
                                         label = status.label,
                                         theme = BadgeTheme.INACTIVE,
-                                        modifier = Modifier.border(
-                                            1.dp,
-                                            MainThemeColor.Pink2,
-                                            RoundedCornerShape(5.dp)
-                                        )
+                                        modifier =
+                                            Modifier.border(
+                                                1.dp,
+                                                MainThemeColor.Pink2,
+                                                RoundedCornerShape(5.dp),
+                                            ),
                                     )
 
                                 ReservationStatus.CONFIRMED,
-                                ReservationStatus.INPROGRESS ->
+                                ReservationStatus.INPROGRESS,
+                                ->
                                     CommonBadge(
                                         label = status.label,
                                         theme = BadgeTheme.ACTIVE,
-                                        modifier = Modifier.border(
-                                            1.dp,
-                                            MainThemeColor.Olive,
-                                            RoundedCornerShape(5.dp)
-                                        )
+                                        modifier =
+                                            Modifier.border(
+                                                1.dp,
+                                                MainThemeColor.Olive,
+                                                RoundedCornerShape(5.dp),
+                                            ),
                                     )
                             }
                             CommonBadge(label = type.label, theme = BadgeTheme.DISABLED)
@@ -132,23 +137,24 @@ fun ScheduleCard(
                 Spacer(modifier = Modifier.height(13.5.dp))
                 Text(text = packageType.label, style = MainThemeFont.Title)
                 HorizontalDivider(
-                    thickness = 1.dp, color = MainThemeColor.Gray2,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    thickness = 1.dp,
+                    color = MainThemeColor.Gray2,
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.clock_green),
                             contentDescription = "clock",
-                            modifier = Modifier.size(13.dp)
+                            modifier = Modifier.size(13.dp),
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "촬영 일시",
                             style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray4
+                            color = MainThemeColor.Gray4,
                         )
                         Spacer(modifier = Modifier.width(14.dp))
                         Text(text = date, style = MainThemeFont.BodyBold)
@@ -157,13 +163,13 @@ fun ScheduleCard(
                         Image(
                             painter = painterResource(id = R.drawable.location_green),
                             contentDescription = "clock",
-                            modifier = Modifier.size(13.dp)
+                            modifier = Modifier.size(13.dp),
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "촬영 장소",
                             style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray4
+                            color = MainThemeColor.Gray4,
                         )
                         Spacer(modifier = Modifier.width(14.dp))
                         Text(text = location, style = MainThemeFont.BodyBold)
@@ -186,7 +192,7 @@ fun ScheduleCardPreview() {
             packageType = PackageType.KAKAO,
             date = "5월 26일 오전 9시 30분",
             location = "종로구 효자로 33",
-            onClick = {}
+            onClick = {},
         )
     }
 }

@@ -9,12 +9,13 @@ plugins {
     id("kotlin-parcelize")
 }
 
-val localProperties = Properties().apply {
-    val localPropertiesFile = rootProject.file("local.properties")
-    if (localPropertiesFile.exists()) {
-        load(localPropertiesFile.inputStream())
+val localProperties =
+    Properties().apply {
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            load(localPropertiesFile.inputStream())
+        }
     }
-}
 
 android {
     namespace = "com.hm.picplz"
@@ -39,7 +40,7 @@ android {
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            "${localProperties["kakao_native_app_key"]}"
+            "${localProperties["kakao_native_app_key"]}",
         )
         buildConfigField("String", "KAKAO_REST_API_KEY", "${localProperties["kakao_rest_api_key"]}")
         buildConfigField("String", "DEV_GUEST_TOKEN", "${localProperties["dev_guest_token"]}")
@@ -54,7 +55,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
@@ -93,7 +94,7 @@ dependencies {
     implementation(project(":feature:mypage"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:main"))
-    
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -135,7 +136,7 @@ dependencies {
     // coil
     implementation(libs.coil.compose)
 
-    //retrofit
+    // retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)

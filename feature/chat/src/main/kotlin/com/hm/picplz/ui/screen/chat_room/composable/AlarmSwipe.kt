@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -38,32 +37,34 @@ import kotlin.math.roundToInt
 
 private enum class Reveal { Closed, Open }
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalFoundationApi::class)
-
 @Composable
 fun AlarmSwipe(
     isMuted: Boolean,
     onSwipe: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val density = LocalDensity.current
     val revealPx = with(density) { 61.dp.toPx() }
 
-    val anchors = DraggableAnchors {
-        Reveal.Closed at 0f
-        Reveal.Open at -revealPx
-    }
-    
-    val state = remember {
-        AnchoredDraggableState(
-            initialValue = Reveal.Closed,
-            anchors = anchors,
-            positionalThreshold = { it * 0.5f },
-            velocityThreshold = { with(density) { 800.dp.toPx() } },
-            snapAnimationSpec = tween(),
-            decayAnimationSpec = androidx.compose.animation.splineBasedDecay(density)
-        )
-    }
+    val anchors =
+        DraggableAnchors {
+            Reveal.Closed at 0f
+            Reveal.Open at -revealPx
+        }
+
+    val state =
+        remember {
+            AnchoredDraggableState(
+                initialValue = Reveal.Closed,
+                anchors = anchors,
+                positionalThreshold = { it * 0.5f },
+                velocityThreshold = { with(density) { 800.dp.toPx() } },
+                snapAnimationSpec = tween(),
+                decayAnimationSpec = androidx.compose.animation.splineBasedDecay(density),
+            )
+        }
 
     LaunchedEffect(state) {
         snapshotFlow { state.currentValue }
@@ -80,35 +81,39 @@ fun AlarmSwipe(
 
     Box(
         Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             Modifier
                 .matchParentSize(),
             horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = Modifier
-                    .height(75.dp)
-                    .width(61.dp)
-                    .then(
-                        if (isMuted) Modifier.background(MainThemeColor.Green120)
-                        else Modifier.background(MainThemeColor.Gray3)
-                    ),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .height(75.dp)
+                        .width(61.dp)
+                        .then(
+                            if (isMuted) {
+                                Modifier.background(MainThemeColor.Green120)
+                            } else {
+                                Modifier.background(MainThemeColor.Gray3)
+                            },
+                        ),
+                contentAlignment = Alignment.Center,
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
-                        painter = if(isMuted) painterResource(R.drawable.bell_on) else painterResource(R.drawable.bell_off),
+                        painter = if (isMuted) painterResource(R.drawable.bell_on) else painterResource(R.drawable.bell_off),
                         contentDescription = null,
-                        modifier = Modifier.width(20.dp)
+                        modifier = Modifier.width(20.dp),
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
                         style = MainThemeFont.Caption,
                         text = if (isMuted) "알림on" else "알림off",
-                        color = MainThemeColor.White
+                        color = MainThemeColor.White,
                     )
                 }
             }
@@ -118,7 +123,7 @@ fun AlarmSwipe(
             Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .anchoredDraggable(state = state, orientation = Orientation.Horizontal)
-                .background(MainThemeColor.White)
+                .background(MainThemeColor.White),
         ) {
             content()
         }

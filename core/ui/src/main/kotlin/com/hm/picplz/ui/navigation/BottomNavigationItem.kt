@@ -1,18 +1,18 @@
 package com.hm.picplz.ui.navigation
 
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.model.Main as MainRoute
-import com.hm.picplz.navigation.model.SearchPhotographer as SearchPhotographerRoute
-import com.hm.picplz.navigation.model.Reservation as ReservationRoute
-import com.hm.picplz.navigation.model.Feed as FeedRoute
 import com.hm.picplz.navigation.model.Chat as ChatRoute
+import com.hm.picplz.navigation.model.Feed as FeedRoute
+import com.hm.picplz.navigation.model.Main as MainRoute
 import com.hm.picplz.navigation.model.MyPage as MyPageRoute
+import com.hm.picplz.navigation.model.Reservation as ReservationRoute
+import com.hm.picplz.navigation.model.SearchPhotographer as SearchPhotographerRoute
 
 sealed class BottomNavigationItem(
     val route: Any,
     val label: String,
     val iconSelect: Int,
-    val iconUnselect: Int
+    val iconUnselect: Int,
 ) {
     data object Main : BottomNavigationItem(
         MainRoute,

@@ -26,7 +26,7 @@ data class SignUpCommonState(
                 profileImageUri = null,
                 nicknameFieldErrors = emptyList(),
                 photographerSelectionState = SelectionState.UNSELECTED,
-                userSelectionState = SelectionState.UNSELECTED
+                userSelectionState = SelectionState.UNSELECTED,
             )
         }
     }

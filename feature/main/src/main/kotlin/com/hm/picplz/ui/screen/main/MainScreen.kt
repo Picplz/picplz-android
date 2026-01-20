@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,74 +36,79 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.MainSearch
-
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.PhotographerStatus
+import com.hm.picplz.ui.screen.common.card.PhotographerCard
+import com.hm.picplz.ui.screen.common.card.PortfolioCard
+import com.hm.picplz.ui.screen.common.card.ScheduleCardNone
 import com.hm.picplz.ui.screen.main.modalBottomSheet.DeviceModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.MoodKeywordModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.RegionModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.SortFilterModalBottomSheet
 import com.hm.picplz.ui.screen.main.modalBottomSheet.SortType
-import com.hm.picplz.ui.screen.common.card.PhotographerCard
-import com.hm.picplz.ui.screen.common.card.PortfolioCard
-import com.hm.picplz.ui.screen.common.card.ScheduleCardNone
 import com.hm.picplz.ui.screen.main.search.SearchNavigateButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 
-private val DISTRICTS = listOf(
-    "연남동", "성수동", "한남동", "망원동",
-    "상수동", "이태원동", "청담동", "삼청동",
-    "북촌동", "신사동", "서교동", "합정동",
-    "논현동", "잠실동"
-)
+private val DISTRICTS =
+    listOf(
+        "연남동", "성수동", "한남동", "망원동",
+        "상수동", "이태원동", "청담동", "삼청동",
+        "북촌동", "신사동", "서교동", "합정동",
+        "논현동", "잠실동",
+    )
 private val TODAY_DISTRICT: String by lazy { DISTRICTS.random() }
 
 @Composable
 fun SearchBanner(navController: NavHostController) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(159.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(MainThemeColor.Black, Color(0xFF242529))
-                )
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(159.dp)
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors = listOf(MainThemeColor.Black, Color(0xFF242529)),
+                        ),
+                ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
         ) {
             Spacer(Modifier.height(10.dp))
 
             SearchNavigateButton(
                 placeholder = "촬영을 하고 싶은 장소 또는 동을 검색해보세요",
-                onClick = { navController.navigate(MainSearch) })
+                onClick = { navController.navigate(MainSearch) },
+            )
 
             Spacer(Modifier.height(20.dp))
 
             Text(
                 text = "오늘은 $TODAY_DISTRICT 나들이 어때요?",
                 style = MainThemeFont.TitleSmall,
-                color = MainThemeColor.White
+                color = MainThemeColor.White,
             )
 
             Spacer(Modifier.height(4.dp))
 
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(MainThemeColor.Gray6)
-                    .padding(5.dp)
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(MainThemeColor.Gray6)
+                        .padding(5.dp),
             ) {
                 // TODO: 작가 수 연동
                 Text(
                     text = "N명의 작가가 픽플즈에서 활동하고 있어요",
                     style = MainThemeFont.Caption,
-                    color = MainThemeColor.White
+                    color = MainThemeColor.White,
                 )
             }
         }
@@ -113,9 +116,10 @@ fun SearchBanner(navController: NavHostController) {
         Image(
             painter = painterResource(id = R.drawable.mask_group),
             contentDescription = "banner-image",
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .zIndex(1f)
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .zIndex(1f),
         )
     }
 }
@@ -139,7 +143,8 @@ fun ReservationSection() {
         ScheduleCardNone(
             mainText = "진행중인 촬영이 없어요",
             subText = "촬영지를 검색하고 작가들을 둘러보세요",
-            onClick = { /* TODO */ })
+            onClick = { /* TODO */ },
+        )
     }
 }
 
@@ -147,10 +152,11 @@ fun ReservationSection() {
 fun AdSection() {
     Column {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(MainThemeColor.Olive)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(MainThemeColor.Olive),
         ) {
             Text(text = "광고!")
         }
@@ -164,7 +170,7 @@ fun PopularPortfolioSection() {
         Spacer(modifier = Modifier.height(12.dp))
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(11.dp),
-            contentPadding = PaddingValues(end = 16.dp)
+            contentPadding = PaddingValues(end = 16.dp),
         ) {
 //            TODO: 포트폴리오 데이터 연동
             item {
@@ -176,7 +182,7 @@ fun PopularPortfolioSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -188,7 +194,7 @@ fun PopularPortfolioSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -200,7 +206,7 @@ fun PopularPortfolioSection() {
                     bookmarkCnt = 23,
                     isBookMarked = false,
                     bookmarkClick = {},
-                    onClick = {}
+                    onClick = {},
                 )
             }
         }
@@ -214,7 +220,7 @@ fun PopularPhotographerSection() {
         Spacer(modifier = Modifier.height(20.dp))
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(30.dp),
-            contentPadding = PaddingValues(end = 16.dp)
+            contentPadding = PaddingValues(end = 16.dp),
         ) {
 //            TODO: 작가 데이터 연동
             item {
@@ -222,7 +228,7 @@ fun PopularPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -230,7 +236,7 @@ fun PopularPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.ENABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
             item {
@@ -238,7 +244,7 @@ fun PopularPhotographerSection() {
                     profileImage = R.drawable.user_undefined,
                     username = "유가영",
                     status = PhotographerStatus.DISABLED,
-                    onClick = {}
+                    onClick = {},
                 )
             }
         }
@@ -254,9 +260,11 @@ fun PopularReviewSection() {
     }
 }
 
-
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     var visible by remember { mutableStateOf(false) }
     var visibleDevice by remember { mutableStateOf(false) }
     var visibleDeviceMood by remember { mutableStateOf(false) }
@@ -267,15 +275,16 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
         containerColor = MainThemeColor.White,
         topBar = {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MainThemeColor.Black)
-                    .padding(16.dp, 11.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(MainThemeColor.Black)
+                        .padding(16.dp, 11.dp),
             ) {
                 Text(
                     text = "홈",
                     style = MainThemeFont.BodySmallButton2,
-                    color = MainThemeColor.White
+                    color = MainThemeColor.White,
                 )
             }
         },
@@ -284,15 +293,16 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                 navController = navController,
             )
         },
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
         ) {
             SearchBanner(navController = navController)
 
@@ -323,12 +333,12 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 
             DeviceModalBottomSheet(
                 onDismiss = { visibleDevice = false },
-                visible = visibleDevice
+                visible = visibleDevice,
             )
 
             MoodKeywordModalBottomSheet(
                 onDismiss = { visibleDeviceMood = false },
-                visible = visibleDeviceMood
+                visible = visibleDeviceMood,
             )
 
             SortFilterModalBottomSheet(
@@ -336,12 +346,11 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                 visible = visibleSortFilter,
                 onSelect = { selectedType ->
                     selectedSortType = selectedType
-                }
+                },
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

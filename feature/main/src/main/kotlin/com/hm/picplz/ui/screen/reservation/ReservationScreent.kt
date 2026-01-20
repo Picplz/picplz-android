@@ -12,19 +12,23 @@ import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun ReservationScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun ReservationScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     Scaffold(
         containerColor = MainThemeColor.White,
         bottomBar = {
             BottomNavigationBar(navController = navController)
         },
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Text(
             text = "받은예약 화면",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }

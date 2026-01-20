@@ -1,8 +1,8 @@
 package com.hm.picplz.ui.screen.search_photographer.util
 
 import androidx.compose.ui.geometry.Offset
-import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.common.util.DisplayMetricsUtil
+import com.hm.picplz.domain.model.FilteredPhotographers
 import kotlin.random.Random
 
 class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
@@ -33,7 +33,7 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
         fun generateOffset(): Offset {
             return Offset(
                 (Random.nextFloat() * 2 - 1) * maxOffsetX,
-                (Random.nextFloat() * 2 - 1) * maxOffsetX
+                (Random.nextFloat() * 2 - 1) * maxOffsetX,
             )
         }
 

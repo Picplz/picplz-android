@@ -6,10 +6,13 @@ sealed interface SignUpSideEffect {
     sealed interface SelectUserTypeScreenSideEffect : SignUpSideEffect {
         data class NavigateToSelected(
             val destination: String,
-            val user: User
+            val user: User,
         ) : SelectUserTypeScreenSideEffect
     }
+
     data object NavigateToPrev : SignUpSideEffect
+
     data class Navigate(val destination: String) : SignUpSideEffect
+
     data object ShowFileUploadDialog : SignUpSideEffect
 }

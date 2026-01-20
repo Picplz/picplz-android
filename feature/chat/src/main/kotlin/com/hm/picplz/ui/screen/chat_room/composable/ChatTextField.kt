@@ -21,25 +21,26 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun ChatTextField(
     modifier: Modifier = Modifier,
     inputText: String = "",
-    onInputChanged: (String) -> Unit = {}
+    onInputChanged: (String) -> Unit = {},
 ) {
     BasicTextField(
         value = inputText,
         onValueChange = { newValue -> onInputChanged(newValue) },
-        modifier = modifier
-            .height(40.dp)
-            .border(
-                width = 1.dp,
-                color = MainThemeColor.Black,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(horizontal = 12.dp),
+        modifier =
+            modifier
+                .height(40.dp)
+                .border(
+                    width = 1.dp,
+                    color = MainThemeColor.Black,
+                    shape = RoundedCornerShape(20.dp),
+                )
+                .padding(horizontal = 12.dp),
         textStyle = pretendardTypography.bodyMedium,
         singleLine = true,
         decorationBox = { innerTextField ->
             Box(
                 contentAlignment = Alignment.CenterStart,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 if (inputText.isEmpty()) {
                     Text(
@@ -50,7 +51,7 @@ fun ChatTextField(
                 }
                 innerTextField()
             }
-        }
+        },
     )
 }
 

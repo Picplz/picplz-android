@@ -23,24 +23,27 @@ fun ChatSuggestButton(
     onClick: () -> Unit = {},
 ) {
     Button(
-        modifier = modifier
-            .height(30.dp),
+        modifier =
+            modifier
+                .height(30.dp),
         shape = RoundedCornerShape(5.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MainThemeColor.Black,
-            contentColor = MainThemeColor.White,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MainThemeColor.Black,
+                contentColor = MainThemeColor.White,
+            ),
         contentPadding = PaddingValues(horizontal = 10.dp),
-        onClick = onClick
+        onClick = onClick,
     ) {
         Text(
             text = chatText,
-            style = TextStyle(
-                fontWeight = FontWeight.Medium,
-                fontSize = 10.sp,
-                lineHeight = 10.sp * 1.4,
-                letterSpacing = 0.sp
-            )
+            style =
+                TextStyle(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 10.sp,
+                    lineHeight = 10.sp * 1.4,
+                    letterSpacing = 0.sp,
+                ),
         )
     }
 }
@@ -50,7 +53,7 @@ fun ChatSuggestButton(
 fun ChatSuggestButtonPreview() {
     PicplzTheme {
         ChatSuggestButton(
-            chatText = "촬영 소요 시간은 얼마나 걸리나요?"
+            chatText = "촬영 소요 시간은 얼마나 걸리나요?",
         )
     }
 }

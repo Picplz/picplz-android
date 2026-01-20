@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.hm.picplz.core.ui.R
 import com.hm.picplz.common.model.PhotoReview
+import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -35,45 +35,49 @@ import com.hm.picplz.ui.theme.pretendardTypography
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
     navController: NavController,
-    photoReviews: List<PhotoReview>
+    photoReviews: List<PhotoReview>,
 ) {
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
     val chunkedImages = photoReviews.chunked(3)
 
-    Scaffold(modifier = Modifier.fillMaxSize(),
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
         containerColor = MainThemeColor.White,
         content = { innerPadding ->
             Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .fillMaxWidth(),
             ) {
                 CommonFixedTopBar(title = "사진 리뷰") {
                     navController.popBackStack()
                 }
 
                 Column(
-                    modifier = paddingModifier
-                        .fillMaxSize()
-                        .padding(top = 7.dp, bottom = 20.dp)
-                        .verticalScroll(rememberScrollState()) // 스크롤 가능하도록 추가
+                    modifier =
+                        paddingModifier
+                            .fillMaxSize()
+                            .padding(top = 7.dp, bottom = 20.dp)
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     if (chunkedImages.isEmpty()) {
                         Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .weight(1f),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Image(
                                     painter = painterResource(id = R.drawable.user_undefined),
-                                    contentDescription = "user-undefined"
+                                    contentDescription = "user-undefined",
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Text(
                                     text = "등록된 사진 리뷰가 없습니다",
-                                    style = pretendardTypography.titleSmall
+                                    style = pretendardTypography.titleSmall,
                                 )
                             }
                         }
@@ -83,43 +87,50 @@ fun DetailPhotographerPhotoReviewsScreen(
                                 rowImages.forEach { imageRes ->
 //                                TODO: 기본 로드 이미지 변경
                                     Image(
-                                        painter = rememberAsyncImagePainter(
-                                            model = ImageRequest.Builder(
-                                                LocalContext.current
-                                            )
-                                                .data(imageRes.photoReviewUri) // 실제 로드할 이미지
-                                                .placeholder(R.drawable.center_char) // 로드되기 전 기본 이미지
-                                                .error(R.drawable.center_char) // 로드 실패 시 보여줄 이미지
-                                                .crossfade(true) // 부드러운 전환 효과
-                                                .build()
-                                        ),
+                                        painter =
+                                            rememberAsyncImagePainter(
+                                                model =
+                                                    ImageRequest.Builder(
+                                                        LocalContext.current,
+                                                    )
+                                                        .data(imageRes.photoReviewUri) // 실제 로드할 이미지
+                                                        .placeholder(R.drawable.center_char) // 로드되기 전 기본 이미지
+                                                        .error(R.drawable.center_char) // 로드 실패 시 보여줄 이미지
+                                                        .crossfade(true) // 부드러운 전환 효과
+                                                        .build(),
+                                            ),
                                         contentDescription = "포트폴리오 이미지",
-                                        modifier = Modifier
-                                            .weight(1f) // 각 이미지가 동일한 크기를 가짐
-                                            .aspectRatio(1f) // 1:1 비율
-                                            .padding(2.dp)
-                                            .clickable {
-                                                navController.navigate(DetailPhotographerSingleReview(reviewId = imageRes.reviewId, photoIndex = imageRes.index))
-                                            },
-                                        contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
+                                        modifier =
+                                            Modifier
+                                                .weight(1f) // 각 이미지가 동일한 크기를 가짐
+                                                .aspectRatio(1f) // 1:1 비율
+                                                .padding(2.dp)
+                                                .clickable {
+                                                    navController.navigate(
+                                                        DetailPhotographerSingleReview(
+                                                            reviewId = imageRes.reviewId,
+                                                            photoIndex = imageRes.index,
+                                                        ),
+                                                    )
+                                                },
+                                        contentScale = ContentScale.Crop,
                                     )
                                 }
                                 // 남은 빈 공간 채우기
                                 repeat(3 - rowImages.size) {
                                     Spacer(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .aspectRatio(1f)
-                                            .padding(2.dp)
+                                        modifier =
+                                            Modifier
+                                                .weight(1f)
+                                                .aspectRatio(1f)
+                                                .padding(2.dp),
                                     )
                                 }
                             }
                         }
                     }
-
                 }
-
             }
-        }
+        },
     )
 }

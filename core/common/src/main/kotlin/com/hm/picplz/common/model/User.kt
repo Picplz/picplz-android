@@ -19,11 +19,13 @@ data class User(
 @Serializable
 enum class UserType {
     User,
-    Photographer
+    Photographer,
 }
 
 enum class SelectionState {
-    UNSELECTED, SELECTED, DESELECTED
+    UNSELECTED,
+    SELECTED,
+    DESELECTED,
 }
 
 @Serializable

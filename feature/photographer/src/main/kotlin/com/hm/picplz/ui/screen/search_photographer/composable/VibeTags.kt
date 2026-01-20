@@ -12,13 +12,14 @@ import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun VibeTags (
+fun VibeTags(
     modifier: Modifier = Modifier,
     tags: List<String> = emptyList(),
 ) {
     LazyRow(
-        modifier = modifier
-            .height(30.dp),
+        modifier =
+            modifier
+                .height(30.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         itemsIndexed(tags) { index, vibeTag ->

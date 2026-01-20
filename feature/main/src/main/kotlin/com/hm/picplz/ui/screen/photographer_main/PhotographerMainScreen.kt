@@ -45,13 +45,12 @@ import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentListItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 
 @Composable
 fun PhotographerMainScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotographerMainViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val currentState = viewModel.state.collectAsState().value
 
@@ -60,73 +59,86 @@ fun PhotographerMainScreen(
         bottomBar = {
             BottomNavigationBar(navController = navController)
         },
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
     ) { innerPadding ->
         Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier =
+                modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
         ) {
-            Box (
+            Box(
                 Modifier
                     .background(
-                        color = if (currentState.isActive) MainThemeColor.Green100 else MainThemeColor.Gray1
-                    )
-            ){
+                        color = if (currentState.isActive) MainThemeColor.Green100 else MainThemeColor.Gray1,
+                    ),
+            ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, start = 5.dp, end = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AddressMarker(
-                        address = "마포구 서교동"
+                        address = "마포구 서교동",
                     )
                     RefetchButton(
-                        onClick = { }
+                        onClick = { },
                     )
                 }
                 Box(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .height(370.dp),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        modifier
+                            .fillMaxWidth()
+                            .height(370.dp),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Image(
-                        painter = painterResource(
-                            if (currentState.isActive) R.drawable.double_circle_active else R.drawable.double_circle_inactive
-                        ),
+                        painter =
+                            painterResource(
+                                if (currentState.isActive) R.drawable.double_circle_active else R.drawable.double_circle_inactive,
+                            ),
                         contentDescription = "범위 이미지",
-                        modifier = Modifier
+                        modifier = Modifier,
                     )
                     Image(
-                        painter = painterResource(
-                            if (currentState.isActive) R.drawable.searching_photographer_active else R.drawable.searching_photographer_inactive
-                        ),
+                        painter =
+                            painterResource(
+                                if (currentState.isActive) {
+                                    R.drawable.searching_photographer_active
+                                } else {
+                                    R.drawable.searching_photographer_inactive
+                                },
+                            ),
                         contentDescription = "작가 캐릭터",
                     )
                     if (currentState.isActive) {
                         Image(
-                            modifier = Modifier
-                                .offset(x = (-85).dp, y = (-85).dp)
-                                .size(75.dp),
+                            modifier =
+                                Modifier
+                                    .offset(x = (-85).dp, y = (-85).dp)
+                                    .size(75.dp),
                             painter = painterResource(R.drawable.flash),
                             contentDescription = "플래시 이미지",
                         )
                         Image(
-                            modifier = Modifier
-                                .offset(x = 88.dp, y = 88.dp)
-                                .size(55.dp),
+                            modifier =
+                                Modifier
+                                    .offset(x = 88.dp, y = 88.dp)
+                                    .size(55.dp),
                             painter = painterResource(R.drawable.flash),
                             contentDescription = "플래시 이미지",
                         )
                         Image(
-                            modifier = Modifier
-                                .offset(x = 120.dp, y = 42.dp)
-                                .size(37.dp),
+                            modifier =
+                                Modifier
+                                    .offset(x = 120.dp, y = 42.dp)
+                                    .size(37.dp),
                             painter = painterResource(R.drawable.flash),
                             contentDescription = "플래시 이미지",
                         )
@@ -134,52 +146,55 @@ fun PhotographerMainScreen(
                 }
             }
             Column(
-                modifier = Modifier
-                    .padding(
-                        vertical = 10.dp,
-                        horizontal = 15.dp
-                    )
-                    .fillMaxHeight()
-                ,
-                verticalArrangement = Arrangement.SpaceBetween
+                modifier =
+                    Modifier
+                        .padding(
+                            vertical = 10.dp,
+                            horizontal = 15.dp,
+                        )
+                        .fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Row(
-                    modifier = Modifier
-                        .height(45.dp)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .height(45.dp)
+                            .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = "촬영 가능 장비",
-                        style = typography.titleSmall
+                        style = typography.titleSmall,
                     )
                     TextButton(
                         onClick = {
                             if (currentState.isActive.not()) {
                                 viewModel.handleIntent(
-                                    PhotographerMainIntent.Navigate("photographer-equipment-setting")
+                                    PhotographerMainIntent.Navigate("photographer-equipment-setting"),
                                 )
                             }
                         },
-                        contentPadding = PaddingValues(0.dp)
+                        contentPadding = PaddingValues(0.dp),
                     ) {
                         Text(
-                            text = if (currentState.isActive) {
-                                "바로 촬영 중에는 편집할 수 없어요"
-                            }else {
-                                "장비 편집"
-                            },
+                            text =
+                                if (currentState.isActive) {
+                                    "바로 촬영 중에는 편집할 수 없어요"
+                                } else {
+                                    "장비 편집"
+                                },
                             style = typography.bodySmall,
-                            color = MainThemeColor.Gray4
+                            color = MainThemeColor.Gray4,
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 LazyColumn(
-                    modifier = modifier
-                        .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    modifier =
+                        modifier
+                            .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     items(currentState.equipmentList) { equipment ->
                         EquipmentListItem(
@@ -188,9 +203,11 @@ fun PhotographerMainScreen(
                             isEnabled = equipment.isEnabled,
                             onEnabledChanged = {
                                 if (currentState.isActive.not()) {
-                                    viewModel.handleIntent(PhotographerMainIntent.ToggleEquipmentEnabled(
-                                        equipment.id
-                                    ))
+                                    viewModel.handleIntent(
+                                        PhotographerMainIntent.ToggleEquipmentEnabled(
+                                            equipment.id,
+                                        ),
+                                    )
                                 }
                             },
                             isPhotographerActive = currentState.isActive,
@@ -200,7 +217,7 @@ fun PhotographerMainScreen(
                 CommonBottomButton(
                     text = if (currentState.isActive) "바로 촬영 끄기 " else "바로 촬영 시작",
                     onClick = {
-                            viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(true))
+                        viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(true))
                     },
                     containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
                 )
@@ -209,7 +226,7 @@ fun PhotographerMainScreen(
                     CommonButtonModal(
                         onDismissRequest = {
                             viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
-                       },
+                        },
                         confirmText = "확인",
                         cancelText = "취소",
                         onConfirm = {
@@ -218,13 +235,14 @@ fun PhotographerMainScreen(
                         },
                         onCancel = {
                             viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(false))
-                        }
+                        },
                     ) {
                         Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(40.dp),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(40.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -232,15 +250,16 @@ fun PhotographerMainScreen(
                                 Image(
                                     painter = painterResource(id = R.drawable.marker_map),
                                     contentDescription = "마커 이미지",
-                                    modifier = Modifier
-                                        .width(49.dp)
-                                        .height(62.dp)
+                                    modifier =
+                                        Modifier
+                                            .width(49.dp)
+                                            .height(62.dp),
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Text(
                                     text = if (currentState.isActive) "바로 촬영을 종료할까요?" else "2km 이내 고객에게\n내 위치 정보가 나타납니다",
                                     textAlign = TextAlign.Center,
-                                    style = pretendardTypography.titleSmall
+                                    style = pretendardTypography.titleSmall,
                                 )
                             }
                         }

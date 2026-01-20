@@ -11,20 +11,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatRoomViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(ChatRoomState.idle())
-    val state: StateFlow<ChatRoomState> = _state
+class ChatRoomViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _state = MutableStateFlow(ChatRoomState.idle())
+        val state: StateFlow<ChatRoomState> = _state
 
-    private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
-    val sideEffect: SharedFlow<ChatRoomSideEffect> = _sideEffect
+        private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
+        val sideEffect: SharedFlow<ChatRoomSideEffect> = _sideEffect
 
-    fun handleIntent(intent: ChatRoomIntent) {
-        when (intent) {
-            is ChatRoomIntent.NavigateToPrev -> {
-                viewModelScope.launch {
-                    _sideEffect.emit(ChatRoomSideEffect.NavigateToPrev)
+        fun handleIntent(intent: ChatRoomIntent) {
+            when (intent) {
+                is ChatRoomIntent.NavigateToPrev -> {
+                    viewModelScope.launch {
+                        _sideEffect.emit(ChatRoomSideEffect.NavigateToPrev)
+                    }
                 }
             }
         }
     }
-}

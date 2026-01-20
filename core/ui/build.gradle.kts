@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    
+
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -38,12 +38,12 @@ dependencies {
     implementation(libs.androidx.material3)
     // implementation("androidx.compose.material:material:1.5.1")
     // implementation("androidx.compose.foundation:foundation:1.5.1")
-    
+
     // Coil for image loading
     implementation(libs.coil.compose)
-    
+
     // Navigation (for NavController types)
     implementation(libs.androidx.navigation.compose)
-    
+
     debugImplementation(libs.androidx.ui.tooling)
 }

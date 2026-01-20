@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -38,14 +37,17 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
+fun DetailProfileSection(
+    modifier: Modifier,
+    profileInfo: PhotographerInfo,
+) {
     val uriHandler = LocalUriHandler.current
     var isFollow by remember { mutableStateOf(profileInfo.isFollow) }
 
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(text = profileInfo.followCount.toString())
         Spacer(modifier = Modifier.width(6.dp))
@@ -62,9 +64,8 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
                 // 버튼 클릭 시 상태 변경
                 // TODO: 서버 API 연동
                 isFollow = !isFollow
-            }
+            },
         )
-
     }
 
     Row(
@@ -73,10 +74,11 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
         Image(
             rememberAsyncImagePainter(model = profileInfo.profileImageUri),
             contentDescription = "작가 프로필",
-            modifier = Modifier
-                .size(74.dp)
-                .clip(CircleShape)
-                .border(1.dp, MainThemeColor.Gray2, CircleShape)
+            modifier =
+                Modifier
+                    .size(74.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, MainThemeColor.Gray2, CircleShape),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -95,32 +97,35 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
                     contentDescription = "별점",
                 )
                 Spacer(modifier = Modifier.width(3.dp))
-                ClickableText(
-                    text = AnnotatedString(profileInfo.socialAccount.toString()),
-                    style = pretendardTypography.bodySmall.copy(
-                        color = MainThemeColor.Black,
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    onClick = {
-                        uriHandler.openUri("https://www.instagram.com/${profileInfo.socialAccount}/")
-                    }
+                Text(
+                    text = profileInfo.socialAccount.toString(),
+                    style =
+                        pretendardTypography.bodySmall.copy(
+                            color = MainThemeColor.Black,
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                    modifier =
+                        Modifier.clickable {
+                            uriHandler.openUri("https://www.instagram.com/${profileInfo.socialAccount}/")
+                        },
                 )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = profileInfo.infoText,
-                style = pretendardTypography.labelSmall
+                style = pretendardTypography.labelSmall,
             )
         }
     }
 
-    Divider(
+    HorizontalDivider(
         color = MainThemeColor.Gray2,
         thickness = 1.dp,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 20.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp),
     )
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -128,20 +133,20 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
         Text(
             text = "촬영지",
             style = pretendardTypography.labelMedium,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.width(16.dp))
         profileInfo.workingArea.forEachIndexed { index, area ->
             Text(
                 text = area,
                 style = pretendardTypography.labelMedium,
-                color = MainThemeColor.Gray4
+                color = MainThemeColor.Gray4,
             )
             if (index != profileInfo.keyword.lastIndex) {
                 Text(
                     text = ", ",
                     style = pretendardTypography.labelMedium,
-                    color = MainThemeColor.Gray4
+                    color = MainThemeColor.Gray4,
                 )
             }
         }
@@ -155,20 +160,20 @@ fun DetailProfileSection(modifier: Modifier, profileInfo: PhotographerInfo) {
         Text(
             text = "키워드",
             style = pretendardTypography.labelMedium,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.width(16.dp))
         profileInfo.keyword.forEachIndexed { index, keyword ->
             Text(
                 text = keyword,
                 style = pretendardTypography.labelMedium,
-                color = MainThemeColor.Gray4
+                color = MainThemeColor.Gray4,
             )
             if (index != profileInfo.keyword.lastIndex) {
                 Text(
                     text = ", ",
                     style = pretendardTypography.labelMedium,
-                    color = MainThemeColor.Gray4
+                    color = MainThemeColor.Gray4,
                 )
             }
         }

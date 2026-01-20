@@ -7,46 +7,41 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientViewModel
-import com.hm.picplz.common.mockdata.emptyUserData
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpClientScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    userInfo: User = emptyUserData,
+    @Suppress("UNUSED_PARAMETER") _userInfo: User = emptyUserData,
     viewModel: SignUpClientViewModel = viewModel(),
 ) {
-    val currentState = viewModel.state.collectAsState().value
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
-        Column (
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
                 text = "고객 선택",
-                onClickBack = {}
+                onClickBack = {},
             )
         }
     }
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->

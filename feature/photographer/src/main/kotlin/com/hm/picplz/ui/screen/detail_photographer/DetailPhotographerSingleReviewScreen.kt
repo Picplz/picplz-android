@@ -43,7 +43,6 @@ import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.util.SingleReviewType
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -80,11 +79,12 @@ fun DetailPhotographerSingleReviewScreen(
     // 스크롤 위치 계산 함수 개선
     fun calculateScrollOffset(index: Int): Int {
         val offsetFromStart = index * (imageWidthPx + imageSpacingPx)
-        val adjustedOffsetFromStart = if (index == currentPhotoIndex) {
-            offsetFromStart - (selectedImageWidthPx - imageWidthPx) / 2
-        } else {
-            offsetFromStart
-        }
+        val adjustedOffsetFromStart =
+            if (index == currentPhotoIndex) {
+                offsetFromStart - (selectedImageWidthPx - imageWidthPx) / 2
+            } else {
+                offsetFromStart
+            }
 
         // 더 정확한 계산 방식 적용
         return (adjustedOffsetFromStart - (screenWidthPx / 2) + (imageWidthPx / 2) + horizontalPaddingPx).toInt()
@@ -108,16 +108,18 @@ fun DetailPhotographerSingleReviewScreen(
     }
 
     // UI 구성
-    Scaffold(modifier = Modifier.fillMaxSize(),
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
         containerColor = MainThemeColor.White,
         content = { innerPadding ->
             Box(modifier = Modifier.fillMaxSize()) {
                 // Main content area (scrollable)
                 Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
                 ) {
                     CommonFixedTopBar(title = "${currentPhotoIndex + 1} / ${singleReview.photoReviewCount}") {
                         viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
@@ -128,7 +130,7 @@ fun DetailPhotographerSingleReviewScreen(
                             navController = navController,
                             review = singleReview,
                             type = SingleReviewType.DETAIL,
-                            photoIndex = currentPhotoIndex
+                            photoIndex = currentPhotoIndex,
                         )
 
                         Spacer(modifier = Modifier.height(80.dp)) // Ensure there's space at the bottom
@@ -137,14 +139,15 @@ fun DetailPhotographerSingleReviewScreen(
 
                 // Floating PhotoScroller at the bottom, with zIndex to stay on top
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .zIndex(1f)
-                        .height(80.dp)
-                        .background(MainThemeColor.White),
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .zIndex(1f)
+                            .height(80.dp)
+                            .background(MainThemeColor.White),
                 ) {
                     Box(
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
                     ) {
                         PhotoScroller(
                             scrollState = scrollState,
@@ -160,12 +163,13 @@ fun DetailPhotographerSingleReviewScreen(
                                         scrollState.animateScrollTo(offset)
                                     }
                                 }
-                            }
+                            },
                         )
                     }
                 }
             }
-        })
+        },
+    )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
@@ -178,14 +182,13 @@ fun DetailPhotographerSingleReviewScreen(
     }
 }
 
-
 // 이미지 스크롤러 컴포저블
 @Composable
 fun PhotoScroller(
     scrollState: ScrollState,
     photoIndex: Int,
     images: List<PhotoReview>,
-    onImageClick: (Int) -> Unit
+    onImageClick: (Int) -> Unit,
 ) {
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
     val imageWidth = 40.dp
@@ -193,11 +196,12 @@ fun PhotoScroller(
     val imageSpacing = 1.dp
 
     Row(
-        modifier = Modifier
-            .horizontalScroll(scrollState)
-            .padding(horizontal = screenWidthDp / 2),
+        modifier =
+            Modifier
+                .horizontalScroll(scrollState)
+                .padding(horizontal = screenWidthDp / 2),
         horizontalArrangement = Arrangement.spacedBy(imageSpacing),
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         images.forEachIndexed { index, image ->
             val isSelected = index == photoIndex
@@ -210,12 +214,13 @@ fun PhotoScroller(
             Image(
                 painter = rememberAsyncImagePainter(model = image.photoReviewUri),
                 contentDescription = "review-image",
-                modifier = Modifier
-                    .size(animatedSize)
-                    .clickable {
-                        onImageClick(index)
-                    },
-                contentScale = ContentScale.Crop
+                modifier =
+                    Modifier
+                        .size(animatedSize)
+                        .clickable {
+                            onImageClick(index)
+                        },
+                contentScale = ContentScale.Crop,
             )
 
             if (isSelected) Spacer(modifier = Modifier.width(10.dp))

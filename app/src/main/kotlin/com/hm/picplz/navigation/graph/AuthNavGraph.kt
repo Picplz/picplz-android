@@ -5,7 +5,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hm.picplz.navigation.UserTypeMap
-import com.hm.picplz.navigation.model.*
+import com.hm.picplz.navigation.model.Login
+import com.hm.picplz.navigation.model.SignUpClient
+import com.hm.picplz.navigation.model.SignUpCompletion
+import com.hm.picplz.navigation.model.SignUpIntro
+import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.screen.login.LoginIntroScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
@@ -19,7 +23,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         val args = backStackEntry.toRoute<SignUpIntro>()
         SignUpScreen(
             mainNavController = navController,
-            profileImageUri = args.profileImageUri
+            profileImageUri = args.profileImageUri,
         )
     }
 
@@ -27,7 +31,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         val args = backStackEntry.toRoute<SignUpClient>()
         SignUpClientScreen(
             navController = navController,
-            userInfo = args.userInfo
+            _userInfo = args.userInfo,
         )
     }
 
@@ -35,7 +39,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         val args = backStackEntry.toRoute<SignUpPhotographer>()
         SignUpPhotographerScreen(
             mainNavController = navController,
-            userInfo = args.userInfo
+            userInfo = args.userInfo,
         )
     }
 
@@ -43,7 +47,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         val args = backStackEntry.toRoute<SignUpCompletion>()
         SignUpCompletionScreen(
             mainNavController = navController,
-            userInfo = args.userInfo
+            userInfo = args.userInfo,
         )
     }
 }

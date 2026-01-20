@@ -22,19 +22,22 @@ fun CommonAddButton(
     onClick: () -> Unit,
 ) {
     Button(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(42.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(42.dp),
         onClick = onClick,
         shape = RoundedCornerShape(5.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MainThemeColor.White,
-            contentColor = MainThemeColor.Gray5
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MainThemeColor.Gray3
-        )
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MainThemeColor.White,
+                contentColor = MainThemeColor.Gray5,
+            ),
+        border =
+            BorderStroke(
+                width = 1.dp,
+                color = MainThemeColor.Gray3,
+            ),
     ) {
         Text(
             text = text,
@@ -49,7 +52,7 @@ fun CommonAddButtonPreview() {
     PicplzTheme {
         CommonAddButton(
             text = "추가하기",
-            onClick = {}
+            onClick = {},
         )
     }
 }
