@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat_room
 
-import android.net.Uri
 import com.hm.picplz.common.model.User
 import com.hm.picplz.domain.model.ButtonActionType
 import com.hm.picplz.domain.model.ChatMessage
@@ -55,9 +54,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영 작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -98,9 +95,7 @@ val dummyChatMessages = listOf(
         receiver = User(
             id = "2",
             nickname = "유가영 작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         content = MessageContent.Text("이거 사진 너무 잘나왔어요\n감사해요"),
         timestamp = System.currentTimeMillis() - 10000
@@ -111,9 +106,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -138,9 +131,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영 작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -167,9 +158,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -195,9 +184,7 @@ val dummyChatMessages = listOf(
         receiver = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         content = MessageContent.DealConfirmation(
             button = MessageButton(
@@ -218,9 +205,7 @@ val dummyChatMessages = listOf(
         receiver = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         content = MessageContent.ChangeTime(
             newScheduledTime = System.currentTimeMillis() + 1000 * 60 * 60 * 24
@@ -238,9 +223,7 @@ val dummyChatMessages = listOf(
         receiver = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         content = MessageContent.Completion(
             title = "상품명",
@@ -255,9 +238,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -277,9 +258,7 @@ val dummyChatMessages = listOf(
         sender = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         receiver = User(
             id = "1",
@@ -309,9 +288,7 @@ val dummyChatMessages = listOf(
         receiver = User(
             id = "2",
             nickname = "유가영작가",
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         ),
         content = MessageContent.ChatSuggest(
             suggestedChats = listOf(

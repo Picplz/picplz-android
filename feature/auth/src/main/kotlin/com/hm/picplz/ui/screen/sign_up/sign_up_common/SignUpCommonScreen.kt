@@ -16,13 +16,13 @@ fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpCommonViewModel = viewModel(),
     mainNavController: NavHostController,
-    profileImageUri: Uri? = null
+    profileImageUri: String? = null
 ) {
     val signUpCommonNavController = rememberNavController()
 
     LaunchedEffect(profileImageUri) {
-        profileImageUri?.let { uri ->
-            viewModel.handleIntent(SignUpCommonIntent.SetProfileImageUri(uri))
+        profileImageUri?.let { uriString ->
+            viewModel.handleIntent(SignUpCommonIntent.SetProfileImageUri(uriString))
         }
     }
 

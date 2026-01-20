@@ -1,8 +1,8 @@
 package com.hm.picplz.data.mockdata
 
+import com.hm.picplz.common.model.PhotoPortfolio
+import com.hm.picplz.common.model.PhotoReview
 import com.hm.picplz.data.model.KeywordBar
-import com.hm.picplz.data.model.PhotoPortfolio
-import com.hm.picplz.data.model.PhotoReview
 import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.data.model.PhotographerPortfolio
 import com.hm.picplz.data.model.PhotographerReview

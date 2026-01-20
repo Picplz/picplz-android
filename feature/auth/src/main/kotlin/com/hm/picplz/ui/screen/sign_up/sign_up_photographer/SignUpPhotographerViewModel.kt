@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.service.AddressService
@@ -122,17 +121,11 @@ class SignUpPhotographerViewModel @Inject constructor(
 
             is SignUpPhotographerIntent.NavigateWithSubmit -> {
                 viewModelScope.launch {
-                    val userBundle = if (_state.value.vibeChipList.isNotEmpty()) {
-                        bundleOf(
-                            "userInfo" to _state.value.userInfo
+                    _state.value.userInfo?.let { user ->
+                        _sideEffect.emit(
+                            SignUpPhotographerSideEffect.NavigateToSignUpCompletion(user)
                         )
-                    } else bundleOf()
-                    _sideEffect.emit(
-                        SignUpPhotographerSideEffect.NavigateWithSubmit(
-                            intent.destination,
-                            userBundle
-                        )
-                    )
+                    }
                 }
             }
 

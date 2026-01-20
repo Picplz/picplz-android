@@ -39,7 +39,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.common.model.UserType
-import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.navigation.model.SignUpCompletion
+import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.util.SetStatusBarStyle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -64,7 +65,7 @@ fun SignUpProfileImageScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri != null) {
-            viewModel.handleIntent(SetProfileImageUri(uri))
+            viewModel.handleIntent(SetProfileImageUri(uri.toString()))
         }
     }
 
@@ -198,7 +199,11 @@ fun SignUpProfileImageScreen(
                     signUpCommonNavController.popBackStack()
                 }
                 is SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected -> {
-                    mainNavController.navigateWithBundle(sideEffect.destination, sideEffect.user)
+                    if (sideEffect.destination == "sign-up-photographer") {
+                        mainNavController.navigate(SignUpPhotographer(userInfo = sideEffect.user))
+                    } else {
+                        mainNavController.navigate(SignUpCompletion(userInfo = sideEffect.user))
+                    }
                 }
                 is SignUpSideEffect.Navigate -> {
                     signUpCommonNavController.navigate(sideEffect.destination)

@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
+import com.hm.picplz.navigation.model.DetailPhotographer
 
 @Composable
 fun PhotographerSheet(
@@ -46,7 +47,7 @@ fun PhotographerSheet(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp)
-            .clickable { mainNavController.navigate("detail-photographer") }
+            .clickable { mainNavController.navigate(DetailPhotographer) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

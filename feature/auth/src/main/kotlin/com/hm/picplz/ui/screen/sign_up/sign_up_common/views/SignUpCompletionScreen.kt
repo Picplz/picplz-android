@@ -39,6 +39,7 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.common.mockdata.emptyUserData
@@ -137,7 +138,7 @@ fun SignUpCompletionScreen(
                     text = "픽플즈 시작하기",
                     onClick = {
                         // TODO: 뒤로가기에 대한 처리 필요
-                        mainNavController.navigate("main")
+                        mainNavController.navigate(Main)
                     },
                     containerColor = MainThemeColor.Black
                 )

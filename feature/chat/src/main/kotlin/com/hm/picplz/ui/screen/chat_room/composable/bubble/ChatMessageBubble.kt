@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat_room.composable.bubble
 
-import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
@@ -79,9 +78,7 @@ fun ChatMessageReceivedBubblePreview() {
                 sender = User(
                     id = "2",
                     nickname = "유가영 작가",
-                    profileImageUri = Uri.parse(
-                        "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-                    )
+                    profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
                 ),
                 receiver = User(
                     id = "1",

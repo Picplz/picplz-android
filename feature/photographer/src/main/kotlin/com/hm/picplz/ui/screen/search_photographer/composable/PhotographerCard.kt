@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.navigation.model.DetailPhotographer
 
 @Composable
 fun PhotographerCard(
@@ -38,7 +39,7 @@ fun PhotographerCard(
             .height(140.dp)
             .padding(vertical = 20.dp)
             .width(345.dp)
-            .clickable { mainNavController.navigate("detail-photographer") }
+            .clickable { mainNavController.navigate(DetailPhotographer) }
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = photographer.profileImageUri),

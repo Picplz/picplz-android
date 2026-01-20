@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.chat_room.composable
 
-import android.net.Uri
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -18,7 +17,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 @Composable
 fun ChatMessageProfile(
     modifier: Modifier = Modifier,
-    profileImageUri: Uri?,
+    profileImageUri: String?,
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -40,9 +39,7 @@ fun ChatMessageProfile(
 fun ChatMessageProfilePreview() {
     PicplzTheme {
         ChatMessageProfile(
-            profileImageUri = Uri.parse(
-                "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
-            )
+            profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
         )
     }
 }

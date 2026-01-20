@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.PhotoPortfolio
-import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
+import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.buttonText
@@ -89,17 +88,7 @@ fun PortfolioSection(
             verticalPadding = 0.dp,
             gap = 6.dp,
             onClick = {
-                val bundle = Bundle().apply {
-                    putParcelableArrayList(
-                        "photo-portfolios",
-                        ArrayList(photoPortfolios)
-                    )
-                }
-
-                navController.navigateWithBundle(
-                    "detail-photographer-photo-portfolios",
-                    bundle
-                )
+                navController.navigate(DetailPhotographerPhotoPortfolios)
             },
             modifier = modifier.align(Alignment.End)
         )

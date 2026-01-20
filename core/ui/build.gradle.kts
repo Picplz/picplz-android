@@ -23,7 +23,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
@@ -43,7 +43,7 @@ dependencies {
     implementation(libs.coil.compose)
     
     // Navigation (for NavController types)
-    implementation(libs.androidx.navigation.compose.v260)
+    implementation(libs.androidx.navigation.compose)
     
     debugImplementation(libs.androidx.ui.tooling)
 }

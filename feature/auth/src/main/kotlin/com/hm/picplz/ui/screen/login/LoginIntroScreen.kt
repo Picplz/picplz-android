@@ -26,13 +26,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.hm.picplz.navigation.Routes
+import com.hm.picplz.navigation.model.Main
+import com.hm.picplz.navigation.model.SignUpIntro
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.navigateWithBundle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.theme.MainFontFamily
@@ -106,7 +105,7 @@ fun LoginIntroScreen(
 
                 LoginSideEffect.LoginSuccess -> {
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Routes.MAIN) {
+                    navController.navigate(Main) {
                         popUpTo(navController.graph.startDestinationId) {
                             inclusive = true
                         }
@@ -116,10 +115,7 @@ fun LoginIntroScreen(
                 }
 
                 is LoginSideEffect.NavigateToSignUp -> {
-                    val profileImageUrlBundle = bundleOf(
-                        "profileImageUri" to sideEffect.profileImageUrl
-                    )
-                    navController.navigateWithBundle("sign-up", profileImageUrlBundle)
+                    navController.navigate(SignUpIntro(profileImageUri = sideEffect.profileImageUrl))
                 }
 
                 LoginSideEffect.UnlinkSuccess -> {

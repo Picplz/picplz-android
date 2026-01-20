@@ -1,7 +1,7 @@
 package com.hm.picplz.data.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.hm.picplz.common.model.PhotoPortfolio
+import com.hm.picplz.common.model.PhotoReview
 
 data class PhotographerReviewSummary(
     val averageRating: Float, // 총 리뷰 별점 평균
@@ -35,12 +35,7 @@ data class PhotographerReview(
     val recommendationCount: Int // 추천 개수
 )
 
-@Parcelize
-data class PhotoReview(
-    val reviewId: Int, // 속한 리뷰 아이디
-    val photoReviewUri: String, // 포토 리뷰 URL
-    val index: Int, // 속한 리뷰의 포토 중 몇 번째에 해당하는 지
-) : Parcelable
+
 
 data class PhotographerInfo(
     val id: Int,
@@ -56,12 +51,7 @@ data class PhotographerInfo(
     val photoPortfolios: List<PhotoPortfolio>,
 )
 
-@Parcelize
-data class PhotoPortfolio(
-    val portfolioId: Int, // 속한 리뷰 아이디
-    val photoPortfolioUri: String, // 포토 리뷰 URL
-    val index: Int, // 속한 리뷰의 포토 중 몇 번째에 해당하는 지
-) : Parcelable
+
 
 data class PhotographerPortfolio(
     val portfolioId: Int,

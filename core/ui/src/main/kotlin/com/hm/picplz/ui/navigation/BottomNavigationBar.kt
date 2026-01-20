@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hm.picplz.common.model.UserType
@@ -83,16 +84,16 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
-    val isSelected = currentDestination?.route == item.route
+    val isSelected = currentDestination?.hasRoute(item.route::class) == true
 
     NavigationBarItem(selected = isSelected,
-        onClick = {}, // 클릭 이벤트 제거(RippleEffect 제거)
+        onClick = {},
         colors = NavigationBarItemDefaults.colors(indicatorColor = MainThemeColor.Transparent),
         icon = {
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .clickable(
-                        interactionSource = remember { MutableInteractionSource() }, // RippleEffect 제거
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
                         navController.navigate(item.route) {

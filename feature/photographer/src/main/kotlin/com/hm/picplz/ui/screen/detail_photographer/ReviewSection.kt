@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.Routes
+import com.hm.picplz.navigation.model.ReviewPhotographer
 import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
@@ -81,7 +81,7 @@ fun ReviewSection(
             horizontalPadding = 0.dp,
             verticalPadding = 0.dp,
             gap = 6.dp,
-            onClick = { navController.navigate(Routes.REVIEW_PHOTOGRAPHER) },
+            onClick = { navController.navigate(ReviewPhotographer) },
             modifier = modifier.align(Alignment.End)
         )
     }

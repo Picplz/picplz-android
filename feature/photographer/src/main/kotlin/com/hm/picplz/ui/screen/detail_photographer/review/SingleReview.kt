@@ -39,7 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.Routes
+import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.data.mockdata.mockPhotoReviews
@@ -65,7 +65,7 @@ fun SingleReview(
 
     val singleReviewModifier = if (type == SingleReviewType.OVERVIEW) {
         modifier.clickable {
-            navController.navigate(Routes.detailPhotographerSingleReview(review.reviewId, 0))
+            navController.navigate(DetailPhotographerSingleReview(reviewId = review.reviewId, photoIndex = 0))
         }
     } else {
         modifier

@@ -1,7 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,41 +16,29 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.Routes
-import com.hm.picplz.data.model.PhotoReview
+import com.hm.picplz.common.model.PhotoReview
+import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
-import kotlinx.coroutines.flow.collectLatest
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
-    viewModel: DetailPhotographerViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    photoReviews: List<PhotoReview>
 ) {
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
-
-    val photoReviews =
-        navController.currentBackStackEntry?.arguments?.getParcelableArrayList(
-            "photo-reviews",
-            PhotoReview::class.java
-        )
-
-    val chunkedImages = photoReviews?.chunked(3) ?: emptyList() // 3개씩 나눔, null이면 빈 리스트 반환
+    val chunkedImages = photoReviews.chunked(3)
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         containerColor = MainThemeColor.White,
@@ -63,7 +49,7 @@ fun DetailPhotographerPhotoReviewsScreen(
                     .fillMaxWidth()
             ) {
                 CommonFixedTopBar(title = "사진 리뷰") {
-                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
+                    navController.popBackStack()
                 }
 
                 Column(
@@ -113,7 +99,7 @@ fun DetailPhotographerPhotoReviewsScreen(
                                             .aspectRatio(1f) // 1:1 비율
                                             .padding(2.dp)
                                             .clickable {
-                                                navController.navigate(Routes.detailPhotographerSingleReview(imageRes.reviewId, imageRes.index))
+                                                navController.navigate(DetailPhotographerSingleReview(reviewId = imageRes.reviewId, photoIndex = imageRes.index))
                                             },
                                         contentScale = ContentScale.Crop // 이미지 중앙을 기준으로 크기를 맞추고 자름
                                     )
@@ -133,18 +119,6 @@ fun DetailPhotographerPhotoReviewsScreen(
 
                 }
 
-            }
-
-            LaunchedEffect(Unit) {
-                viewModel.sideEffect.collectLatest { sideEffect ->
-                    when (sideEffect) {
-                        is DetailPhotographerSideEffect.NavigateToPrev -> {
-                            navController.popBackStack()
-                        }
-
-                        else -> {}
-                    }
-                }
             }
         }
     )

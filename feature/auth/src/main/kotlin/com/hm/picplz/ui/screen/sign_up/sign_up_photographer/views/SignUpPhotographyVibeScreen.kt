@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.ChipMode
-import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.util.SetStatusBarStyle
@@ -182,13 +182,9 @@ fun SignUpPhotographyVibeScreen(
                 is SignUpPhotographerSideEffect.Navigate -> {
                     mainNavController.navigate(sideEffect.destination)
                 }
-                is SignUpPhotographerSideEffect.NavigateWithSubmit -> {
-                    mainNavController.navigateWithBundle(
-                        sideEffect.destination,
-                        sideEffect.userInfo
-                    )
+                is SignUpPhotographerSideEffect.NavigateToSignUpCompletion -> {
+                    mainNavController.navigate(SignUpCompletion(userInfo = sideEffect.userInfo))
                 }
-                else -> {}
             }
         }
     }

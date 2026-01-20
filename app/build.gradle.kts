@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-parcelize")
 }
 
@@ -72,7 +73,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -129,7 +130,7 @@ dependencies {
     kspAndroidTest(libs.hilt.compiler)
 
     // Navigation
-    implementation(libs.androidx.navigation.compose.v260)
+    implementation(libs.androidx.navigation.compose)
 
     // coil
     implementation(libs.coil.compose)

@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.Routes
+import com.hm.picplz.navigation.model.ChatRoom
 import com.hm.picplz.domain.model.ChatRoomInfo
 import com.hm.picplz.ui.screen.chat.ChatTabType
 import com.hm.picplz.ui.screen.chat.dummyChatRooms
@@ -144,7 +144,7 @@ fun ChatRoomList (
         viewModel.sideEffect.collect { sideEffect ->
             when(sideEffect) {
                 is ChatSideEffect.NavigateToChatRoom -> {
-                    navController.navigate(Routes.chatRoom(sideEffect.chatId))
+                    navController.navigate(ChatRoom(roomId = sideEffect.chatId))
                 }
             }
         }

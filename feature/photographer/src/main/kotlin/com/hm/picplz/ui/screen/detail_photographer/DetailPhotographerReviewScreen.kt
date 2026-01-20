@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import CommonChip
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +40,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.navigation.navigateWithBundle
+import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
 import com.hm.picplz.ui.screen.common.CommonDropdownMenu
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
@@ -154,19 +153,7 @@ fun DetailPhotographerReviewScreen(
                                         .weight(1f)
                                         .aspectRatio(1f)
                                         .clickable {
-                                            // Bundle에 데이터 넣기
-                                            val bundle = Bundle().apply {
-                                                putParcelableArrayList(
-                                                    "photo-reviews",
-                                                    ArrayList((images))
-                                                )
-                                            }
-
-                                            // Bundle을 navigate의 두 번째 인자로 전달
-                                            navController.navigateWithBundle(
-                                                "detail-photographer-photo-reviews",
-                                                bundle
-                                            )
+                                            navController.navigate(DetailPhotographerPhotoReviews)
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {

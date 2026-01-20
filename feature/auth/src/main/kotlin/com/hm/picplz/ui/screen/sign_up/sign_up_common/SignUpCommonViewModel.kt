@@ -42,18 +42,17 @@ class SignUpCommonViewModel @Inject constructor() : ViewModel() {
                             UserType.User -> "sign-up-completion"
                             UserType.Photographer -> "sign-up-photographer"
                         }
-                        val userBundle = bundleOf(
-                            "userInfo" to User(
-                                id = UUID.randomUUID().toString(),
-                                nickname = _state.value.nickname,
-                                profileImageUri = _state.value.profileImageUri,
-                                userType = _state.value.selectedUserType
-                            )
+
+                        val user = User(
+                            id = UUID.randomUUID().toString(),
+                            nickname = _state.value.nickname,
+                            profileImageUri = _state.value.profileImageUri,
+                            userType = _state.value.selectedUserType
                         )
                         _sideEffect.emit(
                             SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected(
                                 destination,
-                                userBundle
+                                user
                             )
                         )
                     }
