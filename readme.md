@@ -99,15 +99,32 @@ main          ← production
   ↑
 develop       ← integration
   ↑
-feature/123   ← feature branches
+feat/123      ← feature branches
 fix/456       ← bug fix branches
 ```
 
-**Naming Convention:**
-- `feat/이슈번호` - 새 기능
-- `fix/이슈번호` - 버그 수정
-- `refactor/이슈번호` - 리팩토링
-- `docs/이슈번호` - 문서
+**Branch Naming:** `feat/이슈번호`, `fix/이슈번호`, `refactor/이슈번호`, `docs/이슈번호`
+
+### Commit Convention
+
+[Gitmoji](https://gitmoji.dev/) 사용
+
+| Emoji | Code | Description |
+|-------|------|-------------|
+| ✨ | `:sparkles:` | 새 기능 |
+| 🐛 | `:bug:` | 버그 수정 |
+| ♻️ | `:recycle:` | 리팩토링 |
+| 📝 | `:memo:` | 문서 |
+| 🎨 | `:art:` | 코드 구조/포맷 개선 |
+| 🔥 | `:fire:` | 코드/파일 삭제 |
+| 🚚 | `:truck:` | 리소스 이동/이름 변경 |
+| ✅ | `:white_check_mark:` | 테스트 추가/수정 |
+
+```
+✨ 사진작가 검색 필터 추가
+🐛 채팅방 목록 새로고침 오류 수정
+♻️ AuthRepository DI 구조 개선
+```
 
 ### Architecture (MVI)
 
