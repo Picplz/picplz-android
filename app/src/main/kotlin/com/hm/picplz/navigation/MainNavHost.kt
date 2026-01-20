@@ -10,33 +10,40 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.hm.picplz.data.model.User
-import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
+import com.hm.picplz.common.model.User
+// Feature: auth
+import com.hm.picplz.ui.screen.login.LoginIntroScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
+// Feature: chat
 import com.hm.picplz.ui.screen.chat.ChatScreen
+import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
+// Feature: photographer
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoPortfoliosScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoReviewsScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPortfoliosScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
-import com.hm.picplz.ui.screen.feed.FeedScreen
-import com.hm.picplz.ui.screen.login.LoginIntroScreen
-import com.hm.picplz.ui.screen.main.MainScreen
-import com.hm.picplz.ui.screen.main.MainSearchScreen
+import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
+// Feature: mypage
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
-import com.hm.picplz.ui.screen.my_page.ReservationScreen
+// Feature: feed
+import com.hm.picplz.ui.screen.feed.FeedScreen
+// App: not migrated yet
+import com.hm.picplz.ui.screen.main.MainScreen
+import com.hm.picplz.ui.screen.main.MainSearchScreen
+import com.hm.picplz.ui.screen.reservation.ReservationScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
 import com.hm.picplz.ui.main.MainActivityUiState
-import com.hm.picplz.mockdata.emptyUserData
+import com.hm.picplz.common.mockdata.emptyUserData
+import com.hm.picplz.navigation.Routes
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.hm.picplz.core.ui"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -28,15 +28,22 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    // implementation("androidx.compose.material:material:1.5.1")
+    // implementation("androidx.compose.foundation:foundation:1.5.1")
     
     // Coil for image loading
     implementation(libs.coil.compose)
+    
+    // Navigation (for NavController types)
+    implementation(libs.androidx.navigation.compose.v260)
     
     debugImplementation(libs.androidx.ui.tooling)
 }

@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.hm.picplz.feature.photographer"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
     

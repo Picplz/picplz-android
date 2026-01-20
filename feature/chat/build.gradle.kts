@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.hm.picplz.feature.chat"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24

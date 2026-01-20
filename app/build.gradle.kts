@@ -17,7 +17,7 @@ val localProperties = Properties().apply {
 
 android {
     namespace = "com.hm.picplz"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         compose = true
@@ -82,6 +82,17 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:chat"))
+    implementation(project(":feature:photographer"))
+    implementation(project(":feature:mypage"))
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:main"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -135,5 +146,5 @@ dependencies {
     implementation(libs.kakao.maps)
 
     // Material
-    implementation("androidx.compose.material:material:1.5.1")
+    // implementation("androidx.compose.material:material:1.5.1")
 }

@@ -3,7 +3,7 @@ package com.hm.picplz.ui.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.model.User
+import com.hm.picplz.common.model.User
 import com.hm.picplz.data.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
