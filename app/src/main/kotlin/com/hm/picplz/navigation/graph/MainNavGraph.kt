@@ -14,9 +14,12 @@ import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
+import com.hm.picplz.ui.screen.dev.DevScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
+    composable<Dev> { DevScreen(navController = navController) }
+
     composable<Main> { MainScreen(navController = navController) }
 
     composable<MainSearch> {

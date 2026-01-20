@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,8 +38,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.MainSearch
-import com.hm.picplz.navigation.model.DetailPhotographer
-import com.hm.picplz.navigation.model.PhotographerMain
+
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.PhotographerStatus
 import com.hm.picplz.ui.screen.main.modalBottomSheet.DeviceModalBottomSheet
@@ -258,11 +257,10 @@ fun PopularReviewSection() {
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) {
-    var visible by remember { mutableStateOf(false) } // <-- 상태 선언
-    var visibleDevice by remember { mutableStateOf(false) } // <-- 상태 선언
-    var visibleDeviceMood by remember { mutableStateOf(false) } // <-- 상태 선언
-    var visibleSortFilter by remember { mutableStateOf(false) } // <-- 상태 선언
-
+    var visible by remember { mutableStateOf(false) }
+    var visibleDevice by remember { mutableStateOf(false) }
+    var visibleDeviceMood by remember { mutableStateOf(false) }
+    var visibleSortFilter by remember { mutableStateOf(false) }
     var selectedSortType by remember { mutableStateOf(SortType.POPULAR) }
 
     Scaffold(
@@ -317,31 +315,6 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
             Spacer(modifier = Modifier.height(30.dp))
 
             PopularReviewSection()
-
-
-
-
-            Button(onClick = { navController.navigate(DetailPhotographer) }) {
-                Text(text = "작사 상세 페이지 테스트 버튼")
-            }
-            Button(onClick = { navController.navigate(PhotographerMain) }) {
-                Text(text = "작가 메인 페이지 테스트 버튼")
-            }
-            Button(onClick = { visible = true }) {
-                Text(text = "지역 바텀시트 테스트 버튼")
-            }
-            Button(onClick = { visibleDevice = true }) {
-                Text(text = "촬영기기 바텀시트 테스트 버튼")
-            }
-            Button(onClick = { visibleDeviceMood = true }) {
-                Text(text = "분위기 키워드 바텀시트 테스트 버튼")
-            }
-            Row {
-                Text(text = selectedSortType.label)
-                Button(onClick = { visibleSortFilter = true }) {
-                    Text(text = "정렬 바텀시트 테스트 버튼")
-                }
-            }
 
             RegionModalBottomSheet(
                 onDismiss = { visible = false },

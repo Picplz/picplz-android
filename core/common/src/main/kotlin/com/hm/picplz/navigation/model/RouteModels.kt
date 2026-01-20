@@ -25,6 +25,9 @@ data class SignUpPhotographer(val userInfo: User)
 @Serializable
 data class SignUpCompletion(val userInfo: User)
 
+// === Dev ===
+@Serializable object Dev
+
 // === Main Screens ===
 @Serializable object Main
 @Serializable object MainSearch

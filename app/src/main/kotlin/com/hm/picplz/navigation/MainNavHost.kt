@@ -8,6 +8,7 @@ import com.hm.picplz.navigation.graph.authNavGraph
 import com.hm.picplz.navigation.graph.mainNavGraph
 import com.hm.picplz.navigation.graph.photographerNavGraph
 import com.hm.picplz.navigation.model.Chat
+import com.hm.picplz.navigation.model.Dev
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.ui.main.MainActivityUiState
 
@@ -15,10 +16,8 @@ import com.hm.picplz.ui.main.MainActivityUiState
 fun MainNavHost(
     navController: NavHostController, uiState: MainActivityUiState, modifier: Modifier = Modifier
 ) {
-    val startDestination: Any = when (uiState) {
-        is MainActivityUiState.Success -> Main
-        else -> Chat
-    }
+    // TODO: 개발 완료 후 Main으로 변경
+    val startDestination: Any = Dev
 
     NavHost(
         navController = navController,
