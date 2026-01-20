@@ -67,8 +67,8 @@ core:ui → core:common
    kakao_native_app_key=your_kakao_native_app_key
    kakao_oauth_host=your_kakao_oauth_host
    kakao_rest_api_key=your_kakao_rest_api_key
-   dev_guest_token=your_dev_guest_token
-   dev_user_token=your_dev_user_token
+   dev_guest_token=your_dev_guest_token      # 개발용 게스트 액세스 토큰
+   dev_user_token=your_dev_user_token        # 개발용 유저 액세스 토큰
    ```
 
 3. **Build**
@@ -125,7 +125,7 @@ feature/
 
 ## Test Distribution
 
-Firebase App Distribution으로 테스트 배포 중
+[Firebase Console](https://console.firebase.google.com/u/0/project/picplz-40a0c/)에서 App Distribution으로 테스트 배포 중
 
 ## Documentation
 
