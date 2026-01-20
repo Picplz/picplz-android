@@ -1,12 +1,12 @@
 # PICPLZ PROJECT KNOWLEDGE BASE
 
 **Generated:** 2026-01-20
-**Commit:** 2472cfb
-**Branch:** refactor/75
+**Commit:** f07e768
+**Branch:** refactor/77
 
 ## OVERVIEW
 
-Android 사진작가-고객 매칭 플랫폼. Jetpack Compose + Hilt + MVI 패턴. 멀티모듈 마이그레이션 진행 중.
+Android 사진작가-고객 매칭 플랫폼. Jetpack Compose + Hilt + MVI 패턴. 멀티모듈 마이그레이션 완료.
 
 ## DOCUMENTATION INDEX
 
@@ -70,9 +70,27 @@ core:ui → core:common
 
 # Clean
 ./gradlew clean
+
+# Code Quality (pre-commit hook runs these)
+./gradlew ktlintCheck    # Lint check
+./gradlew ktlintFormat   # Auto-fix lint issues
+./gradlew detekt         # Static analysis
 ```
 
-## MIGRATION STATUS (refactor/75)
+## CODE QUALITY
+
+| Tool | Version | Config | pre-commit |
+|------|---------|--------|------------|
+| ktlint | 12.1.2 | `.editorconfig` | ✅ |
+| detekt | 1.23.7 | `detekt.yml` | ✅ |
+
+### Conventions
+- **Composable 함수**: PascalCase 허용 (`ktlint_function_naming_ignore_when_annotated_with=Composable`)
+- **MaxLineLength**: 120자
+- **미사용 Route 파라미터**: `_` prefix + `@Suppress("UNUSED_PARAMETER")`
+- **빈 catch 블록**: 의도적 무시 시 주석 필수 또는 `@Suppress("SwallowedException")`
+
+## MIGRATION STATUS (refactor/77)
 
 | Module | Status | Notes |
 |--------|--------|-------|
