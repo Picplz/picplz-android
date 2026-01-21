@@ -44,6 +44,56 @@ Design System module providing reusable Compose components, theme, and drawable 
 - Status icons: `bookmark_*`, `like_*`, `star_*`
 - UI elements: `close.xml`, `check.xml`, `arrow_*.xml`
 
+## COMMON COMPONENT DESIGN PRINCIPLES
+
+### 공통 컴포넌트의 본질
+
+공통 컴포넌트는 **동일한 UI를 여러 곳에서 재사용**하기 위한 것이다.
+스타일이 유동적이면 공통 컴포넌트의 의미가 없다.
+
+### Props 최소화 원칙
+
+**UI적 요소는 파라미터로 받지 않는다** - 피그마 기준으로 고정
+
+| 받아야 할 것 | 예시 | 이유 |
+|-------------|------|------|
+| **도메인 텍스트** | `text: String` | 화면마다 다른 문구 |
+| **도메인 동작** | `onClick: () -> Unit` | 화면마다 다른 비즈니스 로직 |
+| **도메인 상태** | `enabled: Boolean` | 비즈니스 로직에 따른 활성화 |
+
+| 받으면 안 되는 것 | 예시 | 이유 |
+|------------------|------|------|
+| 색상 | `containerColor`, `contentColor` | 피그마 기준 고정 |
+| 크기/여백 | `height`, `padding`, `modifier` | 피그마 기준 고정 |
+| 폰트 스타일 | `textStyle`, `fontSize` | 디자인 시스템 고정 |
+| 테두리 | `borderColor`, `borderWidth` | 피그마 기준 고정 |
+
+### 스타일이 다르면 별도 컴포넌트
+
+```
+❌ CommonBottomButton(containerColor = KakaoYellow, ...)
+✅ KakaoLoginButton(text, onClick)
+
+❌ CommonTopBar(hasMenu = true, menuIcon = ...)
+✅ CommonTopBarWithMenu(text, onClickBack, onClickMenu)
+```
+
+### Defaults Object 패턴 (Material3 컨벤션)
+
+내부 상수는 `Defaults` object로 정의:
+
+```kotlin
+object CommonBottomButtonDefaults {
+    val VerticalPadding = 14.dp
+    val HorizontalPadding = 20.dp
+    val CornerRadius = 8.dp
+}
+```
+
+### 요약
+
+> **공통 컴포넌트 = 도메인 정보만 받고, UI는 피그마대로 고정**
+
 ## CONVENTIONS
 
 1. **Prefix `Common`** - All reusable components must be prefixed
