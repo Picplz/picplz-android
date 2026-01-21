@@ -24,6 +24,13 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
+private object CommonTopBarWithSubtitleDefaults {
+    val Height = 44.dp
+    val HorizontalPadding = 16.dp
+    val IconSize = 18.dp
+    val SubtitleTopPadding = 2.dp
+}
+
 @Composable
 fun CommonTopBarWithSubtitle(
     text: String,
@@ -36,8 +43,8 @@ fun CommonTopBarWithSubtitle(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(TopBarHeight)
-                .padding(horizontal = TopBarHorizontalPadding),
+                .height(CommonTopBarWithSubtitleDefaults.Height)
+                .padding(horizontal = CommonTopBarWithSubtitleDefaults.HorizontalPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -48,7 +55,7 @@ fun CommonTopBarWithSubtitle(
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
                     contentDescription = "뒤로가기",
-                    modifier = Modifier.size(TopBarIconSize),
+                    modifier = Modifier.size(CommonTopBarWithSubtitleDefaults.IconSize),
                 )
             }
         }
@@ -67,7 +74,7 @@ fun CommonTopBarWithSubtitle(
                 Text(
                     text = subText,
                     style = subTextStyle,
-                    modifier = Modifier.padding(top = 2.dp),
+                    modifier = Modifier.padding(top = CommonTopBarWithSubtitleDefaults.SubtitleTopPadding),
                 )
             }
         }
@@ -80,7 +87,7 @@ fun CommonTopBarWithSubtitle(
                 Icon(
                     painter = painterResource(id = R.drawable.menu),
                     contentDescription = "메뉴",
-                    modifier = Modifier.size(TopBarIconSize),
+                    modifier = Modifier.size(CommonTopBarWithSubtitleDefaults.IconSize),
                 )
             }
         }

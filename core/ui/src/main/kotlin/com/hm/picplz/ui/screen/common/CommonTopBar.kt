@@ -22,9 +22,11 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
-internal val TopBarHeight = 44.dp
-internal val TopBarHorizontalPadding = 16.dp
-internal val TopBarIconSize = 18.dp
+private object CommonTopBarDefaults {
+    val Height = 44.dp
+    val HorizontalPadding = 16.dp
+    val IconSize = 18.dp
+}
 
 @Composable
 fun CommonTopBar(
@@ -35,8 +37,8 @@ fun CommonTopBar(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(TopBarHeight)
-                .padding(horizontal = TopBarHorizontalPadding),
+                .height(CommonTopBarDefaults.Height)
+                .padding(horizontal = CommonTopBarDefaults.HorizontalPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -47,7 +49,7 @@ fun CommonTopBar(
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
                     contentDescription = "뒤로가기",
-                    modifier = Modifier.size(TopBarIconSize),
+                    modifier = Modifier.size(CommonTopBarDefaults.IconSize),
                 )
             }
         }
@@ -76,7 +78,7 @@ fun CommonFixedTopBar(
             Modifier
                 .background(MainThemeColor.White)
                 .zIndex(1f)
-                .height(TopBarHeight),
+                .height(CommonTopBarDefaults.Height),
     ) {
         CommonTopBar(
             text = title,

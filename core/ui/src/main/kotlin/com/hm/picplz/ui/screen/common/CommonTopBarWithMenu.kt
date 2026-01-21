@@ -15,9 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
+
+private object CommonTopBarWithMenuDefaults {
+    val Height = 44.dp
+    val HorizontalPadding = 16.dp
+    val IconSize = 18.dp
+}
 
 @Composable
 fun CommonTopBarWithMenu(
@@ -29,8 +36,8 @@ fun CommonTopBarWithMenu(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(TopBarHeight)
-                .padding(horizontal = TopBarHorizontalPadding),
+                .height(CommonTopBarWithMenuDefaults.Height)
+                .padding(horizontal = CommonTopBarWithMenuDefaults.HorizontalPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -41,7 +48,7 @@ fun CommonTopBarWithMenu(
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
                     contentDescription = "뒤로가기",
-                    modifier = Modifier.size(TopBarIconSize),
+                    modifier = Modifier.size(CommonTopBarWithMenuDefaults.IconSize),
                 )
             }
         }
@@ -64,7 +71,7 @@ fun CommonTopBarWithMenu(
                 Icon(
                     painter = painterResource(id = R.drawable.menu),
                     contentDescription = "메뉴",
-                    modifier = Modifier.size(TopBarIconSize),
+                    modifier = Modifier.size(CommonTopBarWithMenuDefaults.IconSize),
                 )
             }
         }
