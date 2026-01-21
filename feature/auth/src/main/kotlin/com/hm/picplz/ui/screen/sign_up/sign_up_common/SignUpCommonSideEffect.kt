@@ -12,7 +12,7 @@ sealed interface SignUpSideEffect {
 
     data object NavigateToPrev : SignUpSideEffect
 
-    data class Navigate(val destination: String) : SignUpSideEffect
+    data class Navigate(val destination: Any) : SignUpSideEffect
 
     data object ShowFileUploadDialog : SignUpSideEffect
 }

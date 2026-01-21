@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hm.picplz.navigation.model.SignUpPhotographyVibe
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonModalBottomSheet
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -181,7 +182,7 @@ fun SignUpCareerPeriodScreen(
                     text = "다음",
                     onClick = {
                         viewModel.handleIntent(SetCareerPeriod)
-                        viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
+                        viewModel.handleIntent(Navigate(SignUpPhotographyVibe))
                     },
                     enabled = currentState.yearValue != null && currentState.monthValue != null,
                     containerColor = MainThemeColor.Black,

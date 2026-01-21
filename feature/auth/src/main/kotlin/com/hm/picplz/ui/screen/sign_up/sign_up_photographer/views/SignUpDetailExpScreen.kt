@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipMode
+import com.hm.picplz.navigation.model.SignUpCareerPeriod
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
@@ -138,7 +139,7 @@ fun SignUpDetailExpScreen(
                     text = "다음",
                     onClick = {
                         viewModel.handleIntent(SetUserPhotographyExperience)
-                        viewModel.handleIntent(Navigate("sign-up-career-period"))
+                        viewModel.handleIntent(Navigate(SignUpCareerPeriod))
                     },
                     enabled = currentState.selectedPhotographyExperienceId != null,
                     containerColor = MainThemeColor.Black,

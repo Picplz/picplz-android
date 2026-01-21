@@ -43,6 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.SignUpDevice
 import com.hm.picplz.ui.screen.common.AreaTag
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSearchField
@@ -304,7 +305,7 @@ fun SignUpMainLocationScreen(
                 CommonBottomButton(
                     text = "다음",
                     onClick = {
-                        viewModel.handleIntent(Navigate("sign-up-device"))
+                        viewModel.handleIntent(Navigate(SignUpDevice))
                     },
                     enabled = currentState.selectedAreas.isNotEmpty(),
                     containerColor = MainThemeColor.Black,

@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hm.picplz.navigation.model.SignUpAddDevice
+import com.hm.picplz.navigation.model.SignUpPhotographyVibe
 import com.hm.picplz.ui.screen.common.CommonAddButton
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -115,7 +117,7 @@ fun SignUpDeviceScreen(
                             CommonAddButton(
                                 text = "추가하기 +",
                                 onClick = {
-                                    viewModel.handleIntent(Navigate("sign-up-add-device?category=phone"))
+                                    viewModel.handleIntent(Navigate(SignUpAddDevice(category = "phone")))
                                 },
                             )
                         }
@@ -154,7 +156,7 @@ fun SignUpDeviceScreen(
                             CommonAddButton(
                                 text = "추가하기 +",
                                 onClick = {
-                                    viewModel.handleIntent(Navigate("sign-up-add-device?category=camera"))
+                                    viewModel.handleIntent(Navigate(SignUpAddDevice(category = "camera")))
                                 },
                             )
                         }
@@ -172,7 +174,7 @@ fun SignUpDeviceScreen(
                 CommonBottomButton(
                     text = "다음",
                     onClick = {
-                        viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
+                        viewModel.handleIntent(Navigate(SignUpPhotographyVibe))
                     },
                     enabled = currentState.phoneDevices.isNotEmpty() || currentState.cameraDevices.isNotEmpty(),
                     containerColor = MainThemeColor.Black,
