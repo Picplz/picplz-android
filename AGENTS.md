@@ -59,6 +59,34 @@ core:data → core:domain
 core:ui → core:common
 ```
 
+## GIT WORKFLOW
+
+### Issue-Driven Development
+1. **모든 작업은 GitHub Issue 기반** - 이슈 먼저 생성/확인 후 작업 시작
+2. **1 Issue = 1 Branch = 1 PR** - 이슈와 브랜치, PR이 1:1 대응
+
+### Branch Strategy
+```
+main ← develop ← feat/이슈번호
+                 fix/이슈번호
+                 refactor/이슈번호
+                 docs/이슈번호
+```
+
+- **Base**: 항상 `develop` 브랜치에서 분기
+- **Naming**: `{type}/{issue-number}` (예: `feat/12`, `refactor/86`)
+- **PR Target**: `develop`으로 머지
+
+### Commit Convention (Gitmoji)
+| Emoji | Code | Description |
+|-------|------|-------------|
+| ✨ | `:sparkles:` | 새 기능 |
+| 🐛 | `:bug:` | 버그 수정 |
+| ♻️ | `:recycle:` | 리팩토링 |
+| 🔥 | `:fire:` | 코드/파일 삭제 |
+| 📝 | `:memo:` | 문서 |
+| 🚚 | `:truck:` | 파일 이동/이름 변경 |
+
 ## COMMANDS
 
 ```bash
@@ -102,6 +130,10 @@ core:ui → core:common
 | feature:feed | ✅ | Complete |
 | feature:main | ✅ | Complete |
 | app | ✅ | Cleanup & Dependency linking done |
+
+## DESIGN
+
+**Figma**: [픽플즈 디자인](https://www.figma.com/design/Lf9FSdH8jJeIeDxdTEHLbL/%ED%94%BD%ED%94%8C%EC%A6%88)
 
 ## NOTES
 - **Android Studio**: Use "Android" view or `Shift+Shift` for navigation.
