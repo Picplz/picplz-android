@@ -33,11 +33,84 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun CommonTopBar(
     modifier: Modifier = Modifier,
     text: String,
-    subText: String? = null,
     onClickBack: () -> Unit,
     showMenuIcon: Boolean = false,
     onClickMenu: () -> Unit = {},
-    boxHeight: Dp = 50.dp,
+    textStyle: TextStyle = pretendardTypography.bodyMedium,
+    paddingStart: Dp = 0.dp,
+    iconSize: Dp = 16.dp,
+    spacerWidth: Dp = 50.dp,
+) {
+    Box(
+        modifier =
+            Modifier
+                .height(44.dp)
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            modifier =
+                modifier
+                    .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            IconButton(
+                onClick = onClickBack,
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .padding(start = paddingStart),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.triangle_left),
+                    contentDescription = "arrow left",
+                    modifier = Modifier.size(iconSize),
+                )
+            }
+            Box(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = text,
+                    style = textStyle,
+                )
+            }
+            Box(
+                modifier =
+                    Modifier
+                        .size(spacerWidth)
+                        .fillMaxHeight(),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (showMenuIcon) {
+                    IconButton(onClick = onClickMenu) {
+                        Icon(
+                            modifier =
+                                Modifier
+                                    .size(18.dp),
+                            painter = painterResource(id = R.drawable.menu),
+                            contentDescription = "상단바 메뉴 아이콘",
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CommonTopBarWithSubtitle(
+    modifier: Modifier = Modifier,
+    text: String,
+    subText: String,
+    onClickBack: () -> Unit,
+    showMenuIcon: Boolean = false,
+    onClickMenu: () -> Unit = {},
     textStyle: TextStyle = pretendardTypography.bodyMedium,
     subTextStyle: TextStyle = MainFontFamily.caption,
     paddingStart: Dp = 0.dp,
@@ -47,7 +120,7 @@ fun CommonTopBar(
     Box(
         modifier =
             Modifier
-                .height(boxHeight)
+                .height(44.dp)
                 .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
@@ -85,13 +158,11 @@ fun CommonTopBar(
                         text = text,
                         style = textStyle,
                     )
-                    if (subText != null) {
-                        Text(
-                            text = subText,
-                            style = subTextStyle,
-                            modifier = Modifier.padding(top = 2.dp),
-                        )
-                    }
+                    Text(
+                        text = subText,
+                        style = subTextStyle,
+                        modifier = Modifier.padding(top = 2.dp),
+                    )
                 }
             }
             Box(
@@ -149,9 +220,9 @@ fun CommonTopBarPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun CommonTopBarSubtitlePreview() {
+fun CommonTopBarWithSubtitlePreview() {
     PicplzTheme {
-        CommonTopBar(
+        CommonTopBarWithSubtitle(
             text = "제목",
             subText = "부제목",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
@@ -162,9 +233,9 @@ fun CommonTopBarSubtitlePreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun CommonTopBarSubtitleMenuPreview() {
+fun CommonTopBarWithSubtitleMenuPreview() {
     PicplzTheme {
-        CommonTopBar(
+        CommonTopBarWithSubtitle(
             text = "제목",
             subText = "부제목",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
