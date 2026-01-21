@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.UserType
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.SignUpNickname
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSelectImageButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -144,7 +145,7 @@ fun SignUpSelectTypeScreen(
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = { viewModel.handleIntent(Navigate("sign-up-nickname")) },
+                    onClick = { viewModel.handleIntent(Navigate(SignUpNickname)) },
                     enabled = currentState.selectedUserType != null,
                     containerColor = MainThemeColor.Black,
                 )

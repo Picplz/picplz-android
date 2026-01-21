@@ -14,7 +14,7 @@ sealed interface SignUpPhotographerIntent {
 
     data class SetPhotographyExperience(val photographyExperienceId: String?) : SignUpPhotographerIntent
 
-    data class Navigate(val destination: String) : SignUpPhotographerIntent
+    data class Navigate(val destination: Any) : SignUpPhotographerIntent
 
     data class SetEditingChipId(val chipId: String?) : SignUpPhotographerIntent
 
@@ -28,7 +28,7 @@ sealed interface SignUpPhotographerIntent {
 
     data object SetUserPhotographyExperience : SignUpPhotographerIntent
 
-    data class NavigateWithSubmit(val destination: String) : SignUpPhotographerIntent
+    data class NavigateWithSubmit(val destination: Any) : SignUpPhotographerIntent
 
     data object SetUserPhotographyVibe : SignUpPhotographerIntent
 

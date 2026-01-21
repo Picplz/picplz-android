@@ -15,7 +15,7 @@ sealed interface SignUpCommonIntent {
 
     data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
 
-    data class Navigate(val destination: String) : SignUpCommonIntent
+    data class Navigate(val destination: Any) : SignUpCommonIntent
 
     data object ShowFileUploadDialog : SignUpCommonIntent
 

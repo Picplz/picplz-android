@@ -25,6 +25,29 @@ data class SignUpPhotographer(val userInfo: User)
 @Serializable
 data class SignUpCompletion(val userInfo: User)
 
+// === SignUp Common Internal Routes ===
+@Serializable object SignUpSelectType
+
+@Serializable object SignUpNickname
+
+@Serializable object SignUpProfile
+
+// === SignUp Photographer Internal Routes ===
+@Serializable object SignUpMainLocation
+
+@Serializable object SignUpExperience
+
+@Serializable object SignUpDetailExperience
+
+@Serializable object SignUpPhotographyVibe
+
+@Serializable object SignUpCareerPeriod
+
+@Serializable object SignUpDevice
+
+@Serializable
+data class SignUpAddDevice(val category: String = "phone")
+
 // === Dev ===
 @Serializable object Dev
 
