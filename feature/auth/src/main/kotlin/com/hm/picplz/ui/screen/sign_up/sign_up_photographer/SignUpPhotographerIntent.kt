@@ -4,6 +4,7 @@ import com.hm.picplz.common.model.User
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.Device
 import com.hm.picplz.domain.model.DeviceCategory
+import com.hm.picplz.navigation.model.NavigationRoute
 
 sealed interface SignUpPhotographerIntent {
     data class SetUserInfo(val userInfo: User) : SignUpPhotographerIntent
@@ -14,7 +15,7 @@ sealed interface SignUpPhotographerIntent {
 
     data class SetPhotographyExperience(val photographyExperienceId: String?) : SignUpPhotographerIntent
 
-    data class Navigate(val destination: Any) : SignUpPhotographerIntent
+    data class Navigate(val destination: NavigationRoute) : SignUpPhotographerIntent
 
     data class SetEditingChipId(val chipId: String?) : SignUpPhotographerIntent
 
@@ -28,7 +29,7 @@ sealed interface SignUpPhotographerIntent {
 
     data object SetUserPhotographyExperience : SignUpPhotographerIntent
 
-    data class NavigateWithSubmit(val destination: Any) : SignUpPhotographerIntent
+    data object NavigateWithSubmit : SignUpPhotographerIntent
 
     data object SetUserPhotographyVibe : SignUpPhotographerIntent
 
