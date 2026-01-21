@@ -32,8 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.SignUpIntro
-import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
+import com.hm.picplz.ui.screen.common.KakaoLoginButton
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -176,21 +176,19 @@ fun LoginIntroPage(
         if (page.isLast) {
             Spacer(modifier = Modifier.height(66.dp))
 
-            CommonBottomButton(
-                text = "카카오로 계속하기",
-                modifier = Modifier.padding(horizontal = 15.dp),
-                contentColor = MainThemeColor.Black,
-                containerColor = MainThemeColor.Yellow,
-                onClick = onLoginClick,
-            )
+            Box(modifier = Modifier.padding(horizontal = 15.dp)) {
+                KakaoLoginButton(
+                    text = "카카오로 계속하기",
+                    onClick = onLoginClick,
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
-            CommonBottomButton(
-                text = "카카오 로그아웃",
-                modifier = Modifier.padding(horizontal = 15.dp),
-                contentColor = MainThemeColor.Black,
-                containerColor = MainThemeColor.Yellow,
-                onClick = onLogoutClick,
-            )
+            Box(modifier = Modifier.padding(horizontal = 15.dp)) {
+                KakaoLoginButton(
+                    text = "카카오 로그아웃",
+                    onClick = onLogoutClick,
+                )
+            }
         }
     }
 }

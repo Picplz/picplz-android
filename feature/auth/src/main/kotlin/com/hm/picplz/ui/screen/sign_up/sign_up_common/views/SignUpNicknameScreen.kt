@@ -148,7 +148,6 @@ fun SignUpNicknameScreen(
                     text = "다음",
                     onClick = { viewModel.handleIntent(Navigate(SignUpProfile)) },
                     enabled = currentState.nickname.isNotEmpty() && currentState.nicknameFieldErrors.isEmpty(),
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

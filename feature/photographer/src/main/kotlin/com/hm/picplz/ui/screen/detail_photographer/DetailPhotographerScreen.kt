@@ -46,7 +46,6 @@ fun DetailPhotographerScreen(
                 CommonBottomButton(
                     text = "예약하기",
                     onClick = { },
-                    containerColor = MainThemeColor.Black,
                 )
             }
         },

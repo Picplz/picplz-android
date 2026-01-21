@@ -142,7 +142,6 @@ fun SignUpDetailExpScreen(
                         viewModel.handleIntent(Navigate(SignUpCareerPeriod))
                     },
                     enabled = currentState.selectedPhotographyExperienceId != null,
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

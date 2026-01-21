@@ -182,7 +182,6 @@ fun SignUpPhotographyVibeScreen(
                         viewModel.handleIntent(NavigateWithSubmit)
                     },
                     enabled = currentState.selectedVibeChipList != listOf<ChipItem>(),
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

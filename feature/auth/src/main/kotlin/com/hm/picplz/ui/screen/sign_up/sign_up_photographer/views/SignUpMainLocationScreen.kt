@@ -308,7 +308,6 @@ fun SignUpMainLocationScreen(
                         viewModel.handleIntent(Navigate(SignUpDevice))
                     },
                     enabled = currentState.selectedAreas.isNotEmpty(),
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

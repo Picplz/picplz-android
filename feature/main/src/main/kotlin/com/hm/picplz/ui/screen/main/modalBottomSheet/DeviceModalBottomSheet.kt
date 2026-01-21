@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonModalBottomSheet
-import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -168,19 +167,18 @@ private fun Footer(
                 .padding(bottom = 45.dp, top = 30.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        CommonBottomButton(
-            text = "초기화",
-            onClick = onReset,
-            modifier = Modifier.weight(1f),
-            contentColor = MainThemeColor.Black,
-            borderColor = MainThemeColor.Gray3,
-            containerColor = MainThemeColor.White,
-        )
-        CommonBottomButton(
-            text = "{}명 작가보기",
-            onClick = onSubmit,
-            modifier = Modifier.weight(2f),
-        )
+        Box(modifier = Modifier.weight(1f)) {
+            CommonBottomButton(
+                text = "초기화",
+                onClick = onReset,
+            )
+        }
+        Box(modifier = Modifier.weight(2f)) {
+            CommonBottomButton(
+                text = "{}명 작가보기",
+                onClick = onSubmit,
+            )
+        }
     }
 }
 

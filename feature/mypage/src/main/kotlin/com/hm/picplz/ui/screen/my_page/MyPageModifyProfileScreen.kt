@@ -60,7 +60,6 @@ fun MyPageModifyProfileScreen(
                 CommonBottomButton(
                     text = "완료",
                     onClick = { },
-                    containerColor = MainThemeColor.Black,
                 )
             }
         },

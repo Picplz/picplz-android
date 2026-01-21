@@ -148,7 +148,6 @@ fun SignUpCompletionScreen(
                         // TODO: 뒤로가기에 대한 처리 필요
                         mainNavController.navigate(Main)
                     },
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }
