@@ -73,7 +73,9 @@ fun ChatRoomScreen(
                         ChatRoomIntent.NavigateToPrev,
                     )
                 },
-                showMenuIcon = true,
+                onClickMenu = {
+                    // TODO: Implement menu click action
+                },
             )
         },
         modifier =

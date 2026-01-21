@@ -2,11 +2,9 @@ package com.hm.picplz.ui.screen.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.hm.picplz.core.ui.R
@@ -29,75 +26,97 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
+private val TopBarHeight = 44.dp
+private val TopBarHorizontalPadding = 16.dp
+private val IconSize = 18.dp
+
 @Composable
 fun CommonTopBar(
-    modifier: Modifier = Modifier,
     text: String,
     onClickBack: () -> Unit,
-    showMenuIcon: Boolean = false,
-    onClickMenu: () -> Unit = {},
-    textStyle: TextStyle = pretendardTypography.bodyMedium,
-    paddingStart: Dp = 0.dp,
-    iconSize: Dp = 16.dp,
-    spacerWidth: Dp = 50.dp,
 ) {
-    Box(
+    Row(
         modifier =
             Modifier
-                .height(44.dp)
-                .fillMaxWidth(),
-        contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .height(TopBarHeight)
+                .padding(horizontal = TopBarHorizontalPadding),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier =
-                modifier
-                    .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart,
         ) {
-            IconButton(
-                onClick = onClickBack,
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .padding(start = paddingStart),
-            ) {
+            IconButton(onClick = onClickBack) {
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
-                    contentDescription = "arrow left",
-                    modifier = Modifier.size(iconSize),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier.size(IconSize),
                 )
             }
-            Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = text,
-                    style = textStyle,
+        }
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = text,
+                style = pretendardTypography.bodyMedium,
+            )
+        }
+
+        Box(modifier = Modifier.weight(1f))
+    }
+}
+
+@Composable
+fun CommonTopBarWithMenu(
+    text: String,
+    onClickBack: () -> Unit,
+    onClickMenu: () -> Unit,
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(TopBarHeight)
+                .padding(horizontal = TopBarHorizontalPadding),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            IconButton(onClick = onClickBack) {
+                Image(
+                    painter = painterResource(R.drawable.triangle_left),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier.size(IconSize),
                 )
             }
-            Box(
-                modifier =
-                    Modifier
-                        .size(spacerWidth)
-                        .fillMaxHeight(),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (showMenuIcon) {
-                    IconButton(onClick = onClickMenu) {
-                        Icon(
-                            modifier =
-                                Modifier
-                                    .size(18.dp),
-                            painter = painterResource(id = R.drawable.menu),
-                            contentDescription = "상단바 메뉴 아이콘",
-                        )
-                    }
-                }
+        }
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = text,
+                style = pretendardTypography.bodyMedium,
+            )
+        }
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            IconButton(onClick = onClickMenu) {
+                Icon(
+                    painter = painterResource(id = R.drawable.menu),
+                    contentDescription = "메뉴",
+                    modifier = Modifier.size(IconSize),
+                )
             }
         }
     }
@@ -105,84 +124,62 @@ fun CommonTopBar(
 
 @Composable
 fun CommonTopBarWithSubtitle(
-    modifier: Modifier = Modifier,
     text: String,
     subText: String,
     onClickBack: () -> Unit,
-    showMenuIcon: Boolean = false,
-    onClickMenu: () -> Unit = {},
-    textStyle: TextStyle = pretendardTypography.bodyMedium,
+    onClickMenu: () -> Unit,
     subTextStyle: TextStyle = MainFontFamily.caption,
-    paddingStart: Dp = 0.dp,
-    iconSize: Dp = 16.dp,
-    spacerWidth: Dp = 50.dp,
 ) {
-    Box(
+    Row(
         modifier =
             Modifier
-                .height(44.dp)
-                .fillMaxWidth(),
-        contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .height(TopBarHeight)
+                .padding(horizontal = TopBarHorizontalPadding),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier =
-                modifier
-                    .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterStart,
         ) {
-            IconButton(
-                onClick = onClickBack,
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .padding(start = paddingStart),
-            ) {
+            IconButton(onClick = onClickBack) {
                 Image(
                     painter = painterResource(R.drawable.triangle_left),
-                    contentDescription = "arrow left",
-                    modifier = Modifier.size(iconSize),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier.size(IconSize),
                 )
             }
-            Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                contentAlignment = Alignment.Center,
+        }
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = text,
-                        style = textStyle,
-                    )
-                    Text(
-                        text = subText,
-                        style = subTextStyle,
-                        modifier = Modifier.padding(top = 2.dp),
-                    )
-                }
+                Text(
+                    text = text,
+                    style = pretendardTypography.bodyMedium,
+                )
+                Text(
+                    text = subText,
+                    style = subTextStyle,
+                    modifier = Modifier.padding(top = 2.dp),
+                )
             }
-            Box(
-                modifier =
-                    Modifier
-                        .size(spacerWidth)
-                        .fillMaxHeight(),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (showMenuIcon) {
-                    IconButton(onClick = onClickMenu) {
-                        Icon(
-                            modifier =
-                                Modifier
-                                    .size(18.dp),
-                            painter = painterResource(id = R.drawable.menu),
-                            contentDescription = "상단바 메뉴 아이콘",
-                        )
-                    }
-                }
+        }
+
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            IconButton(onClick = onClickMenu) {
+                Icon(
+                    painter = painterResource(id = R.drawable.menu),
+                    contentDescription = "메뉴",
+                    modifier = Modifier.size(IconSize),
+                )
             }
         }
     }
@@ -198,18 +195,19 @@ fun CommonFixedTopBar(
             Modifier
                 .background(MainThemeColor.White)
                 .zIndex(1f)
-                .height(44.dp),
+                .height(TopBarHeight),
     ) {
         CommonTopBar(
             text = title,
-            onClickBack = { onClickBack() },
+            onClickBack = onClickBack,
         )
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun CommonTopBarPreview() {
+private fun CommonTopBarPreview() {
     PicplzTheme {
         CommonTopBar(
             text = "제목",
@@ -218,29 +216,30 @@ fun CommonTopBarPreview() {
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun CommonTopBarWithSubtitlePreview() {
+private fun CommonTopBarWithMenuPreview() {
     PicplzTheme {
-        CommonTopBarWithSubtitle(
+        CommonTopBarWithMenu(
             text = "제목",
-            subText = "부제목",
-            subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
             onClickBack = {},
+            onClickMenu = {},
         )
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun CommonTopBarWithSubtitleMenuPreview() {
+private fun CommonTopBarWithSubtitlePreview() {
     PicplzTheme {
         CommonTopBarWithSubtitle(
-            text = "제목",
-            subText = "부제목",
+            text = "유가영 작가",
+            subText = "당장 촬영 가능",
             subTextStyle = MainFontFamily.caption.copy(color = MainThemeColor.Green120),
             onClickBack = {},
-            showMenuIcon = true,
+            onClickMenu = {},
         )
     }
 }
