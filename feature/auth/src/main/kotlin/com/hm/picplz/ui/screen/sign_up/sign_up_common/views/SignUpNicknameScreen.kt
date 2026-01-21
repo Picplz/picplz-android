@@ -123,7 +123,6 @@ fun SignUpNicknameScreen(
                             buildAnnotatedString {
                                 append("∙  한글, 영문, 숫자 입력 가능 (2~15자)\n")
                                 append("∙  중복 닉네임은 불가\n")
-                                append("∙  이모티콘, 특수문자 사용이 불가\n")
                                 append("∙  닉네임의 처음과 마지막 부분 공백 사용 불가")
                             },
                         style =
