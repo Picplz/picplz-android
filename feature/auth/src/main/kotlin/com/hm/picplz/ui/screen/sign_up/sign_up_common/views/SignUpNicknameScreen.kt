@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonFilledTextField
 import com.hm.picplz.ui.screen.common.CommonTopBar
@@ -146,7 +147,7 @@ fun SignUpNicknameScreen(
             ) {
                 CommonBottomButton(
                     text = "다음",
-                    onClick = { viewModel.handleIntent(Navigate("sign-up-profile")) },
+                    onClick = { viewModel.handleIntent(Navigate(SignUpProfile)) },
                     enabled = currentState.nickname.isNotEmpty() && currentState.nicknameFieldErrors.isEmpty(),
                     containerColor = MainThemeColor.Black,
                 )

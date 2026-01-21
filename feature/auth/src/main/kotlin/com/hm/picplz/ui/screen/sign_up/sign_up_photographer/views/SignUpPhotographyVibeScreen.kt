@@ -179,7 +179,7 @@ fun SignUpPhotographyVibeScreen(
                     text = "다음",
                     onClick = {
                         viewModel.handleIntent(SetUserPhotographyVibe)
-                        viewModel.handleIntent(NavigateWithSubmit("sign-up-completion"))
+                        viewModel.handleIntent(NavigateWithSubmit)
                     },
                     enabled = currentState.selectedVibeChipList != listOf<ChipItem>(),
                     containerColor = MainThemeColor.Black,

@@ -34,6 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.SignUpDetailExperience
+import com.hm.picplz.navigation.model.SignUpPhotographyVibe
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
@@ -165,9 +167,9 @@ fun SignUpExperienceScreen(
                     text = "다음",
                     onClick = {
                         if (currentState.hasPhotographyExperience == true) {
-                            viewModel.handleIntent(Navigate("sign-up-detail-experience"))
+                            viewModel.handleIntent(Navigate(SignUpDetailExperience))
                         } else if (currentState.hasPhotographyExperience == false) {
-                            viewModel.handleIntent(Navigate("sign-up-photography-vibe"))
+                            viewModel.handleIntent(Navigate(SignUpPhotographyVibe))
                         }
                     },
                     enabled = currentState.hasPhotographyExperience != null,

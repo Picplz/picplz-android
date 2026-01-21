@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common
 
 import com.hm.picplz.common.model.UserType
+import com.hm.picplz.navigation.model.NavigationRoute
 
 sealed interface SignUpCommonIntent {
     data object NavigateToPrev : SignUpCommonIntent
@@ -15,7 +16,7 @@ sealed interface SignUpCommonIntent {
 
     data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
 
-    data class Navigate(val destination: String) : SignUpCommonIntent
+    data class Navigate(val destination: NavigationRoute) : SignUpCommonIntent
 
     data object ShowFileUploadDialog : SignUpCommonIntent
 
