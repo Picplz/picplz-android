@@ -1,7 +1,5 @@
 package com.hm.picplz.navigation.graph
 
-import androidx.compose.runtime.remember
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -21,7 +19,6 @@ import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPortfoliosS
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
-import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerViewModel
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
 import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerScreen
@@ -40,26 +37,18 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
     }
 
     composable<ReviewPhotographer> { backStackEntry ->
-        val parentEntry =
-            remember(backStackEntry) {
-                navController.getBackStackEntry<DetailPhotographer>()
-            }
-        val sharedViewModel: DetailPhotographerViewModel = hiltViewModel(parentEntry)
+        val args = backStackEntry.toRoute<ReviewPhotographer>()
         DetailPhotographerReviewScreen(
             navController = navController,
-            viewModel = sharedViewModel,
+            photographerId = args.photographerId,
         )
     }
 
     composable<DetailPhotographerPhotoReviews> { backStackEntry ->
-        val parentEntry =
-            remember(backStackEntry) {
-                navController.getBackStackEntry<DetailPhotographer>()
-            }
-        val parentViewModel: DetailPhotographerViewModel = hiltViewModel(parentEntry)
+        val args = backStackEntry.toRoute<DetailPhotographerPhotoReviews>()
         DetailPhotographerPhotoReviewsScreen(
             navController = navController,
-            photoReviews = parentViewModel.state.value.reviewSummary.photoReviews,
+            photographerId = args.photographerId,
         )
     }
 
@@ -73,14 +62,10 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
     }
 
     composable<DetailPhotographerPhotoPortfolios> { backStackEntry ->
-        val parentEntry =
-            remember(backStackEntry) {
-                navController.getBackStackEntry<DetailPhotographer>()
-            }
-        val parentViewModel: DetailPhotographerViewModel = hiltViewModel(parentEntry)
+        val args = backStackEntry.toRoute<DetailPhotographerPhotoPortfolios>()
         DetailPhotographerPhotoPortfoliosScreen(
             navController = navController,
-            photoPortfolios = parentViewModel.state.value.profileInfo.photoPortfolios,
+            photographerId = args.photographerId,
         )
     }
 

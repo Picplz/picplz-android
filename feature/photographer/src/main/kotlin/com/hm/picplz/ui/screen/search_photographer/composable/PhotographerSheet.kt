@@ -49,7 +49,11 @@ fun PhotographerSheet(
             Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp)
-                .clickable { mainNavController.navigate(DetailPhotographer) },
+                .clickable {
+                    selectedPhotographer?.let {
+                        mainNavController.navigate(DetailPhotographer(it.id))
+                    }
+                },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

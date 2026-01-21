@@ -32,6 +32,7 @@ fun PortfolioSection(
     modifier: Modifier,
     navController: NavController,
     photoPortfolios: List<PhotoPortfolio>,
+    photographerId: Int,
 ) {
     Column {
         // 포트폴리오
@@ -91,7 +92,7 @@ fun PortfolioSection(
             verticalPadding = 0.dp,
             gap = 6.dp,
             onClick = {
-                navController.navigate(DetailPhotographerPhotoPortfolios)
+                navController.navigate(DetailPhotographerPhotoPortfolios(photographerId))
             },
             modifier = modifier.align(Alignment.End),
         )

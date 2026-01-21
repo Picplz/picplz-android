@@ -40,7 +40,7 @@ fun PhotographerCard(
                 .height(140.dp)
                 .padding(vertical = 20.dp)
                 .width(345.dp)
-                .clickable { mainNavController.navigate(DetailPhotographer) },
+                .clickable { mainNavController.navigate(DetailPhotographer(photographer.id)) },
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = photographer.profileImageUri),
