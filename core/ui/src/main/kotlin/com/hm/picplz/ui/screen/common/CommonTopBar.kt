@@ -32,10 +32,11 @@ private object CommonTopBarDefaults {
 fun CommonTopBar(
     text: String,
     onClickBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .height(CommonTopBarDefaults.Height)
                 .padding(horizontal = CommonTopBarDefaults.HorizontalPadding),

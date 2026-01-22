@@ -24,10 +24,11 @@ private object KakaoLoginButtonDefaults {
 fun KakaoLoginButton(
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors =
             ButtonDefaults.buttonColors(
                 containerColor = MainThemeColor.Yellow,

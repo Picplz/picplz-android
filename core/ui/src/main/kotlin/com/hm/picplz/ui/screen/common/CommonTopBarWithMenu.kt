@@ -31,10 +31,11 @@ fun CommonTopBarWithMenu(
     text: String,
     onClickBack: () -> Unit,
     onClickMenu: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .height(CommonTopBarWithMenuDefaults.Height)
                 .padding(horizontal = CommonTopBarWithMenuDefaults.HorizontalPadding),

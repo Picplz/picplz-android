@@ -60,13 +60,24 @@ Design System module providing reusable Compose components, theme, and drawable 
 | **도메인 텍스트** | `text: String` | 화면마다 다른 문구 |
 | **도메인 동작** | `onClick: () -> Unit` | 화면마다 다른 비즈니스 로직 |
 | **도메인 상태** | `enabled: Boolean` | 비즈니스 로직에 따른 활성화 |
+| **레이아웃 통합** | `modifier: Modifier = Modifier` | 부모 레이아웃과의 통합, 접근성, 테스트 |
 
 | 받으면 안 되는 것 | 예시 | 이유 |
 |------------------|------|------|
 | 색상 | `containerColor`, `contentColor` | 피그마 기준 고정 |
-| 크기/여백 | `height`, `padding`, `modifier` | 피그마 기준 고정 |
+| 크기/여백 | `height`, `padding` | 피그마 기준 고정 |
 | 폰트 스타일 | `textStyle`, `fontSize` | 디자인 시스템 고정 |
 | 테두리 | `borderColor`, `borderWidth` | 피그마 기준 고정 |
+
+### modifier는 왜 허용하는가?
+
+`Modifier`는 스타일링이 아니라 **레이아웃 통합 도구**:
+- 부모와의 배치: `padding`, `fillMaxWidth`, `weight`
+- 시스템 통합: `imePadding`, `navigationBarsPadding`
+- 접근성: `semantics`, `testTag`
+- 애니메이션: `animateContentSize`
+
+modifier 없으면 매번 `Box`/`Spacer`로 감싸는 보일러플레이트 발생.
 
 ### 스타일이 다르면 별도 컴포넌트
 

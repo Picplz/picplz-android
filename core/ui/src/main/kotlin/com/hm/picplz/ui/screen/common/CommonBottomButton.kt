@@ -24,11 +24,12 @@ private object CommonBottomButtonDefaults {
 fun CommonBottomButton(
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors =
             ButtonDefaults.buttonColors(
                 containerColor = MainThemeColor.Black,

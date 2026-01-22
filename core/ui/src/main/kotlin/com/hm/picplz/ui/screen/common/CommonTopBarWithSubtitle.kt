@@ -37,11 +37,12 @@ fun CommonTopBarWithSubtitle(
     subText: String,
     onClickBack: () -> Unit,
     onClickMenu: () -> Unit,
+    modifier: Modifier = Modifier,
     subTextStyle: TextStyle = MainFontFamily.caption,
 ) {
     Row(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .height(CommonTopBarWithSubtitleDefaults.Height)
                 .padding(horizontal = CommonTopBarWithSubtitleDefaults.HorizontalPadding),
