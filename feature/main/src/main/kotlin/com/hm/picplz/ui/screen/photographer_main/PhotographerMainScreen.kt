@@ -224,7 +224,6 @@ fun PhotographerMainScreen(
                     onClick = {
                         viewModel.handleIntent(PhotographerMainIntent.SetIsModalOpen(true))
                     },
-                    containerColor = if (currentState.isActive) MainThemeColor.Green120 else MainThemeColor.Black,
                 )
 
                 if (currentState.isModalOpen) {

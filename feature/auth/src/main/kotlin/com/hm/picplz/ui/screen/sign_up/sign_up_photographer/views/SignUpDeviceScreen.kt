@@ -177,7 +177,6 @@ fun SignUpDeviceScreen(
                         viewModel.handleIntent(Navigate(SignUpPhotographyVibe))
                     },
                     enabled = currentState.phoneDevices.isNotEmpty() || currentState.cameraDevices.isNotEmpty(),
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

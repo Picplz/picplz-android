@@ -46,7 +46,7 @@ import com.hm.picplz.ui.screen.chat_room.composable.bubble.CompleteBubble
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.DealConfirmationBubble
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.ImageChat
 import com.hm.picplz.ui.screen.chat_room.composable.bubble.NotificationBubble
-import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.CommonTopBarWithSubtitle
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -64,7 +64,7 @@ fun ChatRoomScreen(
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
-            CommonTopBar(
+            CommonTopBarWithSubtitle(
                 text = "유가영 작가",
                 subText = "당장 촬영 가능",
                 subTextStyle = caption.copy(color = MainThemeColor.Green120),
@@ -73,7 +73,9 @@ fun ChatRoomScreen(
                         ChatRoomIntent.NavigateToPrev,
                     )
                 },
-                showMenuIcon = true,
+                onClickMenu = {
+                    // TODO: Implement menu click action
+                },
             )
         },
         modifier =

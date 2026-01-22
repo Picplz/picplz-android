@@ -185,7 +185,6 @@ fun SignUpCareerPeriodScreen(
                         viewModel.handleIntent(Navigate(SignUpPhotographyVibe))
                     },
                     enabled = currentState.yearValue != null && currentState.monthValue != null,
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

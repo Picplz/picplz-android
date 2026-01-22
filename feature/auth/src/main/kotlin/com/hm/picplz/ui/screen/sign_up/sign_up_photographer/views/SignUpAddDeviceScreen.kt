@@ -156,7 +156,6 @@ fun SignUpAddDeviceScreen(
                                     !camera.modelName.isNullOrEmpty()
                             }
                         },
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

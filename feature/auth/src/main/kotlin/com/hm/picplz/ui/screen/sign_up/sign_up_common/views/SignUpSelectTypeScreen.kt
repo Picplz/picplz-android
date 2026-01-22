@@ -147,7 +147,6 @@ fun SignUpSelectTypeScreen(
                     text = "다음",
                     onClick = { viewModel.handleIntent(Navigate(SignUpNickname)) },
                     enabled = currentState.selectedUserType != null,
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

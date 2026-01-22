@@ -313,11 +313,7 @@ fun MyPageOrderSheetScreen(
 
                 CommonBottomButton(
                     text = "영수증 조회",
-                    onClick = { /*TODO*/ },
-                    contentColor = MainThemeColor.Black,
-                    containerColor = MainThemeColor.White,
-                    borderColor = MainThemeColor.Gray3,
-                    modifier = Modifier.height(42.dp),
+                    onClick = { },
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))

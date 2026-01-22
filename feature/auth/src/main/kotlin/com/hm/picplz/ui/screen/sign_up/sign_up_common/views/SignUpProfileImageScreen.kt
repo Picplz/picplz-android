@@ -208,7 +208,6 @@ fun SignUpProfileImageScreen(
                         },
                     onClick = { viewModel.handleIntent(NavigateToSelected) },
                     enabled = currentState.nickname.isNotEmpty(),
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }

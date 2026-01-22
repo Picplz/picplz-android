@@ -202,11 +202,7 @@ fun ShootingHistoryCard(
                     Spacer(modifier = Modifier.height(23.dp))
                     CommonBottomButton(
                         text = if (status === ShootingStatus.COMPLEETED) "리뷰 쓰러가기" else "다시 예약하기",
-                        onClick = { /*TODO*/ },
-                        containerColor = MainThemeColor.White,
-                        contentColor = MainThemeColor.Black,
-                        borderColor = MainThemeColor.Gray3,
-                        modifier = Modifier.height(49.dp),
+                        onClick = { },
                     )
                 }
             }

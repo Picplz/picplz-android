@@ -14,36 +14,32 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
-private object CommonBottomButtonDefaults {
+private object KakaoLoginButtonDefaults {
     val VerticalPadding = 14.dp
     val HorizontalPadding = 20.dp
     val CornerRadius = 5.dp
 }
 
 @Composable
-fun CommonBottomButton(
+fun KakaoLoginButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors =
             ButtonDefaults.buttonColors(
-                containerColor = MainThemeColor.Black,
-                contentColor = MainThemeColor.White,
-                disabledContainerColor = MainThemeColor.Gray3,
-                disabledContentColor = MainThemeColor.Gray2,
+                containerColor = MainThemeColor.Yellow,
+                contentColor = MainThemeColor.Black,
             ),
-        shape = RoundedCornerShape(CommonBottomButtonDefaults.CornerRadius),
+        shape = RoundedCornerShape(KakaoLoginButtonDefaults.CornerRadius),
         contentPadding =
             PaddingValues(
-                vertical = CommonBottomButtonDefaults.VerticalPadding,
-                horizontal = CommonBottomButtonDefaults.HorizontalPadding,
+                vertical = KakaoLoginButtonDefaults.VerticalPadding,
+                horizontal = KakaoLoginButtonDefaults.HorizontalPadding,
             ),
-        enabled = enabled,
     ) {
         Text(
             text = text,
@@ -55,25 +51,11 @@ fun CommonBottomButton(
 @Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-private fun CommonBottomButtonEnabledPreview() {
+private fun KakaoLoginButtonPreview() {
     PicplzTheme {
-        CommonBottomButton(
-            text = "다음",
+        KakaoLoginButton(
+            text = "카카오로 계속하기",
             onClick = {},
-            enabled = true,
-        )
-    }
-}
-
-@Suppress("UnusedPrivateMember")
-@Preview(showBackground = true)
-@Composable
-private fun CommonBottomButtonDisabledPreview() {
-    PicplzTheme {
-        CommonBottomButton(
-            text = "다음",
-            onClick = {},
-            enabled = false,
         )
     }
 }

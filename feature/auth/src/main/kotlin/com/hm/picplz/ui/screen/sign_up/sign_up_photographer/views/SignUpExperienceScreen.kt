@@ -173,7 +173,6 @@ fun SignUpExperienceScreen(
                         }
                     },
                     enabled = currentState.hasPhotographyExperience != null,
-                    containerColor = MainThemeColor.Black,
                 )
             }
         }
