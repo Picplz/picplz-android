@@ -27,6 +27,7 @@ import com.hm.picplz.navigation.model.ChatRoom
 import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
+import com.hm.picplz.navigation.model.DetailReservation
 import com.hm.picplz.navigation.model.Feed
 import com.hm.picplz.navigation.model.Login
 import com.hm.picplz.navigation.model.Main
@@ -121,6 +122,10 @@ fun DevScreen(navController: NavHostController) {
             // === Chat ===
             SectionTitle("Chat")
             DevButton("ChatRoom (test-room)") { navController.navigate(ChatRoom(roomId = "test-room-123")) }
+
+            // === Reservation ===
+            SectionTitle("Reservation")
+            DevButton("DetailReservation(예약 상세)") { navController.navigate(DetailReservation) }
 
             Spacer(modifier = Modifier.height(32.dp))
         }

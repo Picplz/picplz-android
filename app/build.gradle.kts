@@ -94,6 +94,7 @@ dependencies {
     implementation(project(":feature:mypage"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:reservation"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

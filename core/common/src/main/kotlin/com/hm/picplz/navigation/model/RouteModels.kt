@@ -101,3 +101,7 @@ data class DetailPhotographerSingleReview(val reviewId: Int, val photoIndex: Int
 
 @Serializable
 data class DetailPhotographerPortfolioDetail(val portfolioId: Int, val photoIndex: Int) : NavigationRoute
+
+// === Reservation Screens ===
+@Serializable
+data object DetailReservation : NavigationRoute
