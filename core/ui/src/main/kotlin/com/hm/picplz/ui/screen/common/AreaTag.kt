@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,7 +31,6 @@ fun AreaTag(
     Row(
         modifier =
             modifier
-                .height(28.dp)
                 .background(
                     color = MainThemeColor.White,
                     shape = RoundedCornerShape(5.dp),
@@ -42,7 +40,7 @@ fun AreaTag(
                     color = MainThemeColor.Black,
                     shape = RoundedCornerShape(5.dp),
                 )
-                .padding(horizontal = 11.dp),
+                .padding(horizontal = 12.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
