@@ -7,19 +7,18 @@ object NicknameValidator {
         val errors = mutableListOf<NicknameFieldError>()
         if (newNickname.isEmpty()) {
             errors.add(NicknameFieldError.Required())
+            return errors
         }
-        if (newNickname.length < 2 || newNickname.length > 15) {
-            errors.add(NicknameFieldError.Length())
-        }
-        if (!newNickname.matches(Regex("^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\\s]+$"))) {
+        // 우선순위: 형식 > 길이 > 중복
+        if (!newNickname.matches(Regex("^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]+$"))) {
             errors.add(NicknameFieldError.InvalidChar())
+            return errors
         }
-        if (newNickname.contains(Regex("[\\p{So}\\p{Cn}\\p{Sk}\\p{Sc}\\p{Sm}]"))) {
-            errors.add(NicknameFieldError.InvalidSpecialCharacter())
+        if (newNickname.length !in 2..15) {
+            errors.add(NicknameFieldError.Length())
+            return errors
         }
-        if (newNickname.startsWith(" ") || newNickname.endsWith(" ")) {
-            errors.add(NicknameFieldError.Whitespace())
-        }
+        // 중복 검사는 서버에서 처리
         return errors
     }
 }
