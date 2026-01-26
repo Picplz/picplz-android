@@ -32,9 +32,9 @@ class AreaSearchHandler {
                 val isAlreadySelected =
                     currentState.selectedAreas.any { it.id == intent.area.id }
 
-                if (!isAlreadySelected && currentState.selectedAreas.size >= 10) {
+                if (!isAlreadySelected && currentState.selectedAreas.size >= 5) {
                     return currentState.copy(
-                        toastMessage = "활동 지역은 최대 10개까지 선택할 수 있습니다.",
+                        toastMessage = "활동 지역은 최대 5개까지 선택할 수 있습니다.",
                         showToast = true,
                     )
                 }

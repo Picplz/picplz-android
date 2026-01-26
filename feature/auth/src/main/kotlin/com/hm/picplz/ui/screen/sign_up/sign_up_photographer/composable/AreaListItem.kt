@@ -40,7 +40,7 @@ fun AreaListItem(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 15.dp),
+                    .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
