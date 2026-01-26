@@ -15,16 +15,18 @@ fun SignUpPhotographerScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpPhotographerViewModel = hiltViewModel(),
     mainNavController: NavHostController,
-    userInfo: User = emptyUserData,
+    userInfo: User? = null,
+    startAt: String? = null,
 ) {
     val signUpPhotographerNavController = rememberNavController()
 
-    viewModel.handleIntent(SignUpPhotographerIntent.SetUserInfo(userInfo))
+    viewModel.handleIntent(SignUpPhotographerIntent.SetUserInfo(userInfo ?: emptyUserData))
 
     SignUpPhotographerNavHost(
         mainNavController = mainNavController,
         signUpPhotographerNavController = signUpPhotographerNavController,
         viewModel = viewModel,
         modifier = modifier,
+        startAt = startAt,
     )
 }

@@ -76,6 +76,7 @@ fun DevScreen(navController: NavHostController) {
             DevButton("SignUpIntro") { navController.navigate(SignUpIntro()) }
             DevButton("SignUpClient") { navController.navigate(SignUpClient(userInfo = emptyUserData)) }
             DevButton("SignUpPhotographer") { navController.navigate(SignUpPhotographer(userInfo = emptyUserData)) }
+            DevButton("SignUpDevice (Direct)") { navController.navigate(SignUpPhotographer(startAt = "device")) }
             DevButton("SignUpCompletion") { navController.navigate(SignUpCompletion(userInfo = emptyUserData)) }
 
             // === Main Tabs ===

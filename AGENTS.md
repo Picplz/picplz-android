@@ -51,6 +51,26 @@ All features must follow this 5-file structure:
 - `Intent`: User actions
 - `SideEffect`: One-off events (Navigation, Toast)
 
+### SideEffect Channel Rule (Boy Scout Rule)
+**일회성 SideEffect는 `Channel` 사용** (SharedFlow 금지)
+
+```kotlin
+// ✅ 권장
+private val _sideEffect = Channel<SideEffect>(Channel.BUFFERED)
+val sideEffect = _sideEffect.receiveAsFlow()
+
+// ❌ 금지 - 여러 화면이 백스택에 있으면 중복 실행됨
+private val _sideEffect = MutableSharedFlow<SideEffect>()
+```
+
+| | SharedFlow | Channel |
+|---|---|---|
+| 소비자 | 모든 collector | 단일 collector |
+| 용도 | 상태 브로드캐스트 | 일회성 이벤트 |
+
+- **적용 시점**: 해당 ViewModel 수정 시 함께 변경 (Boy Scout Rule)
+- **신규 작성 시**: 처음부터 Channel 사용
+
 ### Module Dependencies
 ```
 app → features

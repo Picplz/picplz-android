@@ -10,10 +10,10 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.CareerHandle
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.DeviceHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.VibeChipHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,8 +28,8 @@ class SignUpPhotographerViewModel
         private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
         val state: StateFlow<SignUpPhotographerState> get() = _state
 
-        private val _sideEffect = MutableSharedFlow<SignUpPhotographerSideEffect>()
-        val sideEffect: SharedFlow<SignUpPhotographerSideEffect> get() = _sideEffect
+        private val _sideEffect = Channel<SignUpPhotographerSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
         private val vibeChipHandler = VibeChipHandler()
         private val areaSearchHandler = AreaSearchHandler()
@@ -102,7 +102,7 @@ class SignUpPhotographerViewModel
             when (intent) {
                 is SignUpPhotographerIntent.NavigateToPrev -> {
                     viewModelScope.launch {
-                        _sideEffect.emit(SignUpPhotographerSideEffect.NavigateToPrev)
+                        _sideEffect.send(SignUpPhotographerSideEffect.NavigateToPrev)
                     }
                 }
 
@@ -120,14 +120,14 @@ class SignUpPhotographerViewModel
 
                 is SignUpPhotographerIntent.Navigate -> {
                     viewModelScope.launch {
-                        _sideEffect.emit(SignUpPhotographerSideEffect.Navigate(intent.destination))
+                        _sideEffect.send(SignUpPhotographerSideEffect.Navigate(intent.destination))
                     }
                 }
 
                 is SignUpPhotographerIntent.NavigateWithSubmit -> {
                     viewModelScope.launch {
                         val user = _state.value.userInfo
-                        _sideEffect.emit(
+                        _sideEffect.send(
                             SignUpPhotographerSideEffect.NavigateToSignUpCompletion(user),
                         )
                     }
