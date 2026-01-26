@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -154,41 +153,22 @@ fun SignUpProfileImageScreen(
                             )
                         }
                     }
-                    Spacer(
-                        modifier =
-                            Modifier
-                                .height(80.dp),
-                    )
-                    Text(
-                        text =
-                            if (currentState.profileImageUri === null) {
-                                buildAnnotatedString {
-                                    append("프로필 이미지를\n")
-                                    append("설정해 주세요.")
-                                }
-                            } else {
-                                when (currentState.selectedUserType) {
-                                    UserType.User ->
-                                        buildAnnotatedString {
-                                            append("프로필 이미지 설정이\n")
-                                            append("완료되었습니다.")
-                                        }
-                                    UserType.Photographer ->
-                                        buildAnnotatedString {
-                                            append("이제 주 촬영지와 촬영 기기를\n")
-                                            append("입력해볼까요?")
-                                        }
-                                    else ->
-                                        buildAnnotatedString {
-                                            append("다음 단계로\n")
-                                            append("넘어갈게요.")
-                                        }
-                                }
-                            },
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                    Spacer(modifier = Modifier.height(70.dp))
+                    val guideText =
+                        when {
+                            currentState.profileImageUri == null -> "프로필 이미지를\n설정해 주세요."
+                            currentState.selectedUserType == UserType.Photographer ->
+                                "이제 촬영지와 촬영 기기를\n선택할 거예요"
+                            else -> null
+                        }
+                    if (guideText != null) {
+                        Text(
+                            text = guideText,
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
             Box(

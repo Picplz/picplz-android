@@ -49,7 +49,6 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSearchField
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.common.ToastPosition
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
@@ -315,8 +314,6 @@ fun SignUpMainLocationScreen(
             CommonToast(
                 message = message,
                 isVisible = currentState.showToast,
-                position = ToastPosition.BOTTOM,
-                offset = 120.dp,
                 onDismiss = {
                     viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
                 },
