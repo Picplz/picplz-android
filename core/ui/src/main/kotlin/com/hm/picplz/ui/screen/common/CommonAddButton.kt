@@ -1,8 +1,8 @@
 package com.hm.picplz.ui.screen.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,10 +22,7 @@ fun CommonAddButton(
     onClick: () -> Unit,
 ) {
     Button(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(42.dp),
+        modifier = modifier.fillMaxWidth(),
         onClick = onClick,
         shape = RoundedCornerShape(5.dp),
         colors =
@@ -38,6 +35,7 @@ fun CommonAddButton(
                 width = 1.dp,
                 color = MainThemeColor.Gray3,
             ),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 11.dp),
     ) {
         Text(
             text = text,

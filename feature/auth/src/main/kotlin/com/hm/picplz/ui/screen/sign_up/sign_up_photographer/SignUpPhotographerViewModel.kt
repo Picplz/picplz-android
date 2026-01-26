@@ -137,6 +137,10 @@ class SignUpPhotographerViewModel
                     handleSearchAreaIntent(intent)
                 }
 
+                is SignUpPhotographerIntent.AddCurrentDeviceToList -> {
+                    handleAddCurrentDeviceToList(intent)
+                }
+
                 else -> {
                     val newState =
                         vibeChipHandler.handleIntent(intent, _state.value)
@@ -145,6 +149,18 @@ class SignUpPhotographerViewModel
                             ?: careerHandler.handleIntent(intent, _state.value)
 
                     newState?.let { _state.value = it }
+                }
+            }
+        }
+
+        private fun handleAddCurrentDeviceToList(intent: SignUpPhotographerIntent.AddCurrentDeviceToList) {
+            val newState = deviceHandler.handleIntent(intent, _state.value)
+            newState?.let { state ->
+                _state.value = state
+                if (!state.showToast) {
+                    viewModelScope.launch {
+                        _sideEffect.send(SignUpPhotographerSideEffect.NavigateToPrev)
+                    }
                 }
             }
         }

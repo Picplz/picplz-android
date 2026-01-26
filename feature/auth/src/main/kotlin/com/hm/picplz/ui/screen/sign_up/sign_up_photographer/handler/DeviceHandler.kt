@@ -110,27 +110,49 @@ class DeviceHandler {
                 when (intent.category) {
                     DeviceCategory.PHONE -> {
                         currentState.currentPhone?.let { phone ->
-                            currentState.copy(
-                                phoneDevices = currentState.phoneDevices + phone,
-                                currentPhone = null,
-                                brandExpanded = false,
-                                modelExpanded = false,
-                                phoneBrandDirectInput = false,
-                                phoneModelDirectInput = false,
-                            )
+                            val isDuplicate =
+                                currentState.phoneDevices.any {
+                                    it.companyName == phone.companyName && it.modelName == phone.modelName
+                                }
+                            if (isDuplicate) {
+                                currentState.copy(
+                                    showToast = true,
+                                    toastMessage = "이미 추가된 기기입니다.",
+                                )
+                            } else {
+                                currentState.copy(
+                                    phoneDevices = currentState.phoneDevices + phone,
+                                    currentPhone = null,
+                                    brandExpanded = false,
+                                    modelExpanded = false,
+                                    phoneBrandDirectInput = false,
+                                    phoneModelDirectInput = false,
+                                )
+                            }
                         } ?: currentState
                     }
 
                     DeviceCategory.CAMERA -> {
                         currentState.currentCamera?.let { camera ->
-                            currentState.copy(
-                                cameraDevices = currentState.cameraDevices + camera,
-                                currentCamera = null,
-                                brandExpanded = false,
-                                modelExpanded = false,
-                                cameraTypeExpanded = false,
-                                cameraBrandDirectInput = false,
-                            )
+                            val isDuplicate =
+                                currentState.cameraDevices.any {
+                                    it.companyName == camera.companyName && it.modelName == camera.modelName
+                                }
+                            if (isDuplicate) {
+                                currentState.copy(
+                                    showToast = true,
+                                    toastMessage = "이미 추가된 기기입니다.",
+                                )
+                            } else {
+                                currentState.copy(
+                                    cameraDevices = currentState.cameraDevices + camera,
+                                    currentCamera = null,
+                                    brandExpanded = false,
+                                    modelExpanded = false,
+                                    cameraTypeExpanded = false,
+                                    cameraBrandDirectInput = false,
+                                )
+                            }
                         } ?: currentState
                     }
                 }

@@ -5,13 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,62 +35,47 @@ fun DeviceItem(
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    Row(
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(42.dp),
+                .clip(RoundedCornerShape(5.dp))
+                .background(MainThemeColor.Gray1)
+                .border(
+                    width = 1.dp,
+                    color = MainThemeColor.Gray2,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .padding(horizontal = 15.dp, vertical = 11.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(42.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(MainThemeColor.Gray1)
-                    .border(
-                        width = 1.dp,
-                        color = MainThemeColor.Gray2,
-                        shape = RoundedCornerShape(5.dp),
-                    )
-                    .padding(horizontal = 10.dp),
-            contentAlignment = Alignment.CenterStart,
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = device.companyName,
-                        style = pretendardTypography.bodyMedium,
-                        color = MainThemeColor.Gray4,
-                    )
-                    Spacer(modifier = Modifier.width(14.dp))
-                    Text(
-                        text =
-                            when (device) {
-                                is Device.PhoneDevice -> device.modelName ?: "모델명 없음"
-                                is Device.CameraDevice -> "${device.modelName ?: "모델명 없음"} (${device.cameraType})"
-                            },
-                        style = MainFontFamily.bodyBold,
-                        color = MainThemeColor.Gray5,
-                    )
-                }
-            }
+            Text(
+                text = device.companyName,
+                style = pretendardTypography.bodyMedium,
+                color = MainThemeColor.Gray4,
+            )
+            Spacer(modifier = Modifier.width(14.dp))
+            Text(
+                text =
+                    when (device) {
+                        is Device.PhoneDevice -> device.modelName ?: "모델명 없음"
+                        is Device.CameraDevice -> "${device.modelName ?: "모델명 없음"} (${device.cameraType})"
+                    },
+                style = MainFontFamily.bodyBold,
+                color = MainThemeColor.Gray5,
+            )
         }
         Image(
             painter = painterResource(id = R.drawable.close_circle),
             contentDescription = "삭제",
             modifier =
                 Modifier
-                    .size(22.dp)
-                    .offset(x = (10).dp, y = (-10).dp)
-                    .align(Alignment.TopEnd)
+                    .size(20.dp)
                     .clickable { onRemove() },
         )
     }

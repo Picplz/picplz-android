@@ -80,7 +80,7 @@ fun SignUpDeviceScreen(
                             .padding(top = 16.dp),
                 ) {
                     Text(
-                        text = "활용 기기를 선택해 주세요.",
+                        text = "촬영 기기를 선택해 주세요.",
                         style = pretendardTypography.titleMedium,
                     )
                     Spacer(modifier = Modifier.height(30.dp))
@@ -88,32 +88,26 @@ fun SignUpDeviceScreen(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .height(220.dp),
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(40.dp),
                     ) {
-                        Text(
-                            text = "내 핸드폰",
-                            style = pretendardTypography.titleSmall,
-                        )
                         Column(
-                            modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .verticalScroll(rememberScrollState())
-                                    .padding(top = 10.dp, end = 10.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(17.dp),
-                            ) {
-                                currentState.phoneDevices.forEach { device ->
-                                    DeviceItem(
-                                        device = device,
-                                        onRemove = {
-                                            viewModel.handleIntent(RemoveDeviceFromCategory(device))
-                                        },
-                                    )
-                                }
+                            Text(
+                                text = "내 핸드폰",
+                                style = pretendardTypography.titleSmall,
+                            )
+                            currentState.phoneDevices.forEach { device ->
+                                DeviceItem(
+                                    device = device,
+                                    onRemove = {
+                                        viewModel.handleIntent(RemoveDeviceFromCategory(device))
+                                    },
+                                )
                             }
-                            Spacer(modifier = Modifier.height(10.dp))
                             CommonAddButton(
                                 text = "추가하기 +",
                                 onClick = {
@@ -121,38 +115,22 @@ fun SignUpDeviceScreen(
                                 },
                             )
                         }
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(220.dp),
-                    ) {
-                        Text(
-                            text = "내 카메라",
-                            style = pretendardTypography.titleSmall,
-                        )
                         Column(
-                            modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .verticalScroll(rememberScrollState())
-                                    .padding(top = 10.dp, end = 10.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(17.dp),
-                            ) {
-                                currentState.cameraDevices.forEach { device ->
-                                    DeviceItem(
-                                        device = device,
-                                        onRemove = {
-                                            viewModel.handleIntent(RemoveDeviceFromCategory(device))
-                                        },
-                                    )
-                                }
+                            Text(
+                                text = "내 카메라",
+                                style = pretendardTypography.titleSmall,
+                            )
+                            currentState.cameraDevices.forEach { device ->
+                                DeviceItem(
+                                    device = device,
+                                    onRemove = {
+                                        viewModel.handleIntent(RemoveDeviceFromCategory(device))
+                                    },
+                                )
                             }
-                            Spacer(modifier = Modifier.height(10.dp))
                             CommonAddButton(
                                 text = "추가하기 +",
                                 onClick = {
