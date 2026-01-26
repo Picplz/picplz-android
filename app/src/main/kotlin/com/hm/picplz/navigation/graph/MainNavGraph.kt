@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hm.picplz.navigation.model.Chat
 import com.hm.picplz.navigation.model.ChatRoom
+import com.hm.picplz.navigation.model.DetailReservation
 import com.hm.picplz.navigation.model.Dev
 import com.hm.picplz.navigation.model.Feed
 import com.hm.picplz.navigation.model.Main
@@ -17,6 +18,7 @@ import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.screen.chat.ChatScreen
 import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
+import com.hm.picplz.ui.screen.detail_reservation.DetailReservationScreen
 import com.hm.picplz.ui.screen.dev.DevScreen
 import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
@@ -67,5 +69,9 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPageOrderSheet> {
         MyPageOrderSheetScreen(navController = navController)
+    }
+
+    composable<DetailReservation> {
+        DetailReservationScreen()
     }
 }
