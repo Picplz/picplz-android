@@ -240,7 +240,7 @@ fun SignUpMainLocationScreen(
                                         )
                                         if (index < currentState.searchResults.size - 1) {
                                             HorizontalDivider(
-                                                thickness = 0.98.dp,
+                                                thickness = 1.dp,
                                                 color = MainThemeColor.Gray2,
                                             )
                                         }
@@ -272,24 +272,16 @@ fun SignUpMainLocationScreen(
                                         style = pretendardTypography.titleSmall,
                                         color = MainThemeColor.Gray6,
                                     )
-                                    Spacer(
-                                        modifier =
-                                            Modifier
-                                                .height(18.dp),
-                                    )
-                                    Box(
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user_undefined),
+                                        contentDescription = "아이콘",
                                         modifier =
                                             Modifier
                                                 .height(60.68.dp)
                                                 .width(52.39.dp),
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.user_undefined),
-                                            contentDescription = "아이콘",
-                                            modifier = Modifier.fillMaxSize(),
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(22.dp))
+                                    )
+                                    Spacer(modifier = Modifier.height(30.dp))
                                     Text(
                                         text = "다른 지역으로\n이동해 보는 건 어때요?",
                                         style = pretendardTypography.bodyMedium,
