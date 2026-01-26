@@ -55,6 +55,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 import kotlinx.coroutines.flow.collectLatest
 import java.util.UUID
 
+// TODO: #99 직접입력 버튼 플로우 개선 - Input 전환 시 자동 포커스 구현
 @Composable
 fun SignUpAddDeviceScreen(
     modifier: Modifier = Modifier,

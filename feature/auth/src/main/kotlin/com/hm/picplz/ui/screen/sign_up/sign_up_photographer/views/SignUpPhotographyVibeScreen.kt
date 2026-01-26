@@ -108,20 +108,20 @@ fun SignUpPhotographyVibeScreen(
                                 .height(80.dp),
                     )
                     Text(
-                        text = "자신 있는 촬영 감성을 선택해 주세요.",
+                        text = "자신 있는 분위기 키워드를 선택해 주세요.",
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(
                         modifier =
                             Modifier
-                                .height(30.dp),
+                                .height(20.dp),
                     )
                     FlowRow(
                         modifier =
                             Modifier
                                 .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
                         currentState.vibeChipList.map { chip ->
                             CommonChip(
