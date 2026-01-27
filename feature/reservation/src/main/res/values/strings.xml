@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reservation_cancel">예약 취소</string>
+    <string name="reservation_step_waiting">예약 대기</string>
+    <string name="reservation_step_in_progress">촬영 진행</string>
+    <string name="reservation_step_confirmed">거래 확정</string>
+</resources>
