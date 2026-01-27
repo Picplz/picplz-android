@@ -17,7 +17,7 @@ import com.hm.picplz.ui.theme.MainThemeFont.Body
 fun ReservationInfoSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         ReservationInfoItem(
             title = "촬영 상품명",
@@ -25,11 +25,11 @@ fun ReservationInfoSection(modifier: Modifier = Modifier) {
         )
         ReservationInfoItem(
             title = "촬영 장소",
-            description = "서울특별시 종로구 효자로 3, 네번째 테이블 창문 앞"
+            description = "서울특별시 종로구 효자로 3, 네번째 테이블 창문 앞",
         )
         ReservationInfoItem(
             title = "촬영 일시",
-            description = "작가와 협의"
+            description = "작가와 협의",
         )
     }
 }
@@ -42,7 +42,7 @@ private fun ReservationInfoItem(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         ReservationInfoItemTitle(title = title)
         ReservationInfoItemDescription(description = description)
@@ -58,7 +58,7 @@ private fun ReservationInfoItemTitle(
         text = title,
         modifier = modifier,
         style = bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-        color = Color.Black
+        color = Color.Black,
     )
 }
 
@@ -71,7 +71,7 @@ private fun ReservationInfoItemDescription(
         text = description,
         modifier = modifier,
         style = Body,
-        color = MainThemeColor.Gray5
+        color = MainThemeColor.Gray5,
     )
 }
 

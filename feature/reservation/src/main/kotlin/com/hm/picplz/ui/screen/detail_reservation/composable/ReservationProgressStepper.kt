@@ -25,25 +25,25 @@ import com.hm.picplz.ui.theme.pretendardTypography
 fun ReservationProgressStepper(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterHorizontally)
+        horizontalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterHorizontally),
     ) {
         ReservationStepItem(
             isActive = true,
-            label = stringResource(string.reservation_step_waiting)
+            label = stringResource(string.reservation_step_waiting),
         )
 
         DashLine()
 
         ReservationStepItem(
             isActive = false,
-            label = stringResource(string.reservation_step_in_progress)
+            label = stringResource(string.reservation_step_in_progress),
         )
 
         DashLine()
 
         ReservationStepItem(
             isActive = false,
-            label = stringResource(string.reservation_step_confirmed)
+            label = stringResource(string.reservation_step_confirmed),
         )
     }
 }
@@ -52,12 +52,12 @@ fun ReservationProgressStepper(modifier: Modifier = Modifier) {
 private fun ReservationStepItem(
     isActive: Boolean,
     label: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         StepIcon(isActive)
 
@@ -85,19 +85,17 @@ private fun StepIcon(
 private fun StepLabel(
     label: String,
     isActive: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = label,
         modifier = modifier,
-        style = if(isActive) bodyBold else pretendardTypography.bodyMedium.copy(color = MainThemeColor.Gray4),
+        style = if (isActive) bodyBold else pretendardTypography.bodyMedium.copy(color = MainThemeColor.Gray4),
     )
 }
 
 @Composable
-private fun DashLine(
-    modifier: Modifier = Modifier
-) {
+private fun DashLine(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.dash_line),
         contentDescription = "DashLine",

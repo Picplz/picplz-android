@@ -26,32 +26,32 @@ import com.hm.picplz.ui.theme.MainThemeColor
 fun DetailReservationScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier,
-        containerColor = MainThemeColor.White
+        containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Box(modifier = Modifier.fillMaxWidth().height(230.dp).background(Color.LightGray)) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = "지도 영역"
+                    text = "지도 영역",
                 )
             }
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(horizontal = 16.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 item {
                     ReservationStatusHeader(
                         modifier = Modifier.padding(vertical = 20.dp),
                         title = "예약 승인 대기중...",
                         description = "n분 이내로 승인되지 않으면 자동 취소됩니다.",
-                        onCancelClick = {}
+                        onCancelClick = {},
                     )
                 }
 
                 item {
                     ReservationProgressStepper(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                     )
                 }
 
