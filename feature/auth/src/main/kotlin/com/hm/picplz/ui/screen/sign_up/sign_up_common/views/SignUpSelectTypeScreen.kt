@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,22 +87,12 @@ fun SignUpSelectTypeScreen(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text =
-                            buildAnnotatedString {
-                                append("가입하실 회원 타입을\n")
-                                append("선택해주세요.")
-                            },
-                        modifier =
-                            Modifier
-                                .fillMaxWidth(),
+                        text = "가입하실 회원 타입을\n선택해주세요.",
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                     )
-                    Spacer(
-                        modifier =
-                            Modifier
-                                .height(30.dp),
-                    )
+                    Spacer(modifier = Modifier.height(38.dp))
                     Row(
                         modifier =
                             Modifier

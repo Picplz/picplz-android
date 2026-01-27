@@ -1,17 +1,13 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,14 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -72,14 +65,13 @@ fun DeviceSelectorBox(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(40.dp)
                             .border(
                                 width = 1.dp,
                                 color =
                                     when {
                                         !enabled -> MainThemeColor.Gray2
                                         inputText.isNotEmpty() -> MainThemeColor.Black
-                                        else -> Color(0xFFB0BCC4)
+                                        else -> MainThemeColor.Gray3
                                     },
                                 RoundedCornerShape(5.dp),
                             )
@@ -87,14 +79,14 @@ fun DeviceSelectorBox(
                                 color = MainThemeColor.Gray1,
                                 RoundedCornerShape(5.dp),
                             )
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 14.dp, vertical = 11.dp),
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     if (inputText.isEmpty()) {
                         Text(
                             text = placeholder,
                             style = pretendardTypography.bodyMedium,
-                            color = MainThemeColor.Gray,
+                            color = MainThemeColor.Gray3,
                         )
                     }
                     innerTextField()
@@ -106,14 +98,13 @@ fun DeviceSelectorBox(
             modifier =
                 modifier
                     .fillMaxWidth()
-                    .height(40.dp)
                     .border(
                         width = 1.dp,
                         color =
                             when {
                                 !enabled -> MainThemeColor.Gray2
                                 isSelected -> MainThemeColor.Black
-                                else -> Color(0xFFB0BCC4)
+                                else -> MainThemeColor.Gray3
                             },
                         RoundedCornerShape(5.dp),
                     )
@@ -128,31 +119,19 @@ fun DeviceSelectorBox(
                             boxModifier
                         }
                     }
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 14.dp, vertical = 11.dp),
             contentAlignment = Alignment.CenterStart,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = text ?: placeholder,
-                    style = pretendardTypography.bodyMedium,
-                    color =
-                        when {
-                            !enabled -> MainThemeColor.Gray3
-                            text == null -> MainThemeColor.Gray
-                            else -> MainThemeColor.Black
-                        },
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.triangle_down),
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    alpha = if (enabled) 1f else 0.3f,
-                )
-            }
+            Text(
+                text = text ?: placeholder,
+                style = pretendardTypography.bodyMedium,
+                color =
+                    when {
+                        !enabled -> MainThemeColor.Gray3
+                        text == null -> MainThemeColor.Gray3
+                        else -> MainThemeColor.Black
+                    },
+            )
         }
     }
 }

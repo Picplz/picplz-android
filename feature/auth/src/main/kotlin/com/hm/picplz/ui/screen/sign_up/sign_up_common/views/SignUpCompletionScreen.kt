@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +32,6 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
-import com.hm.picplz.common.model.UserType
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.ui.screen.common.CommonBottomButton
@@ -88,11 +86,7 @@ fun SignUpCompletionScreen(
                             painterResource(id = R.drawable.default_profile_large)
                         }
                     Text(
-                        text =
-                            buildAnnotatedString {
-                                append("안녕하세요 ")
-                                append("${userInfo.nickname}님!")
-                            },
+                        text = "안녕하세요 ${userInfo.nickname}님!",
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -118,15 +112,7 @@ fun SignUpCompletionScreen(
                                 .height(74.dp),
                     )
                     Text(
-                        text =
-                            buildAnnotatedString {
-                                append("가입을 축하드려요.\n")
-                                when (userInfo.userType) {
-                                    UserType.Photographer -> append("함께 사진 촬영하러 가볼까요?")
-                                    UserType.User -> append("인생샷 건지러 가볼까요")
-                                    null -> append("인생샷 건지러 가볼까요")
-                                }
-                            },
+                        text = "가입을 축하드려요.\n함께 사진 촬영하러 가볼까요?",
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),

@@ -30,8 +30,10 @@ import com.hm.picplz.data.model.DeviceData
 import com.hm.picplz.domain.model.Device
 import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddCurrentDeviceToList
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.DismissToast
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.ResetCurrentDevice
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetBrandExpanded
@@ -53,6 +55,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 import kotlinx.coroutines.flow.collectLatest
 import java.util.UUID
 
+// TODO: #99 직접입력 버튼 플로우 개선 - Input 전환 시 자동 포커스 구현
 @Composable
 fun SignUpAddDeviceScreen(
     modifier: Modifier = Modifier,
@@ -138,7 +141,6 @@ fun SignUpAddDeviceScreen(
                     text = "추가하기",
                     onClick = {
                         viewModel.handleIntent(AddCurrentDeviceToList(category))
-                        viewModel.handleIntent(NavigateToPrev)
                     },
                     enabled =
                         when (category) {
@@ -277,6 +279,16 @@ fun SignUpAddDeviceScreen(
         },
         visible = currentState.modelExpanded,
     )
+
+    currentState.toastMessage?.let { message ->
+        CommonToast(
+            message = message,
+            isVisible = currentState.showToast,
+            onDismiss = {
+                viewModel.handleIntent(DismissToast)
+            },
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->

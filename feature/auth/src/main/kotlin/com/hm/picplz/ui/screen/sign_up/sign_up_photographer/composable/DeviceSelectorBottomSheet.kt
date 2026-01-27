@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,17 +25,34 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
+
+@Composable
+private fun DragHandle() {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier =
+                Modifier
+                    .width(40.dp)
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(MainThemeColor.Gray3),
+        )
+    }
+}
 
 @Composable
 fun DeviceSelectorContent(
@@ -46,10 +64,9 @@ fun DeviceSelectorContent(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .navigationBarsPadding(),
+                .heightIn(max = 540.dp)
+                .padding(horizontal = 20.dp),
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
         if (onDirectInput != null) {
             OutlinedButton(
                 onClick = onDirectInput,
@@ -78,6 +95,7 @@ fun DeviceSelectorContent(
                     style = pretendardTypography.bodyMedium,
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -105,6 +123,7 @@ fun DeviceSelectorContent(
                 )
             }
         }
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
@@ -125,13 +144,9 @@ fun DeviceSelectorBottomSheet(
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = bottomSheetState,
-            containerColor = Color.White,
-            dragHandle = null,
-            modifier =
-                Modifier.heightIn(
-                    min = 200.dp,
-                    max = LocalConfiguration.current.screenHeightDp.dp * 0.867f,
-                ),
+            containerColor = MainThemeColor.White,
+            dragHandle = { DragHandle() },
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         ) {
             DeviceSelectorContent(
                 options = options,

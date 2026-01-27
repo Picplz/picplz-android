@@ -64,11 +64,17 @@ data class SignUpPhotographerState(
 
         private fun defaultVibeChipList(): List<ChipItem> {
             return listOf(
-                ChipItem(id = "1", label = "MZ 감성"),
-                ChipItem(id = "2", label = "을지로 감성"),
-                ChipItem(id = "3", label = "키치 감성"),
-                ChipItem(id = "4", label = "퇴폐 감성"),
-                ChipItem(id = "5", label = "올드머니 감성"),
+                ChipItem(id = "1", label = "캐주얼"),
+                ChipItem(id = "2", label = "고급미"),
+                ChipItem(id = "3", label = "심플"),
+                ChipItem(id = "4", label = "단아"),
+                ChipItem(id = "5", label = "몽환적"),
+                ChipItem(id = "6", label = "빈티지"),
+                ChipItem(id = "7", label = "청량"),
+                ChipItem(id = "8", label = "화려"),
+                ChipItem(id = "9", label = "퇴폐적"),
+                ChipItem(id = "10", label = "키치"),
+                ChipItem(id = "11", label = "힙스터"),
             )
         }
 

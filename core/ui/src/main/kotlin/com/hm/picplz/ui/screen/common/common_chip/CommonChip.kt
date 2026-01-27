@@ -2,15 +2,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -141,10 +137,10 @@ fun CommonChip(
         }
     }
 
-    val chipHeight =
+    val chipVerticalPadding =
         when (height ?: ChipHeight.MEDIUM) {
-            ChipHeight.MEDIUM -> 30.dp
-            ChipHeight.BIG -> 40.dp
+            ChipHeight.MEDIUM -> 6.dp
+            ChipHeight.BIG -> 10.dp
         }
 
     when (currentState.chipMode) {
@@ -155,7 +151,6 @@ fun CommonChip(
                         .clickable {
                             onClickDefaultMode()
                         }
-                        .height(chipHeight)
                         .background(
                             color = backgroundColor,
                             shape = RoundedCornerShape(5.dp),
@@ -165,13 +160,12 @@ fun CommonChip(
                             color = if (isSelected) selectedBorderColor else unselectedBorderColor,
                             shape = RoundedCornerShape(5.dp),
                         )
-                        .widthIn(min = 20.dp),
+                        .padding(horizontal = 12.dp, vertical = chipVerticalPadding),
+                verticalAlignment = CenterVertically,
             ) {
                 Row(
                     modifier =
                         Modifier
-                            .fillMaxHeight()
-                            .padding(horizontal = 12.dp)
                             .onGloballyPositioned { layoutCoordinates ->
                                 val widthInPx = layoutCoordinates.size.width
                                 val widthInDp = with(density) { widthInPx.toDp() }
@@ -209,30 +203,28 @@ fun CommonChip(
                 modifier =
                     Modifier
                         .clickable { onEdit() }
-                        .height(chipHeight)
+                        .background(
+                            color = MainThemeColor.Gray1,
+                            shape = RoundedCornerShape(5.dp),
+                        )
                         .border(
                             width = 1.dp,
                             color = MainThemeColor.Gray3,
                             shape = RoundedCornerShape(5.dp),
                         )
-                        .background(color = MainThemeColor.Gray1),
+                        .padding(horizontal = 12.dp, vertical = chipVerticalPadding),
+                verticalAlignment = CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalAlignment = CenterVertically,
-                ) {
-                    Text(
-                        text = "+직접 적어주세요",
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        style =
-                            TextStyle(
-                                fontFamily = Pretendard,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                            ),
-                        color = MainThemeColor.Gray3,
-                    )
-                }
+                Text(
+                    text = "+직접 적어주세요",
+                    style =
+                        TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
+                        ),
+                    color = MainThemeColor.Gray3,
+                )
             }
         }
 
@@ -271,7 +263,7 @@ fun CommonChip(
                         keyboardType = KeyboardType.Text,
                     ),
                 decorationBox = { innerTextField ->
-                    Box(
+                    Row(
                         modifier =
                             Modifier
                                 .border(
@@ -279,16 +271,11 @@ fun CommonChip(
                                     color = if (isSelected) selectedBorderColor else unselectedBorderColor,
                                     shape = RoundedCornerShape(5.dp),
                                 )
-                                .height(chipHeight)
                                 .width(currentState.textFieldWidth + 24.dp)
-                                .padding(horizontal = 12.dp),
+                                .padding(horizontal = 12.dp, vertical = chipVerticalPadding),
+                        verticalAlignment = CenterVertically,
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalAlignment = CenterVertically,
-                        ) {
-                            innerTextField()
-                        }
+                        innerTextField()
                     }
                 },
             )

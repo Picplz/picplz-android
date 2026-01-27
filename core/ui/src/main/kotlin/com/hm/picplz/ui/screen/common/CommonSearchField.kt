@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,6 +40,7 @@ fun CommonSearchField(
     enabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Search,
     keyboardActions: (() -> Unit)? = null,
+    onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
     Box(
         modifier =
@@ -60,7 +62,10 @@ fun CommonSearchField(
                 modifier =
                     Modifier
                         .weight(1f)
-                        .padding(end = 8.dp),
+                        .padding(end = 8.dp)
+                        .onFocusChanged { focusState ->
+                            onFocusChanged?.invoke(focusState.isFocused)
+                        },
                 enabled = enabled,
                 textStyle =
                     MaterialTheme.typography.bodyLarge.copy(

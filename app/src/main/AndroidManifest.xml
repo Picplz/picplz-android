@@ -48,6 +48,21 @@
                     android:host="oauth"
                     android:scheme="kakao${KAKAO_NATIVE_APP_KEY}" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="signup"
+                    android:pathPrefix="/photographer"
+                    android:scheme="picplz" />
+                <data
+                    android:host="signup"
+                    android:pathPrefix="/common"
+                    android:scheme="picplz" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -29,7 +29,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -49,7 +51,6 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSearchField
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
-import com.hm.picplz.ui.screen.common.ToastPosition
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
@@ -72,6 +73,7 @@ fun SignUpMainLocationScreen(
 ) {
     val currentState by viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
+    var isSearchFieldFocused by remember { mutableStateOf(false) }
 
     LaunchedEffect(currentState.searchQuery) {
         if (currentState.searchQuery.isNotBlank()) {
@@ -119,7 +121,7 @@ fun SignUpMainLocationScreen(
                     modifier =
                         Modifier
                             .padding(top = 16.dp),
-                    text = "주 촬영지(동)를 선택해 주세요.",
+                    text = "주 촬영지를 선택해 주세요.",
                     style = MaterialTheme.typography.titleMedium,
                 )
                 CommonSearchField(
@@ -130,7 +132,7 @@ fun SignUpMainLocationScreen(
                             SignUpPhotographerIntent.UpdateSearchQuery(searchText),
                         )
                     },
-                    placeholder = "동명(동, 면)으로 검색 (ex, 연남동)",
+                    placeholder = "구 단위로 검색 (ex, 마포구)",
                     onSearchClick = {
                         viewModel.handleIntent(
                             SignUpPhotographerIntent.SearchArea(
@@ -144,6 +146,9 @@ fun SignUpMainLocationScreen(
                                 currentState.searchQuery,
                             ),
                         )
+                    },
+                    onFocusChanged = { isFocused ->
+                        isSearchFieldFocused = isFocused
                     },
                 )
                 if (currentState.selectedAreas.isNotEmpty()) {
@@ -166,33 +171,36 @@ fun SignUpMainLocationScreen(
                             )
                         }
                     }
-                } else {
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.marker_icon),
-                        contentDescription = "아이콘",
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text =
-                            when {
-                                currentState.searchQuery.isBlank() -> "근처 동네"
-                                else -> "'${currentState.searchQuery}' 검색 결과"
-                            },
-                        style = MainFontFamily.buttonDefault,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MainThemeColor.Black,
-                    )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                val spacingToIconText = if (currentState.hasSearchCompleted) 40.dp else 20.dp
+                Spacer(modifier = Modifier.height(spacingToIconText))
+
+                val showIconText = !isSearchFieldFocused || currentState.hasSearchCompleted
+
+                if (showIconText) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.marker_icon),
+                            contentDescription = "아이콘",
+                            modifier = Modifier.size(16.dp),
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text =
+                                when {
+                                    currentState.searchQuery.isBlank() -> "인근 지역"
+                                    else -> "'${currentState.searchQuery}' 검색 결과"
+                                },
+                            style = MainFontFamily.buttonDefault,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MainThemeColor.Black,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 Box(
                     modifier =
                         Modifier
@@ -232,7 +240,7 @@ fun SignUpMainLocationScreen(
                                         )
                                         if (index < currentState.searchResults.size - 1) {
                                             HorizontalDivider(
-                                                thickness = 0.98.dp,
+                                                thickness = 1.dp,
                                                 color = MainThemeColor.Gray2,
                                             )
                                         }
@@ -264,24 +272,16 @@ fun SignUpMainLocationScreen(
                                         style = pretendardTypography.titleSmall,
                                         color = MainThemeColor.Gray6,
                                     )
-                                    Spacer(
-                                        modifier =
-                                            Modifier
-                                                .height(18.dp),
-                                    )
-                                    Box(
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user_undefined),
+                                        contentDescription = "아이콘",
                                         modifier =
                                             Modifier
                                                 .height(60.68.dp)
                                                 .width(52.39.dp),
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.user_undefined),
-                                            contentDescription = "아이콘",
-                                            modifier = Modifier.fillMaxSize(),
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(22.dp))
+                                    )
+                                    Spacer(modifier = Modifier.height(30.dp))
                                     Text(
                                         text = "다른 지역으로\n이동해 보는 건 어때요?",
                                         style = pretendardTypography.bodyMedium,
@@ -315,8 +315,6 @@ fun SignUpMainLocationScreen(
             CommonToast(
                 message = message,
                 isVisible = currentState.showToast,
-                position = ToastPosition.BOTTOM,
-                offset = 120.dp,
                 onDismiss = {
                     viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
                 },

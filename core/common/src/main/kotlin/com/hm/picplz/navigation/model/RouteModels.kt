@@ -16,13 +16,19 @@ sealed interface NavigationRoute
 @Serializable object Login : NavigationRoute
 
 @Serializable
-data class SignUpIntro(val profileImageUri: String? = null) : NavigationRoute
+data class SignUpIntro(
+    val profileImageUri: String? = null,
+    val startAt: String? = null,
+) : NavigationRoute
 
 @Serializable
 data class SignUpClient(val userInfo: User) : NavigationRoute
 
 @Serializable
-data class SignUpPhotographer(val userInfo: User) : NavigationRoute
+data class SignUpPhotographer(
+    val userInfo: User? = null,
+    val startAt: String? = null,
+) : NavigationRoute
 
 @Serializable
 data class SignUpCompletion(val userInfo: User) : NavigationRoute

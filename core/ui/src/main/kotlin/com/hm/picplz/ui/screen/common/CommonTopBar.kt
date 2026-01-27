@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 private object CommonTopBarDefaults {
     val Height = 44.dp
-    val HorizontalPadding = 16.dp
     val IconSize = 18.dp
 }
 
@@ -38,8 +36,7 @@ fun CommonTopBar(
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(CommonTopBarDefaults.Height)
-                .padding(horizontal = CommonTopBarDefaults.HorizontalPadding),
+                .height(CommonTopBarDefaults.Height),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(

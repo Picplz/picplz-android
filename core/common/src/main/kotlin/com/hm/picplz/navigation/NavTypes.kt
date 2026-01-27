@@ -34,4 +34,37 @@ val UserNavType =
         }
     }
 
-val UserTypeMap = mapOf(typeOf<User>() to UserNavType)
+val NullableUserNavType =
+    object : NavType<User?>(isNullableAllowed = true) {
+        override fun get(
+            bundle: Bundle,
+            key: String,
+        ): User? {
+            return bundle.getString(key)?.let {
+                if (it == "null") null else Json.decodeFromString(it)
+            }
+        }
+
+        override fun parseValue(value: String): User? {
+            if (value == "null") return null
+            return Json.decodeFromString(Uri.decode(value))
+        }
+
+        override fun serializeAsValue(value: User?): String {
+            return value?.let { Uri.encode(Json.encodeToString(it)) } ?: "null"
+        }
+
+        override fun put(
+            bundle: Bundle,
+            key: String,
+            value: User?,
+        ) {
+            bundle.putString(key, value?.let { Json.encodeToString(it) } ?: "null")
+        }
+    }
+
+val UserTypeMap =
+    mapOf(
+        typeOf<User>() to UserNavType,
+        typeOf<User?>() to NullableUserNavType,
+    )
