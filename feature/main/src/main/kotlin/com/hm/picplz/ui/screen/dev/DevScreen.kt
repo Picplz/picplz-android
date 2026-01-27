@@ -74,6 +74,15 @@ fun DevScreen(navController: NavHostController) {
             SectionTitle("Auth")
             DevButton("Login") { navController.navigate(Login) }
             DevButton("SignUpIntro") { navController.navigate(SignUpIntro()) }
+            DevButton("SignUpSelectType (유형 선택)") {
+                navController.navigate(SignUpIntro(startAt = "select-type"))
+            }
+            DevButton("SignUpNickname (닉네임)") {
+                navController.navigate(SignUpIntro(startAt = "nickname"))
+            }
+            DevButton("SignUpProfile (프로필 이미지)") {
+                navController.navigate(SignUpIntro(startAt = "profile"))
+            }
             DevButton("SignUpClient") { navController.navigate(SignUpClient(userInfo = emptyUserData)) }
             DevButton("SignUpPhotographer") { navController.navigate(SignUpPhotographer(userInfo = emptyUserData)) }
             DevButton("SignUpDevice (Direct)") { navController.navigate(SignUpPhotographer(startAt = "device")) }

@@ -20,11 +20,19 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSc
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable<Login> { LoginIntroScreen(navController = navController) }
 
-    composable<SignUpIntro> { backStackEntry ->
+    composable<SignUpIntro>(
+        deepLinks =
+            listOf(
+                navDeepLink {
+                    uriPattern = "picplz://signup/common/{startAt}"
+                },
+            ),
+    ) { backStackEntry ->
         val args = backStackEntry.toRoute<SignUpIntro>()
         SignUpScreen(
             mainNavController = navController,
             profileImageUri = args.profileImageUri,
+            startAt = args.startAt,
         )
     }
 

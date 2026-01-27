@@ -14,6 +14,7 @@ fun SignUpScreen(
     viewModel: SignUpCommonViewModel = viewModel(),
     mainNavController: NavHostController,
     profileImageUri: String? = null,
+    startAt: String? = null,
 ) {
     val signUpCommonNavController = rememberNavController()
 
@@ -28,5 +29,6 @@ fun SignUpScreen(
         signUpCommonNavController = signUpCommonNavController,
         viewModel = viewModel,
         modifier = modifier,
+        startAt = startAt,
     )
 }

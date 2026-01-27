@@ -58,6 +58,10 @@
                     android:host="signup"
                     android:pathPrefix="/photographer"
                     android:scheme="picplz" />
+                <data
+                    android:host="signup"
+                    android:pathPrefix="/common"
+                    android:scheme="picplz" />
             </intent-filter>
         </activity>
     </application>

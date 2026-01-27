@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hm.picplz.navigation.model.NavigationRoute
 import com.hm.picplz.navigation.model.SignUpNickname
 import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.navigation.model.SignUpSelectType
@@ -20,10 +21,19 @@ fun SignUpCommonNavHost(
     signUpCommonNavController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: SignUpCommonViewModel = viewModel(),
+    startAt: String? = null,
 ) {
+    val startDestination: NavigationRoute =
+        when (startAt) {
+            "select-type" -> SignUpSelectType
+            "nickname" -> SignUpNickname
+            "profile" -> SignUpProfile
+            else -> SignUpSelectType
+        }
+
     NavHost(
         navController = signUpCommonNavController,
-        startDestination = SignUpSelectType,
+        startDestination = startDestination,
         modifier = modifier,
     ) {
         composable<SignUpNickname> {
