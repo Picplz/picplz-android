@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationBottomButtons
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
@@ -35,12 +35,24 @@ fun DetailReservationScreen(
     DetailReservationScreen(
         modifier = modifier,
         state = state,
+        onChatClick = {
+            viewModel.handelIntent(DetailReservationIntent.NavigateToChat)
+        },
+        onHistoryClick = {
+            viewModel.handelIntent(DetailReservationIntent.NavigateToHistory)
+        },
+        onConfirmClick = {
+            viewModel.handelIntent(DetailReservationIntent.ConfirmReservation)
+        },
     )
 }
 
 @Composable
 private fun DetailReservationScreen(
     state: DetailReservationState,
+    onChatClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -88,10 +100,12 @@ private fun DetailReservationScreen(
                 }
             }
 
-            CommonBottomButton(
+            DetailReservationBottomButtons(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 48.dp),
-                text = "채팅 바로가기",
-                onClick = {},
+                currentReservationStatus = state.reservationStatus,
+                onChatClick = onChatClick,
+                onHistoryClick = onHistoryClick,
+                onConfirmClick = onConfirmClick,
             )
         }
     }
@@ -102,5 +116,8 @@ private fun DetailReservationScreen(
 fun DetailReservationScreenPreview() {
     DetailReservationScreen(
         state = DetailReservationState(),
+        onChatClick = {},
+        onHistoryClick = {},
+        onConfirmClick = {},
     )
 }

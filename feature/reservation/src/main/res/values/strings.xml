@@ -12,4 +12,7 @@
     <string name="reservation_status_description_waiting_payment">결제 및 촬영 일시 확정을 진행해 주세요.</string>
     <string name="reservation_status_description_reserved">작가와 촬영을 진행해주세요!</string>
     <string name="reservation_status_description_completed">이미 완료된 촬영입니다.</string>
+    <string name="reservation_button_chat">채팅 바로가기</string>
+    <string name="reservation_button_history">내역 보기</string>
+    <string name="reservation_button_confirm">거래 확정하기</string>
 </resources>
