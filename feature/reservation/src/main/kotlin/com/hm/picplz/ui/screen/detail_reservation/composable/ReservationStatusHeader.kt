@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.feature.reservation.R
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus.Companion.showCancelButton
 import com.hm.picplz.ui.theme.MainFontFamily.bodyBold
 import com.hm.picplz.ui.theme.MainFontFamily.caption
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -31,8 +33,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun ReservationStatusHeader(
-    title: String,
-    description: String,
+    currentReservationStatus: ReservationStatus,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -41,12 +42,15 @@ fun ReservationStatusHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         ReservationStatusInfo(
-            title = title,
-            description = description,
+            title = stringResource(currentReservationStatus.titleResId),
+            description = stringResource(currentReservationStatus.descriptionResId),
         )
-        ReservationCancelButton(
-            onClick = onCancelClick,
-        )
+
+        if (currentReservationStatus.showCancelButton()) {
+            ReservationCancelButton(
+                onClick = onCancelClick,
+            )
+        }
     }
 }
 
@@ -118,10 +122,36 @@ class CustomViewConfiguration(
 
 @Preview
 @Composable
-private fun ReservationStatusHeaderPreview() {
+private fun ReservationStatusHeaderWaitingApprovalPreview() {
     ReservationStatusHeader(
-        title = "예약 승인 대기 중...",
-        description = "n분 이내로 승인되지 않으면 자동 취소됩니다.",
+        currentReservationStatus = ReservationStatus.WAITING_APPROVAL,
+        onCancelClick = { },
+    )
+}
+
+@Preview
+@Composable
+private fun ReservationStatusHeaderWaitingPaymentPreview() {
+    ReservationStatusHeader(
+        currentReservationStatus = ReservationStatus.WAITING_PAYMENT,
+        onCancelClick = { },
+    )
+}
+
+@Preview
+@Composable
+private fun ReservationStatusHeaderReservedPreview() {
+    ReservationStatusHeader(
+        currentReservationStatus = ReservationStatus.RESERVED,
+        onCancelClick = { },
+    )
+}
+
+@Preview
+@Composable
+private fun ReservationStatusHeaderCompletedPreview() {
+    ReservationStatusHeader(
+        currentReservationStatus = ReservationStatus.COMPLETED,
         onCancelClick = { },
     )
 }

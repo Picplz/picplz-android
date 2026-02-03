@@ -1,10 +1,12 @@
 package com.hm.picplz.ui.screen.common
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -52,6 +54,37 @@ fun CommonBottomButton(
     }
 }
 
+@Composable
+fun CommonBottomOutlinedButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MainThemeColor.White,
+                contentColor = MainThemeColor.Black,
+            ),
+        shape = RoundedCornerShape(CommonBottomButtonDefaults.CornerRadius),
+        border = BorderStroke(1.dp, MainThemeColor.Gray3),
+        contentPadding =
+            PaddingValues(
+                vertical = CommonBottomButtonDefaults.VerticalPadding,
+                horizontal = CommonBottomButtonDefaults.HorizontalPadding,
+            ),
+        enabled = enabled,
+    ) {
+        Text(
+            text = text,
+            style = pretendardTypography.labelLarge,
+        )
+    }
+}
+
 @Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
@@ -74,6 +107,19 @@ private fun CommonBottomButtonDisabledPreview() {
             text = "다음",
             onClick = {},
             enabled = false,
+        )
+    }
+}
+
+@Suppress("UnusedPrivateMember")
+@Preview(showBackground = true)
+@Composable
+private fun CommonBottomOutlinedButtonPreview() {
+    PicplzTheme {
+        CommonBottomOutlinedButton(
+            text = "다음",
+            onClick = {},
+            enabled = true,
         )
     }
 }
