@@ -11,11 +11,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
@@ -23,13 +26,35 @@ import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHe
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun DetailReservationScreen(modifier: Modifier = Modifier) {
+fun DetailReservationScreen(
+    modifier: Modifier = Modifier,
+    viewModel: DetailReservationViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    DetailReservationScreen(
+        modifier = modifier,
+        state = state,
+    )
+}
+
+@Composable
+private fun DetailReservationScreen(
+    state: DetailReservationState,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         modifier = modifier,
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            Box(modifier = Modifier.fillMaxWidth().height(230.dp).background(Color.LightGray)) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(230.dp)
+                        .background(Color.LightGray),
+            ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = "지도 영역",
@@ -43,13 +68,18 @@ fun DetailReservationScreen(modifier: Modifier = Modifier) {
                 item {
                     ReservationStatusHeader(
                         modifier = Modifier.padding(vertical = 20.dp),
+                        currentReservationStatus = state.reservationStatus,
                         onCancelClick = {},
                     )
                 }
 
                 item {
                     ReservationProgressStepper(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
+                        currentReservationStep = state.reservationStatus.step,
                     )
                 }
 
@@ -70,5 +100,7 @@ fun DetailReservationScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun DetailReservationScreenPreview() {
-    DetailReservationScreen()
+    DetailReservationScreen(
+        state = DetailReservationState(),
+    )
 }

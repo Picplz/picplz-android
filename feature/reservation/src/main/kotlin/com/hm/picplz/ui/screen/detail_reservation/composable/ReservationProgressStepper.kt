@@ -24,8 +24,8 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun ReservationProgressStepper(
+    currentReservationStep: ReservationStep,
     modifier: Modifier = Modifier,
-    currentReservationStep: ReservationStep = ReservationStep.WAITING,
 ) {
     Row(
         modifier = modifier,

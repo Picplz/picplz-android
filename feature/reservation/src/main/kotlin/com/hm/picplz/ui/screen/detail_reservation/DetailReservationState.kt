@@ -1,3 +1,7 @@
 package com.hm.picplz.ui.screen.detail_reservation
 
-class DetailReservationState
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
+
+data class DetailReservationState(
+    val reservationStatus: ReservationStatus = ReservationStatus.WAITING_APPROVAL,
+)

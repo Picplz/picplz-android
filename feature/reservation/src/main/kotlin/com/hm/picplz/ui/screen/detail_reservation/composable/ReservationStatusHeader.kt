@@ -33,9 +33,9 @@ import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
 fun ReservationStatusHeader(
+    currentReservationStatus: ReservationStatus,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
-    currentReservationStatus: ReservationStatus = ReservationStatus.RESERVED,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
