@@ -16,35 +16,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.feature.reservation.R.string
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStep
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStep.Companion.hasPassed
 import com.hm.picplz.ui.theme.MainFontFamily.bodyBold
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun ReservationProgressStepper(modifier: Modifier = Modifier) {
+fun ReservationProgressStepper(
+    modifier: Modifier = Modifier,
+    currentReservationStep: ReservationStep = ReservationStep.WAITING,
+) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterHorizontally),
     ) {
-        ReservationStepItem(
-            isActive = true,
-            label = stringResource(string.reservation_step_waiting),
-        )
+        ReservationStep.entries.forEachIndexed { index, step ->
+            ReservationStepItem(
+                isActive = step.hasPassed(currentReservationStep),
+                label = stringResource(step.nameResId),
+            )
 
-        DashLine()
-
-        ReservationStepItem(
-            isActive = false,
-            label = stringResource(string.reservation_step_in_progress),
-        )
-
-        DashLine()
-
-        ReservationStepItem(
-            isActive = false,
-            label = stringResource(string.reservation_step_confirmed),
-        )
+            if (index < ReservationStep.entries.lastIndex) {
+                DashLine()
+            }
+        }
     }
 }
 
@@ -105,6 +101,24 @@ private fun DashLine(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-private fun ReservationProgressStepperPreview() {
-    ReservationProgressStepper()
+private fun ReservationProgressStepperWaitingPreview() {
+    ReservationProgressStepper(
+        currentReservationStep = ReservationStep.WAITING,
+    )
+}
+
+@Preview
+@Composable
+private fun ReservationProgressStepperWaitingInProgress() {
+    ReservationProgressStepper(
+        currentReservationStep = ReservationStep.IN_PROGRESS,
+    )
+}
+
+@Preview
+@Composable
+private fun ReservationProgressStepperWaitingConfirmed() {
+    ReservationProgressStepper(
+        currentReservationStep = ReservationStep.CONFIRMED,
+    )
 }
