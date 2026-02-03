@@ -43,8 +43,6 @@ fun DetailReservationScreen(modifier: Modifier = Modifier) {
                 item {
                     ReservationStatusHeader(
                         modifier = Modifier.padding(vertical = 20.dp),
-                        title = "예약 승인 대기중...",
-                        description = "n분 이내로 승인되지 않으면 자동 취소됩니다.",
                         onCancelClick = {},
                     )
                 }

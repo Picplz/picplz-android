@@ -4,4 +4,12 @@
     <string name="reservation_step_waiting">예약 대기</string>
     <string name="reservation_step_in_progress">촬영 진행</string>
     <string name="reservation_step_confirmed">거래 확정</string>
+    <string name="reservation_status_title_waiting_approval">예약 승인 대기중…</string>
+    <string name="reservation_status_title_waiting_payment">결제 및 촬영 일시 확정 대기중…</string>
+    <string name="reservation_status_title_reserved">예약 확정</string>
+    <string name="reservation_status_title_completed">거래 확정</string>
+    <string name="reservation_status_description_waiting_approval">n분 이내로 승인되지 않으면 자동 취소됩니다.</string>
+    <string name="reservation_status_description_waiting_payment">결제 및 촬영 일시 확정을 진행해 주세요.</string>
+    <string name="reservation_status_description_reserved">작가와 촬영을 진행해주세요!</string>
+    <string name="reservation_status_description_completed">이미 완료된 촬영입니다.</string>
 </resources>
