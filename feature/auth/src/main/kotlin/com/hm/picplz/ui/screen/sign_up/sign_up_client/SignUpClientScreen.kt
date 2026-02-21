@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
@@ -22,7 +22,7 @@ fun SignUpClientScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     @Suppress("UNUSED_PARAMETER") _userInfo: User = emptyUserData,
-    viewModel: SignUpClientViewModel = viewModel(),
+    viewModel: SignUpClientViewModel = hiltViewModel(),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
