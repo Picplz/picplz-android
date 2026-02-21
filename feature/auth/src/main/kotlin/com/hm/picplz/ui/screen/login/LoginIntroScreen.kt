@@ -185,7 +185,7 @@ fun LoginIntroPage(
             Spacer(modifier = Modifier.height(10.dp))
             Box(modifier = Modifier.padding(horizontal = 15.dp)) {
                 KakaoLoginButton(
-                    text = "카카오 로그아웃",
+                    text = "[DEV] 카카오 연동 해제",
                     onClick = onLogoutClick,
                 )
             }

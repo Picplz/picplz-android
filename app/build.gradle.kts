@@ -17,6 +17,10 @@ val localProperties =
         }
     }
 
+// API 서버 주소 (Single Source of Truth — 여기만 수정)
+val apiHost = "43.203.62.97"
+val apiPort = "8080"
+
 android {
     namespace = "com.hm.picplz"
     compileSdk = 35
@@ -45,7 +49,7 @@ android {
         buildConfigField("String", "KAKAO_REST_API_KEY", "${localProperties["kakao_rest_api_key"]}")
         buildConfigField("String", "DEV_GUEST_TOKEN", "${localProperties["dev_guest_token"]}")
         buildConfigField("String", "DEV_USER_TOKEN", "${localProperties["dev_user_token"]}")
-        buildConfigField("String", "API_BASE_URL", "${localProperties["api_base_url"]}")
+        buildConfigField("String", "API_BASE_URL", "\"http://$apiHost:$apiPort\"")
 
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = localProperties["kakao_native_app_key"] ?: ""
     }
@@ -80,6 +84,46 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+// network_security_config.xml 생성 (apiHost에서 파생 — Single Source of Truth)
+abstract class GenerateNetSecConfigTask : DefaultTask() {
+    @get:Input
+    abstract val host: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        val xmlDir = outputDir.get().asFile.resolve("xml")
+        xmlDir.mkdirs()
+        xmlDir.resolve("network_security_config.xml").writeText(
+            """<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">${host.get()}</domain>
+    </domain-config>
+</network-security-config>
+""",
+        )
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val taskName =
+            "generateNetSecConfig${variant.name.replaceFirstChar { it.uppercase() }}"
+        val taskProvider =
+            tasks.register<GenerateNetSecConfigTask>(taskName) {
+                host.set(apiHost)
+                outputDir.set(layout.buildDirectory.dir("generated/res/netSecConfig/${variant.name}"))
+            }
+        variant.sources.res?.addGeneratedSourceDirectory(
+            taskProvider,
+            GenerateNetSecConfigTask::outputDir,
+        )
     }
 }
 

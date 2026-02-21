@@ -17,7 +17,7 @@ data class JwtTokenDto(
 data class KaKaoLoginResponseDto(
     val socialCode: String?,
     val socialEmail: String?,
-    val socialProvider: String,
+    val socialProvider: String?,
     val token: JwtTokenDto?,
     val registered: Boolean,
 ) {
