@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.User
+import com.hm.picplz.data.model.DeviceBrand
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.Device
 
@@ -42,6 +43,9 @@ data class SignUpPhotographerState(
     val searchError: String? = null,
     val toastMessage: String? = null,
     val showToast: Boolean = false,
+    val availableCameraBrands: List<DeviceBrand> = emptyList(),
+    val availableCameraTypes: List<String> = emptyList(),
+    val isCamerasLoading: Boolean = false,
     val phoneDevices: List<Device.PhoneDevice> = emptyList(),
     val cameraDevices: List<Device.CameraDevice> = emptyList(),
     val currentPhone: Device.PhoneDevice? = null,

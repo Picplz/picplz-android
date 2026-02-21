@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.CameraService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.AreaSearchHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.CareerHandler
@@ -24,6 +25,7 @@ class SignUpPhotographerViewModel
     constructor(
         private val addressService: AddressService,
         private val locationService: LocationService,
+        private val cameraService: CameraService,
     ) : ViewModel() {
         private val _state = MutableStateFlow<SignUpPhotographerState>(SignUpPhotographerState.idle())
         val state: StateFlow<SignUpPhotographerState> get() = _state
@@ -38,6 +40,28 @@ class SignUpPhotographerViewModel
 
         init {
             loadNearbyAreasOnInit()
+            loadCameras()
+        }
+
+        private fun loadCameras() {
+            _state.update { it.copy(isCamerasLoading = true) }
+            viewModelScope.launch {
+                cameraService.getCameraList()
+                    .onSuccess { cameraListData ->
+                        _state.update {
+                            it.copy(
+                                availableCameraBrands = cameraListData.brands,
+                                availableCameraTypes = cameraListData.types,
+                                isCamerasLoading = false,
+                            )
+                        }
+                        Log.d("CameraLoad", "카메라 목록 로딩 성공: ${cameraListData.brands.size}개 브랜드")
+                    }
+                    .onFailure { error ->
+                        _state.update { it.copy(isCamerasLoading = false) }
+                        Log.e("CameraLoad", "카메라 목록 로딩 실패", error)
+                    }
+            }
         }
 
         private fun loadNearbyAreasOnInit() {

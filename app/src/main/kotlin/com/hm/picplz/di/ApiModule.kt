@@ -3,9 +3,11 @@ package com.hm.picplz.di
 import com.hm.picplz.BuildConfig
 import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.AuthApi
+import com.hm.picplz.data.api.CameraApi
 import com.hm.picplz.data.api.KakaoMapApi
 import com.hm.picplz.data.api.MemberApi
 import com.hm.picplz.data.api.PhotographerApi
+import com.hm.picplz.data.api.S3Api
 import com.hm.picplz.data.provider.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -108,5 +110,21 @@ object NetworkModule {
         @PicplzApi retrofit: Retrofit,
     ): MemberApi {
         return retrofit.create(MemberApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCameraApi(
+        @PicplzApi retrofit: Retrofit,
+    ): CameraApi {
+        return retrofit.create(CameraApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideS3Api(
+        @PicplzApi retrofit: Retrofit,
+    ): S3Api {
+        return retrofit.create(S3Api::class.java)
     }
 }

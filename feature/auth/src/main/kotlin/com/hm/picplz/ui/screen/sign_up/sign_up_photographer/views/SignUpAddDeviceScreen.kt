@@ -79,7 +79,10 @@ fun SignUpAddDeviceScreen(
     val brands: List<DeviceBrand> =
         when (category) {
             DeviceCategory.PHONE -> DeviceData.phoneDevices
-            DeviceCategory.CAMERA -> DeviceData.cameraBrands.map { DeviceBrand(it, emptyList()) }
+            DeviceCategory.CAMERA ->
+                currentState.availableCameraBrands.ifEmpty {
+                    DeviceData.cameraBrands.map { DeviceBrand(it, emptyList()) }
+                }
         }
 
     val models: List<String> =
@@ -216,8 +219,10 @@ fun SignUpAddDeviceScreen(
         visible = currentState.brandExpanded,
     )
     if (category == DeviceCategory.CAMERA) {
+        val cameraTypeOptions =
+            currentState.availableCameraTypes.ifEmpty { DeviceData.cameraTypes }
         DeviceSelectorBottomSheet(
-            options = DeviceData.cameraTypes,
+            options = cameraTypeOptions,
             onOptionSelected = { type ->
                 val currentBrand = currentState.currentCamera?.companyName ?: ""
                 val currentModel = currentState.currentCamera?.modelName
