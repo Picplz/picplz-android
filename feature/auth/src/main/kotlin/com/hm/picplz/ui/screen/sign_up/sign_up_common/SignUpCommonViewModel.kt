@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.model.User
 import com.hm.picplz.common.model.UserType
+import com.hm.picplz.data.model.CreateCustomerRequest
+import com.hm.picplz.data.provider.TokenManager
+import com.hm.picplz.data.service.CustomerService
 import com.hm.picplz.data.service.MemberService
 import com.hm.picplz.data.service.S3Service
 import com.hm.picplz.navigation.model.SignUpProfile
@@ -24,8 +27,10 @@ import javax.inject.Inject
 class SignUpCommonViewModel
     @Inject
     constructor(
+        private val customerService: CustomerService,
         private val memberService: MemberService,
         private val s3Service: S3Service,
+        private val tokenManager: TokenManager,
     ) : ViewModel() {
         private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
         val state: StateFlow<SignUpCommonState> get() = _state
@@ -46,26 +51,46 @@ class SignUpCommonViewModel
 
                 is SignUpCommonIntent.NavigateToSelected -> {
                     viewModelScope.launch {
+                        if (_state.value.isSubmitting) {
+                            return@launch
+                        }
                         _state.value.selectedUserType?.let { selectedUserType ->
-                            val destination =
-                                when (selectedUserType) {
-                                    UserType.User -> "sign-up-completion"
-                                    UserType.Photographer -> "sign-up-photographer"
+                            when (selectedUserType) {
+                                UserType.User -> {
+                                    _state.update { it.copy(isSubmitting = true, error = null) }
+
+                                    val currentState = _state.value
+                                    val request =
+                                        CreateCustomerRequest(
+                                            nickname = currentState.nickname,
+                                            socialEmail = tokenManager.getSocialEmail(),
+                                            socialProvider = tokenManager.getSocialProvider(),
+                                            socialCode = tokenManager.getSocialCode(),
+                                            profileImage = currentState.profileImageObjectKey,
+                                        )
+
+                                    customerService.createCustomer(request)
+                                        .onSuccess {
+                                            sendNavigateToSelectedSideEffect(
+                                                destination = "sign-up-completion",
+                                            )
+                                        }
+                                        .onFailure { error ->
+                                            _state.update {
+                                                it.copy(
+                                                    isSubmitting = false,
+                                                    error = error,
+                                                )
+                                            }
+                                        }
                                 }
 
-                            val user =
-                                User(
-                                    id = UUID.randomUUID().toString(),
-                                    nickname = _state.value.nickname,
-                                    profileImageUri = _state.value.profileImageUri,
-                                    userType = _state.value.selectedUserType,
-                                )
-                            _sideEffect.send(
-                                SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected(
-                                    destination,
-                                    user,
-                                ),
-                            )
+                                UserType.Photographer -> {
+                                    sendNavigateToSelectedSideEffect(
+                                        destination = "sign-up-photographer",
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -179,5 +204,22 @@ class SignUpCommonViewModel
                     newState?.let { _state.value = it }
                 }
             }
+        }
+
+        private suspend fun sendNavigateToSelectedSideEffect(destination: String) {
+            val currentState = _state.value
+            val user =
+                User(
+                    id = UUID.randomUUID().toString(),
+                    nickname = currentState.nickname,
+                    profileImageUri = currentState.profileImageUri,
+                    userType = currentState.selectedUserType,
+                )
+            _sideEffect.send(
+                SignUpSideEffect.SelectUserTypeScreenSideEffect.NavigateToSelected(
+                    destination,
+                    user,
+                ),
+            )
         }
     }

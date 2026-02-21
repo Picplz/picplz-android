@@ -4,6 +4,7 @@ import com.hm.picplz.BuildConfig
 import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.AuthApi
 import com.hm.picplz.data.api.CameraApi
+import com.hm.picplz.data.api.CustomerApi
 import com.hm.picplz.data.api.KakaoMapApi
 import com.hm.picplz.data.api.MemberApi
 import com.hm.picplz.data.api.PhotographerApi
@@ -118,6 +119,14 @@ object NetworkModule {
         @PicplzApi retrofit: Retrofit,
     ): CameraApi {
         return retrofit.create(CameraApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCustomerApi(
+        @PicplzApi retrofit: Retrofit,
+    ): CustomerApi {
+        return retrofit.create(CustomerApi::class.java)
     }
 
     @Provides
