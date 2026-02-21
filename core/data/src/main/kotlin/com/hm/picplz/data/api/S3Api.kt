@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface S3Api {
     @GET("api/v1/s3/presigned-upload-url")
     suspend fun getPresignedUploadUrl(
-        @Query("dirName") imageType: String,
-        @Query("fileName") filename: String,
+        @Query("imageType") imageType: String,
+        @Query("filename") filename: String,
     ): Response<UploadUrlResponseDto>
 }

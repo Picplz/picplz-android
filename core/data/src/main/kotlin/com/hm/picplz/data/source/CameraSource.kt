@@ -20,7 +20,7 @@ class CameraSourceImpl
                 if (!response.isSuccessful) {
                     error("Get cameras failed: ${response.code()} ${response.errorBody()?.string()}")
                 }
-                val cameras = response.body() ?: error("Get cameras failed: empty body")
+                val cameras = response.body()?.data ?: error("Get cameras failed: empty body")
                 val brands =
                     cameras
                         .groupBy { it.brand }
