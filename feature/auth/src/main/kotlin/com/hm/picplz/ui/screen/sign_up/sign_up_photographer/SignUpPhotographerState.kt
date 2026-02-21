@@ -21,6 +21,7 @@ data class CareerPeriod(
 data class SignUpPhotographerState(
     val currentStep: Int? = 0,
     val isLoading: Boolean = false,
+    val isSubmitting: Boolean = false,
     val error: Throwable? = null,
     val userInfo: User = emptyUserData,
     val hasPhotographyExperience: Boolean? = null,
