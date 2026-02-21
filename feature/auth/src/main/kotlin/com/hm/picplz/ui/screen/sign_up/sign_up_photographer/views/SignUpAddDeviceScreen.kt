@@ -79,10 +79,7 @@ fun SignUpAddDeviceScreen(
     val brands: List<DeviceBrand> =
         when (category) {
             DeviceCategory.PHONE -> DeviceData.phoneDevices
-            DeviceCategory.CAMERA ->
-                currentState.availableCameraBrands.ifEmpty {
-                    DeviceData.cameraBrands.map { DeviceBrand(it, emptyList()) }
-                }
+            DeviceCategory.CAMERA -> currentState.availableCameraBrands
         }
 
     val models: List<String> =
@@ -219,8 +216,7 @@ fun SignUpAddDeviceScreen(
         visible = currentState.brandExpanded,
     )
     if (category == DeviceCategory.CAMERA) {
-        val cameraTypeOptions =
-            currentState.availableCameraTypes.ifEmpty { DeviceData.cameraTypes }
+        val cameraTypeOptions = currentState.availableCameraTypes
         DeviceSelectorBottomSheet(
             options = cameraTypeOptions,
             onOptionSelected = { type ->
@@ -397,6 +393,15 @@ private fun CameraDeviceForm(
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp, vertical = 15.dp),
     ) {
+        if (currentState.cameraLoadError != null) {
+            Text(
+                text = currentState.cameraLoadError,
+                style = pretendardTypography.bodySmall,
+                color = MainThemeColor.Red,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
         Text("브랜드", style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
         DeviceSelectorBox(

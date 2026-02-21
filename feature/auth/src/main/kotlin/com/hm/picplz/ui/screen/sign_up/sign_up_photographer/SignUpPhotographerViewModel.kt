@@ -16,9 +16,15 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.CareerHandle
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.DeviceHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.VibeChipHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,18 +46,43 @@ class SignUpPhotographerViewModel
         private val _sideEffect = Channel<SignUpPhotographerSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
 
+        private val autoSearchRequests = MutableSharedFlow<String>(extraBufferCapacity = 1)
+        private val manualSearchRequests = MutableSharedFlow<String>(extraBufferCapacity = 1)
+
         private val vibeChipHandler = VibeChipHandler()
         private val areaSearchHandler = AreaSearchHandler()
         private val deviceHandler = DeviceHandler()
         private val careerHandler = CareerHandler()
 
         init {
+            observeSearchRequests()
             loadNearbyAreasOnInit()
             loadCameras()
         }
 
+        @OptIn(FlowPreview::class)
+        private fun observeSearchRequests() {
+            viewModelScope.launch {
+                autoSearchRequests
+                    .debounce(300L)
+                    .map { it.trim() }
+                    .distinctUntilChanged()
+                    .collectLatest { keyword ->
+                        executeSearchArea(keyword)
+                    }
+            }
+
+            viewModelScope.launch {
+                manualSearchRequests
+                    .map { it.trim() }
+                    .collectLatest { keyword ->
+                        executeSearchArea(keyword)
+                    }
+            }
+        }
+
         private fun loadCameras() {
-            _state.update { it.copy(isCamerasLoading = true) }
+            _state.update { it.copy(isCamerasLoading = true, cameraLoadError = null) }
             viewModelScope.launch {
                 cameraService.getCameraList()
                     .onSuccess { cameraListData ->
@@ -60,12 +91,18 @@ class SignUpPhotographerViewModel
                                 availableCameraBrands = cameraListData.brands,
                                 availableCameraTypes = cameraListData.types,
                                 isCamerasLoading = false,
+                                cameraLoadError = null,
                             )
                         }
                         Log.d("CameraLoad", "카메라 목록 로딩 성공: ${cameraListData.brands.size}개 브랜드")
                     }
                     .onFailure { error ->
-                        _state.update { it.copy(isCamerasLoading = false) }
+                        _state.update {
+                            it.copy(
+                                isCamerasLoading = false,
+                                cameraLoadError = "카메라 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+                            )
+                        }
                         Log.e("CameraLoad", "카메라 목록 로딩 실패", error)
                     }
             }
@@ -221,7 +258,18 @@ class SignUpPhotographerViewModel
                 }
 
                 is SignUpPhotographerIntent.SearchArea -> {
-                    handleSearchAreaIntent(intent)
+                    manualSearchRequests.tryEmit(intent.keyword)
+                }
+
+                is SignUpPhotographerIntent.UpdateSearchQuery -> {
+                    _state.update {
+                        it.copy(
+                            searchQuery = intent.query,
+                            searchError = null,
+                            hasSearchCompleted = false,
+                        )
+                    }
+                    autoSearchRequests.tryEmit(intent.query)
                 }
 
                 is SignUpPhotographerIntent.AddCurrentDeviceToList -> {
@@ -252,48 +300,46 @@ class SignUpPhotographerViewModel
             }
         }
 
-        private fun handleSearchAreaIntent(intent: SignUpPhotographerIntent.SearchArea) {
-            viewModelScope.launch {
-                if (intent.keyword.isBlank()) {
-                    _state.update {
-                        it.copy(
-                            hasSearchCompleted = false,
-                            searchResults = emptyList(),
-                        )
-                    }
-                    loadNearbyAreasOnInit()
-                    return@launch
-                }
-
+        private suspend fun executeSearchArea(keyword: String) {
+            if (keyword.isBlank()) {
                 _state.update {
                     it.copy(
-                        isSearching = true,
                         hasSearchCompleted = false,
+                        searchError = null,
                     )
                 }
-
-                addressService.searchArea(intent.keyword)
-                    .onSuccess { searchedAreas ->
-                        _state.update {
-                            it.copy(
-                                searchResults = searchedAreas,
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                                searchError = null,
-                            )
-                        }
-                    }
-                    .onFailure { error ->
-                        _state.update {
-                            it.copy(
-                                searchResults = emptyList(),
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                                searchError = "검색 중 오류가 발생했습니다",
-                            )
-                        }
-                        Log.e("AddressSearch", "지역 검색 실패", error)
-                    }
+                loadNearbyAreasOnInit()
+                return
             }
+
+            _state.update {
+                it.copy(
+                    isSearching = true,
+                    hasSearchCompleted = false,
+                    searchError = null,
+                )
+            }
+
+            addressService.searchArea(keyword)
+                .onSuccess { searchedAreas ->
+                    _state.update {
+                        it.copy(
+                            searchResults = searchedAreas,
+                            isSearching = false,
+                            hasSearchCompleted = true,
+                            searchError = null,
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            isSearching = false,
+                            hasSearchCompleted = true,
+                            searchError = "검색 서버에 문제가 있어요. 잠시 후 다시 시도해 주세요.",
+                        )
+                    }
+                    Log.e("AddressSearch", "지역 검색 실패: query=$keyword", error)
+                }
         }
     }

@@ -47,6 +47,7 @@ data class SignUpPhotographerState(
     val availableCameraBrands: List<DeviceBrand> = emptyList(),
     val availableCameraTypes: List<String> = emptyList(),
     val isCamerasLoading: Boolean = false,
+    val cameraLoadError: String? = null,
     val phoneDevices: List<Device.PhoneDevice> = emptyList(),
     val cameraDevices: List<Device.CameraDevice> = emptyList(),
     val currentPhone: Device.PhoneDevice? = null,
