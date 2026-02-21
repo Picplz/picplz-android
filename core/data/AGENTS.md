@@ -43,6 +43,14 @@ ViewModel → UseCase → Repository(Impl) → Source → Api → Network
                             DTO.toDomain() → Domain Model
 ```
 
+## BACKEND API
+
+| Resource | URL |
+|----------|-----|
+| **Swagger UI** | http://43.203.62.97:8080/api/v1/swagger-ui/index.html |
+| **OpenAPI Spec** | http://43.203.62.97:8080/api/v1/v3/api-docs |
+| **Base URL** | `http://43.203.62.97:8080/api/v1` |
+
 ## NOTES
 
 - **API Keys**: `ConfigProvider` implementation in `:app` module reads from `local.properties`
