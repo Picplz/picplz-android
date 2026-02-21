@@ -7,10 +7,10 @@ import com.hm.picplz.domain.usecase.GetKakaoUserInfoUseCase
 import com.hm.picplz.domain.usecase.LoginWithKakaoUseCase
 import com.hm.picplz.domain.usecase.UnlinkKakaoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,8 +26,8 @@ class LoginViewModel
         private val _state = MutableStateFlow(LoginState.idle())
         val state: StateFlow<LoginState> get() = _state
 
-        private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
-        val sideEffect: SharedFlow<LoginSideEffect> get() = _sideEffect
+        private val _sideEffect = Channel<LoginSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
         fun handleIntent(intent: LoginIntent) {
             when (intent) {
@@ -41,7 +41,7 @@ class LoginViewModel
                                 Log.d(TAG, "로그인 성공: $response")
 
                                 if (response.registered) {
-                                    _sideEffect.emit(LoginSideEffect.LoginSuccess)
+                                    _sideEffect.send(LoginSideEffect.LoginSuccess)
                                 } else {
                                     handleIntent(LoginIntent.FetchUserInfoFromKaKao)
                                 }
@@ -49,7 +49,7 @@ class LoginViewModel
                             .onFailure { error ->
                                 _state.update { it.copy(isLoading = false, error = error) }
                                 Log.e(TAG, "로그인 실패", error)
-                                _sideEffect.emit(LoginSideEffect.LoginFailed(error))
+                                _sideEffect.send(LoginSideEffect.LoginFailed(error))
                             }
                     }
                 }
@@ -59,13 +59,13 @@ class LoginViewModel
                         getKakaoUserInfoUseCase()
                             .onSuccess { userInfo ->
                                 Log.i(TAG, "사용자 정보 요청 성공\n프로필사진: ${userInfo.profileImageUrl}")
-                                _sideEffect.emit(
+                                _sideEffect.send(
                                     LoginSideEffect.NavigateToSignUp(userInfo.profileImageUrl),
                                 )
                             }
                             .onFailure { error ->
                                 Log.e(TAG, "카카오 사용자 정보 요청 실패", error)
-                                _sideEffect.emit(LoginSideEffect.LoginFailed(error))
+                                _sideEffect.send(LoginSideEffect.LoginFailed(error))
                             }
                     }
                 }
@@ -75,11 +75,11 @@ class LoginViewModel
                         unlinkKakaoUseCase()
                             .onSuccess {
                                 Log.i(TAG, "연결 끊기 성공")
-                                _sideEffect.emit(LoginSideEffect.UnlinkSuccess)
+                                _sideEffect.send(LoginSideEffect.UnlinkSuccess)
                             }
                             .onFailure { error ->
                                 Log.e(TAG, "연결 끊기 실패", error)
-                                _sideEffect.emit(LoginSideEffect.UnlinkFailed(error))
+                                _sideEffect.send(LoginSideEffect.UnlinkFailed(error))
                             }
                     }
                 }
