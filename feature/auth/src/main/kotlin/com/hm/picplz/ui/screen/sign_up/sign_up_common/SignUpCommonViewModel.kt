@@ -6,6 +6,7 @@ import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.model.User
 import com.hm.picplz.common.model.UserType
 import com.hm.picplz.data.service.MemberService
+import com.hm.picplz.data.service.S3Service
 import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserInfoHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserTypeInfoHandler
@@ -24,6 +25,7 @@ class SignUpCommonViewModel
     @Inject
     constructor(
         private val memberService: MemberService,
+        private val s3Service: S3Service,
     ) : ViewModel() {
         private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
         val state: StateFlow<SignUpCommonState> get() = _state
@@ -133,6 +135,40 @@ class SignUpCommonViewModel
 
                 is SignUpCommonIntent.ResetAllSignUpData -> {
                     _state.value = SignUpCommonState.idle()
+                }
+
+                is SignUpCommonIntent.UploadProfileImage -> {
+                    viewModelScope.launch {
+                        _state.update { it.copy(isUploadingImage = true) }
+                        s3Service.getUploadUrl("PROFILE", intent.filename)
+                            .onSuccess { response ->
+                                s3Service.uploadImage(response.uploadUrl, intent.imageBytes, "image/jpeg")
+                                    .onSuccess {
+                                        _state.update {
+                                            it.copy(
+                                                profileImageObjectKey = response.objectKey,
+                                                isUploadingImage = false,
+                                            )
+                                        }
+                                    }
+                                    .onFailure { error ->
+                                        _state.update {
+                                            it.copy(
+                                                isUploadingImage = false,
+                                                error = error,
+                                            )
+                                        }
+                                    }
+                            }
+                            .onFailure { error ->
+                                _state.update {
+                                    it.copy(
+                                        isUploadingImage = false,
+                                        error = error,
+                                    )
+                                }
+                            }
+                    }
                 }
 
                 else -> {

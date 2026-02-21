@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +47,7 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigat
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToSelected
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetProfileImageUri
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ShowFileUploadDialog
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.UploadProfileImage
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -62,6 +64,8 @@ fun SignUpProfileImageScreen(
 ) {
     SetStatusBarStyle()
 
+    val context = LocalContext.current
+
     /** 파일 피커 **/
     val filePickerLauncher =
         rememberLauncherForActivityResult(
@@ -69,6 +73,11 @@ fun SignUpProfileImageScreen(
         ) { uri: Uri? ->
             if (uri != null) {
                 viewModel.handleIntent(SetProfileImageUri(uri.toString()))
+                val imageBytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
+                if (imageBytes != null) {
+                    val filename = uri.lastPathSegment ?: "profile.jpg"
+                    viewModel.handleIntent(UploadProfileImage(imageBytes, filename))
+                }
             }
         }
 

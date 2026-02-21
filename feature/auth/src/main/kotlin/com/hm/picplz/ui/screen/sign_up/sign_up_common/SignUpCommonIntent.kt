@@ -18,6 +18,16 @@ sealed interface SignUpCommonIntent {
 
     data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
 
+    data class UploadProfileImage(val imageBytes: ByteArray, val filename: String) : SignUpCommonIntent {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is UploadProfileImage) return false
+            return filename == other.filename && imageBytes.contentEquals(other.imageBytes)
+        }
+
+        override fun hashCode(): Int = 31 * imageBytes.contentHashCode() + filename.hashCode()
+    }
+
     data class Navigate(val destination: NavigationRoute) : SignUpCommonIntent
 
     data object ShowFileUploadDialog : SignUpCommonIntent
