@@ -14,6 +14,8 @@ sealed interface SignUpCommonIntent {
 
     data class SetNickname(val newNickname: String) : SignUpCommonIntent
 
+    data object CheckNicknameDuplicate : SignUpCommonIntent
+
     data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
 
     data class Navigate(val destination: NavigationRoute) : SignUpCommonIntent

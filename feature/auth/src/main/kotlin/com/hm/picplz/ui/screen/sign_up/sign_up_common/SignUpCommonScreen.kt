@@ -3,7 +3,7 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_common
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.navigation.SignUpCommonNavHost
@@ -11,7 +11,7 @@ import com.hm.picplz.navigation.SignUpCommonNavHost
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     mainNavController: NavHostController,
     profileImageUri: String? = null,
     startAt: String? = null,

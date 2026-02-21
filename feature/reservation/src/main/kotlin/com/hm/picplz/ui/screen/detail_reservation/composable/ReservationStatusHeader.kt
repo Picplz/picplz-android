@@ -1,3 +1,5 @@
+@file:Suppress("UnusedPrivateMember")
+
 package com.hm.picplz.ui.screen.detail_reservation.composable
 
 import androidx.compose.foundation.BorderStroke

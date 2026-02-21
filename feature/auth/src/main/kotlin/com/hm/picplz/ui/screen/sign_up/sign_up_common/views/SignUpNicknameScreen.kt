@@ -22,16 +22,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.util.filterWhitespace
-import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonFilledTextField
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -43,7 +41,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpNicknameScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     signUpCommonNavController: NavController,
 ) {
     SetStatusBarStyle()
@@ -121,9 +119,12 @@ fun SignUpNicknameScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
-                    text = "다음",
-                    onClick = { viewModel.handleIntent(Navigate(SignUpProfile)) },
-                    enabled = currentState.nickname.isNotEmpty() && currentState.nicknameFieldErrors.isEmpty(),
+                    text = if (currentState.isCheckingNickname) "확인 중..." else "다음",
+                    onClick = { viewModel.handleIntent(SignUpCommonIntent.CheckNicknameDuplicate) },
+                    enabled =
+                        currentState.nickname.isNotEmpty() &&
+                            currentState.nicknameFieldErrors.isEmpty() &&
+                            !currentState.isCheckingNickname,
                 )
             }
         }

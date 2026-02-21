@@ -4,6 +4,7 @@ import com.hm.picplz.BuildConfig
 import com.hm.picplz.data.api.AddressApi
 import com.hm.picplz.data.api.AuthApi
 import com.hm.picplz.data.api.KakaoMapApi
+import com.hm.picplz.data.api.MemberApi
 import com.hm.picplz.data.api.PhotographerApi
 import com.hm.picplz.data.provider.AuthInterceptor
 import dagger.Module
@@ -99,5 +100,13 @@ object NetworkModule {
         @PicplzApi retrofit: Retrofit,
     ): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMemberApi(
+        @PicplzApi retrofit: Retrofit,
+    ): MemberApi {
+        return retrofit.create(MemberApi::class.java)
     }
 }

@@ -12,6 +12,8 @@ data class SignUpCommonState(
     val nickname: String = "",
     val profileImageUri: String? = null,
     val nicknameFieldErrors: List<NicknameFieldError> = emptyList(),
+    val isCheckingNickname: Boolean = false,
+    val isNicknameDuplicate: Boolean = false,
     val photographerSelectionState: SelectionState,
     val userSelectionState: SelectionState,
 ) {
@@ -25,6 +27,8 @@ data class SignUpCommonState(
                 nickname = "",
                 profileImageUri = null,
                 nicknameFieldErrors = emptyList(),
+                isCheckingNickname = false,
+                isNicknameDuplicate = false,
                 photographerSelectionState = SelectionState.UNSELECTED,
                 userSelectionState = SelectionState.UNSELECTED,
             )
