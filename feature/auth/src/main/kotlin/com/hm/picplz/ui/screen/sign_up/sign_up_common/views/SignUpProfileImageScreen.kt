@@ -30,15 +30,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.common.model.UserType
-import com.hm.picplz.core.ui.R
+import com.hm.picplz.feature.auth.R
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.screen.common.CommonBottomButton
@@ -54,11 +55,12 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.core.ui.R as CoreUiR
 
 @Composable
 fun SignUpProfileImageScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     mainNavController: NavController,
     signUpCommonNavController: NavController,
 ) {
@@ -96,7 +98,7 @@ fun SignUpProfileImageScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
-                text = "프로필 이미지 업로드",
+                text = stringResource(R.string.sign_up_profile_image_top_bar_title),
                 onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
 
@@ -116,7 +118,7 @@ fun SignUpProfileImageScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = "안녕하세요 ${currentState.nickname}님!",
+                        text = stringResource(R.string.sign_up_profile_image_greeting, currentState.nickname),
                         style = MaterialTheme.typography.headlineMedium,
                     )
                     Spacer(
@@ -132,11 +134,11 @@ fun SignUpProfileImageScreen(
                             if (currentState.profileImageUri != null) {
                                 rememberAsyncImagePainter(model = currentState.profileImageUri)
                             } else {
-                                painterResource(id = R.drawable.default_profile)
+                                painterResource(id = CoreUiR.drawable.default_profile)
                             }
                         Image(
                             painter = painter,
-                            contentDescription = "프로필 이미지",
+                            contentDescription = stringResource(R.string.sign_up_profile_image_content_description),
                             contentScale = ContentScale.Crop,
                             modifier =
                                 Modifier
@@ -153,8 +155,9 @@ fun SignUpProfileImageScreen(
                                     .offset(x = (-5).dp, y = (-5).dp),
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.camera_circle),
-                                contentDescription = "이미지 업로드",
+                                painter = painterResource(id = CoreUiR.drawable.camera_circle),
+                                contentDescription =
+                                    stringResource(R.string.sign_up_profile_image_upload_content_description),
                                 modifier =
                                     Modifier
                                         .size(33.dp)
@@ -165,9 +168,10 @@ fun SignUpProfileImageScreen(
                     Spacer(modifier = Modifier.height(70.dp))
                     val guideText =
                         when {
-                            currentState.profileImageUri == null -> "프로필 이미지를\n설정해 주세요."
+                            currentState.profileImageUri == null ->
+                                stringResource(R.string.sign_up_profile_image_guide_required)
                             currentState.selectedUserType == UserType.Photographer ->
-                                "이제 촬영지와 촬영 기기를\n선택할 거예요"
+                                stringResource(R.string.sign_up_profile_image_guide_photographer)
                             else -> null
                         }
                     if (guideText != null) {
@@ -190,10 +194,10 @@ fun SignUpProfileImageScreen(
             ) {
                 CommonBottomButton(
                     text =
-                        if (currentState.profileImageUri === null) {
-                            "다음에 설정하기"
+                        if (currentState.profileImageUri == null) {
+                            stringResource(R.string.sign_up_profile_image_skip)
                         } else {
-                            "다음"
+                            stringResource(R.string.sign_up_next)
                         },
                     onClick = { viewModel.handleIntent(NavigateToSelected) },
                     enabled = currentState.nickname.isNotEmpty(),

@@ -16,7 +16,11 @@ class CameraSourceImpl
     ) : CameraSource {
         override suspend fun getCameraList(): Result<CameraListData> =
             runCatching {
-                val cameras = cameraApi.getAllCameras()
+                val response = cameraApi.getAllCameras()
+                if (!response.isSuccessful) {
+                    error("Get cameras failed: ${response.code()} ${response.errorBody()?.string()}")
+                }
+                val cameras = response.body() ?: error("Get cameras failed: empty body")
                 val brands =
                     cameras
                         .groupBy { it.brand }

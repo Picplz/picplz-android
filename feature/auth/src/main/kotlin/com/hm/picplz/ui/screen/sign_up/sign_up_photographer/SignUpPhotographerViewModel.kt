@@ -163,14 +163,25 @@ class SignUpPhotographerViewModel
 
                         _state.update { it.copy(isSubmitting = true, error = null) }
 
+                        val socialCode = tokenManager.getSocialCode()
+                        if (socialCode == null) {
+                            _state.update {
+                                it.copy(
+                                    isSubmitting = false,
+                                    error = IllegalStateException("소셜 로그인 정보가 없습니다"),
+                                )
+                            }
+                            return@launch
+                        }
+
                         val currentState = _state.value
                         val request =
                             CreatePhotographerRequest(
                                 nickname = currentState.userInfo.nickname.orEmpty(),
                                 socialEmail = tokenManager.getSocialEmail(),
                                 socialProvider = tokenManager.getSocialProvider(),
-                                socialCode = tokenManager.getSocialCode(),
-                                profileImage = currentState.userInfo.profileImageUri,
+                                socialCode = socialCode,
+                                profileImage = currentState.userInfo.profileImageObjectKey,
                                 photoMoods = currentState.selectedVibeChipList.map { it.label },
                                 activeAreas =
                                     currentState.selectedAreas.mapIndexed { index, area ->
@@ -193,6 +204,7 @@ class SignUpPhotographerViewModel
                         photographerService.createPhotographer(request)
                             .onSuccess {
                                 val user = currentState.userInfo
+                                _state.update { it.copy(isSubmitting = false) }
                                 _sideEffect.send(
                                     SignUpPhotographerSideEffect.NavigateToSignUpCompletion(user),
                                 )
@@ -223,7 +235,7 @@ class SignUpPhotographerViewModel
                             ?: deviceHandler.handleIntent(intent, _state.value)
                             ?: careerHandler.handleIntent(intent, _state.value)
 
-                    newState?.let { _state.value = it }
+                    _state.update { newState ?: it }
                 }
             }
         }
@@ -231,7 +243,7 @@ class SignUpPhotographerViewModel
         private fun handleAddCurrentDeviceToList(intent: SignUpPhotographerIntent.AddCurrentDeviceToList) {
             val newState = deviceHandler.handleIntent(intent, _state.value)
             newState?.let { state ->
-                _state.value = state
+                _state.update { state }
                 if (!state.showToast) {
                     viewModelScope.launch {
                         _sideEffect.send(SignUpPhotographerSideEffect.NavigateToPrev)

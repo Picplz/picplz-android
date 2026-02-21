@@ -59,18 +59,30 @@ class SignUpCommonViewModel
                                 UserType.User -> {
                                     _state.update { it.copy(isSubmitting = true, error = null) }
 
+                                    val socialCode = tokenManager.getSocialCode()
+                                    if (socialCode == null) {
+                                        _state.update {
+                                            it.copy(
+                                                isSubmitting = false,
+                                                error = IllegalStateException("소셜 로그인 정보가 없습니다"),
+                                            )
+                                        }
+                                        return@launch
+                                    }
+
                                     val currentState = _state.value
                                     val request =
                                         CreateCustomerRequest(
                                             nickname = currentState.nickname,
                                             socialEmail = tokenManager.getSocialEmail(),
                                             socialProvider = tokenManager.getSocialProvider(),
-                                            socialCode = tokenManager.getSocialCode(),
+                                            socialCode = socialCode,
                                             profileImage = currentState.profileImageObjectKey,
                                         )
 
                                     customerService.createCustomer(request)
                                         .onSuccess {
+                                            _state.update { it.copy(isSubmitting = false) }
                                             sendNavigateToSelectedSideEffect(
                                                 destination = "sign-up-completion",
                                             )
@@ -159,7 +171,7 @@ class SignUpCommonViewModel
                 }
 
                 is SignUpCommonIntent.ResetAllSignUpData -> {
-                    _state.value = SignUpCommonState.idle()
+                    _state.update { SignUpCommonState.idle() }
                 }
 
                 is SignUpCommonIntent.UploadProfileImage -> {
@@ -201,7 +213,7 @@ class SignUpCommonViewModel
                         userTypeInfoHandler.process(intent, _state.value)
                             ?: userInfoHandler.process(intent, _state.value)
 
-                    newState?.let { _state.value = it }
+                    _state.update { newState ?: it }
                 }
             }
         }
@@ -213,6 +225,7 @@ class SignUpCommonViewModel
                     id = UUID.randomUUID().toString(),
                     nickname = currentState.nickname,
                     profileImageUri = currentState.profileImageUri,
+                    profileImageObjectKey = currentState.profileImageObjectKey,
                     userType = currentState.selectedUserType,
                 )
             _sideEffect.send(

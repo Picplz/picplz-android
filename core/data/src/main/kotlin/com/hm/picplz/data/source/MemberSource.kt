@@ -15,10 +15,10 @@ class MemberSourceImpl
         override suspend fun checkNickname(nickname: String): Result<Boolean> =
             runCatching {
                 val response = memberApi.checkNickname(nickname)
-                if (response.isSuccessful) {
-                    true
-                } else {
-                    false
+                when {
+                    response.isSuccessful -> true
+                    response.code() == 409 -> false
+                    else -> error("Nickname check failed: ${response.code()} ${response.errorBody()?.string()}")
                 }
             }
     }

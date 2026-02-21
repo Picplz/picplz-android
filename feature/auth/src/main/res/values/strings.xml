@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_up_next">다음</string>
+
+    <string name="sign_up_nickname_top_bar_title">닉네임 설정하기</string>
+    <string name="sign_up_nickname_title">닉네임을 설정해주세요</string>
+    <string name="sign_up_nickname_placeholder">닉네임 입력</string>
+    <string name="sign_up_nickname_checking">확인 중...</string>
+    <string name="sign_up_nickname_guide">∙  한글, 영문, 숫자 입력 가능 (2~15자)\n∙  중복 닉네임은 불가</string>
+
+    <string name="sign_up_profile_image_top_bar_title">프로필 이미지 업로드</string>
+    <string name="sign_up_profile_image_greeting">안녕하세요 %1$s님!</string>
+    <string name="sign_up_profile_image_content_description">프로필 이미지</string>
+    <string name="sign_up_profile_image_upload_content_description">이미지 업로드</string>
+    <string name="sign_up_profile_image_guide_required">프로필 이미지를\n설정해 주세요.</string>
+    <string name="sign_up_profile_image_guide_photographer">이제 촬영지와 촬영 기기를\n선택할 거예요</string>
+    <string name="sign_up_profile_image_skip">다음에 설정하기</string>
+
+    <string name="sign_up_client_top_bar_title">고객 선택</string>
+</resources>

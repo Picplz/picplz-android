@@ -36,7 +36,12 @@ class S3SourceImpl
             filename: String,
         ): Result<UploadUrlResponseDto> =
             runCatching {
-                s3Api.getPresignedUploadUrl(imageType, filename)
+                val response = s3Api.getPresignedUploadUrl(imageType, filename)
+                if (response.isSuccessful) {
+                    response.body() ?: error("Get presigned upload url failed: empty body")
+                } else {
+                    error("Get presigned upload url failed: ${response.code()} ${response.errorBody()?.string()}")
+                }
             }
 
         override suspend fun uploadImageToS3(
@@ -52,9 +57,10 @@ class S3SourceImpl
                         .put(requestBody)
                         .build()
                 withContext(Dispatchers.IO) {
-                    val response = plainOkHttpClient.newCall(request).execute()
-                    if (!response.isSuccessful) {
-                        throw IOException("S3 upload failed with code: ${response.code}")
+                    plainOkHttpClient.newCall(request).execute().use { response ->
+                        if (!response.isSuccessful) {
+                            throw IOException("S3 upload failed with code: ${response.code}")
+                        }
                     }
                 }
             }
