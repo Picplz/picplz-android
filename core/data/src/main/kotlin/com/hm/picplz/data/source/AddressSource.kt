@@ -1,16 +1,16 @@
 package com.hm.picplz.data.source
 
 import com.hm.picplz.data.api.AddressApi
+import com.hm.picplz.data.model.ApiResponse
+import com.hm.picplz.data.model.AreaData
 import com.hm.picplz.data.model.AreaNearbyRequest
-import com.hm.picplz.data.model.AreaNearbyResponse
 import com.hm.picplz.data.model.AreaSearchRequest
-import com.hm.picplz.data.model.AreaSearchResponse
 import javax.inject.Inject
 
 interface AddressSource {
-    suspend fun searchArea(request: AreaSearchRequest): Result<AreaSearchResponse>
+    suspend fun searchArea(request: AreaSearchRequest): Result<ApiResponse<List<AreaData>>>
 
-    suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<AreaNearbyResponse>
+    suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<ApiResponse<List<AreaData>>>
 }
 
 class AddressSourceImpl
@@ -18,12 +18,12 @@ class AddressSourceImpl
     constructor(
         private val addressApi: AddressApi,
     ) : AddressSource {
-        override suspend fun searchArea(request: AreaSearchRequest): Result<AreaSearchResponse> =
+        override suspend fun searchArea(request: AreaSearchRequest): Result<ApiResponse<List<AreaData>>> =
             runCatching {
                 addressApi.searchAreas(request.keyword)
             }
 
-        override suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<AreaNearbyResponse> =
+        override suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<ApiResponse<List<AreaData>>> =
             runCatching {
                 addressApi.getNearbyAreas(
                     rad = request.rad,

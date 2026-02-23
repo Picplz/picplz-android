@@ -151,6 +151,70 @@ main ← develop ← feat/이슈번호
 | feature:main | ✅ | Complete |
 | app | ✅ | Cleanup & Dependency linking done |
 
+## BACKEND API
+
+| Resource | URL |
+|----------|-----|
+| **Swagger UI** | http://43.203.62.97:8080/api/v1/swagger-ui/index.html |
+| **OpenAPI Spec** | http://43.203.62.97:8080/api/v1/v3/api-docs |
+| **Base URL** | `http://43.203.62.97:8080/api/v1` |
+
+### API Integration Status
+
+| Endpoint | Method | Status | Android Layer |
+|----------|--------|--------|---------------|
+| `/auth/kakao` | POST | ✅ Connected | AuthApi → AuthSource → AuthService → AuthRepository |
+| `/members/nickname` | GET | ✅ Connected | MemberApi → MemberSource → MemberService |
+| `/cameras` | GET | ✅ Connected | CameraApi → CameraSource → CameraService |
+| `/s3/presigned-upload-url` | GET | ✅ Connected | S3Api → S3Source → S3Service |
+| `/areas/search` | GET | ✅ Connected | AddressApi → AddressSource → AddressService |
+| `/areas/nearby` | GET | ✅ Connected | AddressApi → AddressSource → AddressService |
+| `/customers` | POST | ❌ Not yet | Needs CustomerApi + signup flow |
+| `/photographers` | POST | ❌ Not yet | PhotographerApi is empty stub |
+| `/photographers/login` | POST | ❌ Not yet | — |
+| `/members/info` | PATCH | ❌ Not yet | — |
+| `/members/location` | POST | ❌ Not yet | — |
+| `/chat/rooms` | GET/POST | ❌ Not yet | — |
+| `/portfolios` | POST | ❌ Not yet | — |
+| `/products` | POST | ❌ Not yet | — |
+| `/reviews` | POST/PUT/DELETE | ❌ Not yet | — |
+
+### Data Layer Patterns
+
+**Simple (no domain logic)**: `Api → Source (runCatching) → Service → ViewModel`
+- Used by: MemberApi, CameraApi, S3Api
+
+**Full (with domain logic)**: `Api → Source → Service → Repository → UseCase → ViewModel`
+- Used by: AuthApi (login flow)
+
+**Source Rule**: All Sources wrap API calls in `runCatching` returning `Result<T>`
+
+## DATA LAYER FILES
+
+```
+core/data/src/main/kotlin/com/hm/picplz/data/
+├── api/
+│   ├── AuthApi.kt          # POST /auth/kakao
+│   ├── MemberApi.kt        # GET /members/nickname
+│   ├── CameraApi.kt        # GET /cameras
+│   ├── S3Api.kt            # GET /s3/presigned-upload-url
+│   ├── AddressApi.kt       # GET /areas/search, /areas/nearby
+│   ├── PhotographerApi.kt  # ❌ EMPTY STUB — needs POST /photographers
+│   └── KakaoMapApi.kt      # Kakao Map SDK (external)
+├── model/
+│   ├── KakaoModel.kt       # Login DTOs
+│   ├── CameraModel.kt      # CameraInfoDto + CameraListData
+│   ├── S3Model.kt          # UploadUrlResponseDto
+│   └── Device.kt           # DeviceBrand + DeviceData (hardcoded phone list)
+├── source/                  # Interface + Impl pairs
+├── service/                 # Interface + Impl pairs
+├── repository/              # Domain repo implementations
+└── provider/
+    ├── TokenManager.kt      # JWT + social info storage
+    ├── AuthInterceptor.kt   # OkHttp token injection
+    └── ConfigProvider.kt    # API keys interface
+```
+
 ## DESIGN
 
 **Figma**: [픽플즈 디자인](https://www.figma.com/design/Lf9FSdH8jJeIeDxdTEHLbL/%ED%94%BD%ED%94%8C%EC%A6%88)

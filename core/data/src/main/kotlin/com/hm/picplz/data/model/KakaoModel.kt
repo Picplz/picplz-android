@@ -6,17 +6,28 @@ data class KaKaoLoginRequest(
     val accessToken: String,
 )
 
+data class JwtTokenDto(
+    val grantType: String?,
+    val accessToken: String?,
+    val refreshToken: String?,
+    val accessTokenExpires: Long?,
+    val accessTokenExpiresDate: String?,
+)
+
 data class KaKaoLoginResponseDto(
+    val socialCode: String?,
     val socialEmail: String?,
-    val socialProvider: String,
-    val token: String?,
+    val socialProvider: String?,
+    val token: JwtTokenDto?,
     val registered: Boolean,
 ) {
     fun toDomain() =
         KaKaoLoginResponse(
+            socialCode = socialCode,
             socialEmail = socialEmail,
             socialProvider = socialProvider,
-            token = token,
+            accessToken = token?.accessToken,
+            refreshToken = token?.refreshToken,
             registered = registered,
         )
 }

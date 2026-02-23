@@ -2,7 +2,7 @@ package com.hm.picplz.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,7 +20,7 @@ fun SignUpCommonNavHost(
     mainNavController: NavHostController,
     signUpCommonNavController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     startAt: String? = null,
 ) {
     val startDestination: NavigationRoute =
