@@ -79,7 +79,7 @@ data class SignUpAddDevice(val category: String = "phone") : NavigationRoute
 @Serializable object MyPageOrderSheet : NavigationRoute
 
 // === Photographer Screens ===
-@Serializable object SearchPhotographer : NavigationRoute
+@Serializable object QuickShoot : NavigationRoute
 
 @Serializable object PhotographerMain : NavigationRoute
 

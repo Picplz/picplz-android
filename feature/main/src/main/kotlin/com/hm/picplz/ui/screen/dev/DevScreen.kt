@@ -38,9 +38,9 @@ import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.PhotographerMain
+import com.hm.picplz.navigation.model.QuickShoot
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.navigation.model.ReviewPhotographer
-import com.hm.picplz.navigation.model.SearchPhotographer
 import com.hm.picplz.navigation.model.SignUpClient
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpIntro
@@ -109,7 +109,7 @@ fun DevScreen(navController: NavHostController) {
 
             // === Photographer ===
             SectionTitle("Photographer")
-            DevButton("SearchPhotographer (지도)") { navController.navigate(SearchPhotographer) }
+            DevButton("QuickShoot (빠른촬영)") { navController.navigate(QuickShoot) }
             DevButton("PhotographerMain (작가홈)") { navController.navigate(PhotographerMain) }
             DevButton("PhotographerEquipmentSetting") {
                 navController.navigate(

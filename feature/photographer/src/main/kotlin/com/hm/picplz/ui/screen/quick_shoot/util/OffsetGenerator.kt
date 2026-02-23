@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer.util
+package com.hm.picplz.ui.screen.quick_shoot.util
 
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.common.util.DisplayMetricsUtil

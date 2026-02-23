@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer
+package com.hm.picplz.ui.screen.quick_shoot
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -55,9 +55,9 @@ import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
 import com.hm.picplz.ui.screen.common.RefetchButton
-import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerListSheet
-import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerProfile
-import com.hm.picplz.ui.screen.search_photographer.composable.PhotographerSheet
+import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
+import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
+import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.kakao.vectormap.LatLng
 import kotlinx.coroutines.flow.collectLatest
@@ -67,9 +67,9 @@ import kotlinx.coroutines.launch
 @SuppressLint("DefaultLocale", "UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun SearchPhotographerScreen(
+fun QuickShootScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchPhotographerViewModel = hiltViewModel(),
+    viewModel: QuickShootViewModel = hiltViewModel(),
     mainNavController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -82,7 +82,7 @@ fun SearchPhotographerScreen(
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
                     permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
+                    viewModel.handleIntent(QuickShootIntent.GetCurrentLocation)
                 }
 
                 else -> {
@@ -96,7 +96,7 @@ fun SearchPhotographerScreen(
         }
 
     LaunchedEffect(Unit) {
-        viewModel.handleIntent(SearchPhotographerIntent.GetCurrentLocation)
+        viewModel.handleIntent(QuickShootIntent.GetCurrentLocation)
     }
 
     val scope = rememberCoroutineScope()
@@ -117,21 +117,21 @@ fun SearchPhotographerScreen(
             val selectedOffset = currentState.randomOffsets[currentState.selectedPhotographerId]
             if (selectedOffset != null) {
                 viewModel.handleIntent(
-                    SearchPhotographerIntent.CenterSelectedPhotographer(
+                    QuickShootIntent.CenterSelectedPhotographer(
                         selectedOffset,
                     ),
                 )
             }
             scaffoldState.bottomSheetState.expand()
         } else {
-            viewModel.handleIntent(SearchPhotographerIntent.CenterSelectedPhotographer(Offset.Zero))
+            viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
             scaffoldState.bottomSheetState.partialExpand()
         }
     }
 
     LaunchedEffect(scaffoldState.bottomSheetState.currentValue) {
         if (scaffoldState.bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
-            viewModel.handleIntent(SearchPhotographerIntent.SetSelectedPhotographerId(null))
+            viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
         }
     }
 
@@ -146,7 +146,7 @@ fun SearchPhotographerScreen(
         }
 
     LaunchedEffect(calculatedSheetMaxHeight, currentState.selectedPhotographerId) {
-        viewModel.handleIntent(SearchPhotographerIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
+        viewModel.handleIntent(QuickShootIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
     }
 
     Scaffold(bottomBar = { BottomNavigationBar(navController = mainNavController) }) {
@@ -182,7 +182,7 @@ fun SearchPhotographerScreen(
                                 scope.launch {
                                     scaffoldState.bottomSheetState.partialExpand()
                                     viewModel.handleIntent(
-                                        SearchPhotographerIntent.SetSelectedPhotographerId(
+                                        QuickShootIntent.SetSelectedPhotographerId(
                                             null,
                                         ),
                                     )
@@ -223,7 +223,7 @@ fun SearchPhotographerScreen(
                             )
                             RefetchButton(
                                 onClick = {
-                                    viewModel.handleIntent(SearchPhotographerIntent.RefetchNearbyPhotographers)
+                                    viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
                                 },
                             )
                         }
@@ -279,12 +279,12 @@ fun SearchPhotographerScreen(
                                         scope.launch {
                                             scaffoldState.bottomSheetState.partialExpand()
                                             viewModel.handleIntent(
-                                                SearchPhotographerIntent.SetSelectedPhotographerId(
+                                                QuickShootIntent.SetSelectedPhotographerId(
                                                     id,
                                                 ),
                                             )
                                             viewModel.handleIntent(
-                                                SearchPhotographerIntent.CenterSelectedPhotographer(
+                                                QuickShootIntent.CenterSelectedPhotographer(
                                                     offset,
                                                 ),
                                             )
@@ -300,10 +300,10 @@ fun SearchPhotographerScreen(
         LaunchedEffect(Unit) {
             viewModel.sideEffect.collectLatest { sideEffect ->
                 when (sideEffect) {
-                    is SearchPhotographerSideEffect.NavigateToPrev -> {
+                    is QuickShootSideEffect.NavigateToPrev -> {
                         mainNavController.popBackStack()
                     }
-                    is SearchPhotographerSideEffect.RequestLocationPermission -> {
+                    is QuickShootSideEffect.RequestLocationPermission -> {
                         launcher.launch(
                             arrayOf(
                                 Manifest.permission.ACCESS_FINE_LOCATION,

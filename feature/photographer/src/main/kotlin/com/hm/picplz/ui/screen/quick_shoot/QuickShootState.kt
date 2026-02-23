@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer
+package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Dp
@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
-data class SearchPhotographerState(
+data class QuickShootState(
     val address: String? = null,
     val centerCoords: LatLng = LatLng.from(37.406960, 127.115587),
     val userLocation: LatLng? = null,
@@ -20,8 +20,8 @@ data class SearchPhotographerState(
     val centerOffset: Offset? = null,
 ) {
     companion object {
-        fun idle(): SearchPhotographerState {
-            return SearchPhotographerState()
+        fun idle(): QuickShootState {
+            return QuickShootState()
         }
     }
 }

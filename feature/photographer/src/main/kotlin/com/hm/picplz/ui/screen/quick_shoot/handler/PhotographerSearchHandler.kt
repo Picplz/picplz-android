@@ -1,27 +1,27 @@
-package com.hm.picplz.ui.screen.search_photographer.handler
+package com.hm.picplz.ui.screen.quick_shoot.handler
 
 import androidx.compose.ui.geometry.Offset
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerIntent
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerState
-import com.hm.picplz.ui.screen.search_photographer.util.OffsetGenerator
+import com.hm.picplz.ui.screen.quick_shoot.QuickShootIntent
+import com.hm.picplz.ui.screen.quick_shoot.QuickShootState
+import com.hm.picplz.ui.screen.quick_shoot.util.OffsetGenerator
 
 class PhotographerSearchHandler(
     private val offsetGenerator: OffsetGenerator,
 ) {
     fun process(
-        intent: SearchPhotographerIntent,
-        state: SearchPhotographerState,
-    ): SearchPhotographerState? {
+        intent: QuickShootIntent,
+        state: QuickShootState,
+    ): QuickShootState? {
         return when (intent) {
-            is SearchPhotographerIntent.SetIsSearchingPhotographer -> {
+            is QuickShootIntent.SetIsSearchingPhotographer -> {
                 state.copy(isSearchingPhotographer = intent.isSearchingPhotographer)
             }
 
-            is SearchPhotographerIntent.SetNearbyPhotographers -> {
+            is QuickShootIntent.SetNearbyPhotographers -> {
                 state.copy(nearbyPhotographers = intent.nearbyPhotographers)
             }
 
-            is SearchPhotographerIntent.SetSelectedPhotographerId -> {
+            is QuickShootIntent.SetSelectedPhotographerId -> {
                 state.copy(
                     selectedPhotographerId =
                         if (state.selectedPhotographerId == intent.photographerId) {
@@ -32,7 +32,7 @@ class PhotographerSearchHandler(
                 )
             }
 
-            is SearchPhotographerIntent.CenterSelectedPhotographer -> {
+            is QuickShootIntent.CenterSelectedPhotographer -> {
                 val newOffset =
                     Offset(
                         x = -intent.offset.x,
@@ -41,15 +41,15 @@ class PhotographerSearchHandler(
                 state.copy(centerOffset = newOffset)
             }
 
-            is SearchPhotographerIntent.SetSheetMaxHeight -> {
+            is QuickShootIntent.SetSheetMaxHeight -> {
                 state.copy(sheetMaxHeight = intent.maxHeight)
             }
 
-            is SearchPhotographerIntent.SetSheetPeekHeight -> {
+            is QuickShootIntent.SetSheetPeekHeight -> {
                 state.copy(sheetPeekHeight = intent.peekHeight)
             }
 
-            is SearchPhotographerIntent.DistributeRandomOffsets -> {
+            is QuickShootIntent.DistributeRandomOffsets -> {
                 val randomOffsets = offsetGenerator.generateNonOverlappingOffsets(intent.photographers)
                 state.copy(randomOffsets = randomOffsets)
             }
