@@ -18,6 +18,8 @@ sealed interface QuickShootIntent {
 
     data class RequestLocationPermission(val unit: Unit = Unit) : QuickShootIntent
 
+    data class SetLocationPermissionGranted(val granted: Boolean) : QuickShootIntent
+
     data object GetCurrentLocation : QuickShootIntent
 
     data class SetIsSearchingPhotographer(val isSearchingPhotographer: Boolean) : QuickShootIntent
