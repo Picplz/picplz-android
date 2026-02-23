@@ -10,10 +10,10 @@ import com.hm.picplz.ui.screen.quick_shoot.handler.PhotographerSearchHandler
 import com.hm.picplz.ui.screen.quick_shoot.util.OffsetGenerator
 import com.kakao.vectormap.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,8 +29,8 @@ class QuickShootViewModel
         private val _state = MutableStateFlow(QuickShootState.idle())
         val state: StateFlow<QuickShootState> get() = _state
 
-        private val _sideEffect = MutableSharedFlow<QuickShootSideEffect>()
-        val sideEffect: SharedFlow<QuickShootSideEffect> get() = _sideEffect
+        private val _sideEffect = Channel<QuickShootSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
         private val locationHandler = LocationHandler()
         private val offsetGenerator = OffsetGenerator(displayMetricsUtil)
@@ -44,7 +44,7 @@ class QuickShootViewModel
             when (intent) {
                 is QuickShootIntent.NavigateToPrev -> {
                     viewModelScope.launch {
-                        _sideEffect.emit(QuickShootSideEffect.NavigateToPrev)
+                        _sideEffect.send(QuickShootSideEffect.NavigateToPrev)
                     }
                 }
 
@@ -63,8 +63,12 @@ class QuickShootViewModel
 
                 is QuickShootIntent.RequestLocationPermission -> {
                     viewModelScope.launch {
-                        _sideEffect.emit(QuickShootSideEffect.RequestLocationPermission)
+                        _sideEffect.send(QuickShootSideEffect.RequestLocationPermission)
                     }
+                }
+
+                is QuickShootIntent.SetLocationPermissionGranted -> {
+                    _state.update { it.copy(locationPermissionGranted = intent.granted) }
                 }
 
                 is QuickShootIntent.GetCurrentLocation -> {

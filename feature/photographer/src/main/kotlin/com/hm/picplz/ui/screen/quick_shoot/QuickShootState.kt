@@ -7,6 +7,7 @@ import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
 data class QuickShootState(
+    val locationPermissionGranted: Boolean = false,
     val address: String? = null,
     val centerCoords: LatLng = LatLng.from(37.406960, 127.115587),
     val userLocation: LatLng? = null,
