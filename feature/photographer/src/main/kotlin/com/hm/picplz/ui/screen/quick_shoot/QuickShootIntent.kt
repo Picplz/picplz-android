@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.Dp
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
@@ -33,10 +32,6 @@ sealed interface QuickShootIntent {
     data class DistributeRandomOffsets(val photographers: FilteredPhotographers) : QuickShootIntent
 
     data class SetSelectedPhotographerId(val photographerId: Long?) : QuickShootIntent
-
-    data class SetSheetMaxHeight(val maxHeight: Dp) : QuickShootIntent
-
-    data class SetSheetPeekHeight(val peekHeight: Dp?) : QuickShootIntent
 
     data class CenterSelectedPhotographer(val offset: Offset) : QuickShootIntent
 }

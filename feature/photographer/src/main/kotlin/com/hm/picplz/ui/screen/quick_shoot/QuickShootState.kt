@@ -1,8 +1,6 @@
 package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
@@ -16,8 +14,6 @@ data class QuickShootState(
     val nearbyPhotographers: FilteredPhotographers = FilteredPhotographers(),
     val randomOffsets: Map<Long, Offset> = emptyMap(),
     val selectedPhotographerId: Long? = null,
-    val sheetMaxHeight: Dp = 750.dp,
-    val sheetPeekHeight: Dp? = 114.dp,
     val centerOffset: Offset? = null,
 ) {
     companion object {

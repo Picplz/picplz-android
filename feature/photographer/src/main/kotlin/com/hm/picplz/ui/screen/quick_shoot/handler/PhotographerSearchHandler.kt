@@ -41,14 +41,6 @@ class PhotographerSearchHandler(
                 state.copy(centerOffset = newOffset)
             }
 
-            is QuickShootIntent.SetSheetMaxHeight -> {
-                state.copy(sheetMaxHeight = intent.maxHeight)
-            }
-
-            is QuickShootIntent.SetSheetPeekHeight -> {
-                state.copy(sheetPeekHeight = intent.peekHeight)
-            }
-
             is QuickShootIntent.DistributeRandomOffsets -> {
                 val randomOffsets = offsetGenerator.generateNonOverlappingOffsets(intent.photographers)
                 state.copy(randomOffsets = randomOffsets)

@@ -1,28 +1,19 @@
 package com.hm.picplz.ui.screen.common
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,8 +29,6 @@ fun CommonBottomSheetScaffold(
     sheetShape: Shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
     navigationBarPadding: Boolean = false,
     scaffoldState: BottomSheetScaffoldState,
-    sheetMinHeight: Dp? = 0.dp,
-    sheetMaxHeight: Dp? = Dp.Infinity,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     val systemNavBarHeight =
@@ -58,51 +47,21 @@ fun CommonBottomSheetScaffold(
             modifier
                 .safeDrawingPadding(),
         scaffoldState = scaffoldState,
-        sheetContainerColor = MainThemeColor.Gray3,
+        sheetContainerColor = MainThemeColor.White,
         sheetContent = {
-            Surface(
+            Column(
                 modifier =
                     Modifier
-                        .fillMaxWidth()
-                        .offset(y = 1.dp)
-                        .heightIn(
-                            min = sheetMinHeight ?: 0.dp,
-                            max = (sheetMaxHeight ?: Dp.Infinity),
-                        )
-                        .padding(bottom = if (navigationBarPadding) totalBottomPadding else 0.dp)
-                        .clip(sheetShape),
-                color = MainThemeColor.White,
+                        .padding(16.dp)
+                        .padding(bottom = if (navigationBarPadding) totalBottomPadding else 0.dp),
             ) {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Surface(
-                        modifier =
-                            Modifier
-                                .width(40.dp)
-                                .height(4.dp),
-                        shape = RoundedCornerShape(2.dp),
-                        color = MainThemeColor.Black,
-                    ) {}
-                }
-                Column(
-                    modifier =
-                        Modifier
-                            .padding(16.dp),
-                ) {
-                    sheetContent()
-                }
+                sheetContent()
             }
         },
         sheetPeekHeight =
             sheetPeekHeight
                 ?: (30.dp + if (navigationBarPadding) totalBottomPadding else 0.dp),
         sheetShape = sheetShape,
-        sheetDragHandle = null,
         content = content,
     )
 }

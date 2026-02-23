@@ -32,6 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,9 +53,11 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
+import com.hm.picplz.ui.screen.common.CommonModalBottomSheet
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
@@ -137,42 +139,13 @@ fun QuickShootScreen(
             bottomSheetState = bottomSheetState,
         )
 
-    LaunchedEffect(currentState.selectedPhotographerId) {
-        if (currentState.selectedPhotographerId != null) {
-            val selectedOffset = currentState.randomOffsets[currentState.selectedPhotographerId]
-            if (selectedOffset != null) {
-                viewModel.handleIntent(
-                    QuickShootIntent.CenterSelectedPhotographer(
-                        selectedOffset,
-                    ),
-                )
-            }
-            scaffoldState.bottomSheetState.expand()
-        } else {
-            viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
-            scaffoldState.bottomSheetState.partialExpand()
+    val modalSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
+    val selectedPhotographer =
+        currentState.selectedPhotographerId?.let { selectedId ->
+            val allPhotographers = currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
+            allPhotographers.find { it.id == selectedId }
         }
-    }
-
-    LaunchedEffect(scaffoldState.bottomSheetState.currentValue) {
-        if (scaffoldState.bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
-            viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
-        }
-    }
-
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val topMargin = 60.dp
-
-    val calculatedSheetMaxHeight =
-        if (currentState.selectedPhotographerId === null) {
-            screenHeight - topMargin
-        } else {
-            screenHeight
-        }
-
-    LaunchedEffect(calculatedSheetMaxHeight, currentState.selectedPhotographerId) {
-        viewModel.handleIntent(QuickShootIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
-    }
 
     Scaffold(
         bottomBar = {
@@ -185,15 +158,9 @@ fun QuickShootScreen(
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
                 sheetContent = {
-                    if (currentState.selectedPhotographerId === null) {
-                        PhotographerListSheet(mainNavController = mainNavController)
-                    } else {
-                        PhotographerSheet(mainNavController = mainNavController)
-                    }
+                    PhotographerListSheet(mainNavController = mainNavController)
                 },
                 scaffoldState = scaffoldState,
-                sheetPeekHeight = currentState.sheetPeekHeight,
-                sheetMaxHeight = currentState.sheetMaxHeight,
                 navigationBarPadding = true,
             ) {
                 Column(
@@ -218,6 +185,7 @@ fun QuickShootScreen(
                                                 null,
                                             ),
                                         )
+                                        viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
                                     }
                                 },
                     ) {
@@ -304,25 +272,39 @@ fun QuickShootScreen(
                                         offset = offset,
                                         distance = photographer.distance,
                                         onClick = {
-                                            scope.launch {
-                                                scaffoldState.bottomSheetState.partialExpand()
-                                                viewModel.handleIntent(
-                                                    QuickShootIntent.SetSelectedPhotographerId(
-                                                        photographer.id,
-                                                    ),
-                                                )
-                                                viewModel.handleIntent(
-                                                    QuickShootIntent.CenterSelectedPhotographer(
-                                                        offset,
-                                                    ),
-                                                )
-                                            }
+                                            viewModel.handleIntent(
+                                                QuickShootIntent.SetSelectedPhotographerId(
+                                                    photographer.id,
+                                                ),
+                                            )
+                                            viewModel.handleIntent(
+                                                QuickShootIntent.CenterSelectedPhotographer(
+                                                    offset,
+                                                ),
+                                            )
                                         },
                                     )
                                 }
                             }
                         }
                     }
+                }
+            }
+
+            if (selectedPhotographer != null) {
+                CommonModalBottomSheet(
+                    onDismissRequest = {
+                        viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
+                        viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
+                    },
+                    sheetState = modalSheetState,
+                ) {
+                    PhotographerSheet(
+                        photographer = selectedPhotographer,
+                        onNavigateToDetail = { id ->
+                            mainNavController.navigate(DetailPhotographer(id.toInt()))
+                        },
+                    )
                 }
             }
         } else {
