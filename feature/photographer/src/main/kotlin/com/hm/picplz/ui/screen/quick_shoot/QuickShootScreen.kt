@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.hm.picplz.common.util.LocationUtil.getDistance
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
@@ -64,7 +63,6 @@ import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
-import com.kakao.vectormap.LatLng
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -117,6 +115,12 @@ fun QuickShootScreen(
 
         if (hasLocationPermission) {
             viewModel.handleIntent(QuickShootIntent.GetCurrentLocation)
+        }
+    }
+
+    LaunchedEffect(currentState.userLocation) {
+        if (currentState.userLocation != null && currentState.locationPermissionGranted) {
+            viewModel.handleIntent(QuickShootIntent.FetchNearbyPhotographers)
         }
     }
 
@@ -287,38 +291,24 @@ fun QuickShootScreen(
                                 )
                                 val entirePhotographer =
                                     currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
-                                // val userLocation = currentState.userLocation
-                                val dummyUserLocation = LatLng.from(37.402960, 127.115587)
-                                entirePhotographer.forEach {
-                                        (
-                                            id,
-                                            name,
-                                            photographerLocation,
-                                            profileImageUri,
-                                            isActive,
-                                        ),
-                                    ->
+                                entirePhotographer.forEach { photographer ->
                                     val offset =
-                                        currentState.randomOffsets[id]
+                                        currentState.randomOffsets[photographer.id]
                                             ?: return@forEach
-                                    val isSelected = id == currentState.selectedPhotographerId
-                                    val distanceInMeters =
-                                        photographerLocation?.let { location ->
-                                            getDistance(dummyUserLocation, location) * 1000
-                                        }
+                                    val isSelected = photographer.id == currentState.selectedPhotographerId
                                     PhotographerProfile(
-                                        name = name,
-                                        profileImageUri = profileImageUri,
-                                        isActive = isActive,
+                                        name = photographer.name,
+                                        profileImageUri = photographer.profileImageUri,
+                                        isActive = photographer.isActive,
                                         isSelected = isSelected,
                                         offset = offset,
-                                        distance = distanceInMeters,
+                                        distance = photographer.distance,
                                         onClick = {
                                             scope.launch {
                                                 scaffoldState.bottomSheetState.partialExpand()
                                                 viewModel.handleIntent(
                                                     QuickShootIntent.SetSelectedPhotographerId(
-                                                        id,
+                                                        photographer.id,
                                                     ),
                                                 )
                                                 viewModel.handleIntent(

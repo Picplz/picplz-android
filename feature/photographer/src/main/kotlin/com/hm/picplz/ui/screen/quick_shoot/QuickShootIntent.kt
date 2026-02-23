@@ -32,7 +32,7 @@ sealed interface QuickShootIntent {
 
     data class DistributeRandomOffsets(val photographers: FilteredPhotographers) : QuickShootIntent
 
-    data class SetSelectedPhotographerId(val photographerId: Int?) : QuickShootIntent
+    data class SetSelectedPhotographerId(val photographerId: Long?) : QuickShootIntent
 
     data class SetSheetMaxHeight(val maxHeight: Dp) : QuickShootIntent
 

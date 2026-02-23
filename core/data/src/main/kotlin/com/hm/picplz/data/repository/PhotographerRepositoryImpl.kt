@@ -3,7 +3,6 @@ package com.hm.picplz.data.repository
 import com.hm.picplz.data.service.PhotographerService
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.repository.PhotographerRepository
-import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
 class PhotographerRepositoryImpl
@@ -12,16 +11,10 @@ class PhotographerRepositoryImpl
         private val photographerService: PhotographerService,
     ) : PhotographerRepository {
         override suspend fun getNearbyPhotographers(
-            userLocation: LatLng,
-            distanceLimit: Int,
-            countLimit: Int,
-            userAddress: String,
+            longitude: Double,
+            latitude: Double,
+            distance: Long,
         ): Result<FilteredPhotographers> {
-            return photographerService.getNearbyPhotographers(
-                userLocation,
-                distanceLimit,
-                countLimit,
-                userAddress,
-            )
+            return photographerService.getNearbyPhotographers(longitude, latitude, distance)
         }
     }

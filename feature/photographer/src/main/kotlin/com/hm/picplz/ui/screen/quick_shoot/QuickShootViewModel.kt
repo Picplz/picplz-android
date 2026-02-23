@@ -8,7 +8,6 @@ import com.hm.picplz.domain.repository.PhotographerRepository
 import com.hm.picplz.ui.screen.quick_shoot.handler.LocationHandler
 import com.hm.picplz.ui.screen.quick_shoot.handler.PhotographerSearchHandler
 import com.hm.picplz.ui.screen.quick_shoot.util.OffsetGenerator
-import com.kakao.vectormap.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,10 +34,6 @@ class QuickShootViewModel
         private val locationHandler = LocationHandler()
         private val offsetGenerator = OffsetGenerator(displayMetricsUtil)
         private val photographerSearchHandler = PhotographerSearchHandler(offsetGenerator)
-
-        init {
-            handleIntent(QuickShootIntent.FetchNearbyPhotographers)
-        }
 
         fun handleIntent(intent: QuickShootIntent) {
             when (intent) {
@@ -89,15 +84,17 @@ class QuickShootViewModel
                 is QuickShootIntent.RefetchNearbyPhotographers,
                 -> {
                     viewModelScope.launch {
-                        val dummyUserLocation = LatLng.from(37.402960, 127.115587)
-                        val dummyUserAddress = "종로구 무악동"
+                        val userLocation = _state.value.userLocation
+                        if (userLocation == null) {
+                            Log.w("QuickShoot", "User location not available yet")
+                            return@launch
+                        }
                         handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
                         handleIntent(QuickShootIntent.SetIsSearchingPhotographer(true))
                         photographerRepository.getNearbyPhotographers(
-                            userLocation = dummyUserLocation,
-                            distanceLimit = 2,
-                            countLimit = 5,
-                            userAddress = dummyUserAddress,
+                            longitude = userLocation.longitude,
+                            latitude = userLocation.latitude,
+                            distance = 2000,
                         )
                             .onSuccess { nearbyPhotographers ->
                                 handleIntent(QuickShootIntent.SetIsSearchingPhotographer(false))

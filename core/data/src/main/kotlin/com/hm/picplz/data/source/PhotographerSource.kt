@@ -2,21 +2,23 @@ package com.hm.picplz.data.source
 
 import com.hm.picplz.data.api.PhotographerApi
 import com.hm.picplz.data.model.CreatePhotographerRequest
-import com.hm.picplz.data.model.PhotographerListResponse
-import com.hm.picplz.data.provider.DummyPhotographerProvider
+import com.hm.picplz.data.model.NearbyPhotographerCard
 import javax.inject.Inject
 
 interface PhotographerSource {
     suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit>
 
-    suspend fun getPhotographers(): Result<PhotographerListResponse>
+    suspend fun getNearbyPhotographers(
+        longitude: Double,
+        latitude: Double,
+        distance: Long,
+    ): Result<List<NearbyPhotographerCard>>
 }
 
 class PhotographerSourceImpl
     @Inject
     constructor(
         private val photographerApi: PhotographerApi,
-        private val dummyPhotographerProvider: DummyPhotographerProvider,
     ) : PhotographerSource {
         override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
             runCatching {
@@ -28,6 +30,17 @@ class PhotographerSourceImpl
                 }
             }
 
-        override suspend fun getPhotographers(): Result<PhotographerListResponse> =
-            runCatching { dummyPhotographerProvider.getPhotographers() }
+        override suspend fun getNearbyPhotographers(
+            longitude: Double,
+            latitude: Double,
+            distance: Long,
+        ): Result<List<NearbyPhotographerCard>> =
+            runCatching {
+                val response = photographerApi.getNearbyPhotographers(longitude, latitude, distance)
+                if (response.isSuccessful) {
+                    response.body() ?: emptyList()
+                } else {
+                    error("Fetch nearby photographers failed: ${response.code()} ${response.errorBody()?.string()}")
+                }
+            }
     }

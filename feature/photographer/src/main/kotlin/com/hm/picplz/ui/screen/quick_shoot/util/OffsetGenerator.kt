@@ -6,7 +6,7 @@ import com.hm.picplz.domain.model.FilteredPhotographers
 import kotlin.random.Random
 
 class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
-    fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Int, Offset> {
+    fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Long, Offset> {
         val maxAttempts = 1000
 
         @Suppress("SwallowedException")
@@ -23,8 +23,8 @@ class OffsetGenerator(private val displayMetricsUtil: DisplayMetricsUtil) {
 
     private class OffsetGenerationException : Exception("개별 위치 생성 실패")
 
-    fun tryGenerateOffsets(photographers: FilteredPhotographers): Map<Int, Offset> {
-        val offsets = mutableMapOf<Int, Offset>()
+    fun tryGenerateOffsets(photographers: FilteredPhotographers): Map<Long, Offset> {
+        val offsets = mutableMapOf<Long, Offset>()
         val minDistance = 110f
         val maxSingleAttempts = 100
 
