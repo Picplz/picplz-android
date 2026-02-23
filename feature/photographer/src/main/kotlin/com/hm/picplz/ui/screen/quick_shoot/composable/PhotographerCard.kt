@@ -40,7 +40,7 @@ fun PhotographerCard(
                 .height(140.dp)
                 .padding(vertical = 20.dp)
                 .width(345.dp)
-                .clickable { mainNavController.navigate(DetailPhotographer(photographer.id)) },
+                .clickable { mainNavController.navigate(DetailPhotographer(photographer.id.toInt())) },
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = photographer.profileImageUri),
@@ -82,12 +82,7 @@ fun PhotographerCard(
                 }
             }
             val vibeTags =
-                listOf(
-                    "#을지로 감성",
-                    "#키치 감성",
-                    "#MZ 감성",
-                    "#퇴폐 감성",
-                )
+                photographer.photoMoods.map { "#$it" }
             VibeTags(tags = vibeTags)
         }
     }
@@ -102,14 +97,10 @@ fun PhotographerCardPreview() {
             Photographer(
                 id = 1,
                 name = "작가1",
-                location = null,
                 profileImageUri = "https://picsum.photos/200",
                 isActive = false,
-                workingArea = "마포구 서교동",
                 distance = 100,
-                followers = listOf(1, 2, 3),
-                socialAccount = "@account",
-                portfolioPhotos = List(5) { "https://picsum.photos/100" },
+                photoMoods = listOf("을지로 감성", "키치 감성", "MZ 감성", "퇴폐 감성"),
             ),
         mainNavController = mainNavController,
     )
