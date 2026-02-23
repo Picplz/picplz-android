@@ -55,12 +55,12 @@ import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
-import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootBottomButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlinx.coroutines.flow.collectLatest
@@ -373,9 +373,15 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "앱 서비스 이용을 위해\n위치 접근 권한이 필요해요",
+                text = "앱 서비스 이용을 위해",
                 style = MainThemeFont.Title,
                 color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = "위치 접근 권한이 필요해요",
+                style = MainThemeFont.Title,
+                color = MainThemeColor.Green120,
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -387,7 +393,7 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
             )
         }
 
-        CommonBottomButton(
+        QuickShootBottomButton(
             text = "다음",
             onClick = onNextClick,
             modifier =
