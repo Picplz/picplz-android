@@ -63,6 +63,7 @@ import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootBottomButton
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlinx.coroutines.flow.collectLatest
@@ -307,6 +308,16 @@ fun QuickShootScreen(
                     )
                 }
             }
+
+            QuickShootSortBottomSheet(
+                visible = currentState.showSortSheet,
+                onDismiss = {
+                    viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(false))
+                },
+                onSelect = { sortType ->
+                    viewModel.handleIntent(QuickShootIntent.SelectSortType(sortType))
+                },
+            )
         } else {
             QuickShootLocationPermissionRationale(
                 onNextClick = {

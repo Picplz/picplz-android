@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortType
 import com.kakao.vectormap.LatLng
 
 sealed interface QuickShootIntent {
@@ -34,4 +35,8 @@ sealed interface QuickShootIntent {
     data class SetSelectedPhotographerId(val photographerId: Long?) : QuickShootIntent
 
     data class CenterSelectedPhotographer(val offset: Offset) : QuickShootIntent
+
+    data class ToggleSortSheet(val visible: Boolean) : QuickShootIntent
+
+    data class SelectSortType(val sortType: QuickShootSortType) : QuickShootIntent
 }

@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortType
 import com.kakao.vectormap.LatLng
 
 data class QuickShootState(
@@ -15,6 +16,8 @@ data class QuickShootState(
     val randomOffsets: Map<Long, Offset> = emptyMap(),
     val selectedPhotographerId: Long? = null,
     val centerOffset: Offset? = null,
+    val showSortSheet: Boolean = false,
+    val selectedSortType: QuickShootSortType = QuickShootSortType.DISTANCE,
 ) {
     companion object {
         fun idle(): QuickShootState {

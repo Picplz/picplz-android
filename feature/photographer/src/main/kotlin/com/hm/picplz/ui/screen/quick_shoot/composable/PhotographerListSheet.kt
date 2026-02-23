@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.quick_shoot.composable
 import ChipHeight
 import CommonChip
 import CommonStatusTag
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.ui.screen.quick_shoot.QuickShootIntent
 import com.hm.picplz.ui.screen.quick_shoot.QuickShootViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 
@@ -114,9 +116,13 @@ fun PhotographerListSheet(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            modifier =
+                Modifier.clickable {
+                    viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(true))
+                },
         ) {
             Text(
-                text = "거리순",
+                text = currentState.selectedSortType.label,
                 color = MainThemeColor.Gray5,
             )
             Spacer(modifier = Modifier.width(4.dp))

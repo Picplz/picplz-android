@@ -46,6 +46,14 @@ class PhotographerSearchHandler(
                 state.copy(randomOffsets = randomOffsets)
             }
 
+            is QuickShootIntent.ToggleSortSheet -> {
+                state.copy(showSortSheet = intent.visible)
+            }
+
+            is QuickShootIntent.SelectSortType -> {
+                state.copy(selectedSortType = intent.sortType)
+            }
+
             else -> null
         }
     }
