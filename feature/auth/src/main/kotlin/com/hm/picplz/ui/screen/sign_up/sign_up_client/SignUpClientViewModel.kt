@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientIntent.SetUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,15 +19,15 @@ class SignUpClientViewModel
         private val _state = MutableStateFlow<SignUpClientState>(SignUpClientState.idle())
         val state: StateFlow<SignUpClientState> get() = _state
 
-        private val _sideEffect = MutableSharedFlow<SignUpClientSideEffect>()
-        val sideEffect: SharedFlow<SignUpClientSideEffect> get() = _sideEffect
+        private val _sideEffect = Channel<SignUpClientSideEffect>(Channel.BUFFERED)
+        val sideEffect = _sideEffect.receiveAsFlow()
 
         fun handleIntent(intent: SignUpClientIntent) {
             when (intent) {
                 is SetUserInfo -> {}
                 is NavigateToPrev -> {
                     viewModelScope.launch {
-                        _sideEffect.emit(SignUpClientSideEffect.NavigateToPrev)
+                        _sideEffect.send(SignUpClientSideEffect.NavigateToPrev)
                     }
                 }
             }

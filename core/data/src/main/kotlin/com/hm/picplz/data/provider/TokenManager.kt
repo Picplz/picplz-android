@@ -22,7 +22,11 @@ class TokenManager
         companion object {
             private const val PREF_NAME = "picplz_auth"
             private const val KEY_ACCESS_TOKEN = "access_token"
+            private const val KEY_REFRESH_TOKEN = "refresh_token"
             private const val KEY_USER_TYPE = "user_type"
+            private const val KEY_SOCIAL_CODE = "social_code"
+            private const val KEY_SOCIAL_EMAIL = "social_email"
+            private const val KEY_SOCIAL_PROVIDER = "social_provider"
         }
 
         enum class AuthRole(val value: String) {
@@ -49,9 +53,49 @@ class TokenManager
             return AuthRole.entries.find { it.value == value }
         }
 
+        fun saveLoginToken(
+            accessToken: String,
+            refreshToken: String? = null,
+        ) {
+            prefs.edit()
+                .putString(KEY_ACCESS_TOKEN, accessToken)
+                .putString(KEY_USER_TYPE, AuthRole.USER.value)
+                .apply {
+                    refreshToken?.let { putString(KEY_REFRESH_TOKEN, it) }
+                }
+                .apply()
+        }
+
+        fun saveSocialInfo(
+            socialCode: String?,
+            socialEmail: String?,
+            socialProvider: String?,
+        ) {
+            prefs.edit()
+                .putString(KEY_SOCIAL_CODE, socialCode)
+                .putString(KEY_SOCIAL_EMAIL, socialEmail)
+                .putString(KEY_SOCIAL_PROVIDER, socialProvider)
+                .apply()
+        }
+
+        fun getSocialCode(): String? = prefs.getString(KEY_SOCIAL_CODE, null)
+
+        fun getSocialEmail(): String? = prefs.getString(KEY_SOCIAL_EMAIL, null)
+
+        fun getSocialProvider(): String? = prefs.getString(KEY_SOCIAL_PROVIDER, null)
+
+        fun clearSocialInfo() {
+            prefs.edit()
+                .remove(KEY_SOCIAL_CODE)
+                .remove(KEY_SOCIAL_EMAIL)
+                .remove(KEY_SOCIAL_PROVIDER)
+                .apply()
+        }
+
         fun clearToken() {
             prefs.edit()
                 .remove(KEY_ACCESS_TOKEN)
+                .remove(KEY_REFRESH_TOKEN)
                 .remove(KEY_USER_TYPE)
                 .apply()
         }

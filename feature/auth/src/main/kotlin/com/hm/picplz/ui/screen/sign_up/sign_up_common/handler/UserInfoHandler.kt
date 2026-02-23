@@ -17,6 +17,8 @@ class UserInfoHandler {
                 state.copy(
                     nickname = intent.newNickname,
                     nicknameFieldErrors = errors,
+                    isCheckingNickname = false,
+                    isNicknameDuplicate = false,
                 )
             }
 

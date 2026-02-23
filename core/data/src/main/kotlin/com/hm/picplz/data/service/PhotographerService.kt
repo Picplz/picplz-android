@@ -2,6 +2,7 @@ package com.hm.picplz.data.service
 
 import com.hm.picplz.common.util.LocationUtil.getDistance
 import com.hm.picplz.data.mapper.toDomain
+import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.Photographer
@@ -9,6 +10,8 @@ import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
 interface PhotographerService {
+    suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit>
+
     suspend fun getPhotographers(): Result<List<Photographer>>
 
     suspend fun getNearbyPhotographers(
@@ -24,6 +27,9 @@ class PhotographerServiceImpl
     constructor(
         private val photographerSource: PhotographerSource,
     ) : PhotographerService {
+        override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
+            photographerSource.createPhotographer(request)
+
         override suspend fun getPhotographers(): Result<List<Photographer>> {
             return photographerSource.getPhotographers().map { response ->
                 response.map { it.toDomain() }

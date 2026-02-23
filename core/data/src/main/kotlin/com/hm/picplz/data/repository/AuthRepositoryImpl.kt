@@ -1,6 +1,7 @@
 package com.hm.picplz.data.repository
 
 import android.content.Context
+import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.AuthService
 import com.hm.picplz.data.service.KakaoAuthService
 import com.hm.picplz.domain.model.KaKaoLoginResponse
@@ -13,10 +14,19 @@ class AuthRepositoryImpl
     constructor(
         private val authService: AuthService,
         private val kakaoAuthService: KakaoAuthService,
+        private val tokenManager: TokenManager,
     ) : AuthRepository {
         override suspend fun loginWithKakao(context: Context): Result<KaKaoLoginResponse> {
             return getKakaoOAuthToken(context)
                 .mapCatching { token -> authService.loginWithKaKao(token.accessToken).getOrThrow() }
+                .onSuccess { response ->
+                    response.accessToken?.let { tokenManager.saveLoginToken(it, response.refreshToken) }
+                    tokenManager.saveSocialInfo(
+                        socialCode = response.socialCode,
+                        socialEmail = response.socialEmail,
+                        socialProvider = response.socialProvider,
+                    )
+                }
         }
 
         private suspend fun getKakaoOAuthToken(context: Context) =

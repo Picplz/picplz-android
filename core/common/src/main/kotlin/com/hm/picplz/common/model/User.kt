@@ -12,6 +12,7 @@ data class User(
     val email: String? = null,
     val userType: UserType? = null,
     val profileImageUri: String? = null,
+    val profileImageObjectKey: String? = null,
     val photographyExperience: PhotographyExperience? = null,
     val photographyVibes: List<String>? = null,
 ) : Parcelable

@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
+import com.hm.picplz.feature.auth.R
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import kotlinx.coroutines.flow.collectLatest
@@ -22,7 +24,7 @@ fun SignUpClientScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     @Suppress("UNUSED_PARAMETER") _userInfo: User = emptyUserData,
-    viewModel: SignUpClientViewModel = viewModel(),
+    viewModel: SignUpClientViewModel = hiltViewModel(),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -37,7 +39,7 @@ fun SignUpClientScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
-                text = "고객 선택",
+                text = stringResource(R.string.sign_up_client_top_bar_title),
                 onClickBack = {},
             )
         }

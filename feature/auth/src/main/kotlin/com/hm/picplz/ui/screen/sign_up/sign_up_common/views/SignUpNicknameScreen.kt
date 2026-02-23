@@ -19,19 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.util.filterWhitespace
-import com.hm.picplz.navigation.model.SignUpProfile
+import com.hm.picplz.feature.auth.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonFilledTextField
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
-import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpNicknameScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     signUpCommonNavController: NavController,
 ) {
     SetStatusBarStyle()
@@ -70,7 +70,7 @@ fun SignUpNicknameScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CommonTopBar(
-                text = "닉네임 설정하기",
+                text = stringResource(R.string.sign_up_nickname_top_bar_title),
                 onClickBack = { viewModel.handleIntent(SignUpCommonIntent.NavigateToPrev) },
             )
             Spacer(modifier = Modifier.height(144.dp))
@@ -87,7 +87,7 @@ fun SignUpNicknameScreen(
                 horizontalAlignment = Alignment.Start,
             ) {
                 Text(
-                    text = "닉네임을 설정해주세요",
+                    text = stringResource(R.string.sign_up_nickname_title),
                     style = MainThemeFont.Title,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -97,7 +97,7 @@ fun SignUpNicknameScreen(
                         viewModel.handleIntent(SignUpCommonIntent.SetNickname(newNickname.filterWhitespace()))
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = "닉네임 입력",
+                    placeholder = stringResource(R.string.sign_up_nickname_placeholder),
                     errors = currentState.nicknameFieldErrors,
                     imeAction = ImeAction.Done,
                     keyboardActions = {
@@ -106,7 +106,7 @@ fun SignUpNicknameScreen(
                 )
                 Text(
                     modifier = Modifier.padding(vertical = 4.dp),
-                    text = "∙  한글, 영문, 숫자 입력 가능 (2~15자)\n∙  중복 닉네임은 불가",
+                    text = stringResource(R.string.sign_up_nickname_guide),
                     style = MainThemeFont.Caption,
                     color = MainThemeColor.Gray3,
                 )
@@ -121,9 +121,17 @@ fun SignUpNicknameScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
-                    text = "다음",
-                    onClick = { viewModel.handleIntent(Navigate(SignUpProfile)) },
-                    enabled = currentState.nickname.isNotEmpty() && currentState.nicknameFieldErrors.isEmpty(),
+                    text =
+                        if (currentState.isCheckingNickname) {
+                            stringResource(R.string.sign_up_nickname_checking)
+                        } else {
+                            stringResource(R.string.sign_up_next)
+                        },
+                    onClick = { viewModel.handleIntent(SignUpCommonIntent.CheckNicknameDuplicate) },
+                    enabled =
+                        currentState.nickname.isNotEmpty() &&
+                            currentState.nicknameFieldErrors.isEmpty() &&
+                            !currentState.isCheckingNickname,
                 )
             }
         }
