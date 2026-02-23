@@ -22,7 +22,6 @@ class QuickShootViewModel
     @Inject
     constructor(
         private val photographerRepository: PhotographerRepository,
-        private val displayMetricsUtil: com.hm.picplz.common.util.DisplayMetricsUtil,
         private val locationService: LocationService,
     ) : ViewModel() {
         private val _state = MutableStateFlow(QuickShootState.idle())
@@ -32,7 +31,7 @@ class QuickShootViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         private val locationHandler = LocationHandler()
-        private val offsetGenerator = OffsetGenerator(displayMetricsUtil)
+        private val offsetGenerator = OffsetGenerator()
         private val photographerSearchHandler = PhotographerSearchHandler(offsetGenerator)
 
         fun handleIntent(intent: QuickShootIntent) {
