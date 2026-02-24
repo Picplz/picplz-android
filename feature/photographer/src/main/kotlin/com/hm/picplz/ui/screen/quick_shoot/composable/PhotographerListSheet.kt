@@ -15,13 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,13 +31,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.ui.screen.quick_shoot.QuickShootIntent
-import com.hm.picplz.ui.screen.quick_shoot.QuickShootViewModel
+import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
 
 data class StatusTagData(
@@ -63,11 +59,11 @@ private val vibeTags =
 
 @Composable
 fun PhotographerListSheet(
-    viewModel: QuickShootViewModel = hiltViewModel(),
-    mainNavController: NavHostController,
+    photographers: FilteredPhotographers,
+    selectedSortType: QuickShootSortType,
+    onSortClick: () -> Unit,
+    onPhotographerClick: (Long) -> Unit,
 ) {
-    val currentState = viewModel.state.collectAsState().value
-
     val listState = rememberLazyListState()
     val nestedScrollConnection =
         remember {
@@ -116,13 +112,10 @@ fun PhotographerListSheet(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier =
-                Modifier.clickable {
-                    viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(true))
-                },
+            modifier = Modifier.clickable(onClick = onSortClick),
         ) {
             Text(
-                text = currentState.selectedSortType.label,
+                text = selectedSortType.label,
                 color = MainThemeColor.Gray5,
             )
             Spacer(modifier = Modifier.width(4.dp))
@@ -134,16 +127,22 @@ fun PhotographerListSheet(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
+
+        val allPhotographers = photographers.active + photographers.inactive
+
         LazyColumn(
             state = listState,
             modifier = Modifier.nestedScroll(nestedScrollConnection),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            currentState.nearbyPhotographers.let { photographers ->
-                items(photographers.active + photographers.inactive) { photographer ->
-                    PhotographerCard(
-                        photographer = photographer,
-                        mainNavController = mainNavController,
+            itemsIndexed(allPhotographers) { index, photographer ->
+                PhotographerCard(
+                    photographer = photographer,
+                    onClick = { onPhotographerClick(photographer.id) },
+                )
+                if (index < allPhotographers.lastIndex) {
+                    HorizontalDivider(
+                        color = MainThemeColor.Gray2,
+                        thickness = 1.dp,
                     )
                 }
             }
@@ -151,10 +150,38 @@ fun PhotographerListSheet(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun PhotographerListScreenPreview() {
-    val mainNavController = rememberNavController()
-
-    PhotographerListSheet(mainNavController = mainNavController)
+private fun PhotographerListSheetPreview() {
+    PhotographerListSheet(
+        photographers =
+            FilteredPhotographers(
+                active =
+                    listOf(
+                        Photographer(
+                            id = 1,
+                            name = "작가1",
+                            profileImageUri = "https://picsum.photos/200",
+                            isActive = true,
+                            distance = 100,
+                            photoMoods = listOf("을지로 감성", "키치 감성"),
+                        ),
+                    ),
+                inactive =
+                    listOf(
+                        Photographer(
+                            id = 2,
+                            name = "작가2",
+                            profileImageUri = "https://picsum.photos/201",
+                            isActive = false,
+                            distance = 250,
+                            photoMoods = listOf("MZ 감성"),
+                        ),
+                    ),
+            ),
+        selectedSortType = QuickShootSortType.DISTANCE,
+        onSortClick = {},
+        onPhotographerClick = {},
+    )
 }

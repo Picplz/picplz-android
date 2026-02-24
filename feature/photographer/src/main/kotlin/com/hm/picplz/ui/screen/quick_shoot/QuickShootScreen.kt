@@ -159,7 +159,16 @@ fun QuickShootScreen(
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
                 sheetContent = {
-                    PhotographerListSheet(mainNavController = mainNavController)
+                    PhotographerListSheet(
+                        photographers = currentState.nearbyPhotographers,
+                        selectedSortType = currentState.selectedSortType,
+                        onSortClick = {
+                            viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(true))
+                        },
+                        onPhotographerClick = { id ->
+                            mainNavController.navigate(DetailPhotographer(id.toInt()))
+                        },
+                    )
                 },
                 scaffoldState = scaffoldState,
                 navigationBarPadding = true,

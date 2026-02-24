@@ -71,8 +71,7 @@ fun PhotographerSheet(
         ) {
             ActiveStatusBadge(text = "바로 촬영")
             DistanceText(
-                distance = photographer.distance.toString(),
-                duration = "도보 10분 거리",
+                distance = photographer.distance,
                 modifier =
                     Modifier
                         .padding(start = 4.dp),
