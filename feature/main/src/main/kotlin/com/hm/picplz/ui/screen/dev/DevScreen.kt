@@ -1,8 +1,12 @@
 package com.hm.picplz.ui.screen.dev
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -75,6 +79,20 @@ fun DevScreen(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(8.dp))
+
+            // === Token ===
+            SectionTitle("Token")
+            DevButton("📋 현재 토큰 복사") {
+                val prefs = context.getSharedPreferences("picplz_auth", Context.MODE_PRIVATE)
+                val token = prefs.getString("access_token", null)
+                if (token != null) {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("token", token))
+                    Toast.makeText(context, "토큰 복사됨 (${token.take(20)}...)", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "저장된 토큰 없음", Toast.LENGTH_SHORT).show()
+                }
+            }
 
             // === Auth ===
             SectionTitle("Auth")
