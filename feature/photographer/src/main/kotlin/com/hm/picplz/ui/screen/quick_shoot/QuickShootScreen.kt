@@ -229,62 +229,71 @@ fun QuickShootScreen(
                                 )
                             }
 
-                            val boxOffset by animateOffsetAsState(
-                                targetValue = currentState.centerOffset ?: Offset.Zero,
-                                animationSpec =
-                                    spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                                        stiffness = Spring.StiffnessLow,
-                                    ),
-                                label = "boxAnimation",
-                            )
+                            val entirePhotographers =
+                                currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
+                            val isEmpty =
+                                entirePhotographers.isEmpty() &&
+                                    !currentState.isSearchingPhotographer &&
+                                    currentState.userLocation != null
 
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .fillMaxSize()
-                                        .offset(boxOffset.x.dp, boxOffset.y.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Image(
-                                    painter = painterResource(R.drawable.multicircle),
-                                    contentDescription = "범위 지정 이미지",
-                                    contentScale = ContentScale.FillWidth,
+                            if (isEmpty) {
+                                QuickShootEmptyState()
+                            } else {
+                                val boxOffset by animateOffsetAsState(
+                                    targetValue = currentState.centerOffset ?: Offset.Zero,
+                                    animationSpec =
+                                        spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessLow,
+                                        ),
+                                    label = "boxAnimation",
+                                )
+
+                                Box(
                                     modifier =
                                         Modifier
-                                            .scale(1.5f),
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.center_char),
-                                    contentDescription = "작가 탐색 중앙 캐릭터",
-                                )
-                                val entirePhotographer =
-                                    currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
-                                entirePhotographer.forEach { photographer ->
-                                    val offset =
-                                        currentState.randomOffsets[photographer.id]
-                                            ?: return@forEach
-                                    val isSelected = photographer.id == currentState.selectedPhotographerId
-                                    PhotographerProfile(
-                                        name = photographer.name,
-                                        profileImageUri = photographer.profileImageUri,
-                                        isActive = photographer.isActive,
-                                        isSelected = isSelected,
-                                        offset = offset,
-                                        distance = photographer.distance,
-                                        onClick = {
-                                            viewModel.handleIntent(
-                                                QuickShootIntent.SetSelectedPhotographerId(
-                                                    photographer.id,
-                                                ),
-                                            )
-                                            viewModel.handleIntent(
-                                                QuickShootIntent.CenterSelectedPhotographer(
-                                                    offset,
-                                                ),
-                                            )
-                                        },
+                                            .fillMaxSize()
+                                            .offset(boxOffset.x.dp, boxOffset.y.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Image(
+                                        painter = painterResource(R.drawable.multicircle),
+                                        contentDescription = "범위 지정 이미지",
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier =
+                                            Modifier
+                                                .scale(1.5f),
                                     )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.center_char),
+                                        contentDescription = "작가 탐색 중앙 캐릭터",
+                                    )
+                                    entirePhotographers.forEach { photographer ->
+                                        val offset =
+                                            currentState.randomOffsets[photographer.id]
+                                                ?: return@forEach
+                                        val isSelected = photographer.id == currentState.selectedPhotographerId
+                                        PhotographerProfile(
+                                            name = photographer.name,
+                                            profileImageUri = photographer.profileImageUri,
+                                            isActive = photographer.isActive,
+                                            isSelected = isSelected,
+                                            offset = offset,
+                                            distance = photographer.distance,
+                                            onClick = {
+                                                viewModel.handleIntent(
+                                                    QuickShootIntent.SetSelectedPhotographerId(
+                                                        photographer.id,
+                                                    ),
+                                                )
+                                                viewModel.handleIntent(
+                                                    QuickShootIntent.CenterSelectedPhotographer(
+                                                        offset,
+                                                    ),
+                                                )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -395,5 +404,59 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                     .padding(start = 20.dp, end = 20.dp, bottom = 47.dp),
             enabled = true,
         )
+    }
+}
+
+@Composable
+private fun QuickShootEmptyState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(R.drawable.multicircle),
+            contentDescription = "범위 표시",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.scale(1.5f),
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "주변에 바로 촬영 중인",
+                style = MainThemeFont.TitleSmall,
+                color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = "작가가 없습니다",
+                style = MainThemeFont.TitleSmall,
+                color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.empty_character),
+                contentDescription = "주변 작가 없음 캐릭터",
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "다른 지역으로",
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = "이동해 보는 건 어때요?",
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
