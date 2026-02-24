@@ -18,12 +18,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.MainThemeFont
+import com.hm.picplz.ui.theme.Pretendard
+
+private const val MAX_DISPLAY_AREAS = 3
+
+private fun formatActiveAreas(areas: List<String>): String {
+    if (areas.isEmpty()) return ""
+    val displayed = areas.take(MAX_DISPLAY_AREAS).joinToString(", ")
+    val remaining = areas.size - MAX_DISPLAY_AREAS
+    return if (remaining > 0) "$displayed 외 ${remaining}개" else displayed
+}
 
 @Composable
 fun PhotographerCard(
@@ -39,47 +51,63 @@ fun PhotographerCard(
                 .clickable(onClick = onClick)
                 .padding(vertical = 12.dp),
     ) {
+        AsyncImage(
+            model = photographer.profileImageUri,
+            contentDescription = "작가 카드 프로필",
+            contentScale = ContentScale.Crop,
+            modifier =
+                Modifier
+                    .size(88.dp)
+                    .clip(RoundedCornerShape(5.dp)),
+        )
+        Spacer(modifier = Modifier.width(10.dp))
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .height(88.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            AsyncImage(
-                model = photographer.profileImageUri,
-                contentDescription = "작가 카드 프로필",
-                contentScale = ContentScale.Crop,
-                modifier =
-                    Modifier
-                        .size(64.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            val vibeTags = photographer.photoMoods.map { "#$it" }
-            VibeTags(tags = vibeTags)
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(
-            modifier = Modifier.weight(1f),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = photographer.name,
-                    style = MainThemeFont.BodyBold,
-                    color = MainThemeColor.Black,
-                )
-                if (photographer.isActive) {
-                    ActiveStatusBadge(text = "바로 촬영")
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = photographer.name,
+                        style =
+                            TextStyle(
+                                fontFamily = Pretendard,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                lineHeight = 16.sp * 1.4,
+                            ),
+                        color = MainThemeColor.Black,
+                        modifier = Modifier.weight(1f),
+                    )
+                    if (photographer.isActive) {
+                        ActiveStatusBadge(text = "빠른촬영")
+                    }
+                }
+                if (photographer.activeAreas.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = formatActiveAreas(photographer.activeAreas),
+                        style =
+                            TextStyle(
+                                fontFamily = Pretendard,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                                lineHeight = 14.sp * 1.4,
+                            ),
+                        color = MainThemeColor.Gray4,
+                    )
                 }
             }
-            if (photographer.activeAreas.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = photographer.activeAreas.joinToString(" · "),
-                    style = MainThemeFont.Caption,
-                    color = MainThemeColor.Gray4,
-                )
+            val vibeTags = photographer.photoMoods.map { "#$it" }
+            if (vibeTags.isNotEmpty()) {
+                VibeTags(tags = vibeTags)
             }
         }
     }
@@ -93,12 +121,12 @@ private fun PhotographerCardPreview() {
         photographer =
             Photographer(
                 id = 1,
-                name = "작가1",
+                name = "유가영 작가",
                 profileImageUri = "https://picsum.photos/200",
                 isActive = true,
                 distance = 100,
-                photoMoods = listOf("을지로 감성", "키치 감성"),
-                activeAreas = listOf("종로구 무악동", "서대문구 충정로"),
+                photoMoods = listOf("을지로 감성", "MZ 감성", "MZ 감성"),
+                activeAreas = listOf("마포구", "구로구", "노원구", "강남구", "서초구", "용산구"),
             ),
         onClick = {},
     )

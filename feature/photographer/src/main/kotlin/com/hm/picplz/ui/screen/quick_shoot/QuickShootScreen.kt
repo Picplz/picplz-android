@@ -176,7 +176,7 @@ fun QuickShootScreen(
                     )
                 },
                 scaffoldState = scaffoldState,
-                sheetPeekHeight = 84.dp,
+                sheetPeekHeight = 76.dp,
                 navigationBarPadding = true,
             ) {
                 Column(
@@ -288,7 +288,7 @@ fun QuickShootScreen(
                                         painter = painterResource(id = R.drawable.center_char),
                                         contentDescription = "작가 탐색 중앙 캐릭터",
                                     )
-                                    entirePhotographers.forEach { photographer ->
+                                    currentState.nearbyPhotographers.active.forEach { photographer ->
                                         val offset =
                                             currentState.randomOffsets[photographer.id]
                                                 ?: return@forEach

@@ -30,34 +30,62 @@ class PhotographerRepositoryImpl
 
         companion object {
             // TODO: 백엔드 수정 후 삭제
+            @Suppress("MagicNumber")
             private val DUMMY_PHOTOGRAPHERS =
                 listOf(
                     Photographer(
                         id = 14,
-                        name = "서연",
+                        name = "유가영 작가",
                         profileImageUri = "https://picsum.photos/id/64/200",
-                        isActive = false,
+                        isActive = true,
                         distance = 80,
-                        photoMoods = listOf("CASUAL", "SIMPLE"),
-                        activeAreas = listOf("종로구 무악동", "서대문구 충정로"),
+                        photoMoods = listOf("을지로 감성", "MZ 감성"),
+                        activeAreas = listOf("마포구", "구로구", "노원구", "강남구", "서초구", "용산구"),
                     ),
                     Photographer(
                         id = 15,
-                        name = "도윤",
+                        name = "김도윤 작가",
                         profileImageUri = "https://picsum.photos/id/65/200",
-                        isActive = false,
+                        isActive = true,
                         distance = 200,
-                        photoMoods = listOf("VINTAGE", "HIP"),
-                        activeAreas = listOf("종로구 교남동", "중구 을지로"),
+                        photoMoods = listOf("빈티지", "힙한"),
+                        activeAreas = listOf("종로구", "중구"),
                     ),
                     Photographer(
                         id = 16,
-                        name = "유진",
+                        name = "박서준 작가",
                         profileImageUri = "https://picsum.photos/id/91/200",
+                        isActive = true,
+                        distance = 150,
+                        photoMoods = listOf("키치 감성", "퇴폐 감성", "MZ 감성"),
+                        activeAreas = listOf("마포구", "합정동", "이태원동"),
+                    ),
+                    Photographer(
+                        id = 17,
+                        name = "이하은 작가",
+                        profileImageUri = "https://picsum.photos/id/177/200",
                         isActive = false,
-                        distance = 350,
-                        photoMoods = listOf("DREAMY", "GORGEOUS"),
-                        activeAreas = listOf("마포구 연남동", "마포구 합정동", "용산구 이태원동"),
+                        distance = 300,
+                        photoMoods = listOf("드리미", "감성적인"),
+                        activeAreas = listOf("서대문구", "은평구"),
+                    ),
+                    Photographer(
+                        id = 18,
+                        name = "정민수 작가",
+                        profileImageUri = "https://picsum.photos/id/180/200",
+                        isActive = false,
+                        distance = 450,
+                        photoMoods = listOf("캐주얼", "심플"),
+                        activeAreas = listOf("강북구", "도봉구", "성북구", "동대문구"),
+                    ),
+                    Photographer(
+                        id = 19,
+                        name = "최유진 작가",
+                        profileImageUri = "https://picsum.photos/id/203/200",
+                        isActive = false,
+                        distance = 500,
+                        photoMoods = listOf("화려한", "고급스러운"),
+                        activeAreas = listOf("송파구", "강동구"),
                     ),
                 )
         }

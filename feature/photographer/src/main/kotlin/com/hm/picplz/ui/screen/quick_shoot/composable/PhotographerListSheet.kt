@@ -93,7 +93,7 @@ fun PhotographerListSheet(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.clickable(onClick = onSortClick),
