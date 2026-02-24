@@ -5,12 +5,12 @@ import com.hm.picplz.domain.model.FilteredPhotographers
 
 class OffsetGenerator {
     fun generateNonOverlappingOffsets(photographers: FilteredPhotographers): Map<Long, Offset> {
-        val allPhotographers = (photographers.active + photographers.inactive).take(MAX_VISIBLE_COUNT)
+        val activePhotographers = photographers.active.take(MAX_VISIBLE_COUNT)
         val slotIndices =
             SLOT_INDICES_BY_COUNT.getOrElse(
-                allPhotographers.size,
+                activePhotographers.size,
             ) { SLOT_INDICES_BY_COUNT[MAX_VISIBLE_COUNT]!! }
-        return allPhotographers
+        return activePhotographers
             .mapIndexed { index, photographer -> photographer.id to CLOCK_SLOTS[slotIndices[index]] }
             .toMap()
     }
