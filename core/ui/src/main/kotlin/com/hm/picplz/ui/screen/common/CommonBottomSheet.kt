@@ -38,16 +38,8 @@ fun CommonBottomSheetScaffold(
     scaffoldState: BottomSheetScaffoldState,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val systemNavBarHeight =
-        WindowInsets.navigationBars
-            .asPaddingValues()
-            .calculateBottomPadding()
-
     val appBottomNavHeight = LocalNavigationHeight.current
-
-    val totalBottomPadding =
-        systemNavBarHeight +
-            (if (navigationBarPadding) appBottomNavHeight else 0.dp)
+    val bottomNavOffset = if (navigationBarPadding) appBottomNavHeight else 0.dp
 
     BottomSheetScaffold(
         modifier =
@@ -80,14 +72,12 @@ fun CommonBottomSheetScaffold(
                 modifier =
                     Modifier
                         .padding(horizontal = 16.dp)
-                        .padding(bottom = if (navigationBarPadding) totalBottomPadding else 0.dp),
+                        .padding(bottom = bottomNavOffset),
             ) {
                 sheetContent()
             }
         },
-        sheetPeekHeight =
-            (sheetPeekHeight ?: 30.dp) +
-                (if (navigationBarPadding) totalBottomPadding else 0.dp),
+        sheetPeekHeight = (sheetPeekHeight ?: 30.dp) + bottomNavOffset,
         sheetShape = sheetShape,
         content = content,
     )
