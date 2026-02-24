@@ -3,7 +3,7 @@ package com.hm.picplz.ui.screen.quick_shoot
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.service.AddressService
+import com.hm.picplz.data.service.KakaoMapService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.domain.repository.PhotographerRepository
 import com.hm.picplz.ui.screen.quick_shoot.handler.LocationHandler
@@ -24,7 +24,7 @@ class QuickShootViewModel
     constructor(
         private val photographerRepository: PhotographerRepository,
         private val locationService: LocationService,
-        private val addressService: AddressService,
+        private val kakaoMapService: KakaoMapService,
     ) : ViewModel() {
         private val _state = MutableStateFlow(QuickShootState.idle())
         val state: StateFlow<QuickShootState> get() = _state
@@ -46,16 +46,9 @@ class QuickShootViewModel
 
                 is QuickShootIntent.GetAddress -> {
                     viewModelScope.launch {
-                        addressService.getNearbyAreas(
-                            rad = 1,
-                            lat = intent.coords.latitude,
-                            lng = intent.coords.longitude,
-                        )
-                            .onSuccess { areas ->
-                                val area = areas.firstOrNull()
-                                if (area != null) {
-                                    handleIntent(QuickShootIntent.SetAddress(area.name))
-                                }
+                        kakaoMapService.getAddressFromCoordinates(intent.coords)
+                            .onSuccess { address ->
+                                handleIntent(QuickShootIntent.SetAddress(address))
                             }
                             .onFailure { error ->
                                 Log.w("QuickShoot", "주소 조회 실패", error)

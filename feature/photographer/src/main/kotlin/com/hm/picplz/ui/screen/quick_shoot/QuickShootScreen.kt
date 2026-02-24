@@ -466,7 +466,7 @@ private fun QuickShootEmptyState() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.empty_character),
+                painter = painterResource(id = R.drawable.no_photographer),
                 contentDescription = "주변 작가 없음 캐릭터",
             )
 
