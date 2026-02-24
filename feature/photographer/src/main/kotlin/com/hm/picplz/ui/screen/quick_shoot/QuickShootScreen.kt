@@ -231,11 +231,16 @@ fun QuickShootScreen(
                                 AddressMarker(
                                     address = currentState.address,
                                 )
-                                RefetchButton(
-                                    onClick = {
-                                        viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
-                                    },
-                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    RefetchButton(
+                                        onClick = {
+                                            viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
+                                        },
+                                    )
+                                }
                             }
 
                             val entirePhotographers =
