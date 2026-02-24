@@ -49,7 +49,6 @@ import com.hm.picplz.navigation.model.PhotographerMain
 import com.hm.picplz.navigation.model.QuickShoot
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.navigation.model.ReviewPhotographer
-import com.hm.picplz.navigation.model.SignUpClient
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpIntro
 import com.hm.picplz.navigation.model.SignUpPhotographer
@@ -107,7 +106,6 @@ fun DevScreen(navController: NavHostController) {
             DevButton("SignUpProfile (프로필 이미지)") {
                 navController.navigate(SignUpIntro(startAt = "profile"))
             }
-            DevButton("SignUpClient") { navController.navigate(SignUpClient(userInfo = emptyUserData)) }
             DevButton("SignUpPhotographer") { navController.navigate(SignUpPhotographer(userInfo = emptyUserData)) }
             DevButton("SignUpDevice (Direct)") { navController.navigate(SignUpPhotographer(startAt = "device")) }
             DevButton("SignUpPhotographyVibe (분위기 키워드)") {

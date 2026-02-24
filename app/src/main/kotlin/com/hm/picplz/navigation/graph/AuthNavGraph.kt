@@ -7,12 +7,10 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.hm.picplz.navigation.UserTypeMap
 import com.hm.picplz.navigation.model.Login
-import com.hm.picplz.navigation.model.SignUpClient
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpIntro
 import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.screen.login.LoginIntroScreen
-import com.hm.picplz.ui.screen.sign_up.sign_up_client.SignUpClientScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
@@ -33,14 +31,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
             mainNavController = navController,
             profileImageUri = args.profileImageUri,
             startAt = args.startAt,
-        )
-    }
-
-    composable<SignUpClient>(typeMap = UserTypeMap) { backStackEntry ->
-        val args = backStackEntry.toRoute<SignUpClient>()
-        SignUpClientScreen(
-            navController = navController,
-            _userInfo = args.userInfo,
         )
     }
 

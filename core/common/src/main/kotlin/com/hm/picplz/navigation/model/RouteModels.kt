@@ -22,9 +22,6 @@ data class SignUpIntro(
 ) : NavigationRoute
 
 @Serializable
-data class SignUpClient(val userInfo: User) : NavigationRoute
-
-@Serializable
 data class SignUpPhotographer(
     val userInfo: User? = null,
     val startAt: String? = null,
