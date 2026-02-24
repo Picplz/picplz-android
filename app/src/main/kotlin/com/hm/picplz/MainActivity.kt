@@ -66,9 +66,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
             setOnExitAnimationListener { screen ->
+                val iconView =
+                    try {
+                        screen.iconView
+                    } catch (_: NullPointerException) {
+                        screen.remove()
+                        return@setOnExitAnimationListener
+                    }
                 val fadeOut =
                     ObjectAnimator.ofFloat(
-                        screen.iconView,
+                        iconView,
                         View.ALPHA,
                         1.0f,
                         0.0f,
