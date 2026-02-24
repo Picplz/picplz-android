@@ -1,7 +1,11 @@
 package com.hm.picplz.data.service
 
 import com.hm.picplz.data.mapper.toDomain
+import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.model.CreatePhotographerRequest
+import com.hm.picplz.data.model.PhotographerInfo
+import com.hm.picplz.data.model.PhotographerRatingDto
+import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.FilteredPhotographers
 import javax.inject.Inject
@@ -14,6 +18,17 @@ interface PhotographerService {
         latitude: Double,
         distance: Long,
     ): Result<FilteredPhotographers>
+
+    suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerInfo>
+
+    suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto>
+
+    suspend fun getPhotographerReviews(
+        photographerId: Long,
+        page: Int = 0,
+        size: Int = 10,
+        sort: String = "RECOMMENDED",
+    ): Result<ReviewListDto>
 }
 
 class PhotographerServiceImpl
@@ -37,4 +52,17 @@ class PhotographerServiceImpl
                 )
             }
         }
+
+        override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerInfo> =
+            photographerSource.getPhotographerInfo(photographerId).map { it.toPhotographerInfo() }
+
+        override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
+            photographerSource.getPhotographerRating(photographerId)
+
+        override suspend fun getPhotographerReviews(
+            photographerId: Long,
+            page: Int,
+            size: Int,
+            sort: String,
+        ): Result<ReviewListDto> = photographerSource.getPhotographerReviews(photographerId, page, size, sort)
     }

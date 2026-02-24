@@ -303,15 +303,8 @@ fun QuickShootScreen(
                                             offset = offset,
                                             distance = photographer.distance,
                                             onClick = {
-                                                viewModel.handleIntent(
-                                                    QuickShootIntent.SetSelectedPhotographerId(
-                                                        photographer.id,
-                                                    ),
-                                                )
-                                                viewModel.handleIntent(
-                                                    QuickShootIntent.CenterSelectedPhotographer(
-                                                        offset,
-                                                    ),
+                                                mainNavController.navigate(
+                                                    DetailPhotographer(photographer.id.toInt()),
                                                 )
                                             },
                                         )
