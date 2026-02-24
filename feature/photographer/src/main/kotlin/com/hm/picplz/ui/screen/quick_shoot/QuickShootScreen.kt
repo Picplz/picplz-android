@@ -176,6 +176,7 @@ fun QuickShootScreen(
                     )
                 },
                 scaffoldState = scaffoldState,
+                sheetPeekHeight = 84.dp,
                 navigationBarPadding = true,
             ) {
                 Column(
