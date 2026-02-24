@@ -11,6 +11,7 @@ fun NearbyPhotographerCard.toDomain(): Photographer {
         isActive = active == "Y",
         distance = distance,
         photoMoods = photoMoods,
+        activeAreas = activeAreas,
     )
 }
 

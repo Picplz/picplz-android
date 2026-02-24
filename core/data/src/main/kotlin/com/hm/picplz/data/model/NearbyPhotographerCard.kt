@@ -7,4 +7,5 @@ data class NearbyPhotographerCard(
     val active: String,
     val distance: Long,
     val photoMoods: List<String>,
+    val activeAreas: List<String> = emptyList(),
 )
