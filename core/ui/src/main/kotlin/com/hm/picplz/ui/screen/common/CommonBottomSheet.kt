@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
@@ -27,12 +25,15 @@ import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.theme.LocalNavigationHeight
 import com.hm.picplz.ui.theme.MainThemeColor
 
+private val dragHandleHeight = 33.dp // top 10 + handle 4 + bottom 19
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun CommonBottomSheetScaffold(
     modifier: Modifier = Modifier,
     sheetContent: @Composable ColumnScope.() -> Unit,
     sheetPeekHeight: Dp? = 30.dp,
+    sheetMaxHeight: Dp? = null,
     sheetShape: Shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
     navigationBarPadding: Boolean = false,
     scaffoldState: BottomSheetScaffoldState,
@@ -40,6 +41,11 @@ fun CommonBottomSheetScaffold(
 ) {
     val appBottomNavHeight = LocalNavigationHeight.current
     val bottomNavOffset = if (navigationBarPadding) appBottomNavHeight else 0.dp
+
+    val contentMaxHeightModifier =
+        sheetMaxHeight?.let {
+            Modifier.heightIn(max = it - bottomNavOffset - dragHandleHeight)
+        } ?: Modifier
 
     BottomSheetScaffold(
         modifier =
@@ -70,7 +76,7 @@ fun CommonBottomSheetScaffold(
         sheetContent = {
             Column(
                 modifier =
-                    Modifier
+                    contentMaxHeightModifier
                         .padding(horizontal = 16.dp)
                         .padding(bottom = bottomNavOffset),
             ) {

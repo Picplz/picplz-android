@@ -47,14 +47,6 @@ private val statusTags =
         StatusTagData("빠른촬영 가능", R.drawable.tag_camera),
     )
 
-private val vibeTags =
-    listOf(
-        "#을지로 감성",
-        "#키치 감성",
-        "#MZ 감성",
-        "#퇴폐 감성",
-    )
-
 @Composable
 fun PhotographerListSheet(
     photographers: FilteredPhotographers,
