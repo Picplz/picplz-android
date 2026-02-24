@@ -44,7 +44,7 @@ fun CommonBottomSheetScaffold(
 
     val contentMaxHeightModifier =
         sheetMaxHeight?.let {
-            Modifier.heightIn(max = it - bottomNavOffset - dragHandleHeight)
+            Modifier.heightIn(max = it - dragHandleHeight)
         } ?: Modifier
 
     BottomSheetScaffold(
