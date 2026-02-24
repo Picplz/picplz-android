@@ -47,7 +47,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -398,9 +401,16 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "위치 접근 권한이 필요해요",
+                text =
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = MainThemeColor.Green120)) {
+                            append("위치 접근 권한")
+                        }
+                        withStyle(SpanStyle(color = MainThemeColor.Black)) {
+                            append("이 필요해요")
+                        }
+                    },
                 style = MainThemeFont.Title,
-                color = MainThemeColor.Green120,
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(32.dp))
