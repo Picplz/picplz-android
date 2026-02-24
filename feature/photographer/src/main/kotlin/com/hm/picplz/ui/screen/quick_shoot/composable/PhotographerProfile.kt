@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
@@ -34,7 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
@@ -68,8 +69,8 @@ fun PhotographerProfile(
             label = "imageSize",
         )
 
-        Image(
-            painter = rememberAsyncImagePainter(model = profileImageUri),
+        AsyncImage(
+            model = profileImageUri,
             contentDescription = "작가 위치",
             colorFilter =
                 if (!isActive) {
@@ -81,6 +82,7 @@ fun PhotographerProfile(
                 } else {
                     null
                 },
+            contentScale = ContentScale.Crop,
             modifier =
                 Modifier
                     .size(imageSize)
@@ -163,7 +165,7 @@ fun PhotographerProfile(
                         fontFamily = Pretendard,
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
-                        lineHeight = 124.sp * 1.4,
+                        lineHeight = 12.sp * 1.4,
                         letterSpacing = 0.sp,
                     ),
                 color = MainThemeColor.Gray4,

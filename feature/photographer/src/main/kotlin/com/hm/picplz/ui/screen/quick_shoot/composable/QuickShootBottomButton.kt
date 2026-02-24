@@ -8,12 +8,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
-
-private val SlateBlue = Color(0xFF7A9FB0)
 
 private object QuickShootBottomButtonDefaults {
     val VerticalPadding = 14.dp
@@ -33,7 +30,7 @@ fun QuickShootBottomButton(
         modifier = modifier.fillMaxWidth(),
         colors =
             ButtonDefaults.buttonColors(
-                containerColor = SlateBlue,
+                containerColor = MainThemeColor.SlateBlue,
                 contentColor = MainThemeColor.White,
                 disabledContainerColor = MainThemeColor.Gray3,
                 disabledContentColor = MainThemeColor.Gray2,

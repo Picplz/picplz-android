@@ -122,8 +122,10 @@ fun QuickShootScreen(
     }
 
     LaunchedEffect(currentState.userLocation) {
-        if (currentState.userLocation != null && currentState.locationPermissionGranted) {
+        val userLocation = currentState.userLocation
+        if (userLocation != null && currentState.locationPermissionGranted) {
             viewModel.handleIntent(QuickShootIntent.FetchNearbyPhotographers)
+            viewModel.handleIntent(QuickShootIntent.GetAddress(userLocation))
         }
     }
 
@@ -334,6 +336,7 @@ fun QuickShootScreen(
 
             QuickShootSortBottomSheet(
                 visible = currentState.showSortSheet,
+                selectedSortType = currentState.selectedSortType,
                 onDismiss = {
                     viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(false))
                 },

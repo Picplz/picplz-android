@@ -29,6 +29,7 @@ enum class QuickShootSortType(val label: String) {
 @Composable
 fun QuickShootSortBottomSheet(
     visible: Boolean,
+    selectedSortType: QuickShootSortType,
     onDismiss: () -> Unit,
     onSelect: (QuickShootSortType) -> Unit,
 ) {
@@ -47,6 +48,7 @@ fun QuickShootSortBottomSheet(
                     .padding(horizontal = 15.dp),
         ) {
             QuickShootSortType.entries.forEachIndexed { index, type ->
+                val isSelected = type == selectedSortType
                 Box(
                     modifier =
                         Modifier
@@ -61,6 +63,7 @@ fun QuickShootSortBottomSheet(
                     Text(
                         text = type.label,
                         style = MainThemeFont.TitleSmall,
+                        color = if (isSelected) MainThemeColor.Black else MainThemeColor.Gray3,
                     )
                 }
                 if (index != QuickShootSortType.entries.toTypedArray().lastIndex) {
