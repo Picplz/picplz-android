@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.detail_reservation.composable
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,15 +20,28 @@ import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.KakaoMapView
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
 
 @Composable
 fun DetailReservationMap(
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
+    initialPosition: LatLng = LatLng.from(37.406960, 127.115587),
 ) {
     Box(modifier = modifier) {
         KakaoMapView(
             modifier = Modifier.fillMaxSize(),
+            initialPosition = initialPosition,
+            onMapReady = { kakaoMap ->
+                kakaoMap.labelManager?.layer?.addLabel(
+                    LabelOptions.from(MARKER_ID, initialPosition).setStyles(
+                        markerStyle(R.drawable.center_char_circle, ZOOM_LEVEL_DEFAULT),
+                        markerStyle(R.drawable.center_char_circle_1_5, ZOOM_LEVEL_DETAILED),
+                    ),
+                )
+            },
         )
 
         CloseButton(
@@ -63,6 +77,20 @@ private fun CloseButton(
         )
     }
 }
+
+private fun markerStyle(
+    @DrawableRes resId: Int,
+    zoomLevel: Int,
+): LabelStyle =
+    LabelStyle
+        .from(resId)
+        .setZoomLevel(zoomLevel)
+        .setAnchorPoint(ANCHOR_CENTER, ANCHOR_CENTER)
+
+private const val ZOOM_LEVEL_DEFAULT = 0
+private const val ZOOM_LEVEL_DETAILED = 10
+private const val ANCHOR_CENTER = 0.5f
+private const val MARKER_ID = "reservation_marker"
 
 @Preview
 @Composable
