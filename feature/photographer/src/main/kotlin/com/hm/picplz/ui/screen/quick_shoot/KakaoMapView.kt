@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer
+package com.hm.picplz.ui.screen.quick_shoot
 
 import android.util.Log
 import android.view.ViewGroup

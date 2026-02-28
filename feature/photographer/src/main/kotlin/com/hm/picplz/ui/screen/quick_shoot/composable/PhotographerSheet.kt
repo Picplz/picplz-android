@@ -1,25 +1,20 @@
-package com.hm.picplz.ui.screen.search_photographer.composable
+package com.hm.picplz.ui.screen.quick_shoot.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,13 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.navigation.model.DetailPhotographer
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
+import com.hm.picplz.ui.screen.quick_shoot.QuickShootViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 
 @Composable
 fun PhotographerSheet(
-    viewModel: SearchPhotographerViewModel = hiltViewModel(),
+    viewModel: QuickShootViewModel = hiltViewModel(),
     mainNavController: NavController,
 ) {
     val currentState = viewModel.state.collectAsState().value
@@ -51,7 +46,7 @@ fun PhotographerSheet(
                 .padding(top = 12.dp)
                 .clickable {
                     selectedPhotographer?.let {
-                        mainNavController.navigate(DetailPhotographer(it.id))
+                        mainNavController.navigate(DetailPhotographer(it.id.toInt()))
                     }
                 },
     ) {
@@ -80,19 +75,6 @@ fun PhotographerSheet(
                     Modifier
                         .padding(start = 4.dp),
             )
-            Text(
-                text = selectedPhotographer?.socialAccount ?: "",
-                style =
-                    TextStyle(
-                        fontFamily = Pretendard,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        letterSpacing = 0.sp,
-                    ),
-                modifier =
-                    Modifier
-                        .padding(start = 4.dp),
-            )
         }
         Row(
             modifier =
@@ -109,39 +91,10 @@ fun PhotographerSheet(
                         .padding(start = 4.dp),
             )
         }
-        val vibeTags =
-            listOf(
-                "#을지로 감성",
-                "#키치 감성",
-                "#MZ 감성",
-                "#퇴폐 감성",
-            )
+        val vibeTags = selectedPhotographer?.photoMoods?.map { "#$it" } ?: emptyList()
         VibeTags(
             modifier = Modifier.padding(top = 20.dp),
             tags = vibeTags,
         )
-        LazyRow(
-            modifier =
-                Modifier
-                    .padding(top = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            selectedPhotographer?.portfolioPhotos?.let { photos ->
-                itemsIndexed(photos) { _, photoUrl ->
-                    Image(
-                        painter =
-                            rememberAsyncImagePainter(
-                                model = photoUrl,
-                                contentScale = ContentScale.Crop,
-                            ),
-                        contentDescription = "포트폴리오 사진",
-                        modifier =
-                            Modifier
-                                .size(100.dp)
-                                .clip(RoundedCornerShape(5.dp)),
-                    )
-                }
-            }
-        }
     }
 }

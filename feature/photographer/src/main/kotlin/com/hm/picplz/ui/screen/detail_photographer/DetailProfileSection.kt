@@ -32,7 +32,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.search_photographer.composable.ActiveStatusBadge
+import com.hm.picplz.ui.screen.quick_shoot.composable.ActiveStatusBadge
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 

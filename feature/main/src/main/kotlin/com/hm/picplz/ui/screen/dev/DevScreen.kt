@@ -1,5 +1,8 @@
 package com.hm.picplz.ui.screen.dev
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,9 +42,9 @@ import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.PhotographerMain
+import com.hm.picplz.navigation.model.QuickShoot
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.navigation.model.ReviewPhotographer
-import com.hm.picplz.navigation.model.SearchPhotographer
 import com.hm.picplz.navigation.model.SignUpClient
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpIntro
@@ -49,6 +53,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
 fun DevScreen(navController: NavHostController) {
+    val context = LocalContext.current
     Scaffold(
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
@@ -109,7 +114,15 @@ fun DevScreen(navController: NavHostController) {
 
             // === Photographer ===
             SectionTitle("Photographer")
-            DevButton("SearchPhotographer (지도)") { navController.navigate(SearchPhotographer) }
+            DevButton("QuickShoot (빠른촬영)") { navController.navigate(QuickShoot) }
+            DevButton("QuickShoot (권한 설정 → 거부 후 테스트)") {
+                context.startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:${context.packageName}"),
+                    ),
+                )
+            }
             DevButton("PhotographerMain (작가홈)") { navController.navigate(PhotographerMain) }
             DevButton("PhotographerEquipmentSetting") {
                 navController.navigate(

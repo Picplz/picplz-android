@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer.composable
+package com.hm.picplz.ui.screen.quick_shoot.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer
+package com.hm.picplz.ui.screen.quick_shoot
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Dp
@@ -6,22 +6,23 @@ import androidx.compose.ui.unit.dp
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.kakao.vectormap.LatLng
 
-data class SearchPhotographerState(
+data class QuickShootState(
+    val locationPermissionGranted: Boolean = false,
     val address: String? = null,
     val centerCoords: LatLng = LatLng.from(37.406960, 127.115587),
     val userLocation: LatLng? = null,
     val isFetchingGPS: Boolean = false,
     val isSearchingPhotographer: Boolean = false,
     val nearbyPhotographers: FilteredPhotographers = FilteredPhotographers(),
-    val randomOffsets: Map<Int, Offset> = emptyMap(),
-    val selectedPhotographerId: Int? = null,
+    val randomOffsets: Map<Long, Offset> = emptyMap(),
+    val selectedPhotographerId: Long? = null,
     val sheetMaxHeight: Dp = 750.dp,
     val sheetPeekHeight: Dp? = 114.dp,
     val centerOffset: Offset? = null,
 ) {
     companion object {
-        fun idle(): SearchPhotographerState {
-            return SearchPhotographerState()
+        fun idle(): QuickShootState {
+            return QuickShootState()
         }
     }
 }

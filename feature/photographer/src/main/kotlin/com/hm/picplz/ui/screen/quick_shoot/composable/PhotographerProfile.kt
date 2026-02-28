@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer.composable
+package com.hm.picplz.ui.screen.quick_shoot.composable
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.Spring
@@ -43,16 +43,14 @@ import com.hm.picplz.ui.theme.Pretendard
 @Composable
 fun PhotographerProfile(
     name: String,
-    profileImageUri: String,
+    profileImageUri: String?,
     isActive: Boolean,
     isSelected: Boolean,
     offset: Offset,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    distance: Double?,
+    distance: Long,
 ) {
-    val formattedDistance = String.format("%.0f", distance)
-
     Column(
         modifier =
             modifier
@@ -159,7 +157,7 @@ fun PhotographerProfile(
                 modifier =
                     Modifier
                         .zIndex(1f),
-                text = "${formattedDistance}m",
+                text = "${distance}m",
                 style =
                     TextStyle(
                         fontFamily = Pretendard,

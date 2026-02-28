@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.search_photographer.composable
+package com.hm.picplz.ui.screen.quick_shoot.composable
 
 import ChipHeight
 import CommonChip
@@ -36,7 +36,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.ui.screen.search_photographer.SearchPhotographerViewModel
+import com.hm.picplz.ui.screen.quick_shoot.QuickShootViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
 
 data class StatusTagData(
@@ -61,7 +61,7 @@ private val vibeTags =
 
 @Composable
 fun PhotographerListSheet(
-    viewModel: SearchPhotographerViewModel = hiltViewModel(),
+    viewModel: QuickShootViewModel = hiltViewModel(),
     mainNavController: NavHostController,
 ) {
     val currentState = viewModel.state.collectAsState().value
