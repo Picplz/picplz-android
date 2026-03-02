@@ -88,3 +88,4 @@ SignUpPhotographerViewModel
 | LoginViewModel | ✅ Channel |
 | SignUpCommonViewModel | ✅ Channel |
 | SignUpPhotographerViewModel | ✅ Channel |
+| SignUpClientViewModel | ✅ Channel (Boy Scout migrated) |

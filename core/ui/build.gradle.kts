@@ -45,5 +45,8 @@ dependencies {
     // Navigation (for NavController types)
     implementation(libs.androidx.navigation.compose)
 
+    // Kakao Map
+    implementation(libs.kakao.maps)
+
     debugImplementation(libs.androidx.ui.tooling)
 }
