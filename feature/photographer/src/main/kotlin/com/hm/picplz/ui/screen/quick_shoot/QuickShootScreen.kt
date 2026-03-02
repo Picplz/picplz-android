@@ -25,9 +25,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -44,6 +47,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +58,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,7 +68,7 @@ import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
-import com.hm.picplz.ui.screen.common.CommonModalBottomSheet
+import com.hm.picplz.ui.screen.common.CommonGrayDragHandle
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
@@ -146,7 +153,10 @@ fun QuickShootScreen(
             bottomSheetState = bottomSheetState,
         )
 
-    val modalSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val modalSheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
 
     val selectedPhotographer =
         currentState.selectedPhotographerId?.let { selectedId ->
@@ -303,8 +313,10 @@ fun QuickShootScreen(
                                             offset = offset,
                                             distance = photographer.distance,
                                             onClick = {
-                                                mainNavController.navigate(
-                                                    DetailPhotographer(photographer.id.toInt()),
+                                                viewModel.handleIntent(
+                                                    QuickShootIntent.SetSelectedPhotographerId(
+                                                        photographer.id,
+                                                    ),
                                                 )
                                             },
                                         )
@@ -317,12 +329,32 @@ fun QuickShootScreen(
             }
 
             if (selectedPhotographer != null) {
-                CommonModalBottomSheet(
+                val sheetNestedScrollConnection =
+                    remember {
+                        object : NestedScrollConnection {
+                            override fun onPostScroll(
+                                consumed: Offset,
+                                available: Offset,
+                                source: NestedScrollSource,
+                            ): Offset = available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+
+                            override suspend fun onPostFling(
+                                consumed: Velocity,
+                                available: Velocity,
+                            ): Velocity = available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+                        }
+                    }
+                ModalBottomSheet(
                     onDismissRequest = {
                         viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
                         viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
                     },
                     sheetState = modalSheetState,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                    containerColor = MainThemeColor.White,
+                    scrimColor = MainThemeColor.Black.copy(alpha = 0.4f),
+                    dragHandle = { CommonGrayDragHandle() },
+                    modifier = Modifier.wrapContentHeight().nestedScroll(sheetNestedScrollConnection),
                 ) {
                     PhotographerSheet(
                         photographer = selectedPhotographer,

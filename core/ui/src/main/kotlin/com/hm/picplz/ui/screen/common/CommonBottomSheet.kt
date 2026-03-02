@@ -53,26 +53,7 @@ fun CommonBottomSheetScaffold(
                 .safeDrawingPadding(),
         scaffoldState = scaffoldState,
         sheetContainerColor = MainThemeColor.White,
-        sheetDragHandle = {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 19.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Spacer(
-                    modifier =
-                        Modifier
-                            .width(32.dp)
-                            .height(4.dp)
-                            .background(
-                                color = MainThemeColor.Gray2,
-                                shape = RoundedCornerShape(2.dp),
-                            ),
-                )
-            }
-        },
+        sheetDragHandle = { CommonGrayDragHandle() },
         sheetContent = {
             Column(
                 modifier =
@@ -87,4 +68,26 @@ fun CommonBottomSheetScaffold(
         sheetShape = sheetShape,
         content = content,
     )
+}
+
+@Composable
+fun CommonGrayDragHandle() {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 19.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Spacer(
+            modifier =
+                Modifier
+                    .width(32.dp)
+                    .height(4.dp)
+                    .background(
+                        color = MainThemeColor.Gray2,
+                        shape = RoundedCornerShape(2.dp),
+                    ),
+        )
+    }
 }

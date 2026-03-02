@@ -14,6 +14,8 @@ fun NearbyPhotographerCard.toDomain(): Photographer {
         distance = distance,
         photoMoods = photoMoods,
         activeAreas = activeAreas,
+        instagram = "@photographer_$photographerId",
+        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${photographerId * 10 + it}" },
     )
 }
 

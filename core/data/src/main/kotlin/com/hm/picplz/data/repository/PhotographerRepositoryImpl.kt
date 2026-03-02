@@ -41,6 +41,8 @@ class PhotographerRepositoryImpl
                         distance = 80,
                         photoMoods = listOf("을지로 감성", "MZ 감성"),
                         activeAreas = listOf("마포구", "구로구", "노원구", "강남구", "서초구", "용산구"),
+                        instagram = "@gayoung_photo",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${14 * 10 + it}" },
                     ),
                     Photographer(
                         id = 15,
@@ -50,6 +52,8 @@ class PhotographerRepositoryImpl
                         distance = 200,
                         photoMoods = listOf("빈티지", "힙한"),
                         activeAreas = listOf("종로구", "중구"),
+                        instagram = "@doyoon.k",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${15 * 10 + it}" },
                     ),
                     Photographer(
                         id = 16,
@@ -59,6 +63,8 @@ class PhotographerRepositoryImpl
                         distance = 150,
                         photoMoods = listOf("키치 감성", "퇴폐 감성", "MZ 감성"),
                         activeAreas = listOf("마포구", "합정동", "이태원동"),
+                        instagram = "@seojun_studio",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${16 * 10 + it}" },
                     ),
                     Photographer(
                         id = 17,
@@ -68,6 +74,8 @@ class PhotographerRepositoryImpl
                         distance = 300,
                         photoMoods = listOf("드리미", "감성적인"),
                         activeAreas = listOf("서대문구", "은평구"),
+                        instagram = "@haeun.lens",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${17 * 10 + it}" },
                     ),
                     Photographer(
                         id = 18,
@@ -77,6 +85,8 @@ class PhotographerRepositoryImpl
                         distance = 450,
                         photoMoods = listOf("캐주얼", "심플"),
                         activeAreas = listOf("강북구", "도봉구", "성북구", "동대문구"),
+                        instagram = "@minsu_captures",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${18 * 10 + it}" },
                     ),
                     Photographer(
                         id = 19,
@@ -86,6 +96,8 @@ class PhotographerRepositoryImpl
                         distance = 500,
                         photoMoods = listOf("화려한", "고급스러운"),
                         activeAreas = listOf("송파구", "강동구"),
+                        instagram = "@yujin.photo",
+                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${19 * 10 + it}" },
                     ),
                 )
         }

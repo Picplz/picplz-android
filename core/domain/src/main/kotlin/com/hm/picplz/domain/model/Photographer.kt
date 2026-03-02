@@ -8,6 +8,8 @@ data class Photographer(
     val distance: Long,
     val photoMoods: List<String>,
     val activeAreas: List<String> = emptyList(),
+    val instagram: String? = null,
+    val portfolioPhotos: List<String> = emptyList(),
 )
 
 data class FilteredPhotographers(
