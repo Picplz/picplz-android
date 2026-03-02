@@ -4,9 +4,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,10 +35,10 @@ fun PhotographerSheet(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp)
                 .clickable {
                     onNavigateToDetail(photographer.id)
-                },
+                }
+                .padding(horizontal = 20.dp, vertical = 12.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -46,10 +49,11 @@ fun PhotographerSheet(
                 contentScale = ContentScale.Crop,
                 modifier =
                     Modifier
-                        .size(20.dp)
+                        .size(36.dp)
                         .clip(CircleShape)
                         .border(1.dp, MainThemeColor.Gray2, CircleShape),
             )
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = photographer.name,
                 style =
@@ -59,31 +63,47 @@ fun PhotographerSheet(
                         fontSize = 18.sp,
                         letterSpacing = 0.sp,
                     ),
-                modifier =
-                    Modifier
-                        .padding(start = 4.dp),
+                color = MainThemeColor.Black,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier =
-                Modifier
-                    .padding(start = 4.dp, top = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (photographer.isActive) {
-                ActiveStatusBadge(text = "바로 촬영")
+                ActiveStatusBadge(text = "바로촬영")
+                Spacer(modifier = Modifier.width(6.dp))
             }
-            DistanceText(
-                distance = photographer.distance,
-                modifier =
-                    Modifier
-                        .padding(start = 4.dp),
-            )
+            val areasText = formatActiveAreas(photographer.activeAreas)
+            if (areasText.isNotEmpty()) {
+                Text(
+                    text = areasText,
+                    style =
+                        TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 13.sp,
+                            letterSpacing = 0.sp,
+                        ),
+                    color = MainThemeColor.Gray4,
+                )
+            }
         }
-        val vibeTags = photographer.photoMoods.map { "#$it" }
+        Spacer(modifier = Modifier.height(16.dp))
         VibeTags(
-            modifier = Modifier.padding(top = 20.dp),
-            tags = vibeTags,
+            tags = photographer.photoMoods,
         )
+    }
+}
+
+private fun formatActiveAreas(areas: List<String>): String {
+    if (areas.isEmpty()) return ""
+    val displayCount = 3
+    val displayed = areas.take(displayCount).joinToString(", ")
+    val remaining = areas.size - displayCount
+    return if (remaining > 0) {
+        "$displayed 외 ${remaining}개"
+    } else {
+        displayed
     }
 }
