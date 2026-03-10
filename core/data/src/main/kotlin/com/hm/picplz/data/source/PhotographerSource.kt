@@ -3,6 +3,11 @@ package com.hm.picplz.data.source
 import com.hm.picplz.data.api.PhotographerApi
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
+import com.hm.picplz.data.model.PhotographerDetailDto
+import com.hm.picplz.data.model.PhotographerRatingDto
+import com.hm.picplz.data.model.ReviewListDto
+import com.hm.picplz.data.util.safeApiCall
+import com.hm.picplz.data.util.safeApiCallUnit
 import javax.inject.Inject
 
 interface PhotographerSource {
@@ -13,6 +18,17 @@ interface PhotographerSource {
         latitude: Double,
         distance: Long,
     ): Result<List<NearbyPhotographerCard>>
+
+    suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerDetailDto>
+
+    suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto>
+
+    suspend fun getPhotographerReviews(
+        photographerId: Long,
+        page: Int = 0,
+        size: Int = 10,
+        sort: String = "RECOMMENDED",
+    ): Result<ReviewListDto>
 }
 
 class PhotographerSourceImpl
@@ -21,26 +37,26 @@ class PhotographerSourceImpl
         private val photographerApi: PhotographerApi,
     ) : PhotographerSource {
         override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
-            runCatching {
-                val response = photographerApi.createPhotographer(request)
-                if (response.isSuccessful) {
-                    Unit
-                } else {
-                    error("Create photographer failed: ${response.code()} ${response.errorBody()?.string()}")
-                }
-            }
+            safeApiCallUnit { photographerApi.createPhotographer(request) }
 
         override suspend fun getNearbyPhotographers(
             longitude: Double,
             latitude: Double,
             distance: Long,
         ): Result<List<NearbyPhotographerCard>> =
-            runCatching {
-                val response = photographerApi.getNearbyPhotographers(longitude, latitude, distance)
-                if (response.isSuccessful) {
-                    response.body() ?: emptyList()
-                } else {
-                    error("Fetch nearby photographers failed: ${response.code()} ${response.errorBody()?.string()}")
-                }
-            }
+            safeApiCall { photographerApi.getNearbyPhotographers(longitude, latitude, distance) }
+
+        override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerDetailDto> =
+            safeApiCall { photographerApi.getPhotographerInfo(photographerId) }
+
+        override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
+            safeApiCall { photographerApi.getPhotographerRating(photographerId) }
+
+        override suspend fun getPhotographerReviews(
+            photographerId: Long,
+            page: Int,
+            size: Int,
+            sort: String,
+        ): Result<ReviewListDto> =
+            safeApiCall { photographerApi.getPhotographerReviews(photographerId, page, size, sort) }
     }

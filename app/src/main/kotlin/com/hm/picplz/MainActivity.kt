@@ -58,9 +58,27 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        configureSplashScreen(splashScreen) { uiState }
+        configureDoubleBackToExit()
+
+        setContent {
+            PicplzTheme {
+                val navController = rememberNavController()
+                MainNavHost(
+                    navController = navController,
+                    _uiState = uiState,
+                )
+            }
+        }
+    }
+
+    private fun configureSplashScreen(
+        splashScreen: androidx.core.splashscreen.SplashScreen,
+        uiStateProvider: () -> MainActivityUiState,
+    ) {
         splashScreen.apply {
             setKeepOnScreenCondition {
-                when (uiState) {
+                when (uiStateProvider()) {
                     is Loading -> true
                     else -> false
                 }
@@ -88,8 +106,10 @@ class MainActivity : ComponentActivity() {
                 animatorSet.start()
             }
         }
+    }
 
-        /** 2초 안에 뒤로가기 두번 입력 시 종료 **/
+    /** 2초 안에 뒤로가기 두번 입력 시 종료 **/
+    private fun configureDoubleBackToExit() {
         onBackPressedDispatcher.addCallback(this) {
             if (isBackPressedOnce) {
                 finishAffinity()
@@ -97,16 +117,6 @@ class MainActivity : ComponentActivity() {
                 isBackPressedOnce = true
                 Toast.makeText(this@MainActivity, "한 번 더 누르면 종료합니다.", Toast.LENGTH_SHORT).show()
                 handler.postDelayed(resetDoubleBackFlag, 2000)
-            }
-        }
-
-        setContent {
-            PicplzTheme {
-                val navController = rememberNavController()
-                MainNavHost(
-                    navController = navController,
-                    _uiState = uiState,
-                )
             }
         }
     }

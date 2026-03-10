@@ -25,13 +25,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,24 +47,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
 import com.hm.picplz.ui.screen.common.CommonBottomSheetScaffold
+import com.hm.picplz.ui.screen.common.CommonGrayDragHandle
 import com.hm.picplz.ui.screen.common.RefetchButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerListSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootBottomButton
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlinx.coroutines.flow.collectLatest
@@ -119,8 +133,10 @@ fun QuickShootScreen(
     }
 
     LaunchedEffect(currentState.userLocation) {
-        if (currentState.userLocation != null && currentState.locationPermissionGranted) {
+        val userLocation = currentState.userLocation
+        if (userLocation != null && currentState.locationPermissionGranted) {
             viewModel.handleIntent(QuickShootIntent.FetchNearbyPhotographers)
+            viewModel.handleIntent(QuickShootIntent.GetAddress(userLocation))
         }
     }
 
@@ -137,42 +153,16 @@ fun QuickShootScreen(
             bottomSheetState = bottomSheetState,
         )
 
-    LaunchedEffect(currentState.selectedPhotographerId) {
-        if (currentState.selectedPhotographerId != null) {
-            val selectedOffset = currentState.randomOffsets[currentState.selectedPhotographerId]
-            if (selectedOffset != null) {
-                viewModel.handleIntent(
-                    QuickShootIntent.CenterSelectedPhotographer(
-                        selectedOffset,
-                    ),
-                )
-            }
-            scaffoldState.bottomSheetState.expand()
-        } else {
-            viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
-            scaffoldState.bottomSheetState.partialExpand()
+    val modalSheetState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
+
+    val selectedPhotographer =
+        currentState.selectedPhotographerId?.let { selectedId ->
+            val allPhotographers = currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
+            allPhotographers.find { it.id == selectedId }
         }
-    }
-
-    LaunchedEffect(scaffoldState.bottomSheetState.currentValue) {
-        if (scaffoldState.bottomSheetState.currentValue == SheetValue.PartiallyExpanded) {
-            viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
-        }
-    }
-
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val topMargin = 60.dp
-
-    val calculatedSheetMaxHeight =
-        if (currentState.selectedPhotographerId === null) {
-            screenHeight - topMargin
-        } else {
-            screenHeight
-        }
-
-    LaunchedEffect(calculatedSheetMaxHeight, currentState.selectedPhotographerId) {
-        viewModel.handleIntent(QuickShootIntent.SetSheetMaxHeight(calculatedSheetMaxHeight))
-    }
 
     Scaffold(
         bottomBar = {
@@ -185,15 +175,20 @@ fun QuickShootScreen(
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
                 sheetContent = {
-                    if (currentState.selectedPhotographerId === null) {
-                        PhotographerListSheet(mainNavController = mainNavController)
-                    } else {
-                        PhotographerSheet(mainNavController = mainNavController)
-                    }
+                    PhotographerListSheet(
+                        photographers = currentState.nearbyPhotographers,
+                        selectedSortType = currentState.selectedSortType,
+                        onSortClick = {
+                            viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(true))
+                        },
+                        onPhotographerClick = { id ->
+                            mainNavController.navigate(DetailPhotographer(id.toInt()))
+                        },
+                    )
                 },
                 scaffoldState = scaffoldState,
-                sheetPeekHeight = currentState.sheetPeekHeight,
-                sheetMaxHeight = currentState.sheetMaxHeight,
+                sheetPeekHeight = 76.dp,
+                sheetMaxHeight = (LocalConfiguration.current.screenHeightDp * 0.9f).dp,
                 navigationBarPadding = true,
             ) {
                 Column(
@@ -218,6 +213,7 @@ fun QuickShootScreen(
                                                 null,
                                             ),
                                         )
+                                        viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
                                     }
                                 },
                     ) {
@@ -253,78 +249,132 @@ fun QuickShootScreen(
                                 AddressMarker(
                                     address = currentState.address,
                                 )
-                                RefetchButton(
-                                    onClick = {
-                                        viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
-                                    },
-                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    RefetchButton(
+                                        onClick = {
+                                            viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
+                                        },
+                                    )
+                                }
                             }
 
-                            val boxOffset by animateOffsetAsState(
-                                targetValue = currentState.centerOffset ?: Offset.Zero,
-                                animationSpec =
-                                    spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                                        stiffness = Spring.StiffnessLow,
-                                    ),
-                                label = "boxAnimation",
-                            )
+                            val entirePhotographers =
+                                currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
+                            val isEmpty =
+                                entirePhotographers.isEmpty() &&
+                                    !currentState.isSearchingPhotographer &&
+                                    currentState.userLocation != null
 
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .fillMaxSize()
-                                        .offset(boxOffset.x.dp, boxOffset.y.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Image(
-                                    painter = painterResource(R.drawable.multicircle),
-                                    contentDescription = "범위 지정 이미지",
-                                    contentScale = ContentScale.FillWidth,
+                            if (isEmpty) {
+                                QuickShootEmptyState()
+                            } else {
+                                val boxOffset by animateOffsetAsState(
+                                    targetValue = currentState.centerOffset ?: Offset.Zero,
+                                    animationSpec =
+                                        spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessLow,
+                                        ),
+                                    label = "boxAnimation",
+                                )
+
+                                Box(
                                     modifier =
                                         Modifier
-                                            .scale(1.5f),
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.center_char),
-                                    contentDescription = "작가 탐색 중앙 캐릭터",
-                                )
-                                val entirePhotographer =
-                                    currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
-                                entirePhotographer.forEach { photographer ->
-                                    val offset =
-                                        currentState.randomOffsets[photographer.id]
-                                            ?: return@forEach
-                                    val isSelected = photographer.id == currentState.selectedPhotographerId
-                                    PhotographerProfile(
-                                        name = photographer.name,
-                                        profileImageUri = photographer.profileImageUri,
-                                        isActive = photographer.isActive,
-                                        isSelected = isSelected,
-                                        offset = offset,
-                                        distance = photographer.distance,
-                                        onClick = {
-                                            scope.launch {
-                                                scaffoldState.bottomSheetState.partialExpand()
+                                            .fillMaxSize()
+                                            .offset(boxOffset.x.dp, boxOffset.y.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Image(
+                                        painter = painterResource(R.drawable.multicircle),
+                                        contentDescription = "범위 지정 이미지",
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier =
+                                            Modifier
+                                                .scale(1.5f),
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.center_char),
+                                        contentDescription = "작가 탐색 중앙 캐릭터",
+                                    )
+                                    currentState.nearbyPhotographers.active.forEach { photographer ->
+                                        val offset =
+                                            currentState.randomOffsets[photographer.id]
+                                                ?: return@forEach
+                                        val isSelected = photographer.id == currentState.selectedPhotographerId
+                                        PhotographerProfile(
+                                            name = photographer.name,
+                                            profileImageUri = photographer.profileImageUri,
+                                            isActive = photographer.isActive,
+                                            isSelected = isSelected,
+                                            offset = offset,
+                                            distance = photographer.distance,
+                                            onClick = {
                                                 viewModel.handleIntent(
                                                     QuickShootIntent.SetSelectedPhotographerId(
                                                         photographer.id,
                                                     ),
                                                 )
-                                                viewModel.handleIntent(
-                                                    QuickShootIntent.CenterSelectedPhotographer(
-                                                        offset,
-                                                    ),
-                                                )
-                                            }
-                                        },
-                                    )
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
+            if (selectedPhotographer != null) {
+                val sheetNestedScrollConnection =
+                    remember {
+                        object : NestedScrollConnection {
+                            override fun onPostScroll(
+                                consumed: Offset,
+                                available: Offset,
+                                source: NestedScrollSource,
+                            ): Offset = available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+
+                            override suspend fun onPostFling(
+                                consumed: Velocity,
+                                available: Velocity,
+                            ): Velocity = available.copy(x = 0f, y = available.y.coerceAtLeast(0f))
+                        }
+                    }
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        viewModel.handleIntent(QuickShootIntent.SetSelectedPhotographerId(null))
+                        viewModel.handleIntent(QuickShootIntent.CenterSelectedPhotographer(Offset.Zero))
+                    },
+                    sheetState = modalSheetState,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+                    containerColor = MainThemeColor.White,
+                    scrimColor = MainThemeColor.Black.copy(alpha = 0.4f),
+                    dragHandle = { CommonGrayDragHandle() },
+                    modifier = Modifier.wrapContentHeight().nestedScroll(sheetNestedScrollConnection),
+                ) {
+                    PhotographerSheet(
+                        photographer = selectedPhotographer,
+                        onNavigateToDetail = { id ->
+                            mainNavController.navigate(DetailPhotographer(id.toInt()))
+                        },
+                    )
+                }
+            }
+
+            QuickShootSortBottomSheet(
+                visible = currentState.showSortSheet,
+                selectedSortType = currentState.selectedSortType,
+                onDismiss = {
+                    viewModel.handleIntent(QuickShootIntent.ToggleSortSheet(false))
+                },
+                onSelect = { sortType ->
+                    viewModel.handleIntent(QuickShootIntent.SelectSortType(sortType))
+                },
+            )
         } else {
             QuickShootLocationPermissionRationale(
                 onNextClick = {
@@ -379,9 +429,16 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "위치 접근 권한이 필요해요",
+                text =
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = MainThemeColor.Green120)) {
+                            append("위치 접근 권한")
+                        }
+                        withStyle(SpanStyle(color = MainThemeColor.Black)) {
+                            append("이 필요해요")
+                        }
+                    },
                 style = MainThemeFont.Title,
-                color = MainThemeColor.Green120,
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -402,5 +459,59 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                     .padding(start = 20.dp, end = 20.dp, bottom = 47.dp),
             enabled = true,
         )
+    }
+}
+
+@Composable
+private fun QuickShootEmptyState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(R.drawable.multicircle),
+            contentDescription = "범위 표시",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.scale(1.5f),
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "주변에 바로 촬영 중인",
+                style = MainThemeFont.TitleSmall,
+                color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = "작가가 없습니다",
+                style = MainThemeFont.TitleSmall,
+                color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.no_photographer),
+                contentDescription = "주변 작가 없음 캐릭터",
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "다른 지역으로",
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = "이동해 보는 건 어때요?",
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }

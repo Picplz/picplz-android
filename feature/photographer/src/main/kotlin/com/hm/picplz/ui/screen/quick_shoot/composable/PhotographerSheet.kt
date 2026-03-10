@@ -1,69 +1,65 @@
 package com.hm.picplz.ui.screen.quick_shoot.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
-import com.hm.picplz.navigation.model.DetailPhotographer
-import com.hm.picplz.ui.screen.quick_shoot.QuickShootViewModel
+import coil.compose.AsyncImage
+import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.Pretendard
 
 @Composable
 fun PhotographerSheet(
-    viewModel: QuickShootViewModel = hiltViewModel(),
-    mainNavController: NavController,
+    photographer: Photographer,
+    onNavigateToDetail: (Long) -> Unit,
 ) {
-    val currentState = viewModel.state.collectAsState().value
-    val selectedPhotographer =
-        currentState.selectedPhotographerId?.let { selectedId ->
-            currentState.nearbyPhotographers.let { photographers ->
-                (photographers.active + photographers.inactive).find { it.id == selectedId }
-            }
-        }
     Column(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp)
                 .clickable {
-                    selectedPhotographer?.let {
-                        mainNavController.navigate(DetailPhotographer(it.id.toInt()))
-                    }
-                },
+                    onNavigateToDetail(photographer.id)
+                }
+                .padding(horizontal = 20.dp, vertical = 12.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = selectedPhotographer?.profileImageUri),
+            AsyncImage(
+                model = photographer.profileImageUri,
                 contentDescription = "작가 프로필 이미지",
+                contentScale = ContentScale.Crop,
                 modifier =
                     Modifier
-                        .size(20.dp)
+                        .size(36.dp)
                         .clip(CircleShape)
                         .border(1.dp, MainThemeColor.Gray2, CircleShape),
             )
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = selectedPhotographer?.name ?: "",
+                text = photographer.name,
                 style =
                     TextStyle(
                         fontFamily = Pretendard,
@@ -71,30 +67,80 @@ fun PhotographerSheet(
                         fontSize = 18.sp,
                         letterSpacing = 0.sp,
                     ),
-                modifier =
-                    Modifier
-                        .padding(start = 4.dp),
+                color = MainThemeColor.Black,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier =
-                Modifier
-                    .padding(start = 4.dp, top = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ActiveStatusBadge(text = "바로 촬영")
-            DistanceText(
-                distance = selectedPhotographer?.distance.toString(),
-                duration = "도보 10분 거리",
-                modifier =
-                    Modifier
-                        .padding(start = 4.dp),
+            if (photographer.isActive) {
+                ActiveStatusBadge(text = "바로촬영")
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+            val areasText = formatActiveAreas(photographer.activeAreas)
+            if (areasText.isNotEmpty()) {
+                Text(
+                    text = areasText,
+                    style =
+                        TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 13.sp,
+                            letterSpacing = 0.sp,
+                        ),
+                    color = MainThemeColor.Gray4,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        VibeTags(
+            tags = photographer.photoMoods,
+        )
+        val instagramHandle = photographer.instagram
+        if (!instagramHandle.isNullOrEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = instagramHandle,
+                style =
+                    TextStyle(
+                        fontFamily = Pretendard,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 13.sp,
+                        letterSpacing = 0.sp,
+                    ),
+                color = MainThemeColor.Gray4,
             )
         }
-        val vibeTags = selectedPhotographer?.photoMoods?.map { "#$it" } ?: emptyList()
-        VibeTags(
-            modifier = Modifier.padding(top = 20.dp),
-            tags = vibeTags,
-        )
+        if (photographer.portfolioPhotos.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(photographer.portfolioPhotos) { photoUrl ->
+                    AsyncImage(
+                        model = photoUrl,
+                        contentDescription = "포트폴리오 사진",
+                        contentScale = ContentScale.Crop,
+                        modifier =
+                            Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                    )
+                }
+            }
+        }
+    }
+}
+
+private fun formatActiveAreas(areas: List<String>): String {
+    if (areas.isEmpty()) return ""
+    val displayCount = 3
+    val displayed = areas.take(displayCount).joinToString(", ")
+    val remaining = areas.size - displayCount
+    return if (remaining > 0) {
+        "$displayed 외 ${remaining}개"
+    } else {
+        displayed
     }
 }

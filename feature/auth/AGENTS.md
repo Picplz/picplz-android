@@ -16,7 +16,7 @@ LoginIntroScreen (Kakao OAuth)
     └─→ [New User] → SignUpCommonNavHost
                         ├─→ SelectType → Nickname → ProfileImage
                         │       │
-                        │       ├─→ [Client] → SignUpClientScreen → Completion
+                        │       ├─→ [Client] → Completion
                         │       │
                         │       └─→ [Photographer] → SignUpPhotographerNavHost
                         │               └─→ Location → Experience → DetailExp
@@ -32,7 +32,6 @@ LoginIntroScreen (Kakao OAuth)
 | **SignUpPhotographerNavHost** | `navigation/` | Internal nav for photographer-specific steps |
 | **SignUpCommonViewModel** | `ui/screen/sign_up/sign_up_common/` | Shared state for nickname, profile, user type |
 | **SignUpPhotographerViewModel** | `ui/screen/sign_up/sign_up_photographer/` | Photographer profile: location, vibe, device |
-| **SignUpClientViewModel** | `ui/screen/sign_up/sign_up_client/` | Client-specific signup state |
 
 ### MVI Structure (per flow)
 - `*Screen.kt` - Composable UI

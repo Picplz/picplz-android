@@ -1,8 +1,12 @@
 package com.hm.picplz.ui.screen.dev
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,7 +49,6 @@ import com.hm.picplz.navigation.model.PhotographerMain
 import com.hm.picplz.navigation.model.QuickShoot
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.navigation.model.ReviewPhotographer
-import com.hm.picplz.navigation.model.SignUpClient
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.navigation.model.SignUpIntro
 import com.hm.picplz.navigation.model.SignUpPhotographer
@@ -76,6 +79,20 @@ fun DevScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // === Token ===
+            SectionTitle("Token")
+            DevButton("📋 현재 토큰 복사") {
+                val prefs = context.getSharedPreferences("picplz_auth", Context.MODE_PRIVATE)
+                val token = prefs.getString("access_token", null)
+                if (token != null) {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboard.setPrimaryClip(ClipData.newPlainText("token", token))
+                    Toast.makeText(context, "토큰 복사됨 (${token.take(20)}...)", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "저장된 토큰 없음", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             // === Auth ===
             SectionTitle("Auth")
             DevButton("Login") { navController.navigate(Login) }
@@ -89,7 +106,6 @@ fun DevScreen(navController: NavHostController) {
             DevButton("SignUpProfile (프로필 이미지)") {
                 navController.navigate(SignUpIntro(startAt = "profile"))
             }
-            DevButton("SignUpClient") { navController.navigate(SignUpClient(userInfo = emptyUserData)) }
             DevButton("SignUpPhotographer") { navController.navigate(SignUpPhotographer(userInfo = emptyUserData)) }
             DevButton("SignUpDevice (Direct)") { navController.navigate(SignUpPhotographer(startAt = "device")) }
             DevButton("SignUpPhotographyVibe (분위기 키워드)") {

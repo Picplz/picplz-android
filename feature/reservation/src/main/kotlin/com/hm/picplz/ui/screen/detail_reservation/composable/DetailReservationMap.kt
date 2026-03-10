@@ -93,6 +93,7 @@ private const val ANCHOR_CENTER = 0.5f
 private const val MARKER_ID = "reservation_marker"
 
 @Preview
+@Suppress("UnusedPrivateMember")
 @Composable
 private fun DetailReservationMapPreview() {
     DetailReservationMap(

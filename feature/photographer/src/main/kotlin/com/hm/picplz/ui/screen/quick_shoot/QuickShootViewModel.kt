@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.quick_shoot
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.data.service.KakaoMapService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.domain.repository.PhotographerRepository
 import com.hm.picplz.ui.screen.quick_shoot.handler.LocationHandler
@@ -22,8 +23,8 @@ class QuickShootViewModel
     @Inject
     constructor(
         private val photographerRepository: PhotographerRepository,
-        private val displayMetricsUtil: com.hm.picplz.common.util.DisplayMetricsUtil,
         private val locationService: LocationService,
+        private val kakaoMapService: KakaoMapService,
     ) : ViewModel() {
         private val _state = MutableStateFlow(QuickShootState.idle())
         val state: StateFlow<QuickShootState> get() = _state
@@ -32,7 +33,7 @@ class QuickShootViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         private val locationHandler = LocationHandler()
-        private val offsetGenerator = OffsetGenerator(displayMetricsUtil)
+        private val offsetGenerator = OffsetGenerator()
         private val photographerSearchHandler = PhotographerSearchHandler(offsetGenerator)
 
         fun handleIntent(intent: QuickShootIntent) {
@@ -45,14 +46,13 @@ class QuickShootViewModel
 
                 is QuickShootIntent.GetAddress -> {
                     viewModelScope.launch {
-                        locationService.getCurrentLocation(
-                            onLocationReceived = { location ->
-                                handleIntent(QuickShootIntent.SetCenterCoords(location))
-                            },
-                            onPermissionDenied = {
-                                Log.w("Location", "위치 권한 거부")
-                            },
-                        )
+                        kakaoMapService.getAddressFromCoordinates(intent.coords)
+                            .onSuccess { address ->
+                                handleIntent(QuickShootIntent.SetAddress(address))
+                            }
+                            .onFailure { error ->
+                                Log.w("QuickShoot", "주소 조회 실패", error)
+                            }
                     }
                 }
 
