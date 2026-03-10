@@ -22,16 +22,28 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
             -> {
                 _state.update { it.copy(reservationStatus = it.reservationStatus.next()) }
             }
+
+            is DetailReservationIntent.ShowCancelDialog -> {
+                _state.update { it.copy(showCancelDialog = true) }
+            }
+
+            is DetailReservationIntent.DismissCancelDialog -> {
+                _state.update { it.copy(showCancelDialog = false) }
+            }
+
+            is DetailReservationIntent.ConfirmCancel -> {
+                _state.update { it.copy(showCancelDialog = false) }
+                // TODO: 예약 취소 API 호출
+            }
         }
     }
 
     // 상태 변경 확인 테스트를 위한 코드입니다.
-    private fun ReservationStatus.next(): ReservationStatus {
-        return when (this) {
+    private fun ReservationStatus.next(): ReservationStatus =
+        when (this) {
             ReservationStatus.WAITING_APPROVAL -> ReservationStatus.WAITING_PAYMENT
             ReservationStatus.WAITING_PAYMENT -> ReservationStatus.RESERVED
             ReservationStatus.RESERVED -> ReservationStatus.COMPLETED
             ReservationStatus.COMPLETED -> ReservationStatus.COMPLETED
         }
-    }
 }
