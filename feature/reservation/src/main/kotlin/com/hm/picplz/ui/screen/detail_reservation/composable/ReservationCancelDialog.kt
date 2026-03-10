@@ -22,9 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.feature.reservation.R
 import com.hm.picplz.ui.screen.common.CommonButtonModal
-import com.hm.picplz.ui.screen.detail_reservation.model.RefundReason
+import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
-import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStep
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.core.ui.R as CoreR
@@ -32,7 +31,7 @@ import com.hm.picplz.core.ui.R as CoreR
 @Composable
 fun ReservationCancelDialog(
     status: ReservationStatus,
-    refundReason: RefundReason?,
+    refundCondition: RefundCondition,
     onDismiss: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit,
@@ -49,7 +48,7 @@ fun ReservationCancelDialog(
     ) {
         ReservationCancelDialogContent(
             status = status,
-            refundReason = refundReason,
+            refundCondition = refundCondition,
             onInfoClick = onInfoClick,
         )
     }
@@ -58,7 +57,7 @@ fun ReservationCancelDialog(
 @Composable
 private fun ReservationCancelDialogContent(
     status: ReservationStatus,
-    refundReason: RefundReason?,
+    refundCondition: RefundCondition,
     onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -74,7 +73,7 @@ private fun ReservationCancelDialogContent(
                 ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (status.step != ReservationStep.WAITING) {
+        if (status == ReservationStatus.RESERVED) {
             Image(
                 painter = painterResource(CoreR.drawable.info),
                 contentDescription = "환불 규정 안내",
@@ -94,16 +93,16 @@ private fun ReservationCancelDialogContent(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        if (status == ReservationStatus.RESERVED && refundReason != null) {
+        if (status == ReservationStatus.RESERVED && !refundCondition.isFullRefund()) {
             Text(
-                text = getPartialRefundAnnotatedText(refundPercent = refundReason.percent),
+                text = getPartialRefundAnnotatedText(refundPercent = refundCondition.percent),
                 style = pretendardTypography.bodyMedium,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,
             )
         } else {
             Text(
-                text = getDescriptionText(status),
+                text = getDescriptionText(status, refundCondition),
                 style = pretendardTypography.bodyMedium,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,
@@ -113,18 +112,32 @@ private fun ReservationCancelDialogContent(
 }
 
 @Composable
-private fun getDescriptionText(status: ReservationStatus): String =
+private fun getDescriptionText(
+    status: ReservationStatus,
+    refundCondition: RefundCondition,
+): String =
     when (status) {
-        ReservationStatus.WAITING_APPROVAL -> {
-            stringResource(R.string.reservation_cancel_dialog_desc_waiting_approval)
-        }
-
-        ReservationStatus.WAITING_PAYMENT -> {
-            stringResource(R.string.reservation_cancel_dialog_desc_full_refund)
-        }
-
         ReservationStatus.RESERVED -> {
-            stringResource(R.string.reservation_cancel_dialog_desc_partial_refund, 90)
+            when (refundCondition) {
+                RefundCondition.Within24Hours,
+                RefundCondition.Before7Days,
+                -> {
+                    stringResource(R.string.reservation_cancel_dialog_desc_full_refund)
+                }
+
+                else -> {
+                    stringResource(
+                        R.string.reservation_cancel_dialog_desc_partial_refund,
+                        refundCondition.percent,
+                    )
+                }
+            }
+        }
+
+        ReservationStatus.WAITING_APPROVAL,
+        ReservationStatus.WAITING_PAYMENT,
+        -> {
+            stringResource(R.string.reservation_cancel_dialog_desc_waiting_approval)
         }
 
         ReservationStatus.COMPLETED -> {
@@ -147,7 +160,7 @@ private fun getPartialRefundAnnotatedText(refundPercent: Int) =
 private fun ReservationCancelDialogWaitingApprovalPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.WAITING_APPROVAL,
-        refundReason = null,
+        refundCondition = RefundCondition.Within24Hours,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -159,8 +172,8 @@ private fun ReservationCancelDialogWaitingApprovalPreview() {
 @Composable
 private fun ReservationCancelDialogFullRefundPreview() {
     ReservationCancelDialog(
-        status = ReservationStatus.WAITING_PAYMENT,
-        refundReason = null,
+        status = ReservationStatus.RESERVED,
+        refundCondition = RefundCondition.Before7Days,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -173,7 +186,7 @@ private fun ReservationCancelDialogFullRefundPreview() {
 private fun ReservationCancelDialogPartialRefundPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.RESERVED,
-        refundReason = RefundReason.Before3Days,
+        refundCondition = RefundCondition.Before3Days,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},

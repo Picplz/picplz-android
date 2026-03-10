@@ -5,39 +5,41 @@ import com.hm.picplz.feature.reservation.R
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-sealed class RefundReason(
+sealed class RefundCondition(
     val percent: Int,
     @StringRes val conditionResId: Int,
 ) {
-    data object Within24Hours : RefundReason(
+    data object Within24Hours : RefundCondition(
         percent = 100,
         conditionResId = R.string.refund_condition_within_24_hours,
     )
 
-    data object Before7Days : RefundReason(
+    data object Before7Days : RefundCondition(
         percent = 100,
         conditionResId = R.string.refund_condition_before_7_days,
     )
 
-    data object Before3Days : RefundReason(
+    data object Before3Days : RefundCondition(
         percent = 90,
         conditionResId = R.string.refund_condition_before_3_days,
     )
 
-    data object Before2Days : RefundReason(
+    data object Before2Days : RefundCondition(
         percent = 70,
         conditionResId = R.string.refund_condition_before_2_days,
     )
 
-    data object Before1Day : RefundReason(
+    data object Before1Day : RefundCondition(
         percent = 50,
         conditionResId = R.string.refund_condition_before_1_day,
     )
 
-    data object SameDay : RefundReason(
+    data object SameDay : RefundCondition(
         percent = 0,
         conditionResId = R.string.refund_condition_same_day,
     )
+
+    fun isFullRefund() = this == Within24Hours || this == Before7Days
 
     companion object {
         /**
@@ -55,7 +57,7 @@ sealed class RefundReason(
             currentDateTime: LocalDateTime,
             shootingDateTime: LocalDateTime,
             confirmedDateTime: LocalDateTime?,
-        ): RefundReason {
+        ): RefundCondition {
             // 촬영 확정 후 24시간 이내 체크
             confirmedDateTime?.let {
                 val hoursSinceConfirmed = ChronoUnit.HOURS.between(it, currentDateTime)

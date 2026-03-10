@@ -71,7 +71,7 @@ private fun DetailReservationScreen(
         if (state.showCancelDialog) {
             ReservationCancelDialog(
                 status = state.reservationStatus,
-                refundReason = state.refundReason,
+                refundCondition = state.refundCondition,
                 onDismiss = onCancelDialogDismiss,
                 onCancel = onCancelDialogDismiss,
                 onConfirm = onCancelDialogConfirm,

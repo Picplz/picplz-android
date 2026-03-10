@@ -1,7 +1,7 @@
 package com.hm.picplz.ui.screen.detail_reservation
 
 import androidx.lifecycle.ViewModel
-import com.hm.picplz.ui.screen.detail_reservation.model.RefundReason
+import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,19 +41,17 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
 
             is DetailReservationIntent.ShowCancelDialog -> {
                 val currentState = _state.value
-                val refundReason =
-                    currentState.shootingDateTime?.let {
-                        RefundReason.calculate(
-                            currentDateTime = LocalDateTime.now(),
-                            shootingDateTime = currentState.shootingDateTime,
-                            confirmedDateTime = currentState.confirmedDateTime,
-                        )
-                    }
+                val refundCondition =
+                    RefundCondition.calculate(
+                        currentDateTime = LocalDateTime.now(),
+                        shootingDateTime = currentState.shootingDateTime,
+                        confirmedDateTime = currentState.confirmedDateTime,
+                    )
 
                 _state.update {
                     it.copy(
                         showCancelDialog = true,
-                        refundReason = refundReason,
+                        refundCondition = refundCondition,
                     )
                 }
             }
