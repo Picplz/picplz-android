@@ -1,14 +1,18 @@
 package com.hm.picplz.ui.screen.detail_reservation.composable
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,8 +24,10 @@ import com.hm.picplz.feature.reservation.R
 import com.hm.picplz.ui.screen.common.CommonButtonModal
 import com.hm.picplz.ui.screen.detail_reservation.model.RefundReason
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStep
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
+import com.hm.picplz.core.ui.R as CoreR
 
 @Composable
 fun ReservationCancelDialog(
@@ -30,6 +36,7 @@ fun ReservationCancelDialog(
     onDismiss: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CommonButtonModal(
@@ -43,6 +50,7 @@ fun ReservationCancelDialog(
         ReservationCancelDialogContent(
             status = status,
             refundReason = refundReason,
+            onInfoClick = onInfoClick,
         )
     }
 }
@@ -51,15 +59,34 @@ fun ReservationCancelDialog(
 private fun ReservationCancelDialogContent(
     status: ReservationStatus,
     refundReason: RefundReason?,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 24.dp),
+                .padding(
+                    start = 12.dp,
+                    end = 12.dp,
+                    top = 10.dp,
+                    bottom = 20.dp,
+                ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        if (status.step != ReservationStep.WAITING) {
+            Image(
+                painter = painterResource(CoreR.drawable.info),
+                contentDescription = "환불 규정 안내",
+                modifier =
+                    Modifier
+                        .align(Alignment.End)
+                        .size(16.dp)
+                        .clickable(onClick = onInfoClick),
+            )
+        } else {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
         Text(
             text = stringResource(R.string.reservation_cancel_dialog_title),
             style = pretendardTypography.titleSmall,
@@ -124,6 +151,7 @@ private fun ReservationCancelDialogWaitingApprovalPreview() {
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
+        onInfoClick = {},
     )
 }
 
@@ -136,6 +164,7 @@ private fun ReservationCancelDialogFullRefundPreview() {
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
+        onInfoClick = {},
     )
 }
 
@@ -148,5 +177,6 @@ private fun ReservationCancelDialogPartialRefundPreview() {
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
+        onInfoClick = {},
     )
 }

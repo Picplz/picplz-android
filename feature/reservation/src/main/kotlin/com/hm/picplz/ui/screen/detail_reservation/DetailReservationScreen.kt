@@ -75,6 +75,9 @@ private fun DetailReservationScreen(
                 onDismiss = onCancelDialogDismiss,
                 onCancel = onCancelDialogDismiss,
                 onConfirm = onCancelDialogConfirm,
+                onInfoClick = {
+                    // TODO: 환불 규정 툴팁 표시
+                },
             )
         }
 
