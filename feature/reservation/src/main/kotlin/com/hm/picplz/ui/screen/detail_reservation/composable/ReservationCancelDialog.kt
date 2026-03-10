@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.feature.reservation.R
 import com.hm.picplz.ui.screen.common.CommonButtonModal
+import com.hm.picplz.ui.screen.detail_reservation.model.RefundReason
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -25,6 +26,7 @@ import com.hm.picplz.ui.theme.pretendardTypography
 @Composable
 fun ReservationCancelDialog(
     status: ReservationStatus,
+    refundReason: RefundReason?,
     onDismiss: () -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit,
@@ -38,13 +40,17 @@ fun ReservationCancelDialog(
         onCancel = onCancel,
         onConfirm = onConfirm,
     ) {
-        ReservationCancelDialogContent(status = status)
+        ReservationCancelDialogContent(
+            status = status,
+            refundReason = refundReason,
+        )
     }
 }
 
 @Composable
 private fun ReservationCancelDialogContent(
     status: ReservationStatus,
+    refundReason: RefundReason?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -61,9 +67,9 @@ private fun ReservationCancelDialogContent(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        if (status == ReservationStatus.RESERVED) {
+        if (status == ReservationStatus.RESERVED && refundReason != null) {
             Text(
-                text = getPartialRefundAnnotatedText(refundPercent = 90),
+                text = getPartialRefundAnnotatedText(refundPercent = refundReason.percent),
                 style = pretendardTypography.bodyMedium,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,
@@ -114,6 +120,7 @@ private fun getPartialRefundAnnotatedText(refundPercent: Int) =
 private fun ReservationCancelDialogWaitingApprovalPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.WAITING_APPROVAL,
+        refundReason = null,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -125,6 +132,7 @@ private fun ReservationCancelDialogWaitingApprovalPreview() {
 private fun ReservationCancelDialogFullRefundPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.WAITING_PAYMENT,
+        refundReason = null,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -136,6 +144,7 @@ private fun ReservationCancelDialogFullRefundPreview() {
 private fun ReservationCancelDialogPartialRefundPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.RESERVED,
+        refundReason = RefundReason.Before3Days,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},

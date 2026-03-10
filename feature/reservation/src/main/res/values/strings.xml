@@ -26,4 +26,12 @@
     <string name="reservation_cancel_dialog_desc_partial_refund_suffix">가 환불됩니다.\n취소 후에는 이를 변경할 수 없어요.</string>
     <string name="reservation_cancel_dialog_button_no">아니오</string>
     <string name="reservation_cancel_dialog_button_yes">취소할래요</string>
+
+    <!-- 환불 조건 -->
+    <string name="refund_condition_within_24_hours">촬영 확정 후 24시간 이내</string>
+    <string name="refund_condition_before_7_days">촬영일 기준 7일 전까지</string>
+    <string name="refund_condition_before_3_days">촬영일 기준 3일 전까지</string>
+    <string name="refund_condition_before_2_days">촬영일 기준 2일 전까지</string>
+    <string name="refund_condition_before_1_day">촬영일 기준 1일 전까지</string>
+    <string name="refund_condition_same_day">당일 취소 or No-show</string>
 </resources>
