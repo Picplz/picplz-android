@@ -21,6 +21,9 @@
     <string name="reservation_cancel_dialog_desc_waiting_approval">결제 전에는 자유롭게 예약을\n취소할 수 있습니다.\n취소 후에는 이를 변경할 수 없어요.</string>
     <string name="reservation_cancel_dialog_desc_full_refund">취소 시 결제 금액이\n전액 환불됩니다. 취소 후에는 이를\n변경할 수 없어요.</string>
     <string name="reservation_cancel_dialog_desc_partial_refund">지금 취소하시면\n결제 금액의 %1$d%%가 환불됩니다.\n취소 후에는 이를 변경할 수 없어요.</string>
+    <string name="reservation_cancel_dialog_desc_partial_refund_prefix">지금 취소하시면\n</string>
+    <string name="reservation_cancel_dialog_desc_partial_refund_highlight">결제 금액의 %1$d%%</string>
+    <string name="reservation_cancel_dialog_desc_partial_refund_suffix">가 환불됩니다.\n취소 후에는 이를 변경할 수 없어요.</string>
     <string name="reservation_cancel_dialog_button_no">아니오</string>
     <string name="reservation_cancel_dialog_button_yes">취소할래요</string>
 </resources>

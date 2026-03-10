@@ -10,7 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.feature.reservation.R
@@ -58,12 +61,21 @@ private fun ReservationCancelDialogContent(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = getDescriptionText(status),
-            style = pretendardTypography.bodyMedium,
-            color = MainThemeColor.Gray4,
-            textAlign = TextAlign.Center,
-        )
+        if (status == ReservationStatus.RESERVED) {
+            Text(
+                text = getPartialRefundAnnotatedText(refundPercent = 90),
+                style = pretendardTypography.bodyMedium,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+        } else {
+            Text(
+                text = getDescriptionText(status),
+                style = pretendardTypography.bodyMedium,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
@@ -85,6 +97,16 @@ private fun getDescriptionText(status: ReservationStatus): String =
         ReservationStatus.COMPLETED -> {
             ""
         }
+    }
+
+@Composable
+private fun getPartialRefundAnnotatedText(refundPercent: Int) =
+    buildAnnotatedString {
+        append(stringResource(R.string.reservation_cancel_dialog_desc_partial_refund_prefix))
+        withStyle(style = SpanStyle(color = MainThemeColor.Red)) {
+            append(stringResource(R.string.reservation_cancel_dialog_desc_partial_refund_highlight, refundPercent))
+        }
+        append(stringResource(R.string.reservation_cancel_dialog_desc_partial_refund_suffix))
     }
 
 @Preview
