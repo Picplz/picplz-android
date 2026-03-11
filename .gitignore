@@ -161,3 +161,5 @@ fabric.properties
 .DS_Store
 
 /.idea
+
+.claude/
