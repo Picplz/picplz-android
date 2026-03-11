@@ -43,6 +43,19 @@ sealed class RefundCondition(
 
     companion object {
         /**
+         * 모든 환불 조건 목록 (툴팁 테이블 표시용)
+         */
+        val allCases: List<RefundCondition> =
+            listOf(
+                Within24Hours,
+                Before7Days,
+                Before3Days,
+                Before2Days,
+                Before1Day,
+                SameDay,
+            )
+
+        /**
          * 환불 규정을 계산합니다.
          *
          * 환불 규정:
