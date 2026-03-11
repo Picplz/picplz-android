@@ -19,6 +19,7 @@ import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationMa
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPolicyDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
 import com.hm.picplz.ui.theme.MainThemeColor
 
@@ -50,6 +51,9 @@ fun DetailReservationScreen(
         onCancelDialogConfirm = {
             viewModel.handelIntent(DetailReservationIntent.ConfirmCancel)
         },
+        onInfoClick = {
+            viewModel.handelIntent(DetailReservationIntent.ToggleRefundPolicyTooltip)
+        },
     )
 }
 
@@ -62,6 +66,7 @@ private fun DetailReservationScreen(
     onCancelClick: () -> Unit,
     onCancelDialogDismiss: () -> Unit,
     onCancelDialogConfirm: () -> Unit,
+    onInfoClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -69,16 +74,18 @@ private fun DetailReservationScreen(
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
         if (state.showCancelDialog) {
-            ReservationCancelDialog(
-                status = state.reservationStatus,
-                refundCondition = state.refundCondition,
-                onDismiss = onCancelDialogDismiss,
-                onCancel = onCancelDialogDismiss,
-                onConfirm = onCancelDialogConfirm,
-                onInfoClick = {
-                    // TODO: 환불 규정 툴팁 표시
-                },
-            )
+            if (state.showRefundPolicyTooltip) {
+                ReservationRefundPolicyDialog()
+            } else {
+                ReservationCancelDialog(
+                    status = state.reservationStatus,
+                    refundCondition = state.refundCondition,
+                    onDismiss = onCancelDialogDismiss,
+                    onCancel = onCancelDialogDismiss,
+                    onConfirm = onCancelDialogConfirm,
+                    onInfoClick = onInfoClick,
+                )
+            }
         }
 
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -139,5 +146,6 @@ private fun DetailReservationScreenPreview() {
         onCancelClick = {},
         onCancelDialogDismiss = {},
         onCancelDialogConfirm = {},
+        onInfoClick = {},
     )
 }

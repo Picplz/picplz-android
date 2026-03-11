@@ -64,6 +64,10 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
                 _state.update { it.copy(showCancelDialog = false) }
                 // TODO: 예약 취소 API 호출
             }
+
+            is DetailReservationIntent.ToggleRefundPolicyTooltip -> {
+                _state.update { it.copy(showRefundPolicyTooltip = !it.showRefundPolicyTooltip) }
+            }
         }
     }
 

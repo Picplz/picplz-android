@@ -9,5 +9,6 @@ data class DetailReservationState(
     val showCancelDialog: Boolean = false,
     val shootingDateTime: LocalDateTime = LocalDateTime.now(),
     val confirmedDateTime: LocalDateTime = LocalDateTime.now(),
-    val refundCondition: RefundCondition = RefundCondition.Within24Hours,
+    val refundCondition: RefundCondition = RefundCondition.WITHIN_24_HOURS,
+    val showRefundPolicyTooltip: Boolean = false,
 )

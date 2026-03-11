@@ -59,7 +59,7 @@ fun RefundPolicyTable(modifier: Modifier = Modifier) {
         }
 
         // 각 행
-        RefundCondition.allCases.forEach { condition ->
+        RefundCondition.entries.forEach { condition ->
             HorizontalDivider(color = MainThemeColor.Gray3, thickness = 1.dp)
 
             Row(
