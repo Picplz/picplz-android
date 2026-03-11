@@ -52,7 +52,10 @@ fun DetailReservationScreen(
             viewModel.handelIntent(DetailReservationIntent.ConfirmCancel)
         },
         onInfoClick = {
-            viewModel.handelIntent(DetailReservationIntent.ToggleRefundPolicyTooltip)
+            viewModel.handelIntent(DetailReservationIntent.ShowRefundPolicyDialog)
+        },
+        onRefundPolicyDismiss = {
+            viewModel.handelIntent(DetailReservationIntent.DismissRefundPolicyTooltip)
         },
     )
 }
@@ -67,6 +70,7 @@ private fun DetailReservationScreen(
     onCancelDialogDismiss: () -> Unit,
     onCancelDialogConfirm: () -> Unit,
     onInfoClick: () -> Unit,
+    onRefundPolicyDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -74,18 +78,20 @@ private fun DetailReservationScreen(
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
         if (state.showCancelDialog) {
-            if (state.showRefundPolicyTooltip) {
-                ReservationRefundPolicyDialog()
-            } else {
-                ReservationCancelDialog(
-                    status = state.reservationStatus,
-                    refundCondition = state.refundCondition,
-                    onDismiss = onCancelDialogDismiss,
-                    onCancel = onCancelDialogDismiss,
-                    onConfirm = onCancelDialogConfirm,
-                    onInfoClick = onInfoClick,
-                )
-            }
+            ReservationCancelDialog(
+                status = state.reservationStatus,
+                refundCondition = state.refundCondition,
+                onDismiss = onCancelDialogDismiss,
+                onCancel = onCancelDialogDismiss,
+                onConfirm = onCancelDialogConfirm,
+                onInfoClick = onInfoClick,
+            )
+        }
+
+        if (state.showRefundPolicyTooltip) {
+            ReservationRefundPolicyDialog(
+                onDismissRequest = onRefundPolicyDismiss,
+            )
         }
 
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -147,5 +153,6 @@ private fun DetailReservationScreenPreview() {
         onCancelDialogDismiss = {},
         onCancelDialogConfirm = {},
         onInfoClick = {},
+        onRefundPolicyDismiss = {},
     )
 }
