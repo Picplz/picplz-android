@@ -1,12 +1,16 @@
 package com.hm.picplz.ui.screen.detail_reservation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -14,6 +18,9 @@ import javax.inject.Inject
 class DetailReservationViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(DetailReservationState())
     val state: StateFlow<DetailReservationState> get() = _state
+
+    private val _sideEffect = MutableSharedFlow<DetailReservationSideEffect>()
+    val sideEffect: SharedFlow<DetailReservationSideEffect> get() = _sideEffect
 
     init {
         // TODO: API에서 촬영 일시 데이터를 받아와야 합니다.
@@ -80,6 +87,12 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
                         showRefundPolicyTooltip = false,
                         showCancelDialog = true,
                     )
+                }
+            }
+
+            is DetailReservationIntent.NavigateBack -> {
+                viewModelScope.launch {
+                    _sideEffect.emit(DetailReservationSideEffect.NavigateToPrev)
                 }
             }
         }

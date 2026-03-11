@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,10 +26,19 @@ import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
 fun DetailReservationScreen(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailReservationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is DetailReservationSideEffect.NavigateToPrev -> onNavigateBack()
+            }
+        }
+    }
 
     DetailReservationScreen(
         modifier = modifier,
@@ -57,6 +67,9 @@ fun DetailReservationScreen(
         onRefundPolicyDismiss = {
             viewModel.handelIntent(DetailReservationIntent.DismissRefundPolicyTooltip)
         },
+        onCloseClick = {
+            viewModel.handelIntent(DetailReservationIntent.NavigateBack)
+        },
     )
 }
 
@@ -71,6 +84,7 @@ private fun DetailReservationScreen(
     onCancelDialogConfirm: () -> Unit,
     onInfoClick: () -> Unit,
     onRefundPolicyDismiss: () -> Unit,
+    onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -100,7 +114,7 @@ private fun DetailReservationScreen(
                     Modifier
                         .fillMaxWidth()
                         .height(230.dp),
-                onCloseClick = {},
+                onCloseClick = onCloseClick,
             )
 
             LazyColumn(
@@ -154,5 +168,6 @@ private fun DetailReservationScreenPreview() {
         onCancelDialogConfirm = {},
         onInfoClick = {},
         onRefundPolicyDismiss = {},
+        onCloseClick = {},
     )
 }

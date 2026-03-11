@@ -72,6 +72,6 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     }
 
     composable<DetailReservation> {
-        DetailReservationScreen()
+        DetailReservationScreen(onNavigateBack = { navController.popBackStack() })
     }
 }

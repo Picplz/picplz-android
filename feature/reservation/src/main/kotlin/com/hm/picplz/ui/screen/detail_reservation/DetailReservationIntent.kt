@@ -16,4 +16,6 @@ sealed interface DetailReservationIntent {
     data object ShowRefundPolicyDialog : DetailReservationIntent
 
     data object DismissRefundPolicyTooltip : DetailReservationIntent
+
+    data object NavigateBack : DetailReservationIntent
 }
