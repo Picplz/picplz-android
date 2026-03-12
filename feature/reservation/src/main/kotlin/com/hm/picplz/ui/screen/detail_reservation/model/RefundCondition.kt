@@ -5,41 +5,42 @@ import com.hm.picplz.feature.reservation.R
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-sealed class RefundCondition(
+enum class RefundCondition(
     val percent: Int,
     @StringRes val conditionResId: Int,
 ) {
-    data object Within24Hours : RefundCondition(
+    WITHIN_24_HOURS(
         percent = 100,
         conditionResId = R.string.refund_condition_within_24_hours,
-    )
+    ),
 
-    data object Before7Days : RefundCondition(
+    BEFORE_7_DAYS(
         percent = 100,
         conditionResId = R.string.refund_condition_before_7_days,
-    )
+    ),
 
-    data object Before3Days : RefundCondition(
+    BEFORE_3_DAYS(
         percent = 90,
         conditionResId = R.string.refund_condition_before_3_days,
-    )
+    ),
 
-    data object Before2Days : RefundCondition(
+    BEFORE_2_DAYS(
         percent = 70,
         conditionResId = R.string.refund_condition_before_2_days,
-    )
+    ),
 
-    data object Before1Day : RefundCondition(
+    BEFORE_1_DAY(
         percent = 50,
         conditionResId = R.string.refund_condition_before_1_day,
-    )
+    ),
 
-    data object SameDay : RefundCondition(
+    SAME_DAY(
         percent = 0,
         conditionResId = R.string.refund_condition_same_day,
-    )
+    ),
+    ;
 
-    fun isFullRefund() = this == Within24Hours || this == Before7Days
+    fun isFullRefund() = this == WITHIN_24_HOURS || this == BEFORE_7_DAYS
 
     companion object {
         /**
@@ -62,7 +63,7 @@ sealed class RefundCondition(
             confirmedDateTime?.let {
                 val hoursSinceConfirmed = ChronoUnit.HOURS.between(it, currentDateTime)
                 if (hoursSinceConfirmed < 24) {
-                    return Within24Hours
+                    return WITHIN_24_HOURS
                 }
             }
 
@@ -74,11 +75,11 @@ sealed class RefundCondition(
                 )
 
             return when {
-                daysUntilShooting >= 7 -> Before7Days
-                daysUntilShooting >= 3 -> Before3Days
-                daysUntilShooting >= 2 -> Before2Days
-                daysUntilShooting >= 1 -> Before1Day
-                else -> SameDay
+                daysUntilShooting >= 7 -> BEFORE_7_DAYS
+                daysUntilShooting >= 3 -> BEFORE_3_DAYS
+                daysUntilShooting >= 2 -> BEFORE_2_DAYS
+                daysUntilShooting >= 1 -> BEFORE_1_DAY
+                else -> SAME_DAY
             }
         }
     }

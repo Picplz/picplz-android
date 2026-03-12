@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,15 +20,25 @@ import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationMa
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPolicyDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
 fun DetailReservationScreen(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailReservationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is DetailReservationSideEffect.NavigateToPrev -> onNavigateBack()
+            }
+        }
+    }
 
     DetailReservationScreen(
         modifier = modifier,
@@ -50,6 +61,15 @@ fun DetailReservationScreen(
         onCancelDialogConfirm = {
             viewModel.handelIntent(DetailReservationIntent.ConfirmCancel)
         },
+        onInfoClick = {
+            viewModel.handelIntent(DetailReservationIntent.ShowRefundPolicyDialog)
+        },
+        onRefundPolicyDismiss = {
+            viewModel.handelIntent(DetailReservationIntent.DismissRefundPolicyTooltip)
+        },
+        onCloseClick = {
+            viewModel.handelIntent(DetailReservationIntent.NavigateBack)
+        },
     )
 }
 
@@ -62,6 +82,9 @@ private fun DetailReservationScreen(
     onCancelClick: () -> Unit,
     onCancelDialogDismiss: () -> Unit,
     onCancelDialogConfirm: () -> Unit,
+    onInfoClick: () -> Unit,
+    onRefundPolicyDismiss: () -> Unit,
+    onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -75,9 +98,13 @@ private fun DetailReservationScreen(
                 onDismiss = onCancelDialogDismiss,
                 onCancel = onCancelDialogDismiss,
                 onConfirm = onCancelDialogConfirm,
-                onInfoClick = {
-                    // TODO: 환불 규정 툴팁 표시
-                },
+                onInfoClick = onInfoClick,
+            )
+        }
+
+        if (state.showRefundPolicyTooltip) {
+            ReservationRefundPolicyDialog(
+                onDismissRequest = onRefundPolicyDismiss,
             )
         }
 
@@ -87,7 +114,7 @@ private fun DetailReservationScreen(
                     Modifier
                         .fillMaxWidth()
                         .height(230.dp),
-                onCloseClick = {},
+                onCloseClick = onCloseClick,
             )
 
             LazyColumn(
@@ -139,5 +166,8 @@ private fun DetailReservationScreenPreview() {
         onCancelClick = {},
         onCancelDialogDismiss = {},
         onCancelDialogConfirm = {},
+        onInfoClick = {},
+        onRefundPolicyDismiss = {},
+        onCloseClick = {},
     )
 }

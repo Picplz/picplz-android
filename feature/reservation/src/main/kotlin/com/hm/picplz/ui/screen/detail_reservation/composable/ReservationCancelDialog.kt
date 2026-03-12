@@ -119,8 +119,8 @@ private fun getDescriptionText(
     when (status) {
         ReservationStatus.RESERVED -> {
             when (refundCondition) {
-                RefundCondition.Within24Hours,
-                RefundCondition.Before7Days,
+                RefundCondition.WITHIN_24_HOURS,
+                RefundCondition.BEFORE_7_DAYS,
                 -> {
                     stringResource(R.string.reservation_cancel_dialog_desc_full_refund)
                 }
@@ -160,7 +160,7 @@ private fun getPartialRefundAnnotatedText(refundPercent: Int) =
 private fun ReservationCancelDialogWaitingApprovalPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.WAITING_APPROVAL,
-        refundCondition = RefundCondition.Within24Hours,
+        refundCondition = RefundCondition.WITHIN_24_HOURS,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -173,7 +173,7 @@ private fun ReservationCancelDialogWaitingApprovalPreview() {
 private fun ReservationCancelDialogFullRefundPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.RESERVED,
-        refundCondition = RefundCondition.Before7Days,
+        refundCondition = RefundCondition.BEFORE_7_DAYS,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
@@ -186,7 +186,7 @@ private fun ReservationCancelDialogFullRefundPreview() {
 private fun ReservationCancelDialogPartialRefundPreview() {
     ReservationCancelDialog(
         status = ReservationStatus.RESERVED,
-        refundCondition = RefundCondition.Before3Days,
+        refundCondition = RefundCondition.BEFORE_3_DAYS,
         onDismiss = {},
         onCancel = {},
         onConfirm = {},
