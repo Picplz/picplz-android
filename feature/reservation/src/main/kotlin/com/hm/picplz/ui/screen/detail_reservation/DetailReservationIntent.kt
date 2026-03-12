@@ -6,4 +6,10 @@ sealed interface DetailReservationIntent {
     data object NavigateToHistory : DetailReservationIntent
 
     data object ConfirmReservation : DetailReservationIntent
+
+    data object ShowCancelDialog : DetailReservationIntent
+
+    data object DismissCancelDialog : DetailReservationIntent
+
+    data object ConfirmCancel : DetailReservationIntent
 }

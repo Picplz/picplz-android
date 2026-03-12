@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationBottomButtons
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationMap
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
@@ -40,6 +41,15 @@ fun DetailReservationScreen(
         onConfirmClick = {
             viewModel.handelIntent(DetailReservationIntent.ConfirmReservation)
         },
+        onCancelClick = {
+            viewModel.handelIntent(DetailReservationIntent.ShowCancelDialog)
+        },
+        onCancelDialogDismiss = {
+            viewModel.handelIntent(DetailReservationIntent.DismissCancelDialog)
+        },
+        onCancelDialogConfirm = {
+            viewModel.handelIntent(DetailReservationIntent.ConfirmCancel)
+        },
     )
 }
 
@@ -49,12 +59,28 @@ private fun DetailReservationScreen(
     onChatClick: () -> Unit,
     onHistoryClick: () -> Unit,
     onConfirmClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onCancelDialogDismiss: () -> Unit,
+    onCancelDialogConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
+        if (state.showCancelDialog) {
+            ReservationCancelDialog(
+                status = state.reservationStatus,
+                refundCondition = state.refundCondition,
+                onDismiss = onCancelDialogDismiss,
+                onCancel = onCancelDialogDismiss,
+                onConfirm = onCancelDialogConfirm,
+                onInfoClick = {
+                    // TODO: 환불 규정 툴팁 표시
+                },
+            )
+        }
+
         Column(modifier = Modifier.padding(innerPadding)) {
             DetailReservationMap(
                 modifier =
@@ -72,7 +98,7 @@ private fun DetailReservationScreen(
                     ReservationStatusHeader(
                         modifier = Modifier.padding(vertical = 20.dp),
                         currentReservationStatus = state.reservationStatus,
-                        onCancelClick = {},
+                        onCancelClick = onCancelClick,
                     )
                 }
 
@@ -104,11 +130,14 @@ private fun DetailReservationScreen(
 
 @Preview
 @Composable
-fun DetailReservationScreenPreview() {
+private fun DetailReservationScreenPreview() {
     DetailReservationScreen(
         state = DetailReservationState(),
         onChatClick = {},
         onHistoryClick = {},
         onConfirmClick = {},
+        onCancelClick = {},
+        onCancelDialogDismiss = {},
+        onCancelDialogConfirm = {},
     )
 }
