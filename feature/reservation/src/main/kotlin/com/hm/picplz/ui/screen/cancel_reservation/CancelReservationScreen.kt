@@ -29,13 +29,14 @@ import com.hm.picplz.core.ui.R as CoreR
 fun CancelReservationScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
+    onNavigateHome: () -> Unit,
     viewModel: CancelReservationViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 CancelReservationSideEffect.NavigateToHistory -> onNavigateBack()
-                CancelReservationSideEffect.NavigateToHome -> onNavigateBack()
+                CancelReservationSideEffect.NavigateToHome -> onNavigateHome()
                 CancelReservationSideEffect.NavigateToPrev -> onNavigateBack()
             }
         }
@@ -188,5 +189,6 @@ private fun CancelReservationButtons(
 private fun CancelReservationScreenPreview() {
     CancelReservationScreen(
         onNavigateBack = { },
+        onNavigateHome = { },
     )
 }

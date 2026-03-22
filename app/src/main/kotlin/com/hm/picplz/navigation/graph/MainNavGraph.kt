@@ -85,6 +85,15 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     }
 
     composable<CancelReservation> {
-        CancelReservationScreen(onNavigateBack = { navController.popBackStack() })
+        CancelReservationScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateHome = {
+                navController.navigate(Main) {
+                    popUpTo<Dev> { inclusive = false }
+                }
+            },
+        )
     }
 }
