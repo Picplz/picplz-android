@@ -64,6 +64,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
@@ -164,14 +165,25 @@ fun QuickShootScreen(
             allPhotographers.find { it.id == selectedId }
         }
 
+    val isPermissionDenied = !currentState.locationPermissionGranted && currentState.hasRequestedPermission
+    val isFirstEntry = !currentState.locationPermissionGranted && !currentState.hasRequestedPermission
+
     Scaffold(
         bottomBar = {
-            if (currentState.locationPermissionGranted) {
+            if (currentState.locationPermissionGranted || isPermissionDenied) {
                 BottomNavigationBar(navController = mainNavController)
             }
         },
     ) {
-        if (currentState.locationPermissionGranted) {
+        if (isFirstEntry) {
+            QuickShootLocationPermissionRationale(
+                onNextClick = {
+                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission())
+                },
+            )
+        } else if (isPermissionDenied) {
+            QuickShootPermissionDeniedContent(currentState = currentState)
+        } else if (currentState.locationPermissionGranted) {
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
                 sheetContent = {
@@ -375,12 +387,6 @@ fun QuickShootScreen(
                     viewModel.handleIntent(QuickShootIntent.SelectSortType(sortType))
                 },
             )
-        } else {
-            QuickShootLocationPermissionRationale(
-                onNextClick = {
-                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission())
-                },
-            )
         }
         LaunchedEffect(Unit) {
             viewModel.sideEffect.collectLatest { sideEffect ->
@@ -458,6 +464,106 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                     .align(Alignment.BottomCenter)
                     .padding(start = 20.dp, end = 20.dp, bottom = 47.dp),
             enabled = true,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuickShootPermissionDeniedContent(currentState: QuickShootState) {
+    val scaffoldState =
+        rememberBottomSheetScaffoldState(
+            bottomSheetState =
+                rememberStandardBottomSheetState(
+                    initialValue = SheetValue.PartiallyExpanded,
+                    skipHiddenState = true,
+                ),
+        )
+
+    CommonBottomSheetScaffold(
+        modifier = Modifier.fillMaxSize(),
+        sheetContent = {
+            PhotographerListSheet(
+                photographers = FilteredPhotographers(),
+                selectedSortType = currentState.selectedSortType,
+                onSortClick = {},
+                onPhotographerClick = {},
+                emptyContent = { LocationPermissionDeniedEmptyState() },
+            )
+        },
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 76.dp,
+        sheetMaxHeight = (LocalConfiguration.current.screenHeightDp * 0.9f).dp,
+        navigationBarPadding = true,
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MainThemeColor.Gray1),
+        ) {
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AddressMarker(address = "-")
+                RefetchButton(
+                    enabled = false,
+                    onClick = {},
+                )
+            }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                LocationPermissionDeniedEmptyState()
+            }
+        }
+    }
+}
+
+@Composable
+private fun LocationPermissionDeniedEmptyState() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = "위치 접근 권한이",
+            style = MainThemeFont.TitleSmall,
+            color = MainThemeColor.Black,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "꺼져 있어요",
+            style = MainThemeFont.TitleSmall,
+            color = MainThemeColor.Black,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.empty_character),
+            contentDescription = "위치 권한 꺼짐 캐릭터",
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "설정 → 앱 → [픽플즈]에서",
+            style = MainThemeFont.Body,
+            color = MainThemeColor.Gray4,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "위치 권한을 활성화 해주세요",
+            style = MainThemeFont.Body,
+            color = MainThemeColor.Gray4,
+            textAlign = TextAlign.Center,
         )
     }
 }

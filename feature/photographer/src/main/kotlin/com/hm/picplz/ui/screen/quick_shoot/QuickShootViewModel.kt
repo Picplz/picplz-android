@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.quick_shoot
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.KakaoMapService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.domain.repository.PhotographerRepository
@@ -25,6 +26,7 @@ class QuickShootViewModel
         private val photographerRepository: PhotographerRepository,
         private val locationService: LocationService,
         private val kakaoMapService: KakaoMapService,
+        private val tokenManager: TokenManager,
     ) : ViewModel() {
         private val _state = MutableStateFlow(QuickShootState.idle())
         val state: StateFlow<QuickShootState> get() = _state
@@ -35,6 +37,12 @@ class QuickShootViewModel
         private val locationHandler = LocationHandler()
         private val offsetGenerator = OffsetGenerator()
         private val photographerSearchHandler = PhotographerSearchHandler(offsetGenerator)
+
+        init {
+            _state.update {
+                it.copy(hasRequestedPermission = tokenManager.hasRequestedLocationPermission())
+            }
+        }
 
         fun handleIntent(intent: QuickShootIntent) {
             when (intent) {
@@ -57,9 +65,15 @@ class QuickShootViewModel
                 }
 
                 is QuickShootIntent.RequestLocationPermission -> {
+                    tokenManager.setHasRequestedLocationPermission()
+                    _state.update { it.copy(hasRequestedPermission = true) }
                     viewModelScope.launch {
                         _sideEffect.send(QuickShootSideEffect.RequestLocationPermission)
                     }
+                }
+
+                is QuickShootIntent.SetHasRequestedPermission -> {
+                    _state.update { it.copy(hasRequestedPermission = intent.requested) }
                 }
 
                 is QuickShootIntent.SetLocationPermissionGranted -> {
