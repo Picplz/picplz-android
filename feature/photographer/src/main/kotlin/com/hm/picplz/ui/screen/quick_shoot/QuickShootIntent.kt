@@ -16,11 +16,9 @@ sealed interface QuickShootIntent {
 
     data class SetCurrentLocation(val location: LatLng) : QuickShootIntent
 
-    data class RequestLocationPermission(val unit: Unit = Unit) : QuickShootIntent
+    data object RequestLocationPermission : QuickShootIntent
 
     data class SetLocationPermissionGranted(val granted: Boolean) : QuickShootIntent
-
-    data class SetHasRequestedPermission(val requested: Boolean) : QuickShootIntent
 
     data object GetCurrentLocation : QuickShootIntent
 

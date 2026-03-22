@@ -76,6 +76,7 @@ import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootBottomButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortBottomSheet
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortType
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlinx.coroutines.flow.collectLatest
@@ -168,6 +169,24 @@ fun QuickShootScreen(
     val isPermissionDenied = !currentState.locationPermissionGranted && currentState.hasRequestedPermission
     val isFirstEntry = !currentState.locationPermissionGranted && !currentState.hasRequestedPermission
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is QuickShootSideEffect.NavigateToPrev -> {
+                    mainNavController.popBackStack()
+                }
+                is QuickShootSideEffect.RequestLocationPermission -> {
+                    launcher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
             if (currentState.locationPermissionGranted || isPermissionDenied) {
@@ -178,11 +197,13 @@ fun QuickShootScreen(
         if (isFirstEntry) {
             QuickShootLocationPermissionRationale(
                 onNextClick = {
-                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission())
+                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission)
                 },
             )
         } else if (isPermissionDenied) {
-            QuickShootPermissionDeniedContent(currentState = currentState)
+            QuickShootPermissionDeniedContent(
+                selectedSortType = currentState.selectedSortType,
+            )
         } else if (currentState.locationPermissionGranted) {
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
@@ -250,28 +271,12 @@ fun QuickShootScreen(
                                 }
                             }
                         } else {
-                            Row(
-                                modifier =
-                                    modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 10.dp, start = 5.dp, end = 3.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                AddressMarker(
-                                    address = currentState.address,
-                                )
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    RefetchButton(
-                                        onClick = {
-                                            viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
-                                        },
-                                    )
-                                }
-                            }
+                            QuickShootLocationHeader(
+                                address = currentState.address,
+                                onRefetchClick = {
+                                    viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
+                                },
+                            )
 
                             val entirePhotographers =
                                 currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
@@ -388,23 +393,6 @@ fun QuickShootScreen(
                 },
             )
         }
-        LaunchedEffect(Unit) {
-            viewModel.sideEffect.collectLatest { sideEffect ->
-                when (sideEffect) {
-                    is QuickShootSideEffect.NavigateToPrev -> {
-                        mainNavController.popBackStack()
-                    }
-                    is QuickShootSideEffect.RequestLocationPermission -> {
-                        launcher.launch(
-                            arrayOf(
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                            ),
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -470,7 +458,7 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun QuickShootPermissionDeniedContent(currentState: QuickShootState) {
+private fun QuickShootPermissionDeniedContent(selectedSortType: QuickShootSortType) {
     val scaffoldState =
         rememberBottomSheetScaffoldState(
             bottomSheetState =
@@ -485,7 +473,7 @@ private fun QuickShootPermissionDeniedContent(currentState: QuickShootState) {
         sheetContent = {
             PhotographerListSheet(
                 photographers = FilteredPhotographers(),
-                selectedSortType = currentState.selectedSortType,
+                selectedSortType = selectedSortType,
                 onSortClick = {},
                 onPhotographerClick = {},
                 emptyContent = { LocationPermissionDeniedEmptyState() },
@@ -502,20 +490,10 @@ private fun QuickShootPermissionDeniedContent(currentState: QuickShootState) {
                     .fillMaxSize()
                     .background(MainThemeColor.Gray1),
         ) {
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, start = 5.dp, end = 3.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                AddressMarker(address = "-")
-                RefetchButton(
-                    enabled = false,
-                    onClick = {},
-                )
-            }
+            QuickShootLocationHeader(
+                address = "-",
+                refetchEnabled = false,
+            )
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
@@ -523,6 +501,28 @@ private fun QuickShootPermissionDeniedContent(currentState: QuickShootState) {
                 LocationPermissionDeniedEmptyState()
             }
         }
+    }
+}
+
+@Composable
+private fun QuickShootLocationHeader(
+    address: String?,
+    refetchEnabled: Boolean = true,
+    onRefetchClick: () -> Unit = {},
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AddressMarker(address = address)
+        RefetchButton(
+            enabled = refetchEnabled,
+            onClick = onRefetchClick,
+        )
     }
 }
 

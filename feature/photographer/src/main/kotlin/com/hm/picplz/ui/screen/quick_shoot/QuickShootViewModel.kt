@@ -72,10 +72,6 @@ class QuickShootViewModel
                     }
                 }
 
-                is QuickShootIntent.SetHasRequestedPermission -> {
-                    _state.update { it.copy(hasRequestedPermission = intent.requested) }
-                }
-
                 is QuickShootIntent.SetLocationPermissionGranted -> {
                     _state.update { it.copy(locationPermissionGranted = intent.granted) }
                 }
@@ -89,7 +85,7 @@ class QuickShootViewModel
                         },
                         onPermissionDenied = {
                             _state.update { it.copy(isFetchingGPS = false) }
-                            handleIntent(QuickShootIntent.RequestLocationPermission())
+                            handleIntent(QuickShootIntent.RequestLocationPermission)
                         },
                     )
                 }
