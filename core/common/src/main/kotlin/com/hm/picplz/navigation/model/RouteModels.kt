@@ -110,4 +110,4 @@ data class DetailPhotographerPortfolioDetail(val portfolioId: Int, val photoInde
 data object DetailReservation : NavigationRoute
 
 @Serializable
-data object CancelReservation : NavigationRoute
+data object CancelReservationConfirm : NavigationRoute

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.cancel_reservation
+package com.hm.picplz.ui.screen.cancel_reservation_confirm
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -26,32 +26,32 @@ import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.core.ui.R as CoreR
 
 @Composable
-fun CancelReservationScreen(
+fun CancelReservationConfirmScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
     onNavigateHome: () -> Unit,
-    viewModel: CancelReservationViewModel = hiltViewModel(),
+    viewModel: CancelReservationConfirmViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                CancelReservationSideEffect.NavigateToHistory -> onNavigateBack()
-                CancelReservationSideEffect.NavigateToHome -> onNavigateHome()
-                CancelReservationSideEffect.NavigateToPrev -> onNavigateBack()
+                CancelReservationConfirmSideEffect.NavigateToHistory -> onNavigateBack()
+                CancelReservationConfirmSideEffect.NavigateToHome -> onNavigateHome()
+                CancelReservationConfirmSideEffect.NavigateToPrev -> onNavigateBack()
             }
         }
     }
 
-    CancelReservationScreenContent(
+    CancelReservationConfirmScreenContent(
         modifier = modifier,
         onNavigateBack = onNavigateBack,
-        onHistoryClick = { viewModel.handleIntent(CancelReservationIntent.NavigateToHistory) },
-        onHomeClick = { viewModel.handleIntent(CancelReservationIntent.NavigateToHome) },
+        onHistoryClick = { viewModel.handleIntent(CancelReservationConfirmIntent.NavigateToHistory) },
+        onHomeClick = { viewModel.handleIntent(CancelReservationConfirmIntent.NavigateToHome) },
     )
 }
 
 @Composable
-private fun CancelReservationScreenContent(
+private fun CancelReservationConfirmScreenContent(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     onHistoryClick: () -> Unit = {},
@@ -186,8 +186,8 @@ private fun CancelReservationButtons(
 
 @Preview
 @Composable
-private fun CancelReservationScreenPreview() {
-    CancelReservationScreen(
+private fun CancelReservationConfirmScreenPreview() {
+    CancelReservationConfirmScreen(
         onNavigateBack = { },
         onNavigateHome = { },
     )
