@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hm.picplz.feature.reservation.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonBottomOutlinedButton
@@ -27,10 +29,23 @@ import com.hm.picplz.core.ui.R as CoreR
 fun CancelReservationScreen(
     onNavigateBack: () -> Unit = {},
     modifier: Modifier = Modifier,
+    viewModel: CancelReservationViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                CancelReservationSideEffect.NavigateToHistory -> onNavigateBack()
+                CancelReservationSideEffect.NavigateToHome -> onNavigateBack()
+                CancelReservationSideEffect.NavigateToPrev -> onNavigateBack()
+            }
+        }
+    }
+
     CancelReservationScreenContent(
         modifier = modifier,
         onNavigateBack = onNavigateBack,
+        onHistoryClick = { viewModel.handleIntent(CancelReservationIntent.NavigateToHistory) },
+        onHomeClick = { viewModel.handleIntent(CancelReservationIntent.NavigateToHome) },
     )
 }
 
