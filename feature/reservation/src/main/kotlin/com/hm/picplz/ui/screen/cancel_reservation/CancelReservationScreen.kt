@@ -27,8 +27,8 @@ import com.hm.picplz.core.ui.R as CoreR
 
 @Composable
 fun CancelReservationScreen(
-    onNavigateBack: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit,
     viewModel: CancelReservationViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
@@ -186,5 +186,7 @@ private fun CancelReservationButtons(
 @Preview
 @Composable
 private fun CancelReservationScreenPreview() {
-    CancelReservationScreen()
+    CancelReservationScreen(
+        onNavigateBack = { },
+    )
 }
