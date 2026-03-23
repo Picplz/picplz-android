@@ -138,6 +138,12 @@ main ← develop ← feat/이슈번호
 - **미사용 Route 파라미터**: `_` prefix + `@Suppress("UNUSED_PARAMETER")`
 - **빈 catch 블록**: 의도적 무시 시 주석 필수 또는 `@Suppress("SwallowedException")`
 
+### String Resource Rule
+- **UI에 표시되는 모든 텍스트는 `strings.xml`에 정의** — 하드코딩 금지
+- 파일 위치: `core/ui/src/main/res/values/strings.xml` (공통) 또는 각 feature 모듈의 `res/values/strings.xml`
+- 네이밍: `{화면}_{용도}` (예: `quick_shoot_permission_denied_title`, `cancel_reservation_button_home`)
+- `contentDescription`도 string resource 사용
+
 ## MIGRATION STATUS (refactor/77)
 
 | Module | Status | Notes |

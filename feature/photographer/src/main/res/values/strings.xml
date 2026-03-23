@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 빠른촬영 - 공통 -->
+    <string name="quick_shoot_loading_location">위치 정보 로딩</string>
+    <string name="quick_shoot_range_image_desc">범위 지정 이미지</string>
+    <string name="quick_shoot_center_char_desc">작가 탐색 중앙 캐릭터</string>
+
+    <!-- 빠른촬영 - 위치 권한 rationale -->
+    <string name="quick_shoot_rationale_icon_desc">위치 권한 안내 아이콘</string>
+    <string name="quick_shoot_rationale_title_prefix">앱 서비스 이용을 위해</string>
+    <string name="quick_shoot_rationale_title_permission">위치 접근 권한</string>
+    <string name="quick_shoot_rationale_title_suffix">이 필요해요</string>
+    <string name="quick_shoot_rationale_description">더 나은 서비스 제공을 위해 권한을 요청드려요.\n동의하지 않아도 서비스를 이용할 수 있지만,\n다수 기능의 이용이 제한될 수 있어요.</string>
+    <string name="quick_shoot_rationale_button">다음</string>
+
+    <!-- 빠른촬영 - 권한 거부 빈 상태 -->
+    <string name="quick_shoot_permission_denied_title">위치 접근 권한이</string>
+    <string name="quick_shoot_permission_denied_subtitle">꺼져 있어요</string>
+    <string name="quick_shoot_permission_denied_char_desc">위치 권한 꺼짐 캐릭터</string>
+    <string name="quick_shoot_permission_denied_guide_prefix">설정 → 앱 → [픽플즈]에서</string>
+    <string name="quick_shoot_permission_denied_guide_suffix">위치 권한을 활성화 해주세요</string>
+    <string name="quick_shoot_permission_denied_address">-</string>
+    <string name="quick_shoot_permission_denied_toast">위치 권한이 필요합니다</string>
+
+    <!-- 빠른촬영 - 작가 없음 빈 상태 -->
+    <string name="quick_shoot_empty_title">주변에 바로 촬영 중인</string>
+    <string name="quick_shoot_empty_subtitle">작가가 없습니다</string>
+    <string name="quick_shoot_empty_char_desc">주변 작가 없음 캐릭터</string>
+    <string name="quick_shoot_empty_guide_prefix">다른 지역으로</string>
+    <string name="quick_shoot_empty_guide_suffix">이동해 보는 건 어때요?</string>
+</resources>
