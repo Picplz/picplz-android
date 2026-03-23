@@ -13,49 +13,50 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.navigation.model.ReviewPhotographer
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
+import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.buttonText
+import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
-
-data class ReviewItem(
-    val imageUri: Int,
-    val label: String,
-    val value: Int,
-)
 
 @Composable
 fun ReviewSection(
     modifier: Modifier,
     navController: NavHostController,
     reviewSummary: PhotographerReviewSummary,
+    reviews: List<PhotographerReview>,
     photographerId: Int,
 ) {
     val totalRating = reviewSummary.averageRating
-    val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN) // MathUtil에서 호출
+    val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN)
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "촬영 만족도", style = buttonText)
+        Text(
+            text = stringResource(R.string.shooting_satisfaction),
+            style = MainThemeFont.TitleSmall,
+            color = MainThemeColor.Black,
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 별점 부분
         Row(verticalAlignment = Alignment.CenterVertically) {
             starList.forEach { star ->
                 Image(
                     painter = painterResource(id = star),
-                    contentDescription = "별점",
+                    contentDescription = stringResource(R.string.star_rating),
                 )
             }
             Spacer(modifier = Modifier.width(3.dp))
@@ -69,21 +70,45 @@ fun ReviewSection(
 
         Spacer(modifier = Modifier.height(17.dp))
 
-        // 아이템 리스트를 돌면서 표시
-        ReviewBars(items = reviewSummary.keywordBars, modifier = modifier)
+        if (reviews.isEmpty()) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = stringResource(R.string.no_reviews),
+                style = pretendardTypography.bodyMedium,
+                color = MainThemeColor.Gray3,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+        } else {
+            Column(modifier = modifier.fillMaxWidth()) {
+                SingleReview(
+                    navController = navController,
+                    review = reviews.first(),
+                )
+            }
 
-        CommonIconButton(
-            label = "전체 리뷰 보러가기 (${reviewSummary.totalReviewCount})",
-            backgroundColor = Color.Transparent,
-            textColor = MainThemeColor.Gray4,
-            textStyle = pretendardTypography.bodyMedium,
-            iconResId = R.drawable.depth_arrow,
-            location = "right",
-            horizontalPadding = 0.dp,
-            verticalPadding = 0.dp,
-            gap = 6.dp,
-            onClick = { navController.navigate(ReviewPhotographer(photographerId)) },
-            modifier = modifier.align(Alignment.End),
-        )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            CommonIconButton(
+                label =
+                    stringResource(
+                        R.string.view_all_reviews_format,
+                        reviewSummary.totalReviewCount,
+                    ),
+                backgroundColor = Color.Transparent,
+                textColor = MainThemeColor.Gray4,
+                textStyle = MainThemeFont.Caption,
+                iconResId = R.drawable.depth_arrow,
+                location = "right",
+                horizontalPadding = 0.dp,
+                verticalPadding = 0.dp,
+                gap = 6.dp,
+                onClick = {
+                    navController.navigate(ReviewPhotographer(photographerId))
+                },
+                modifier =
+                    modifier.align(Alignment.End),
+            )
+        }
     }
 }

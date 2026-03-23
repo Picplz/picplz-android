@@ -39,12 +39,23 @@ data class PhotographerInfo(
     val socialAccount: String?,
     val infoText: String,
     val isActive: Boolean,
+    val isBookable: Boolean = true,
     val isFollow: Boolean,
     val followCount: Int,
     val profileImageUri: String,
     val workingArea: List<String>,
     val keyword: List<String>,
+    val equipment: List<String> = emptyList(),
     val photoPortfolios: List<PhotoPortfolio>,
+)
+
+data class ShootingPackage(
+    val packageId: Int,
+    val title: String,
+    val price: Int,
+    val imageUri: String,
+    val shootingTime: String,
+    val description: String,
 )
 
 data class PhotographerPortfolio(
