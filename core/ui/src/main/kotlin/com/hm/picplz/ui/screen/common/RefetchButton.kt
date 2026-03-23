@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,22 +31,32 @@ import com.hm.picplz.ui.theme.Pretendard
 @Composable
 fun RefetchButton(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
+    val contentAlpha = if (enabled) 1f else 0.4f
+
     Box(
         modifier =
             modifier
                 .size(width = 166.dp, height = 48.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClick,
+                .then(
+                    if (enabled) {
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onClick,
+                        )
+                    } else {
+                        Modifier
+                    },
                 ),
         contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier =
                 Modifier
+                    .alpha(contentAlpha)
                     .background(
                         color = MainThemeColor.White,
                         shape = RoundedCornerShape(50.dp),

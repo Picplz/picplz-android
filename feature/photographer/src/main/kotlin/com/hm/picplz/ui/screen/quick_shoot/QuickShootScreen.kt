@@ -54,6 +54,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -64,6 +65,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.AddressMarker
@@ -75,10 +77,12 @@ import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerProfile
 import com.hm.picplz.ui.screen.quick_shoot.composable.PhotographerSheet
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootBottomButton
 import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortBottomSheet
+import com.hm.picplz.ui.screen.quick_shoot.composable.QuickShootSortType
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.hm.picplz.feature.photographer.R as PhotographerR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("DefaultLocale", "UnusedMaterial3ScaffoldPaddingParameter")
@@ -107,7 +111,7 @@ fun QuickShootScreen(
                     viewModel.handleIntent(QuickShootIntent.SetLocationPermissionGranted(false))
                     Toast.makeText(
                         context,
-                        "위치 권한이 필요합니다",
+                        context.getString(PhotographerR.string.quick_shoot_permission_denied_toast),
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
@@ -164,14 +168,45 @@ fun QuickShootScreen(
             allPhotographers.find { it.id == selectedId }
         }
 
+    val isPermissionDenied = !currentState.locationPermissionGranted && currentState.hasRequestedPermission
+    val isFirstEntry = !currentState.locationPermissionGranted && !currentState.hasRequestedPermission
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is QuickShootSideEffect.NavigateToPrev -> {
+                    mainNavController.popBackStack()
+                }
+                is QuickShootSideEffect.RequestLocationPermission -> {
+                    launcher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
-            if (currentState.locationPermissionGranted) {
+            if (currentState.locationPermissionGranted || isPermissionDenied) {
                 BottomNavigationBar(navController = mainNavController)
             }
         },
     ) {
-        if (currentState.locationPermissionGranted) {
+        if (isFirstEntry) {
+            QuickShootLocationPermissionRationale(
+                onNextClick = {
+                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission)
+                },
+            )
+        } else if (isPermissionDenied) {
+            QuickShootPermissionDeniedContent(
+                selectedSortType = currentState.selectedSortType,
+            )
+        } else if (currentState.locationPermissionGranted) {
             CommonBottomSheetScaffold(
                 modifier = Modifier.fillMaxSize(),
                 sheetContent = {
@@ -231,35 +266,19 @@ fun QuickShootScreen(
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "위치 정보 로딩",
+                                        text = stringResource(PhotographerR.string.quick_shoot_loading_location),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MainThemeColor.Black,
                                     )
                                 }
                             }
                         } else {
-                            Row(
-                                modifier =
-                                    modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 10.dp, start = 5.dp, end = 3.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                AddressMarker(
-                                    address = currentState.address,
-                                )
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    RefetchButton(
-                                        onClick = {
-                                            viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
-                                        },
-                                    )
-                                }
-                            }
+                            QuickShootLocationHeader(
+                                address = currentState.address,
+                                onRefetchClick = {
+                                    viewModel.handleIntent(QuickShootIntent.RefetchNearbyPhotographers)
+                                },
+                            )
 
                             val entirePhotographers =
                                 currentState.nearbyPhotographers.active + currentState.nearbyPhotographers.inactive
@@ -290,7 +309,10 @@ fun QuickShootScreen(
                                 ) {
                                     Image(
                                         painter = painterResource(R.drawable.multicircle),
-                                        contentDescription = "범위 지정 이미지",
+                                        contentDescription =
+                                            stringResource(
+                                                PhotographerR.string.quick_shoot_range_image_desc,
+                                            ),
                                         contentScale = ContentScale.FillWidth,
                                         modifier =
                                             Modifier
@@ -298,7 +320,10 @@ fun QuickShootScreen(
                                     )
                                     Image(
                                         painter = painterResource(id = R.drawable.center_char),
-                                        contentDescription = "작가 탐색 중앙 캐릭터",
+                                        contentDescription =
+                                            stringResource(
+                                                PhotographerR.string.quick_shoot_center_char_desc,
+                                            ),
                                     )
                                     currentState.nearbyPhotographers.active.forEach { photographer ->
                                         val offset =
@@ -375,29 +400,6 @@ fun QuickShootScreen(
                     viewModel.handleIntent(QuickShootIntent.SelectSortType(sortType))
                 },
             )
-        } else {
-            QuickShootLocationPermissionRationale(
-                onNextClick = {
-                    viewModel.handleIntent(QuickShootIntent.RequestLocationPermission())
-                },
-            )
-        }
-        LaunchedEffect(Unit) {
-            viewModel.sideEffect.collectLatest { sideEffect ->
-                when (sideEffect) {
-                    is QuickShootSideEffect.NavigateToPrev -> {
-                        mainNavController.popBackStack()
-                    }
-                    is QuickShootSideEffect.RequestLocationPermission -> {
-                        launcher.launch(
-                            arrayOf(
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                            ),
-                        )
-                    }
-                }
-            }
         }
     }
 }
@@ -419,11 +421,11 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_location_permission),
-                contentDescription = "위치 권한 안내 아이콘",
+                contentDescription = stringResource(PhotographerR.string.quick_shoot_rationale_icon_desc),
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "앱 서비스 이용을 위해",
+                text = stringResource(PhotographerR.string.quick_shoot_rationale_title_prefix),
                 style = MainThemeFont.Title,
                 color = MainThemeColor.Black,
                 textAlign = TextAlign.Center,
@@ -432,10 +434,10 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
                 text =
                     buildAnnotatedString {
                         withStyle(SpanStyle(color = MainThemeColor.Green120)) {
-                            append("위치 접근 권한")
+                            append(stringResource(PhotographerR.string.quick_shoot_rationale_title_permission))
                         }
                         withStyle(SpanStyle(color = MainThemeColor.Black)) {
-                            append("이 필요해요")
+                            append(stringResource(PhotographerR.string.quick_shoot_rationale_title_suffix))
                         }
                     },
                 style = MainThemeFont.Title,
@@ -443,7 +445,7 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "더 나은 서비스 제공을 위해 권한을 요청드려요.\n동의하지 않아도 서비스를 이용할 수 있지만,\n다수 기능의 이용이 제한될 수 있어요.",
+                text = stringResource(PhotographerR.string.quick_shoot_rationale_description),
                 style = MainThemeFont.Body,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,
@@ -451,13 +453,131 @@ private fun QuickShootLocationPermissionRationale(onNextClick: () -> Unit) {
         }
 
         QuickShootBottomButton(
-            text = "다음",
+            text = stringResource(PhotographerR.string.quick_shoot_rationale_button),
             onClick = onNextClick,
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
                     .padding(start = 20.dp, end = 20.dp, bottom = 47.dp),
             enabled = true,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuickShootPermissionDeniedContent(selectedSortType: QuickShootSortType) {
+    val scaffoldState =
+        rememberBottomSheetScaffoldState(
+            bottomSheetState =
+                rememberStandardBottomSheetState(
+                    initialValue = SheetValue.PartiallyExpanded,
+                    skipHiddenState = true,
+                ),
+        )
+
+    CommonBottomSheetScaffold(
+        modifier = Modifier.fillMaxSize(),
+        sheetContent = {
+            PhotographerListSheet(
+                photographers = FilteredPhotographers(),
+                selectedSortType = selectedSortType,
+                onSortClick = {},
+                onPhotographerClick = {},
+                emptyContent = { LocationPermissionDeniedEmptyState() },
+            )
+        },
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 76.dp,
+        sheetMaxHeight = (LocalConfiguration.current.screenHeightDp * 0.9f).dp,
+        navigationBarPadding = true,
+    ) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MainThemeColor.Gray1),
+        ) {
+            QuickShootLocationHeader(
+                address = stringResource(PhotographerR.string.quick_shoot_permission_denied_address),
+                refetchEnabled = false,
+            )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.multicircle),
+                    contentDescription = stringResource(PhotographerR.string.quick_shoot_range_image_desc),
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.scale(1.5f),
+                )
+                LocationPermissionDeniedEmptyState()
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuickShootLocationHeader(
+    address: String?,
+    refetchEnabled: Boolean = true,
+    onRefetchClick: () -> Unit = {},
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, start = 5.dp, end = 3.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AddressMarker(address = address)
+        RefetchButton(
+            enabled = refetchEnabled,
+            onClick = onRefetchClick,
+        )
+    }
+}
+
+@Composable
+private fun LocationPermissionDeniedEmptyState() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(PhotographerR.string.quick_shoot_permission_denied_title),
+            style = MainThemeFont.TitleSmall,
+            color = MainThemeColor.Black,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(PhotographerR.string.quick_shoot_permission_denied_subtitle),
+            style = MainThemeFont.TitleSmall,
+            color = MainThemeColor.Black,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.no_place),
+            contentDescription = stringResource(PhotographerR.string.quick_shoot_permission_denied_char_desc),
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = stringResource(PhotographerR.string.quick_shoot_permission_denied_guide_prefix),
+            style = MainThemeFont.Body,
+            color = MainThemeColor.Gray4,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = stringResource(PhotographerR.string.quick_shoot_permission_denied_guide_suffix),
+            style = MainThemeFont.Body,
+            color = MainThemeColor.Gray4,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -470,7 +590,7 @@ private fun QuickShootEmptyState() {
     ) {
         Image(
             painter = painterResource(R.drawable.multicircle),
-            contentDescription = "범위 표시",
+            contentDescription = stringResource(PhotographerR.string.quick_shoot_range_image_desc),
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.scale(1.5f),
         )
@@ -479,13 +599,13 @@ private fun QuickShootEmptyState() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "주변에 바로 촬영 중인",
+                text = stringResource(PhotographerR.string.quick_shoot_empty_title),
                 style = MainThemeFont.TitleSmall,
                 color = MainThemeColor.Black,
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "작가가 없습니다",
+                text = stringResource(PhotographerR.string.quick_shoot_empty_subtitle),
                 style = MainThemeFont.TitleSmall,
                 color = MainThemeColor.Black,
                 textAlign = TextAlign.Center,
@@ -495,19 +615,19 @@ private fun QuickShootEmptyState() {
 
             Image(
                 painter = painterResource(id = R.drawable.no_photographer),
-                contentDescription = "주변 작가 없음 캐릭터",
+                contentDescription = stringResource(PhotographerR.string.quick_shoot_empty_char_desc),
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "다른 지역으로",
+                text = stringResource(PhotographerR.string.quick_shoot_empty_guide_prefix),
                 style = MainThemeFont.Body,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "이동해 보는 건 어때요?",
+                text = stringResource(PhotographerR.string.quick_shoot_empty_guide_suffix),
                 style = MainThemeFont.Body,
                 color = MainThemeColor.Gray4,
                 textAlign = TextAlign.Center,

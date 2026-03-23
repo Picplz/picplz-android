@@ -27,6 +27,7 @@ class TokenManager
             private const val KEY_SOCIAL_CODE = "social_code"
             private const val KEY_SOCIAL_EMAIL = "social_email"
             private const val KEY_SOCIAL_PROVIDER = "social_provider"
+            private const val KEY_HAS_REQUESTED_LOCATION_PERMISSION = "has_requested_location_permission"
         }
 
         enum class AuthRole(val value: String) {
@@ -102,6 +103,16 @@ class TokenManager
 
         fun isLoggedIn(): Boolean {
             return getToken() != null
+        }
+
+        fun hasRequestedLocationPermission(): Boolean {
+            return prefs.getBoolean(KEY_HAS_REQUESTED_LOCATION_PERMISSION, false)
+        }
+
+        fun setHasRequestedLocationPermission() {
+            prefs.edit()
+                .putBoolean(KEY_HAS_REQUESTED_LOCATION_PERMISSION, true)
+                .apply()
         }
 
         fun setDevelopmentTokens() {

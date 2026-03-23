@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.quick_shoot.composable
 import CommonStatusTag
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +54,7 @@ fun PhotographerListSheet(
     selectedSortType: QuickShootSortType,
     onSortClick: () -> Unit,
     onPhotographerClick: (Long) -> Unit,
+    emptyContent: (@Composable () -> Unit)? = null,
 ) {
     val listState = rememberLazyListState()
     val nestedScrollConnection =
@@ -113,20 +115,32 @@ fun PhotographerListSheet(
 
         val allPhotographers = photographers.active + photographers.inactive
 
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.nestedScroll(nestedScrollConnection),
-        ) {
-            itemsIndexed(allPhotographers) { index, photographer ->
-                PhotographerCard(
-                    photographer = photographer,
-                    onClick = { onPhotographerClick(photographer.id) },
-                )
-                if (index < allPhotographers.lastIndex) {
-                    HorizontalDivider(
-                        color = MainThemeColor.Gray2,
-                        thickness = 1.dp,
+        if (allPhotographers.isEmpty() && emptyContent != null) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                contentAlignment = Alignment.Center,
+            ) {
+                emptyContent()
+            }
+        } else {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.nestedScroll(nestedScrollConnection),
+            ) {
+                itemsIndexed(allPhotographers) { index, photographer ->
+                    PhotographerCard(
+                        photographer = photographer,
+                        onClick = { onPhotographerClick(photographer.id) },
                     )
+                    if (index < allPhotographers.lastIndex) {
+                        HorizontalDivider(
+                            color = MainThemeColor.Gray2,
+                            thickness = 1.dp,
+                        )
+                    }
                 }
             }
         }
