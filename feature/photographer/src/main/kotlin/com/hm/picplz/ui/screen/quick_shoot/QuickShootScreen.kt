@@ -484,7 +484,7 @@ private fun QuickShootPermissionDeniedContent(selectedSortType: QuickShootSortTy
         sheetMaxHeight = (LocalConfiguration.current.screenHeightDp * 0.9f).dp,
         navigationBarPadding = true,
     ) {
-        Column(
+        Box(
             modifier =
                 Modifier
                     .fillMaxSize()
@@ -498,6 +498,12 @@ private fun QuickShootPermissionDeniedContent(selectedSortType: QuickShootSortTy
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
+                Image(
+                    painter = painterResource(R.drawable.multicircle),
+                    contentDescription = "범위 표시",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.scale(1.5f),
+                )
                 LocationPermissionDeniedEmptyState()
             }
         }
@@ -547,7 +553,7 @@ private fun LocationPermissionDeniedEmptyState() {
         Spacer(modifier = Modifier.height(20.dp))
 
         Image(
-            painter = painterResource(id = R.drawable.empty_character),
+            painter = painterResource(id = R.drawable.no_place),
             contentDescription = "위치 권한 꺼짐 캐릭터",
         )
 
