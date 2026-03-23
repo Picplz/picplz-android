@@ -4,6 +4,8 @@ import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotographerDetailDto
 import com.hm.picplz.data.model.PhotographerRatingDto
+import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -42,4 +44,14 @@ interface PhotographerApi {
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "RECOMMENDED",
     ): Response<ReviewListDto>
+
+    @GET("api/v1/photographers/{photographerId}/products")
+    suspend fun getPhotographerProducts(
+        @Path("photographerId") photographerId: Long,
+    ): Response<List<ProductDto>>
+
+    @GET("api/v1/portfolios/{portfolioId}")
+    suspend fun getPortfolio(
+        @Path("portfolioId") portfolioId: Long,
+    ): Response<PortfolioDto>
 }
