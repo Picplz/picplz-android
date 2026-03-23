@@ -69,7 +69,10 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
 
             is DetailReservationIntent.ConfirmCancel -> {
                 _state.update { it.copy(showCancelDialog = false) }
-                // TODO: 예약 취소 API 호출
+
+                viewModelScope.launch {
+                    _sideEffect.emit(DetailReservationSideEffect.NavigateToCancelReservation)
+                }
             }
 
             is DetailReservationIntent.ShowRefundPolicyDialog -> {
