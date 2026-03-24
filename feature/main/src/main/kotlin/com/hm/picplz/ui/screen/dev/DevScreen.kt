@@ -149,6 +149,7 @@ fun DevScreen(navController: NavHostController) {
             // === Detail Photographer ===
             SectionTitle("Detail Photographer")
             DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer(1)) }
+            DevButton("DetailPhotographer (차단)") { navController.navigate(DetailPhotographer(-1)) }
             DevButton("ReviewPhotographer") { navController.navigate(ReviewPhotographer(1)) }
             DevButton("DetailPhotographerPhotoReviews") {
                 navController.navigate(

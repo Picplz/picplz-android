@@ -39,7 +39,7 @@ fun BlockedBanner(
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = stringResource(R.string.unblock_button),
-            style = MainThemeFont.Caption,
+            style = MainThemeFont.Body,
             color = Color.White,
             modifier = Modifier.clickable { onUnblock() },
         )
