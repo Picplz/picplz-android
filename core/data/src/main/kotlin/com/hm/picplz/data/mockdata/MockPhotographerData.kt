@@ -7,6 +7,7 @@ import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.data.model.PhotographerPortfolio
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.data.model.PhotographerReviewSummary
+import com.hm.picplz.data.model.ShootingPackage
 
 val mockPhotoReviews =
     listOf(
@@ -387,17 +388,68 @@ val mockPortfolios =
         ),
     )
 
+val mockShootingPackages =
+    listOf(
+        ShootingPackage(
+            packageId = 0,
+            title = "남친 생기는 프사\u2764",
+            price = 9900,
+            imageUri = "https://picsum.photos/seed/pkg1/500/600",
+            shootingTime = "15분 이내",
+            description =
+                "여자친구 /남자친구 생기는 카톡프사 찍어드립니당~\n" +
+                    "요즘 인스타그램 감성으로 이쁘게!\n" +
+                    "사용기기: 아이폰 X / 아이폰 16pro\n" +
+                    "베스트컷 5개정도 같이 뽑아드려용!",
+        ),
+        ShootingPackage(
+            packageId = 1,
+            title = "웨딩 아이폰 스냅\uD83D\uDC8D",
+            price = 12900,
+            imageUri = "https://picsum.photos/seed/pkg2/500/600",
+            shootingTime = "30분~1시간",
+            description =
+                "웨딩 다이렉트 전 사진 인생네컷 찍어드립니다\u2764\n" +
+                    "본식 겸 야외촬영 가능.\n" +
+                    "약 10장 자연스럽게 찍어드립니다!",
+        ),
+        ShootingPackage(
+            packageId = 2,
+            title = "인스타 피드촬영\uD83D\uDCF8",
+            price = 9900,
+            imageUri = "https://picsum.photos/seed/pkg3/500/600",
+            shootingTime = "15분~30분",
+            description =
+                "인스타 피드에 올릴 수 있는 사진 찍어드립니다.\n" +
+                    "충분히 여유 있게 촬영합니다.",
+        ),
+    )
+
 val mockPhotographerInfo =
     PhotographerInfo(
         id = 1,
-        name = "홍길동",
-        socialAccount = "dlwlrma",
-        infoText = "10/31 이후 예약 가능합니다. 어쩌고저쩌고 적으면 최대 두 줄까지 적을 수 있습니다",
+        name = "유가영",
+        socialAccount = "Gayoung",
+        infoText =
+            "10/31 이후 예약 가능합니다. " +
+                "어쩌고저쩌고 적으면 최대 두 줄까지 적을 수 있습니다. 어쩌고저쩌고",
         isActive = true,
+        isBookable = true,
         isFollow = true,
-        followCount = 108,
+        followCount = 112,
         profileImageUri = "https://picsum.photos/seed/profile/100",
-        workingArea = listOf("서울시 마포구", "서울시 용산구"),
-        keyword = listOf("#MZ감성", "#을지로감성"),
+        workingArea =
+            listOf(
+                "마포구",
+                "동작구",
+                "머머구",
+                "강남구",
+                "서초구",
+                "용산구",
+                "성동구",
+                "광진구",
+            ),
+        keyword = listOf("#캐주얼", "#고급미"),
+        equipment = listOf("아이폰 16 PRO", "아이폰X", "갤럭시23 울트라"),
         photoPortfolios = mockPhotoPortfolios,
     )

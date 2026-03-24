@@ -39,6 +39,12 @@ open class DetailPhotographerViewModel
                         _sideEffect.send(DetailPhotographerSideEffect.NavigateToPrev)
                     }
                 }
+                is DetailPhotographerIntent.ToggleFollow -> {
+                    _state.update { it.copy(isFollow = !it.isFollow) }
+                }
+                is DetailPhotographerIntent.ToggleInfoExpanded -> {
+                    _state.update { it.copy(isInfoExpanded = !it.isInfoExpanded) }
+                }
             }
         }
 

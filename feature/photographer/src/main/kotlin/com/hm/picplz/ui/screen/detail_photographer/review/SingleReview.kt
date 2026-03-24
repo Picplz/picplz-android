@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -44,6 +43,7 @@ import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.ui.util.ReviewUtil
@@ -85,7 +85,7 @@ fun SingleReview(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(model = review.profileImageUri),
-                contentDescription = "유저 프로필",
+                contentDescription = stringResource(R.string.user_profile),
                 modifier =
                     Modifier
                         .size(37.dp)
@@ -98,7 +98,11 @@ fun SingleReview(
             Column(
                 modifier = Modifier.align(Alignment.CenterVertically),
             ) {
-                Text(text = review.nickname)
+                Text(
+                    text = review.nickname,
+                    style = MainThemeFont.BodyBold,
+                    color = MainThemeColor.Black,
+                )
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -106,7 +110,7 @@ fun SingleReview(
                     subStarList.forEach { star ->
                         Image(
                             painter = painterResource(id = star),
-                            contentDescription = "별점",
+                            contentDescription = stringResource(R.string.star_rating),
                             modifier = Modifier.size(11.dp),
                         )
                     }
@@ -116,15 +120,13 @@ fun SingleReview(
             Spacer(modifier = Modifier.weight(1f))
 
             Row(
-                modifier =
-                    Modifier.align(
-                        if (type == SingleReviewType.OVERVIEW) Alignment.CenterVertically else Alignment.Bottom,
-                    ),
+                modifier = Modifier.align(Alignment.CenterVertically),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 CommonIconButton(
-                    label = "신고",
+                    label = stringResource(R.string.report),
                     backgroundColor = MainThemeColor.Gray1,
-                    textColor = MainThemeColor.Black,
+                    textColor = MainThemeColor.Gray3,
                     horizontalPadding = 5.dp,
                     verticalPadding = 2.dp,
                     borderRadius = 5.dp,
@@ -132,7 +134,11 @@ fun SingleReview(
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                Text(text = review.createdAt)
+                Text(
+                    text = review.createdAt,
+                    style = pretendardTypography.bodySmall,
+                    color = MainThemeColor.Gray4,
+                )
             }
         }
 
@@ -149,7 +155,7 @@ fun SingleReview(
                         items(review.photoReviews) { review ->
                             Image(
                                 painter = rememberAsyncImagePainter(model = review.photoReviewUri),
-                                contentDescription = "리뷰 사진",
+                                contentDescription = stringResource(R.string.review_photo),
                                 modifier = Modifier.size(114.dp),
                                 contentScale = ContentScale.Crop,
                             )
@@ -177,7 +183,7 @@ fun SingleReview(
 
                     Image(
                         painter = painter,
-                        contentDescription = "review-image",
+                        contentDescription = stringResource(R.string.review_image),
                         modifier =
                             Modifier
                                 .fillMaxWidth() // 가로를 꽉 채우되
@@ -195,40 +201,37 @@ fun SingleReview(
         Column(modifier = Modifier.fillMaxWidth()) {
             Row {
                 Text(
-                    text = "옵션",
-                    style =
-                        pretendardTypography.bodySmall.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = MainThemeColor.Gray4,
-                        ),
+                    text = stringResource(R.string.option_label),
+                    style = MainThemeFont.InnerTag,
+                    color = MainThemeColor.Gray4,
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = review.option,
-                    style = pretendardTypography.bodySmall.copy(color = MainThemeColor.Gray4),
+                    style = MainThemeFont.Caption,
+                    color = MainThemeColor.Gray4,
                 )
             }
             Spacer(modifier = Modifier.height(3.dp))
             Row {
                 Text(
-                    text = "촬영지",
-                    style =
-                        pretendardTypography.bodySmall.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = MainThemeColor.Gray4,
-                        ),
+                    text = stringResource(R.string.shooting_location),
+                    style = MainThemeFont.InnerTag,
+                    color = MainThemeColor.Gray4,
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = review.location,
-                    style = pretendardTypography.bodySmall.copy(color = MainThemeColor.Gray4),
+                    style = MainThemeFont.Caption,
+                    color = MainThemeColor.Gray4,
                 )
             }
 
             Spacer(modifier = Modifier.height(13.dp))
             Text(
                 text = review.reviewText,
-                style = pretendardTypography.bodyMedium,
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Black,
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -242,7 +245,7 @@ fun SingleReview(
                         painterResource(
                             id = if (review.isRecommended) R.drawable.like_active else R.drawable.like_inactive,
                         ),
-                    contentDescription = "like-inactive",
+                    contentDescription = stringResource(R.string.like),
                     modifier = Modifier.clickable { },
                 )
                 Text(
@@ -252,10 +255,6 @@ fun SingleReview(
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            if (type == SingleReviewType.OVERVIEW) {
-                HorizontalDivider(thickness = 1.dp, color = MainThemeColor.Gray2)
-            }
         }
     }
 }

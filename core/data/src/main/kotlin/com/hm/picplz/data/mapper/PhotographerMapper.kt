@@ -30,11 +30,13 @@ fun PhotographerDetailDto.toPhotographerInfo(): PhotographerInfo {
         socialAccount = instagram,
         infoText = introduction ?: "",
         isActive = active == "Y",
+        isBookable = active == "Y",
         isFollow = isFollowing == "Y",
         followCount = followers ?: 0,
         profileImageUri = profileImage ?: "",
         workingArea = area?.mapNotNull { it.name } ?: emptyList(),
         keyword = photoMoods ?: emptyList(),
+        equipment = emptyList(),
         photoPortfolios = emptyList(),
     )
 }

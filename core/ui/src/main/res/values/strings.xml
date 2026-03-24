@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DetailPhotographerScreen -->
+    <string name="photographer_name_format">%s 작가</string>
+    <string name="photographer_profile_image">작가 프로필</string>
+    <string name="menu">메뉴</string>
+    <string name="booking_button">예약하기</string>
+    <string name="booking_unavailable">현재 예약을 받지 않아요</string>
+
+    <!-- DetailProfileSection -->
+    <string name="instagram">인스타그램</string>
+    <string name="quick_shoot_label">바로 촬영</string>
+    <string name="expand_more">…더보기</string>
+    <string name="collapse">접기</string>
+    <string name="follower_count_format">%d명</string>
+    <string name="following">팔로잉</string>
+    <string name="follow">팔로우</string>
+    <string name="shooting_area">촬영지</string>
+    <string name="keyword">키워드</string>
+    <string name="equipment">장비</string>
+    <string name="area_overflow_format">외 %d개</string>
+
+    <!-- ReviewSection -->
+    <string name="shooting_satisfaction">촬영 만족도</string>
+    <string name="star_rating">별점</string>
+    <string name="no_reviews">아직 리뷰가\n없어요</string>
+    <string name="view_all_reviews_format">전체 리뷰 보러가기 (%d)</string>
+
+    <!-- PortfolioSection -->
+    <string name="portfolio">포트폴리오</string>
+    <string name="no_portfolio">아직\n포트폴리오가\n없어요</string>
+    <string name="portfolio_image">포트폴리오 이미지</string>
+    <string name="view_more_portfolio">포트폴리오 더보기</string>
+
+    <!-- ShootingPackageSection -->
+    <string name="shooting_package">촬영 패키지</string>
+    <string name="shooting_time_label">촬영 시간</string>
+    <string name="package_description_label">기타 안내</string>
+    <string name="price_won_format">%s원</string>
+
+    <!-- SingleReview -->
+    <string name="user_profile">유저 프로필</string>
+    <string name="report">신고</string>
+    <string name="option_label">옵션</string>
+    <string name="shooting_location">촬영지</string>
+    <string name="review_photo">리뷰 사진</string>
+    <string name="review_image">리뷰 이미지</string>
+    <string name="like">좋아요</string>
+</resources>
