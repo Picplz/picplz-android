@@ -16,31 +16,34 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.mockdata.mockReviewSummary
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.pretendardTypography
+import com.hm.picplz.ui.theme.MainThemeFont
+import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.feature.photographer.R as PhotographerR
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
     navController: NavController,
     photographerId: Int,
+    viewModel: DetailPhotographerViewModel = hiltViewModel(),
 ) {
-    // TODO: photographerId로 데이터 로드
-    val photoReviews = mockReviewSummary.photoReviews
-    val paddingModifier = Modifier.padding(horizontal = 15.dp)
+    val state by viewModel.state.collectAsState()
+    val photoReviews = state.reviewSummary.photoReviews
     val chunkedImages = photoReviews.chunked(3)
 
     Scaffold(
@@ -53,15 +56,17 @@ fun DetailPhotographerPhotoReviewsScreen(
                         .padding(innerPadding)
                         .fillMaxWidth(),
             ) {
-                CommonFixedTopBar(title = "사진 리뷰") {
-                    navController.popBackStack()
+                CommonFixedTopBar(
+                    title = stringResource(PhotographerR.string.photo_review_title),
+                ) {
+                    viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
                     modifier =
-                        paddingModifier
+                        Modifier
                             .fillMaxSize()
-                            .padding(top = 7.dp, bottom = 20.dp)
+                            .padding(horizontal = 16.dp)
                             .verticalScroll(rememberScrollState()),
                 ) {
                     if (chunkedImages.isEmpty()) {
@@ -75,58 +80,57 @@ fun DetailPhotographerPhotoReviewsScreen(
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Image(
                                     painter = painterResource(id = R.drawable.user_undefined),
-                                    contentDescription = "user-undefined",
+                                    contentDescription =
+                                        stringResource(
+                                            PhotographerR.string.photo_review_empty_icon,
+                                        ),
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Text(
-                                    text = "등록된 사진 리뷰가 없습니다",
-                                    style = pretendardTypography.titleSmall,
+                                    text =
+                                        stringResource(
+                                            PhotographerR.string.photo_review_empty,
+                                        ),
+                                    style = MainThemeFont.TitleSmall,
                                 )
                             }
                         }
                     } else {
                         chunkedImages.forEach { rowImages ->
                             Row(modifier = Modifier.fillMaxWidth()) {
-                                rowImages.forEach { imageRes ->
-//                                TODO: 기본 로드 이미지 변경
+                                rowImages.forEach { photo ->
                                     Image(
                                         painter =
                                             rememberAsyncImagePainter(
-                                                model =
-                                                    ImageRequest.Builder(
-                                                        LocalContext.current,
-                                                    )
-                                                        .data(imageRes.photoReviewUri) // 실제 로드할 이미지
-                                                        .placeholder(R.drawable.center_char) // 로드되기 전 기본 이미지
-                                                        .error(R.drawable.center_char) // 로드 실패 시 보여줄 이미지
-                                                        .crossfade(true) // 부드러운 전환 효과
-                                                        .build(),
+                                                model = photo.photoReviewUri,
                                             ),
-                                        contentDescription = "포트폴리오 이미지",
+                                        contentDescription =
+                                            stringResource(
+                                                PhotographerR.string.review_photo,
+                                            ),
                                         modifier =
                                             Modifier
-                                                .weight(1f) // 각 이미지가 동일한 크기를 가짐
-                                                .aspectRatio(1f) // 1:1 비율
-                                                .padding(2.dp)
+                                                .weight(1f)
+                                                .aspectRatio(1f)
+                                                .padding(1.dp)
                                                 .clickable {
                                                     navController.navigate(
                                                         DetailPhotographerSingleReview(
-                                                            reviewId = imageRes.reviewId,
-                                                            photoIndex = imageRes.index,
+                                                            reviewId = photo.reviewId,
+                                                            photoIndex = photo.index,
                                                         ),
                                                     )
                                                 },
                                         contentScale = ContentScale.Crop,
                                     )
                                 }
-                                // 남은 빈 공간 채우기
                                 repeat(3 - rowImages.size) {
                                     Spacer(
                                         modifier =
                                             Modifier
                                                 .weight(1f)
                                                 .aspectRatio(1f)
-                                                .padding(2.dp),
+                                                .padding(1.dp),
                                     )
                                 }
                             }
@@ -136,4 +140,14 @@ fun DetailPhotographerPhotoReviewsScreen(
             }
         },
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is DetailPhotographerSideEffect.NavigateToPrev -> {
+                    navController.popBackStack()
+                }
+            }
+        }
+    }
 }

@@ -38,4 +38,33 @@
     <string name="shooting_satisfaction">촬영 만족도</string>
     <string name="star_rating">별점</string>
     <string name="review_photo">리뷰 사진</string>
+
+    <!-- 사진 리뷰 그리드 -->
+    <string name="photo_review_title">사진 리뷰</string>
+    <string name="photo_review_empty">등록된 사진 리뷰가 없습니다</string>
+    <string name="photo_review_empty_icon">빈 상태 아이콘</string>
+
+    <!-- 리뷰 상세 -->
+    <string name="review_photo_counter">%1$d/%2$d</string>
+    <string name="photographer_link_format">%s 작가</string>
+    <string name="written">작성</string>
+    <string name="review_report_title">신고</string>
+    <string name="star_rating_desc">별점</string>
+    <string name="option_label">옵션</string>
+    <string name="shooting_location">촬영지</string>
+    <string name="like">좋아요</string>
+
+    <!-- 신고 바텀시트 -->
+    <string name="report_harmful_content">유해한 콘텐츠</string>
+    <string name="report_plagiarism">타인이 작성한 글, 사진 도용</string>
+    <string name="report_privacy_risk">개인정보 누출 위험</string>
+    <string name="report_not_customer">고객이 아닌 작가의 리뷰</string>
+    <string name="report_other">기타</string>
+
+    <!-- 풀스크린 사진 -->
+    <string name="full_screen_photo">전체 화면 사진</string>
+    <string name="back">뒤로가기</string>
+    <string name="photographer_profile">작가 프로필</string>
+    <string name="user_profile">유저 프로필</string>
+    <string name="more">더보기</string>
 </resources>

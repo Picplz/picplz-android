@@ -160,9 +160,14 @@ val mockReviews =
             photoReviewCount = 3,
             option = "프로필 Only",
             location = "서울 강남",
-            reviewText = "하나하나 신경써서 해주시고 잘 알려주세요 사진 처음찍거나 잘 못찍으시는 분들 하시면 후회 안하십니다!",
+            reviewText =
+                "하나하나 신경써서 해주시고 잘 알려주세요 사진 처음찍거나 잘 " +
+                    "못찍으시는 분들 하시면 후회 안하십니다하나하나 신경써서 해주시고 잘 " +
+                    "알려주세요 사진 처음찍거나 잘 못찍으시는 분들 하시면 후회 " +
+                    "안하십니다하나하나 신경써서 해주시고 잘 알려주세요 사진 처음찍거나 잘 " +
+                    "못찍으시는 분들 하시면 후회 안하십니다!",
             isRecommended = true,
-            recommendationCount = 3,
+            recommendationCount = 4,
         ),
         PhotographerReview(
             reviewId = 1,

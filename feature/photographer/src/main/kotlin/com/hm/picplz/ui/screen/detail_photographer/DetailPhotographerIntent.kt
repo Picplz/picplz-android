@@ -14,4 +14,12 @@ sealed interface DetailPhotographerIntent {
     data class SelectReviewSort(val sortType: ReviewSortType) : DetailPhotographerIntent
 
     data object ToggleSortSheet : DetailPhotographerIntent
+
+    data class ShowFullScreenPhoto(val imageUri: String) : DetailPhotographerIntent
+
+    data object DismissFullScreenPhoto : DetailPhotographerIntent
+
+    data object ToggleReportSheet : DetailPhotographerIntent
+
+    data class SwitchReview(val reviewIndex: Int) : DetailPhotographerIntent
 }
