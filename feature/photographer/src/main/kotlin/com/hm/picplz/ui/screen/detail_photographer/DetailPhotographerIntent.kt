@@ -6,4 +6,6 @@ sealed interface DetailPhotographerIntent {
     data object ToggleFollow : DetailPhotographerIntent
 
     data object ToggleInfoExpanded : DetailPhotographerIntent
+
+    data object ToggleBlock : DetailPhotographerIntent
 }

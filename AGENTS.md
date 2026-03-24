@@ -84,6 +84,7 @@ core:ui → core:common
 ### Issue-Driven Development
 1. **모든 작업은 GitHub Issue 기반** - 이슈 먼저 생성/확인 후 작업 시작
 2. **1 Issue = 1 Branch = 1 PR** - 이슈와 브랜치, PR이 1:1 대응
+3. **커밋/푸시/PR 생성 전 반드시 사용자 확인** - 임의로 올리지 않는다
 
 ### Branch Strategy
 ```

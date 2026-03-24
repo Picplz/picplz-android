@@ -22,7 +22,13 @@ open class DetailPhotographerViewModel
     ) : ViewModel() {
         val photographerId: Int = savedStateHandle.get<Int>("photographerId") ?: 0
 
-        private val _state = MutableStateFlow(DetailPhotographerState.idle())
+        private val _state = MutableStateFlow(
+            if (photographerId == DEV_BLOCKED_PHOTOGRAPHER_ID) {
+                DetailPhotographerState.blocked()
+            } else {
+                DetailPhotographerState.idle()
+            },
+        )
         val state: StateFlow<DetailPhotographerState> = _state
 
         private val _sideEffect = Channel<DetailPhotographerSideEffect>(Channel.BUFFERED)
@@ -45,7 +51,14 @@ open class DetailPhotographerViewModel
                 is DetailPhotographerIntent.ToggleInfoExpanded -> {
                     _state.update { it.copy(isInfoExpanded = !it.isInfoExpanded) }
                 }
+                is DetailPhotographerIntent.ToggleBlock -> {
+                    _state.update { it.copy(isBlocked = !it.isBlocked) }
+                }
             }
+        }
+
+        companion object {
+            const val DEV_BLOCKED_PHOTOGRAPHER_ID = -1
         }
 
         private fun loadPhotographerInfo() {

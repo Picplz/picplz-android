@@ -19,10 +19,15 @@ data class DetailPhotographerState(
     val shootingPackages: List<ShootingPackage> = mockShootingPackages,
     val isFollow: Boolean = mockPhotographerInfo.isFollow,
     val isInfoExpanded: Boolean = false,
+    val isBlocked: Boolean = false,
 ) {
     companion object {
         fun idle(): DetailPhotographerState {
             return DetailPhotographerState()
+        }
+
+        fun blocked(): DetailPhotographerState {
+            return DetailPhotographerState(isBlocked = true)
         }
     }
 }

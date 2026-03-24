@@ -87,6 +87,14 @@ fun DetailPhotographerScreen(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState()),
             ) {
+                if (state.isBlocked) {
+                    BlockedBanner(
+                        onUnblock = {
+                            viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
+                        },
+                    )
+                }
+
                 DetailProfileSection(
                     modifier = paddingModifier,
                     profileInfo = state.profileInfo,
