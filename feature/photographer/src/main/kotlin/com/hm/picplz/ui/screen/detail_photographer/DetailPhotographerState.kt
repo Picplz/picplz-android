@@ -10,6 +10,7 @@ import com.hm.picplz.data.model.PhotographerPortfolio
 import com.hm.picplz.data.model.PhotographerReview
 import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.data.model.ShootingPackage
+import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortType
 
 data class DetailPhotographerState(
     val profileInfo: PhotographerInfo = mockPhotographerInfo,
@@ -20,6 +21,8 @@ data class DetailPhotographerState(
     val isFollow: Boolean = mockPhotographerInfo.isFollow,
     val isInfoExpanded: Boolean = false,
     val isBlocked: Boolean = false,
+    val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
+    val isSortSheetVisible: Boolean = false,
 ) {
     companion object {
         fun idle(): DetailPhotographerState {

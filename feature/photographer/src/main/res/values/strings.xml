@@ -32,4 +32,10 @@
     <!-- 작가 상세 - 차단 배너 -->
     <string name="blocked_account_message">차단된 계정입니다.</string>
     <string name="unblock_button">차단 해제</string>
+
+    <!-- 리뷰 페이지 -->
+    <string name="review_title">리뷰</string>
+    <string name="shooting_satisfaction">촬영 만족도</string>
+    <string name="star_rating">별점</string>
+    <string name="review_photo">리뷰 사진</string>
 </resources>

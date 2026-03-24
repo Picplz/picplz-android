@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import CommonChip
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,38 +38,32 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
-import com.hm.picplz.ui.screen.common.CommonDropdownMenu
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.common.DropdownMenuItemData
-import com.hm.picplz.ui.screen.detail_photographer.review.ReviewBars
+import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortBottomSheet
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
-import com.hm.picplz.ui.theme.buttonText
-import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.feature.photographer.R as PhotographerR
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun DetailPhotographerReviewScreen(
     navController: NavController,
     photographerId: Int,
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
 ) {
-    val currentState = viewModel.state.collectAsState().value
+    val state by viewModel.state.collectAsState()
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
-    val reviewSummary = currentState.reviewSummary
-    val reviews = currentState.reviews
-
+    val reviewSummary = state.reviewSummary
+    val reviews = state.reviews
     val totalRating = reviewSummary.averageRating
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN)
-
     val images = reviewSummary.photoReviews
-    val reviewBarItems = reviewSummary.keywordBars
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -80,117 +75,78 @@ fun DetailPhotographerReviewScreen(
                         .padding(innerPadding)
                         .fillMaxWidth(),
             ) {
-                CommonFixedTopBar(title = "리뷰") {
+                CommonFixedTopBar(
+                    title = stringResource(PhotographerR.string.review_title),
+                ) {
                     viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 }
 
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
-                    Column(modifier = paddingModifier) {
+                    Column(
+                        modifier = paddingModifier.padding(top = 20.dp),
+                    ) {
+                        // 촬영 만족도 + 별
+                        Text(
+                            text =
+                                stringResource(
+                                    PhotographerR.string.shooting_satisfaction,
+                                ),
+                            style = MainThemeFont.TitleSmall,
+                            color = MainThemeColor.Black,
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = "촬영 만족도", style = buttonText)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                starList.forEach { star ->
-                                    Image(
-                                        painter = painterResource(id = star),
-                                        contentDescription = "별점",
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(3.dp))
-                                Text(
-                                    text = totalRating.toString(),
-                                    style = pretendardTypography.labelLarge,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MainThemeColor.Gray4,
+                            starList.forEach { star ->
+                                Image(
+                                    painter = painterResource(id = star),
+                                    contentDescription =
+                                        stringResource(
+                                            PhotographerR.string.star_rating,
+                                        ),
+                                    modifier = Modifier.height(20.dp),
                                 )
                             }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = totalRating.toString(),
+                                style = MainThemeFont.BodyBold,
+                                color = MainThemeColor.Gray4,
+                            )
                         }
 
-                        Spacer(modifier = Modifier.height(11.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
 
-                        ReviewBars(items = reviewBarItems)
-
-                        Spacer(modifier = Modifier.height(28.dp))
-
+                        // 리뷰 N
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(text = "리뷰", style = buttonText)
-                            Spacer(modifier = Modifier.width(4.dp)) // 텍스트 사이에 간격 추가
-                            Text(text = reviewSummary.totalReviewCount.toString())
+                            Text(
+                                text = stringResource(PhotographerR.string.review_title),
+                                style = MainThemeFont.ButtonDefault,
+                                color = MainThemeColor.Black,
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = reviewSummary.totalReviewCount.toString(),
+                                style = MainThemeFont.Body,
+                                color = MainThemeColor.Gray3,
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(9.dp))
 
-                        // 리뷰 사진 모아보기
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(2.dp),
-                        ) {
-                            images.take(3).forEach { image ->
-                                Image(
-                                    painter = rememberAsyncImagePainter(model = image.photoReviewUri),
-                                    contentDescription = "리뷰 사진",
-                                    modifier =
-                                        Modifier
-                                            .weight(1f)
-                                            .aspectRatio(1f),
-                                    contentScale = ContentScale.Crop,
+                        // 리뷰 사진 그리드
+                        ReviewPhotoGrid(
+                            images = images.map { it.photoReviewUri },
+                            onShowAll = {
+                                navController.navigate(
+                                    DetailPhotographerPhotoReviews(photographerId),
                                 )
-                            }
-
-                            // 4개 이상일 경우 마지막 사진에 원본 이미지 + 어두운 오버레이 + "+N" 표시
-                            if (images.size > 4) {
-                                Box(
-                                    modifier =
-                                        Modifier
-                                            .weight(1f)
-                                            .aspectRatio(1f)
-                                            .clickable {
-                                                navController.navigate(DetailPhotographerPhotoReviews(photographerId))
-                                            },
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    // 원본 이미지
-                                    Image(
-                                        painter = rememberAsyncImagePainter(model = images[3].photoReviewUri),
-                                        contentDescription = "리뷰 사진",
-                                        modifier =
-                                            Modifier
-                                                .matchParentSize()
-                                                .drawWithContent {
-                                                    drawContent()
-                                                    drawRect(
-                                                        color = MainThemeColor.Black.copy(alpha = 0.5f),
-                                                        size = size,
-                                                    )
-                                                },
-                                        contentScale = ContentScale.Crop,
-                                    )
-
-                                    // "+N" 텍스트 오버레이
-                                    Text(
-                                        text = "+${images.size - 4}",
-                                        color = MainThemeColor.White,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp,
-                                    )
-                                }
-                            } else if (images.size == 4) {
-                                Image(
-                                    painter = rememberAsyncImagePainter(model = images[3]),
-                                    contentDescription = "리뷰 사진",
-                                    modifier =
-                                        Modifier
-                                            .weight(1f)
-                                            .aspectRatio(1f),
-                                    contentScale = ContentScale.Crop,
-                                )
-                            }
-                        }
+                            },
+                        )
                     }
 
                     HorizontalDivider(
@@ -199,51 +155,52 @@ fun DetailPhotographerReviewScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 20.dp),
                         thickness = 10.dp,
-                        color = MainThemeColor.Gray2,
+                        color = MainThemeColor.Gray1,
                     )
 
                     Column(modifier = paddingModifier) {
-                        // chip 필터링
-                        // TODO: 디자인 적용
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            CommonChip(label = "프로필 Only", isSelected = true, isEditable = false)
-                            CommonChip(label = "카카오톡 패키지", isSelected = false, isEditable = false)
-                            CommonChip(label = "인스타그램 패키지", isSelected = false, isEditable = false)
-                        }
-
-                        Spacer(modifier = Modifier.height(14.dp))
-
-                        // 추천순 / 최신순
-                        CommonDropdownMenu(
-                            initialSelectedText = "최신순",
-                            triggerButton = { label ->
-                                CommonIconButton(
-                                    label = label,
-                                    backgroundColor = MainThemeColor.Transparent,
-                                    textColor = MainThemeColor.Gray5,
-                                    textStyle = pretendardTypography.bodySmall,
-                                    iconResId = R.drawable.arrow_down,
-                                    location = "right",
-                                    horizontalPadding = 0.dp,
-                                    verticalPadding = 0.dp,
-                                    gap = 4.dp,
-                                    borderRadius = 10.dp,
+                        // 정렬 버튼
+                        CommonIconButton(
+                            label = state.reviewSortType.label,
+                            backgroundColor = MainThemeColor.Transparent,
+                            textColor = MainThemeColor.Gray5,
+                            textStyle = MainThemeFont.Caption,
+                            iconResId = R.drawable.arrow_down,
+                            iconSize = 12.dp,
+                            location = "right",
+                            horizontalPadding = 0.dp,
+                            verticalPadding = 0.dp,
+                            gap = 2.dp,
+                            onClick = {
+                                viewModel.handleIntent(
+                                    DetailPhotographerIntent.ToggleSortSheet,
                                 )
                             },
-                            menuItems =
-                                listOf(
-                                    DropdownMenuItemData("추천순", MainThemeColor.Gray5, itemOnClick = {}),
-                                    DropdownMenuItemData("최신순", MainThemeColor.Gray5),
-                                ),
+                            modifier =
+                                Modifier.padding(top = 20.dp, bottom = 8.dp),
                         )
 
-                        // 리스트 형식 (싱글 리뷰)
+                        // 리뷰 리스트
                         reviews.forEach { item ->
                             SingleReview(navController, item)
                         }
                     }
                 }
             }
+        },
+    )
+
+    // 정렬 바텀시트
+    ReviewSortBottomSheet(
+        visible = state.isSortSheetVisible,
+        selectedSortType = state.reviewSortType,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleSortSheet)
+        },
+        onSelect = { sortType ->
+            viewModel.handleIntent(
+                DetailPhotographerIntent.SelectReviewSort(sortType),
+            )
         },
     )
 
@@ -258,12 +215,85 @@ fun DetailPhotographerReviewScreen(
     }
 }
 
+@Composable
+private fun ReviewPhotoGrid(
+    images: List<String>,
+    onShowAll: () -> Unit,
+) {
+    if (images.isEmpty()) return
+
+    val hasOverflow = images.size > 4
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        images.take(minOf(3, images.size)).forEach { imageUri ->
+            Image(
+                painter = rememberAsyncImagePainter(model = imageUri),
+                contentDescription = stringResource(PhotographerR.string.review_photo),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .aspectRatio(1f),
+                contentScale = ContentScale.Crop,
+            )
+        }
+
+        if (hasOverflow) {
+            Box(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .aspectRatio(1f)
+                        .clickable { onShowAll() },
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = images[3]),
+                    contentDescription = stringResource(PhotographerR.string.review_photo),
+                    modifier =
+                        Modifier
+                            .matchParentSize()
+                            .drawWithContent {
+                                drawContent()
+                                drawRect(
+                                    color = MainThemeColor.Black.copy(alpha = 0.5f),
+                                    size = size,
+                                )
+                            },
+                    contentScale = ContentScale.Crop,
+                )
+                Text(
+                    text = "+${images.size - 4}",
+                    color = MainThemeColor.White,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                )
+            }
+        } else if (images.size == 4) {
+            Image(
+                painter = rememberAsyncImagePainter(model = images[3]),
+                contentDescription = stringResource(PhotographerR.string.review_photo),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .aspectRatio(1f),
+                contentScale = ContentScale.Crop,
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DetailPhotographerReviewScreenPreview() {
     val navController = rememberNavController()
 
     PicplzTheme {
-        DetailPhotographerReviewScreen(navController = navController, photographerId = 1)
+        DetailPhotographerReviewScreen(
+            navController = navController,
+            photographerId = 1,
+        )
     }
 }

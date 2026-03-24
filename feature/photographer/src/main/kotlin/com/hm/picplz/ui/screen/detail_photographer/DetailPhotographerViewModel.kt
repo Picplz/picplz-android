@@ -22,13 +22,14 @@ open class DetailPhotographerViewModel
     ) : ViewModel() {
         val photographerId: Int = savedStateHandle.get<Int>("photographerId") ?: 0
 
-        private val _state = MutableStateFlow(
-            if (photographerId == DEV_BLOCKED_PHOTOGRAPHER_ID) {
-                DetailPhotographerState.blocked()
-            } else {
-                DetailPhotographerState.idle()
-            },
-        )
+        private val _state =
+            MutableStateFlow(
+                if (photographerId == DEV_BLOCKED_PHOTOGRAPHER_ID) {
+                    DetailPhotographerState.blocked()
+                } else {
+                    DetailPhotographerState.idle()
+                },
+            )
         val state: StateFlow<DetailPhotographerState> = _state
 
         private val _sideEffect = Channel<DetailPhotographerSideEffect>(Channel.BUFFERED)
@@ -53,6 +54,17 @@ open class DetailPhotographerViewModel
                 }
                 is DetailPhotographerIntent.ToggleBlock -> {
                     _state.update { it.copy(isBlocked = !it.isBlocked) }
+                }
+                is DetailPhotographerIntent.SelectReviewSort -> {
+                    _state.update {
+                        it.copy(
+                            reviewSortType = intent.sortType,
+                            isSortSheetVisible = false,
+                        )
+                    }
+                }
+                is DetailPhotographerIntent.ToggleSortSheet -> {
+                    _state.update { it.copy(isSortSheetVisible = !it.isSortSheetVisible) }
                 }
             }
         }
