@@ -5,6 +5,8 @@ import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotographerDetailDto
 import com.hm.picplz.data.model.PhotographerRatingDto
+import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.util.safeApiCall
 import com.hm.picplz.data.util.safeApiCallUnit
@@ -29,6 +31,10 @@ interface PhotographerSource {
         size: Int = 10,
         sort: String = "RECOMMENDED",
     ): Result<ReviewListDto>
+
+    suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>>
+
+    suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto>
 }
 
 class PhotographerSourceImpl
@@ -59,4 +65,10 @@ class PhotographerSourceImpl
             sort: String,
         ): Result<ReviewListDto> =
             safeApiCall { photographerApi.getPhotographerReviews(photographerId, page, size, sort) }
+
+        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>> =
+            safeApiCall { photographerApi.getPhotographerProducts(photographerId) }
+
+        override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> =
+            safeApiCall { photographerApi.getPortfolio(portfolioId) }
     }

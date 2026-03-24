@@ -5,6 +5,8 @@ import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.data.model.PhotographerRatingDto
+import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.FilteredPhotographers
@@ -29,6 +31,10 @@ interface PhotographerService {
         size: Int = 10,
         sort: String = "RECOMMENDED",
     ): Result<ReviewListDto>
+
+    suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>>
+
+    suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto>
 }
 
 class PhotographerServiceImpl
@@ -65,4 +71,10 @@ class PhotographerServiceImpl
             size: Int,
             sort: String,
         ): Result<ReviewListDto> = photographerSource.getPhotographerReviews(photographerId, page, size, sort)
+
+        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>> =
+            photographerSource.getPhotographerProducts(photographerId)
+
+        override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> =
+            photographerSource.getPortfolio(portfolioId)
     }
