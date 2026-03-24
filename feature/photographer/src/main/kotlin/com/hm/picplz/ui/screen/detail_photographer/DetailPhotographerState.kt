@@ -23,6 +23,9 @@ data class DetailPhotographerState(
     val isBlocked: Boolean = false,
     val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
     val isSortSheetVisible: Boolean = false,
+    val currentReviewIndex: Int = 0,
+    val fullScreenImageUri: String? = null,
+    val isReportSheetVisible: Boolean = false,
 ) {
     companion object {
         fun idle(): DetailPhotographerState {

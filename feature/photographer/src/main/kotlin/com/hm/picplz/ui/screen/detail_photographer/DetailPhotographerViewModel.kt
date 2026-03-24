@@ -66,6 +66,20 @@ open class DetailPhotographerViewModel
                 is DetailPhotographerIntent.ToggleSortSheet -> {
                     _state.update { it.copy(isSortSheetVisible = !it.isSortSheetVisible) }
                 }
+                is DetailPhotographerIntent.ShowFullScreenPhoto -> {
+                    _state.update { it.copy(fullScreenImageUri = intent.imageUri) }
+                }
+                is DetailPhotographerIntent.DismissFullScreenPhoto -> {
+                    _state.update { it.copy(fullScreenImageUri = null) }
+                }
+                is DetailPhotographerIntent.ToggleReportSheet -> {
+                    _state.update {
+                        it.copy(isReportSheetVisible = !it.isReportSheetVisible)
+                    }
+                }
+                is DetailPhotographerIntent.SwitchReview -> {
+                    _state.update { it.copy(currentReviewIndex = intent.reviewIndex) }
+                }
             }
         }
 
