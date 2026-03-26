@@ -65,12 +65,11 @@ fun ReviewThumbnailBar(
         }
     }
 
-    val density = androidx.compose.ui.platform.LocalDensity.current
-    val gapPx = with(density) { SELECTED_GAP.toPx() }
-
     LaunchedEffect(selectedIndex) {
         if (!isUserDragging) {
-            listState.centerItem(selectedIndex, gapPx)
+            // 약간 지연 후 센터링 — 애니메이션 시작 후 size에 gap 포함되도록
+            kotlinx.coroutines.delay(CENTERING_DELAY_MS)
+            listState.centerItem(selectedIndex)
         }
     }
 
@@ -108,10 +107,7 @@ fun ReviewThumbnailBar(
     }
 }
 
-private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(
-    index: Int,
-    selectedGapPx: Float = 0f,
-) {
+private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(index: Int) {
     val layoutInfo = layoutInfo
     val target = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
 
@@ -120,8 +116,7 @@ private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(
             layoutInfo.viewportSize.width -
                 layoutInfo.beforeContentPadding -
                 layoutInfo.afterContentPadding
-        // 이미지 중앙 = offset + gap + imageSize/2
-        val targetCenter = target.offset + target.size / 2f + selectedGapPx
+        val targetCenter = target.offset + target.size / 2f
         val viewportCenter = containerSize / 2f
         animateScrollBy(targetCenter - viewportCenter)
     } else {
@@ -133,7 +128,7 @@ private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(
                 layoutInfo.viewportSize.width -
                     layoutInfo.beforeContentPadding -
                     layoutInfo.afterContentPadding
-            val targetCenter = retarget.offset + retarget.size / 2f + selectedGapPx
+            val targetCenter = retarget.offset + retarget.size / 2f
             val viewportCenter = containerSize / 2f
             animateScrollBy(targetCenter - viewportCenter)
         }
@@ -154,6 +149,7 @@ internal fun androidx.compose.foundation.lazy.LazyListState.findCenterItemIndex(
     }?.index ?: -1
 }
 
+private const val CENTERING_DELAY_MS = 50L
 private val THUMBNAIL_SIZE = 40.dp
 private val THUMBNAIL_SELECTED_SIZE = 50.dp
 private val SELECTED_GAP = 20.dp

@@ -62,7 +62,7 @@ fun KebabMenuBottomSheet(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_block),
-                    contentDescription = null,
+                    contentDescription = stringResource(PhotographerR.string.menu_block),
                     modifier = Modifier.size(16.dp),
                 )
                 Spacer(modifier = Modifier.width(9.dp))
@@ -87,7 +87,7 @@ fun KebabMenuBottomSheet(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_report),
-                    contentDescription = null,
+                    contentDescription = stringResource(PhotographerR.string.menu_report),
                     modifier = Modifier.size(16.dp),
                 )
                 Spacer(modifier = Modifier.width(9.dp))

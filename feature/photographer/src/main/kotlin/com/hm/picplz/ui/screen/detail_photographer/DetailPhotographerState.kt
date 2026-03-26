@@ -28,6 +28,7 @@ data class DetailPhotographerState(
     val currentReviewIndex: Int = 0,
     val fullScreenImageUri: String? = null,
     val isReportSheetVisible: Boolean = false,
+    val toastMessage: String? = null,
 ) {
     companion object {
         fun idle(): DetailPhotographerState {

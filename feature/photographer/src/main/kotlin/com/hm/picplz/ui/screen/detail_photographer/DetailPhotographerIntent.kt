@@ -26,4 +26,6 @@ sealed interface DetailPhotographerIntent {
     data object ToggleReportSheet : DetailPhotographerIntent
 
     data class SwitchReview(val reviewIndex: Int) : DetailPhotographerIntent
+
+    data object DismissToast : DetailPhotographerIntent
 }

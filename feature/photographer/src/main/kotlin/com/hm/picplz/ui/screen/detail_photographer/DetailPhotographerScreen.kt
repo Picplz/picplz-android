@@ -21,13 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,11 +34,11 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
-import com.hm.picplz.feature.photographer.R as PhotographerR
 
 @Composable
 fun DetailPhotographerScreen(
@@ -50,7 +46,6 @@ fun DetailPhotographerScreen(
     navController: NavHostController,
 ) {
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
     Scaffold(
@@ -180,7 +175,7 @@ fun DetailPhotographerScreen(
     )
 
     // 리뷰 신고 바텀시트
-    com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet(
+    ReportBottomSheet(
         visible = state.isReportSheetVisible,
         onDismiss = {
             viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
@@ -188,36 +183,26 @@ fun DetailPhotographerScreen(
         onSelect = { /* TODO: 신고 API 연동 */ },
     )
 
-    // 커스텀 토스트 상태
-    var toastMessage by remember { mutableStateOf<String?>(null) }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
-                is DetailPhotographerSideEffect.ShowBlockedToast -> {
-                    toastMessage =
-                        context.getString(
-                            PhotographerR.string.blocked_toast,
-                            sideEffect.name,
-                        )
-                }
             }
         }
     }
 
     // 토스트 자동 dismiss
-    LaunchedEffect(toastMessage) {
-        if (toastMessage != null) {
+    LaunchedEffect(state.toastMessage) {
+        if (state.toastMessage != null) {
             kotlinx.coroutines.delay(TOAST_DURATION_MS)
-            toastMessage = null
+            viewModel.handleIntent(DetailPhotographerIntent.DismissToast)
         }
     }
 
     // 커스텀 토스트 오버레이
-    toastMessage?.let { message ->
+    state.toastMessage?.let { message ->
         Box(
             modifier =
                 Modifier

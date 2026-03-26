@@ -54,15 +54,12 @@ open class DetailPhotographerViewModel
                 }
                 is DetailPhotographerIntent.ToggleBlock -> {
                     val wasBlocked = _state.value.isBlocked
-                    _state.update { it.copy(isBlocked = !it.isBlocked) }
-                    if (!wasBlocked) {
-                        viewModelScope.launch {
-                            _sideEffect.send(
-                                DetailPhotographerSideEffect.ShowBlockedToast(
-                                    _state.value.profileInfo.name,
-                                ),
-                            )
-                        }
+                    val name = _state.value.profileInfo.name
+                    _state.update {
+                        it.copy(
+                            isBlocked = !it.isBlocked,
+                            toastMessage = if (!wasBlocked) "'$name'님이 차단되었습니다." else null,
+                        )
                     }
                 }
                 is DetailPhotographerIntent.ToggleAreaExpanded -> {
@@ -95,6 +92,9 @@ open class DetailPhotographerViewModel
                 }
                 is DetailPhotographerIntent.SwitchReview -> {
                     _state.update { it.copy(currentReviewIndex = intent.reviewIndex) }
+                }
+                is DetailPhotographerIntent.DismissToast -> {
+                    _state.update { it.copy(toastMessage = null) }
                 }
             }
         }

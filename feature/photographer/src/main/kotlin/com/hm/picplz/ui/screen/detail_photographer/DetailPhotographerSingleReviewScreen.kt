@@ -204,7 +204,6 @@ fun DetailPhotographerSingleReviewScreen(
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
-                else -> {}
             }
         }
     }

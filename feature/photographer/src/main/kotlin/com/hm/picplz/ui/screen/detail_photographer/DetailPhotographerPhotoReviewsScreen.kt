@@ -147,7 +147,6 @@ fun DetailPhotographerPhotoReviewsScreen(
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
-                else -> {}
             }
         }
     }
