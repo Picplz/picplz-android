@@ -208,7 +208,7 @@ fun DetailPhotographerScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(bottom = 100.dp),
+                    .padding(bottom = 24.dp),
             contentAlignment = Alignment.BottomCenter,
         ) {
             Text(

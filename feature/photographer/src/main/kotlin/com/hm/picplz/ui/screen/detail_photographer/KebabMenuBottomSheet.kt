@@ -40,7 +40,7 @@ fun KebabMenuBottomSheet(
         visibleCloseButton = false,
         onDismissRequest = onDismiss,
         dragHandle = null,
-        sheetMaxHeight = 200.dp,
+        sheetMaxHeight = 140.dp,
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Column(
