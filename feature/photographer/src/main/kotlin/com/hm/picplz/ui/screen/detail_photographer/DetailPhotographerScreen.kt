@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,15 +11,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,8 +39,10 @@ import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.feature.photographer.R as PhotographerR
 
 @Composable
 fun DetailPhotographerScreen(
@@ -39,6 +50,7 @@ fun DetailPhotographerScreen(
     navController: NavHostController,
 ) {
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
     Scaffold(
@@ -162,13 +174,55 @@ fun DetailPhotographerScreen(
         onReport = { /* TODO: 신고 플로우 */ },
     )
 
+    // 커스텀 토스트 상태
+    var toastMessage by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
+                is DetailPhotographerSideEffect.ShowBlockedToast -> {
+                    toastMessage =
+                        context.getString(
+                            PhotographerR.string.blocked_toast,
+                            sideEffect.name,
+                        )
+                }
             }
+        }
+    }
+
+    // 토스트 자동 dismiss
+    LaunchedEffect(toastMessage) {
+        if (toastMessage != null) {
+            kotlinx.coroutines.delay(TOAST_DURATION_MS)
+            toastMessage = null
+        }
+    }
+
+    // 커스텀 토스트 오버레이
+    toastMessage?.let { message ->
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 100.dp),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
+            Text(
+                text = message,
+                style = MainThemeFont.Body,
+                color = MainThemeColor.White,
+                modifier =
+                    Modifier
+                        .background(
+                            color = Color(0xFF0C0C0C).copy(alpha = 0.7f),
+                            shape = RoundedCornerShape(50.dp),
+                        )
+                        .padding(horizontal = 64.dp, vertical = 13.dp),
+            )
         }
     }
 }
@@ -196,6 +250,8 @@ private fun ThinDivider() {
         color = MainThemeColor.Gray1,
     )
 }
+
+private const val TOAST_DURATION_MS = 2000L
 
 @Preview(showBackground = true)
 @Composable

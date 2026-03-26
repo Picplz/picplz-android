@@ -69,6 +69,7 @@
 
     <!-- 케밥 메뉴 바텀시트 -->
     <string name="menu_block">차단하기</string>
+    <string name="blocked_toast">\'%s\'님이 차단되었습니다.</string>
     <string name="menu_report">신고하기</string>
     <string name="more">더보기</string>
 </resources>

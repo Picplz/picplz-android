@@ -72,6 +72,7 @@ fun DetailPhotographerPortfoliosScreen(
                 is DetailPhotographerSideEffect.NavigateToPrev -> {
                     navController.popBackStack()
                 }
+                else -> {}
             }
         }
     }

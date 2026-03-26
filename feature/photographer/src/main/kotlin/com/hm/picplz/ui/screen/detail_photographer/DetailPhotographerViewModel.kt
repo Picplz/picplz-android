@@ -53,7 +53,17 @@ open class DetailPhotographerViewModel
                     _state.update { it.copy(isInfoExpanded = !it.isInfoExpanded) }
                 }
                 is DetailPhotographerIntent.ToggleBlock -> {
+                    val wasBlocked = _state.value.isBlocked
                     _state.update { it.copy(isBlocked = !it.isBlocked) }
+                    if (!wasBlocked) {
+                        viewModelScope.launch {
+                            _sideEffect.send(
+                                DetailPhotographerSideEffect.ShowBlockedToast(
+                                    _state.value.profileInfo.name,
+                                ),
+                            )
+                        }
+                    }
                 }
                 is DetailPhotographerIntent.ToggleAreaExpanded -> {
                     _state.update { it.copy(isAreaExpanded = !it.isAreaExpanded) }
