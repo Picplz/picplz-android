@@ -1,7 +1,6 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,19 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,10 +28,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
 
@@ -193,37 +188,12 @@ fun DetailPhotographerScreen(
         }
     }
 
-    // 토스트 자동 dismiss
-    LaunchedEffect(state.toastMessage) {
-        if (state.toastMessage != null) {
-            kotlinx.coroutines.delay(TOAST_DURATION_MS)
+    CommonToast(
+        message = state.toastMessage,
+        onDismiss = {
             viewModel.handleIntent(DetailPhotographerIntent.DismissToast)
-        }
-    }
-
-    // 커스텀 토스트 오버레이
-    state.toastMessage?.let { message ->
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 24.dp),
-            contentAlignment = Alignment.BottomCenter,
-        ) {
-            Text(
-                text = message,
-                style = MainThemeFont.Body,
-                color = MainThemeColor.White,
-                modifier =
-                    Modifier
-                        .background(
-                            color = Color(0xFF0C0C0C).copy(alpha = 0.7f),
-                            shape = RoundedCornerShape(50.dp),
-                        )
-                        .padding(horizontal = 64.dp, vertical = 13.dp),
-            )
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -249,8 +219,6 @@ private fun ThinDivider() {
         color = MainThemeColor.Gray1,
     )
 }
-
-private const val TOAST_DURATION_MS = 2000L
 
 @Preview(showBackground = true)
 @Composable
