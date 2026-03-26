@@ -100,11 +100,15 @@ fun DetailPhotographerScreen(
                     profileInfo = state.profileInfo,
                     isFollow = state.isFollow,
                     isInfoExpanded = state.isInfoExpanded,
+                    isAreaExpanded = state.isAreaExpanded,
                     onToggleFollow = {
                         viewModel.handleIntent(DetailPhotographerIntent.ToggleFollow)
                     },
                     onToggleInfoExpanded = {
                         viewModel.handleIntent(DetailPhotographerIntent.ToggleInfoExpanded)
+                    },
+                    onToggleAreaExpanded = {
+                        viewModel.handleIntent(DetailPhotographerIntent.ToggleAreaExpanded)
                     },
                 )
 

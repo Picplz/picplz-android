@@ -20,6 +20,7 @@ data class DetailPhotographerState(
     val shootingPackages: List<ShootingPackage> = mockShootingPackages,
     val isFollow: Boolean = mockPhotographerInfo.isFollow,
     val isInfoExpanded: Boolean = false,
+    val isAreaExpanded: Boolean = false,
     val isBlocked: Boolean = false,
     val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
     val isSortSheetVisible: Boolean = false,

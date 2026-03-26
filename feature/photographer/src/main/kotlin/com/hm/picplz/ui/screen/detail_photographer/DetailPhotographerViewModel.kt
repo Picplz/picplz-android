@@ -55,6 +55,9 @@ open class DetailPhotographerViewModel
                 is DetailPhotographerIntent.ToggleBlock -> {
                     _state.update { it.copy(isBlocked = !it.isBlocked) }
                 }
+                is DetailPhotographerIntent.ToggleAreaExpanded -> {
+                    _state.update { it.copy(isAreaExpanded = !it.isAreaExpanded) }
+                }
                 is DetailPhotographerIntent.SelectReviewSort -> {
                     _state.update {
                         it.copy(
