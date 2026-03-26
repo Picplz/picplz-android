@@ -6,8 +6,10 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -71,11 +73,14 @@ fun ReviewThumbnailBar(
         state = listState,
         horizontalArrangement = Arrangement.spacedBy(1.dp),
         contentPadding = PaddingValues(horizontal = centerPadding),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         itemsIndexed(thumbnails) { index, uri ->
             val isSelected = index == selectedIndex
+            if (isSelected) {
+                Spacer(modifier = Modifier.width(SELECTED_GAP))
+            }
             Image(
                 painter = rememberAsyncImagePainter(model = uri),
                 contentDescription = stringResource(PhotographerR.string.review_photo),
@@ -91,6 +96,9 @@ fun ReviewThumbnailBar(
                         .clickable { onSelect(index) },
                 contentScale = ContentScale.Crop,
             )
+            if (isSelected) {
+                Spacer(modifier = Modifier.width(SELECTED_GAP))
+            }
         }
     }
 }
@@ -139,3 +147,4 @@ internal fun androidx.compose.foundation.lazy.LazyListState.findCenterItemIndex(
 
 private val THUMBNAIL_SIZE = 40.dp
 private val THUMBNAIL_SELECTED_SIZE = 50.dp
+private val SELECTED_GAP = 20.dp
