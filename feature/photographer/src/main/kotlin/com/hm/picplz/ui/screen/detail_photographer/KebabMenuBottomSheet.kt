@@ -63,9 +63,9 @@ fun KebabMenuBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.close_circle),
+                    painter = painterResource(id = R.drawable.ic_block),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
@@ -92,9 +92,9 @@ fun KebabMenuBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.bell_off),
+                    painter = painterResource(id = R.drawable.ic_report),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(

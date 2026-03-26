@@ -48,7 +48,7 @@ import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.pretendardTypography
 
 private val FOLLOW_ICON_SIZE = 8.dp
-private val FOLLOW_BUTTON_WIDTH = 60.dp
+private val FOLLOW_BUTTON_WIDTH = 56.dp
 private const val VISIBLE_AREA_COUNT = 3
 private const val ARROW_INLINE_ID = "arrow"
 private const val INFO_TOGGLE_ID = "toggle"
