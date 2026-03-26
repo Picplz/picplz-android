@@ -1,5 +1,7 @@
 package com.hm.picplz.ui.screen.detail_photographer.review
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
@@ -78,27 +80,27 @@ fun ReviewThumbnailBar(
     ) {
         itemsIndexed(thumbnails) { index, uri ->
             val isSelected = index == selectedIndex
-            if (isSelected) {
-                Spacer(modifier = Modifier.width(SELECTED_GAP))
-            }
+            val animatedSize by animateDpAsState(
+                targetValue = if (isSelected) THUMBNAIL_SELECTED_SIZE else THUMBNAIL_SIZE,
+                animationSpec = tween(durationMillis = 250),
+                label = "thumbnailSize",
+            )
+            val animatedGap by animateDpAsState(
+                targetValue = if (isSelected) SELECTED_GAP else 0.dp,
+                animationSpec = tween(durationMillis = 250),
+                label = "thumbnailGap",
+            )
+            Spacer(modifier = Modifier.width(animatedGap))
             Image(
                 painter = rememberAsyncImagePainter(model = uri),
                 contentDescription = stringResource(PhotographerR.string.review_photo),
                 modifier =
                     Modifier
-                        .size(
-                            if (isSelected) {
-                                THUMBNAIL_SELECTED_SIZE
-                            } else {
-                                THUMBNAIL_SIZE
-                            },
-                        )
+                        .size(animatedSize)
                         .clickable { onSelect(index) },
                 contentScale = ContentScale.Crop,
             )
-            if (isSelected) {
-                Spacer(modifier = Modifier.width(SELECTED_GAP))
-            }
+            Spacer(modifier = Modifier.width(animatedGap))
         }
     }
 }
