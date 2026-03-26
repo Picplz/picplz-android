@@ -47,8 +47,8 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.pretendardTypography
 
-private val FOLLOW_ICON_SIZE = 8.dp
-private val FOLLOW_BUTTON_WIDTH = 56.dp
+private val followIconSize = 8.dp
+private val followButtonWidth = 56.dp
 private const val VISIBLE_AREA_COUNT = 3
 private const val ARROW_INLINE_ID = "arrow"
 private const val INFO_TOGGLE_ID = "toggle"
@@ -249,7 +249,7 @@ private fun FollowButton(
     val buttonModifier =
         Modifier
             .height(21.dp)
-            .width(FOLLOW_BUTTON_WIDTH)
+            .width(followButtonWidth)
     if (isFollow) {
         CommonIconButton(
             label = stringResource(R.string.following),
@@ -257,7 +257,7 @@ private fun FollowButton(
             textColor = MainThemeColor.White,
             textStyle = MainThemeFont.Caption,
             iconResId = R.drawable.following,
-            iconSize = FOLLOW_ICON_SIZE,
+            iconSize = followIconSize,
             location = "right",
             horizontalPadding = 7.dp,
             verticalPadding = 3.dp,
@@ -272,7 +272,7 @@ private fun FollowButton(
             textColor = MainThemeColor.Gray4,
             textStyle = MainThemeFont.Caption,
             iconResId = R.drawable.follow,
-            iconSize = FOLLOW_ICON_SIZE,
+            iconSize = followIconSize,
             location = "right",
             horizontalPadding = 7.dp,
             verticalPadding = 3.dp,

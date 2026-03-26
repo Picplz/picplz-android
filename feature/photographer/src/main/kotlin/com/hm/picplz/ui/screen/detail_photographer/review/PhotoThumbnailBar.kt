@@ -43,7 +43,7 @@ fun ReviewThumbnailBar(
 ) {
     val listState = rememberLazyListState()
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
-    val centerPadding = (screenWidthDp - THUMBNAIL_SIZE) / 2
+    val centerPadding = (screenWidthDp - thumbnailSize) / 2
     var isUserDragging by remember { mutableStateOf(false) }
 
     LaunchedEffect(listState.interactionSource) {
@@ -83,12 +83,12 @@ fun ReviewThumbnailBar(
         itemsIndexed(thumbnails) { index, uri ->
             val isSelected = index == selectedIndex
             val animatedSize by animateDpAsState(
-                targetValue = if (isSelected) THUMBNAIL_SELECTED_SIZE else THUMBNAIL_SIZE,
+                targetValue = if (isSelected) thumbnailSelectedSize else thumbnailSize,
                 animationSpec = tween(durationMillis = 250),
                 label = "thumbnailSize",
             )
             val animatedGap by animateDpAsState(
-                targetValue = if (isSelected) SELECTED_GAP else 0.dp,
+                targetValue = if (isSelected) selectedGap else 0.dp,
                 animationSpec = tween(durationMillis = 250),
                 label = "thumbnailGap",
             )
@@ -150,6 +150,6 @@ internal fun androidx.compose.foundation.lazy.LazyListState.findCenterItemIndex(
 }
 
 private const val CENTERING_DELAY_MS = 50L
-private val THUMBNAIL_SIZE = 40.dp
-private val THUMBNAIL_SELECTED_SIZE = 50.dp
-private val SELECTED_GAP = 20.dp
+private val thumbnailSize = 40.dp
+private val thumbnailSelectedSize = 50.dp
+private val selectedGap = 20.dp
