@@ -124,6 +124,7 @@ private fun RowScope.TableCell(
     )
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun RefundPolicyTablePreview() {

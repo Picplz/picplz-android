@@ -155,6 +155,7 @@ private fun getPartialRefundAnnotatedText(refundPercent: Int) =
         append(stringResource(R.string.reservation_cancel_dialog_desc_partial_refund_suffix))
     }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun ReservationCancelDialogWaitingApprovalPreview() {
@@ -168,6 +169,7 @@ private fun ReservationCancelDialogWaitingApprovalPreview() {
     )
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun ReservationCancelDialogFullRefundPreview() {
@@ -181,6 +183,7 @@ private fun ReservationCancelDialogFullRefundPreview() {
     )
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun ReservationCancelDialogPartialRefundPreview() {

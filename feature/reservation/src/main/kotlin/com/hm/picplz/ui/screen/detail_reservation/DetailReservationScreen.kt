@@ -24,6 +24,7 @@ import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPo
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
 import com.hm.picplz.ui.theme.MainThemeColor
 
+@Suppress("LongParameterList")
 @Composable
 fun DetailReservationScreen(
     onNavigateBack: () -> Unit,
@@ -75,6 +76,7 @@ fun DetailReservationScreen(
     )
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun DetailReservationScreen(
     state: DetailReservationState,
@@ -157,6 +159,7 @@ private fun DetailReservationScreen(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun DetailReservationScreenPreview() {

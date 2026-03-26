@@ -66,6 +66,7 @@ fun ReservationRefundPolicyDialog(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun ReservationRefundPolicyDialogPreview() {

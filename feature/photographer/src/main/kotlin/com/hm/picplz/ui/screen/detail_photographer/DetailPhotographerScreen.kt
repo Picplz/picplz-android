@@ -189,7 +189,8 @@ fun DetailPhotographerScreen(
     }
 
     CommonToast(
-        message = state.toastMessage,
+        message = state.toastMessage ?: "",
+        isVisible = state.toastMessage != null,
         onDismiss = {
             viewModel.handleIntent(DetailPhotographerIntent.DismissToast)
         },
