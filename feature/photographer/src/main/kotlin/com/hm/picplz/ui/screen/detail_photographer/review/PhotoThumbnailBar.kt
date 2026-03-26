@@ -65,9 +65,12 @@ fun ReviewThumbnailBar(
         }
     }
 
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val gapPx = with(density) { SELECTED_GAP.toPx() }
+
     LaunchedEffect(selectedIndex) {
         if (!isUserDragging) {
-            listState.centerItem(selectedIndex)
+            listState.centerItem(selectedIndex, gapPx)
         }
     }
 
@@ -105,7 +108,10 @@ fun ReviewThumbnailBar(
     }
 }
 
-private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(index: Int) {
+private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(
+    index: Int,
+    selectedGapPx: Float = 0f,
+) {
     val layoutInfo = layoutInfo
     val target = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
 
@@ -114,7 +120,8 @@ private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(in
             layoutInfo.viewportSize.width -
                 layoutInfo.beforeContentPadding -
                 layoutInfo.afterContentPadding
-        val targetCenter = target.offset + target.size / 2f
+        // 이미지 중앙 = offset + gap + imageSize/2
+        val targetCenter = target.offset + target.size / 2f + selectedGapPx
         val viewportCenter = containerSize / 2f
         animateScrollBy(targetCenter - viewportCenter)
     } else {
@@ -126,7 +133,7 @@ private suspend fun androidx.compose.foundation.lazy.LazyListState.centerItem(in
                 layoutInfo.viewportSize.width -
                     layoutInfo.beforeContentPadding -
                     layoutInfo.afterContentPadding
-            val targetCenter = retarget.offset + retarget.size / 2f
+            val targetCenter = retarget.offset + retarget.size / 2f + selectedGapPx
             val viewportCenter = containerSize / 2f
             animateScrollBy(targetCenter - viewportCenter)
         }
