@@ -171,7 +171,17 @@ fun DetailPhotographerScreen(
         onBlock = {
             viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
         },
-        onReport = { /* TODO: 신고 플로우 */ },
+        onReport = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
+        },
+    )
+
+    com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet(
+        visible = state.isReportSheetVisible,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
+        },
+        onSelect = { /* TODO: 신고 API 연동 */ },
     )
 
     // 커스텀 토스트 상태
