@@ -13,6 +13,8 @@ sealed interface DetailPhotographerIntent {
 
     data object ToggleAreaExpanded : DetailPhotographerIntent
 
+    data object ToggleMenuSheet : DetailPhotographerIntent
+
     data class SelectReviewSort(val sortType: ReviewSortType) : DetailPhotographerIntent
 
     data object ToggleSortSheet : DetailPhotographerIntent

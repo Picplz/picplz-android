@@ -22,6 +22,7 @@ data class DetailPhotographerState(
     val isInfoExpanded: Boolean = false,
     val isAreaExpanded: Boolean = false,
     val isBlocked: Boolean = false,
+    val isMenuSheetVisible: Boolean = false,
     val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
     val isSortSheetVisible: Boolean = false,
     val currentReviewIndex: Int = 0,

@@ -55,7 +55,13 @@ fun DetailPhotographerScreen(
                     viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: 메뉴 동작 구현 */ }) {
+                    IconButton(
+                        onClick = {
+                            viewModel.handleIntent(
+                                DetailPhotographerIntent.ToggleMenuSheet,
+                            )
+                        },
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.menu),
                             contentDescription = stringResource(R.string.menu),
@@ -143,6 +149,17 @@ fun DetailPhotographerScreen(
                 Spacer(modifier = Modifier.height(40.dp))
             }
         },
+    )
+
+    KebabMenuBottomSheet(
+        visible = state.isMenuSheetVisible,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleMenuSheet)
+        },
+        onBlock = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
+        },
+        onReport = { /* TODO: 신고 플로우 */ },
     )
 
     LaunchedEffect(Unit) {

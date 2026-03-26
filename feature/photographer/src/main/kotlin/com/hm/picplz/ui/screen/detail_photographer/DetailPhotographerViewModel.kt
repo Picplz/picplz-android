@@ -58,6 +58,9 @@ open class DetailPhotographerViewModel
                 is DetailPhotographerIntent.ToggleAreaExpanded -> {
                     _state.update { it.copy(isAreaExpanded = !it.isAreaExpanded) }
                 }
+                is DetailPhotographerIntent.ToggleMenuSheet -> {
+                    _state.update { it.copy(isMenuSheetVisible = !it.isMenuSheetVisible) }
+                }
                 is DetailPhotographerIntent.SelectReviewSort -> {
                     _state.update {
                         it.copy(
