@@ -138,6 +138,11 @@ fun DetailPhotographerScreen(
                     reviewSummary = state.reviewSummary,
                     reviews = state.reviews,
                     photographerId = viewModel.photographerId,
+                    onReport = {
+                        viewModel.handleIntent(
+                            DetailPhotographerIntent.ToggleReportSheet,
+                        )
+                    },
                 )
 
                 ThinDivider()

@@ -37,6 +37,7 @@ fun ReviewSection(
     reviewSummary: PhotographerReviewSummary,
     reviews: List<PhotographerReview>,
     photographerId: Int,
+    onReport: () -> Unit,
 ) {
     val totalRating = reviewSummary.averageRating
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN)
@@ -84,6 +85,7 @@ fun ReviewSection(
                 SingleReview(
                     navController = navController,
                     review = reviews.first(),
+                    onReport = onReport,
                 )
             }
 

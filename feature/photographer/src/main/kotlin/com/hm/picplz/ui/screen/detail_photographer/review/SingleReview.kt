@@ -56,6 +56,7 @@ fun SingleReview(
     review: PhotographerReview,
     type: SingleReviewType = SingleReviewType.OVERVIEW,
     photoIndex: Int = 0,
+    onReport: (() -> Unit)? = null,
 ) {
     val subStarList = ReviewUtil.calculateStarRating(review.rating, StarType.SUB)
 
@@ -130,6 +131,7 @@ fun SingleReview(
                     horizontalPadding = 5.dp,
                     verticalPadding = 2.dp,
                     borderRadius = 5.dp,
+                    onClick = onReport,
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))

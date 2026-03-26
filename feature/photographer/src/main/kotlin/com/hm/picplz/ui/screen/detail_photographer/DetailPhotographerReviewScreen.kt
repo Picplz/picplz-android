@@ -40,6 +40,7 @@ import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.common.CommonIconButton
+import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortBottomSheet
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -182,12 +183,29 @@ fun DetailPhotographerReviewScreen(
 
                         // 리뷰 리스트
                         reviews.forEach { item ->
-                            SingleReview(navController, item)
+                            SingleReview(
+                                navController = navController,
+                                review = item,
+                                onReport = {
+                                    viewModel.handleIntent(
+                                        DetailPhotographerIntent.ToggleReportSheet,
+                                    )
+                                },
+                            )
                         }
                     }
                 }
             }
         },
+    )
+
+    // 신고 바텀시트
+    ReportBottomSheet(
+        visible = state.isReportSheetVisible,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
+        },
+        onSelect = { /* TODO: 신고 API 연동 */ },
     )
 
     // 정렬 바텀시트
