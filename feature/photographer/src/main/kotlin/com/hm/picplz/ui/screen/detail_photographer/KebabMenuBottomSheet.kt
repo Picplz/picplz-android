@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,7 +53,6 @@ fun KebabMenuBottomSheet(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(57.dp)
                         .clickable {
                             onBlock()
                             onDismiss()
@@ -67,24 +64,20 @@ fun KebabMenuBottomSheet(
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(9.dp))
                 Text(
                     text = stringResource(PhotographerR.string.menu_block),
-                    style = MainThemeFont.Body,
+                    style = MainThemeFont.BodyLarge,
                     color = MainThemeColor.Black,
                 )
             }
 
-            HorizontalDivider(
-                color = MainThemeColor.Gray2,
-                thickness = 0.96.dp,
-            )
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .height(57.dp)
                         .clickable {
                             onReport()
                             onDismiss()
@@ -96,10 +89,10 @@ fun KebabMenuBottomSheet(
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(9.dp))
                 Text(
                     text = stringResource(PhotographerR.string.menu_report),
-                    style = MainThemeFont.Body,
+                    style = MainThemeFont.BodyLarge,
                     color = MainThemeColor.Black,
                 )
             }
