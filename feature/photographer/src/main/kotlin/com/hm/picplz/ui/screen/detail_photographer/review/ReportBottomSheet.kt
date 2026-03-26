@@ -24,7 +24,7 @@ import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.feature.photographer.R as PhotographerR
 
 private const val ITEM_HEIGHT = 57
-private const val SHEET_PADDING = 80
+private const val SHEET_PADDING = 120
 
 private val reportOptions: List<Int> =
     listOf(
