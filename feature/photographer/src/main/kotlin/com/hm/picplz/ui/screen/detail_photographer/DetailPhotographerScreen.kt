@@ -176,11 +176,10 @@ fun DetailPhotographerScreen(
         onBlock = {
             viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
         },
-        onReport = {
-            viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
-        },
+        onReport = { /* TODO: 작가 신고 플로우 (리뷰 신고와 별개) */ },
     )
 
+    // 리뷰 신고 바텀시트
     com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet(
         visible = state.isReportSheetVisible,
         onDismiss = {
