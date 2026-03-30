@@ -18,6 +18,10 @@ class OrderDetailViewModel @Inject constructor() : ViewModel() {
     private val _sideEffect = MutableSharedFlow<OrderDetailSideEffect>()
     val sideEffect: SharedFlow<OrderDetailSideEffect> = _sideEffect
 
+    init {
+        loadOrderDetail("")
+    }
+
     fun handleIntent(intent: OrderDetailIntent) {
         when (intent) {
             is OrderDetailIntent.OnBackClick -> {
