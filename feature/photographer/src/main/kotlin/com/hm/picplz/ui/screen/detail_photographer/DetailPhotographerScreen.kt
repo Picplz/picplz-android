@@ -28,7 +28,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -55,7 +57,13 @@ fun DetailPhotographerScreen(
                     viewModel.handleIntent(DetailPhotographerIntent.NavigateToPrev)
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: 메뉴 동작 구현 */ }) {
+                    IconButton(
+                        onClick = {
+                            viewModel.handleIntent(
+                                DetailPhotographerIntent.ToggleMenuSheet,
+                            )
+                        },
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.menu),
                             contentDescription = stringResource(R.string.menu),
@@ -100,11 +108,15 @@ fun DetailPhotographerScreen(
                     profileInfo = state.profileInfo,
                     isFollow = state.isFollow,
                     isInfoExpanded = state.isInfoExpanded,
+                    isAreaExpanded = state.isAreaExpanded,
                     onToggleFollow = {
                         viewModel.handleIntent(DetailPhotographerIntent.ToggleFollow)
                     },
                     onToggleInfoExpanded = {
                         viewModel.handleIntent(DetailPhotographerIntent.ToggleInfoExpanded)
+                    },
+                    onToggleAreaExpanded = {
+                        viewModel.handleIntent(DetailPhotographerIntent.ToggleAreaExpanded)
                     },
                 )
 
@@ -116,6 +128,11 @@ fun DetailPhotographerScreen(
                     reviewSummary = state.reviewSummary,
                     reviews = state.reviews,
                     photographerId = viewModel.photographerId,
+                    onReport = {
+                        viewModel.handleIntent(
+                            DetailPhotographerIntent.ToggleReportSheet,
+                        )
+                    },
                 )
 
                 ThinDivider()
@@ -141,6 +158,26 @@ fun DetailPhotographerScreen(
         },
     )
 
+    KebabMenuBottomSheet(
+        visible = state.isMenuSheetVisible,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleMenuSheet)
+        },
+        onBlock = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
+        },
+        onReport = { /* TODO: 작가 신고 플로우 (리뷰 신고와 별개) */ },
+    )
+
+    // 리뷰 신고 바텀시트
+    ReportBottomSheet(
+        visible = state.isReportSheetVisible,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
+        },
+        onSelect = { /* TODO: 신고 API 연동 */ },
+    )
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
@@ -150,6 +187,14 @@ fun DetailPhotographerScreen(
             }
         }
     }
+
+    CommonToast(
+        message = state.toastMessage ?: "",
+        isVisible = state.toastMessage != null,
+        onDismiss = {
+            viewModel.handleIntent(DetailPhotographerIntent.DismissToast)
+        },
+    )
 }
 
 @Composable

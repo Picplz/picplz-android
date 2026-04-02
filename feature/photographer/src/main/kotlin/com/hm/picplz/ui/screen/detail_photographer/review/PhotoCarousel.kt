@@ -55,7 +55,7 @@ fun PhotoCarousel(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(DOT_AREA_HEIGHT),
+                    .height(dotAreaHeight),
             contentAlignment = Alignment.Center,
         ) {
             if (photos.size > 1) {
@@ -111,9 +111,9 @@ fun PageIndicatorDots(
                 kotlin.math.abs(i - selectedPosInWindow)
             val dotSize =
                 when (distFromSelected) {
-                    0 -> DOT_LARGE
-                    1 -> DOT_MEDIUM
-                    else -> DOT_SMALL
+                    0 -> dotLarge
+                    1 -> dotMedium
+                    else -> dotSmall
                 }
             val dotColor =
                 if (pageIndex == currentPage) {
@@ -135,9 +135,9 @@ fun PageIndicatorDots(
     }
 }
 
-private val DOT_AREA_HEIGHT = 18.dp
+private val dotAreaHeight = 18.dp
 private const val MAX_VISIBLE_DOTS = 5
 private const val CENTER_INDEX = 2
-private val DOT_LARGE = 6.dp
-private val DOT_MEDIUM = 4.dp
-private val DOT_SMALL = 2.dp
+private val dotLarge = 6.dp
+private val dotMedium = 4.dp
+private val dotSmall = 2.dp

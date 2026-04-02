@@ -437,7 +437,9 @@ val mockPhotographerInfo =
         socialAccount = "Gayoung",
         infoText =
             "10/31 이후 예약 가능합니다. " +
-                "어쩌고저쩌고 적으면 최대 두 줄까지 적을 수 있습니다. 어쩌고저쩌고",
+                "어쩌고저쩌고 적으면 최대 두 줄까지 적을 수 있습니다. " +
+                "어쩌고저쩌고 더 긴 설명을 넣어서 세 줄 이상 넘어가는지 " +
+                "테스트해봅니다. 사진을 잘 찍어드리겠습니다!",
         isActive = true,
         isBookable = true,
         isFollow = true,
@@ -445,14 +447,14 @@ val mockPhotographerInfo =
         profileImageUri = "https://picsum.photos/seed/profile/100",
         workingArea =
             listOf(
-                "마포구",
-                "동작구",
-                "머머구",
-                "강남구",
-                "서초구",
-                "용산구",
-                "성동구",
-                "광진구",
+                "마포구 망원동",
+                "마포구 연남동",
+                "떡잎구 팽구동",
+                "강남구 도곡1동",
+                "연수구 송도동",
+                "미추홀구 구월동",
+                "원피스구 사봉디동",
+                "새싹구 나뭇잎동",
             ),
         keyword = listOf("#캐주얼", "#고급미"),
         equipment = listOf("아이폰 16 PRO", "아이폰X", "갤럭시23 울트라"),

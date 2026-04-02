@@ -11,6 +11,10 @@ sealed interface DetailPhotographerIntent {
 
     data object ToggleBlock : DetailPhotographerIntent
 
+    data object ToggleAreaExpanded : DetailPhotographerIntent
+
+    data object ToggleMenuSheet : DetailPhotographerIntent
+
     data class SelectReviewSort(val sortType: ReviewSortType) : DetailPhotographerIntent
 
     data object ToggleSortSheet : DetailPhotographerIntent
@@ -22,4 +26,6 @@ sealed interface DetailPhotographerIntent {
     data object ToggleReportSheet : DetailPhotographerIntent
 
     data class SwitchReview(val reviewIndex: Int) : DetailPhotographerIntent
+
+    data object DismissToast : DetailPhotographerIntent
 }

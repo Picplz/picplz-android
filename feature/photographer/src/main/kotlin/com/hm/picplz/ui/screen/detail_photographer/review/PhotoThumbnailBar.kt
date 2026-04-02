@@ -1,13 +1,17 @@
 package com.hm.picplz.ui.screen.detail_photographer.review
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -39,7 +43,7 @@ fun ReviewThumbnailBar(
 ) {
     val listState = rememberLazyListState()
     val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp
-    val centerPadding = (screenWidthDp - THUMBNAIL_SIZE) / 2
+    val centerPadding = (screenWidthDp - thumbnailSize) / 2
     var isUserDragging by remember { mutableStateOf(false) }
 
     LaunchedEffect(listState.interactionSource) {
@@ -63,6 +67,8 @@ fun ReviewThumbnailBar(
 
     LaunchedEffect(selectedIndex) {
         if (!isUserDragging) {
+            // 약간 지연 후 센터링 — 애니메이션 시작 후 size에 gap 포함되도록
+            kotlinx.coroutines.delay(CENTERING_DELAY_MS)
             listState.centerItem(selectedIndex)
         }
     }
@@ -71,26 +77,32 @@ fun ReviewThumbnailBar(
         state = listState,
         horizontalArrangement = Arrangement.spacedBy(1.dp),
         contentPadding = PaddingValues(horizontal = centerPadding),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         itemsIndexed(thumbnails) { index, uri ->
             val isSelected = index == selectedIndex
+            val animatedSize by animateDpAsState(
+                targetValue = if (isSelected) thumbnailSelectedSize else thumbnailSize,
+                animationSpec = tween(durationMillis = 250),
+                label = "thumbnailSize",
+            )
+            val animatedGap by animateDpAsState(
+                targetValue = if (isSelected) selectedGap else 0.dp,
+                animationSpec = tween(durationMillis = 250),
+                label = "thumbnailGap",
+            )
+            Spacer(modifier = Modifier.width(animatedGap))
             Image(
                 painter = rememberAsyncImagePainter(model = uri),
                 contentDescription = stringResource(PhotographerR.string.review_photo),
                 modifier =
                     Modifier
-                        .size(
-                            if (isSelected) {
-                                THUMBNAIL_SELECTED_SIZE
-                            } else {
-                                THUMBNAIL_SIZE
-                            },
-                        )
+                        .size(animatedSize)
                         .clickable { onSelect(index) },
                 contentScale = ContentScale.Crop,
             )
+            Spacer(modifier = Modifier.width(animatedGap))
         }
     }
 }
@@ -137,5 +149,7 @@ internal fun androidx.compose.foundation.lazy.LazyListState.findCenterItemIndex(
     }?.index ?: -1
 }
 
-private val THUMBNAIL_SIZE = 40.dp
-private val THUMBNAIL_SELECTED_SIZE = 50.dp
+private const val CENTERING_DELAY_MS = 50L
+private val thumbnailSize = 40.dp
+private val thumbnailSelectedSize = 50.dp
+private val selectedGap = 20.dp

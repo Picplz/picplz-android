@@ -39,7 +39,7 @@ import com.hm.picplz.feature.photographer.R as PhotographerR
 @Composable
 fun DetailPhotographerPhotoReviewsScreen(
     navController: NavController,
-    photographerId: Int,
+    @Suppress("UNUSED_PARAMETER") photographerId: Int,
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()

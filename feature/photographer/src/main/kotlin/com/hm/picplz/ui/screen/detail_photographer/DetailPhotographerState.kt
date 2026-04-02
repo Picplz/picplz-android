@@ -20,12 +20,15 @@ data class DetailPhotographerState(
     val shootingPackages: List<ShootingPackage> = mockShootingPackages,
     val isFollow: Boolean = mockPhotographerInfo.isFollow,
     val isInfoExpanded: Boolean = false,
+    val isAreaExpanded: Boolean = false,
     val isBlocked: Boolean = false,
+    val isMenuSheetVisible: Boolean = false,
     val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
     val isSortSheetVisible: Boolean = false,
     val currentReviewIndex: Int = 0,
     val fullScreenImageUri: String? = null,
     val isReportSheetVisible: Boolean = false,
+    val toastMessage: String? = null,
 ) {
     companion object {
         fun idle(): DetailPhotographerState {

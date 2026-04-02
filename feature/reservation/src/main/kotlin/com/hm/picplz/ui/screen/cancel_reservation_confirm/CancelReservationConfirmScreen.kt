@@ -184,6 +184,7 @@ private fun CancelReservationButtons(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview
 @Composable
 private fun CancelReservationConfirmScreenPreview() {
