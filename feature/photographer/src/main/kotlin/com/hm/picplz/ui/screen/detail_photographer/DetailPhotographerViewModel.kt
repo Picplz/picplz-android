@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.data.service.PhotographerService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,8 +42,8 @@ open class DetailPhotographerViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         init {
-            if (!isPreviewMode) {
-                loadPhotographerInfo()
+            if (!isPreviewMode && photographerId != DEV_BLOCKED_PHOTOGRAPHER_ID) {
+                loadPhotographerDetail()
             }
         }
 
@@ -134,12 +135,55 @@ open class DetailPhotographerViewModel
             _state.update { it.copy(previewActionDialog = action) }
         }
 
-        private fun loadPhotographerInfo() {
+        private fun loadPhotographerDetail() {
             viewModelScope.launch {
-                photographerService.getPhotographerInfo(photographerId.toLong())
-                    .onSuccess { info ->
-                        _state.update { it.copy(profileInfo = info) }
+                val id = photographerId.toLong()
+
+                val profileDeferred =
+                    async {
+                        photographerService.getPhotographerInfo(id)
                     }
+                val reviewsDeferred =
+                    async {
+                        photographerService.getPhotographerReviews(id)
+                    }
+                val productsDeferred =
+                    async {
+                        photographerService.getPhotographerProducts(id)
+                    }
+
+                val profileResult = profileDeferred.await()
+                val reviewsResult = reviewsDeferred.await()
+                val productsResult = productsDeferred.await()
+
+                profileResult.onSuccess { info ->
+                    _state.update {
+                        it.copy(
+                            profileInfo = info,
+                            isFollow = info.isFollow,
+                        )
+                    }
+                }
+
+                reviewsResult.onSuccess { data ->
+                    _state.update {
+                        it.copy(
+                            reviews = data.reviews,
+                            reviewSummary = data.summary,
+                        )
+                    }
+                }
+
+                productsResult.onSuccess { packages ->
+                    _state.update { it.copy(shootingPackages = packages) }
+                }
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = if (profileResult.isFailure) "Failed to load photographer detail" else null,
+                    )
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- DetailPhotographerScreen -->
+    <string name="photographer_detail_load_error">작가 정보를 불러올 수 없습니다</string>
     <string name="photographer_name_format">%s 작가</string>
     <string name="photographer_profile_image">작가 프로필</string>
     <string name="menu">메뉴</string>

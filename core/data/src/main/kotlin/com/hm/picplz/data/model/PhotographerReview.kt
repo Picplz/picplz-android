@@ -3,6 +3,11 @@ package com.hm.picplz.data.model
 import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.common.model.PhotoReview
 
+data class PhotographerReviewData(
+    val summary: PhotographerReviewSummary,
+    val reviews: List<PhotographerReview>,
+)
+
 data class PhotographerReviewSummary(
     val averageRating: Float,
     val keywordBars: List<KeywordBar>,
