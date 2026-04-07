@@ -111,3 +111,6 @@ data object DetailReservation : NavigationRoute
 
 @Serializable
 data object CancelReservationConfirm : NavigationRoute
+
+@Serializable
+data object OrderDetail : NavigationRoute

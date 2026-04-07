@@ -29,6 +29,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 fun DetailReservationScreen(
     onNavigateBack: () -> Unit,
     onNavigateCancelReservation: () -> Unit,
+    onNavigateToOrderDetail: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailReservationViewModel = hiltViewModel(),
 ) {
@@ -39,6 +40,7 @@ fun DetailReservationScreen(
             when (sideEffect) {
                 is DetailReservationSideEffect.NavigateToPrev -> onNavigateBack()
                 is DetailReservationSideEffect.NavigateToCancelReservation -> onNavigateCancelReservation()
+                is DetailReservationSideEffect.NavigateToOrderDetail -> onNavigateToOrderDetail()
             }
         }
     }

@@ -71,7 +71,19 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
                 _state.update { it.copy(showCancelDialog = false) }
 
                 viewModelScope.launch {
-                    _sideEffect.emit(DetailReservationSideEffect.NavigateToCancelReservation)
+                    when (state.value.reservationStatus) {
+                        ReservationStatus.WAITING_APPROVAL,
+                        ReservationStatus.WAITING_PAYMENT,
+                        -> {
+                            _sideEffect.emit(DetailReservationSideEffect.NavigateToCancelReservation)
+                        }
+
+                        ReservationStatus.RESERVED,
+                        ReservationStatus.COMPLETED,
+                        -> {
+                            _sideEffect.emit(DetailReservationSideEffect.NavigateToOrderDetail)
+                        }
+                    }
                 }
             }
 

@@ -16,6 +16,7 @@ import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
+import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.screen.cancel_reservation_confirm.CancelReservationConfirmScreen
 import com.hm.picplz.ui.screen.chat.ChatScreen
@@ -29,6 +30,7 @@ import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
+import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -81,6 +83,9 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             onNavigateCancelReservation = {
                 navController.navigate(CancelReservationConfirm)
             },
+            onNavigateToOrderDetail = {
+                navController.navigate(OrderDetail)
+            },
         )
     }
 
@@ -94,6 +99,15 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                     popUpTo<Dev> { inclusive = false }
                 }
             },
+        )
+    }
+
+    composable<OrderDetail> {
+        OrderDetailScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateNextStep = { },
         )
     }
 }
