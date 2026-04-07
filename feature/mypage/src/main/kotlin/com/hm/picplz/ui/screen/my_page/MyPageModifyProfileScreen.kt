@@ -153,8 +153,12 @@ private fun NicknameSection(
                     OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = MainThemeColor.Gray1,
                         unfocusedContainerColor = MainThemeColor.Gray1,
-                        focusedBorderColor = if (isValid) MainThemeColor.Gray3 else MainThemeColor.Green120,
-                        unfocusedBorderColor = if (isValid) MainThemeColor.Gray2 else MainThemeColor.Green120,
+                        errorContainerColor = MainThemeColor.Gray1,
+                        focusedBorderColor = if (isValid) MainThemeColor.Gray3 else MainThemeColor.Red,
+                        unfocusedBorderColor = if (isValid) MainThemeColor.Gray2 else MainThemeColor.Red,
+                        errorBorderColor = MainThemeColor.Red,
+                        cursorColor = MainThemeColor.Black,
+                        errorCursorColor = MainThemeColor.Black,
                     ),
                 shape = RoundedCornerShape(5.dp),
             )
