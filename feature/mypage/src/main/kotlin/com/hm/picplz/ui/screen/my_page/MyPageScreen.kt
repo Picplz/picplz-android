@@ -1,10 +1,13 @@
 package com.hm.picplz.ui.screen.my_page
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,377 +33,85 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.hm.picplz.core.ui.R
+import coil.compose.AsyncImage
+import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.ui.navigation.BottomNavigationBar
-import com.hm.picplz.ui.screen.common.CommonIconButton
-import com.hm.picplz.ui.screen.common.PhotographerStatus
-import com.hm.picplz.ui.screen.common.card.PhotographerCard
-import com.hm.picplz.ui.screen.common.card.PortfolioCard
-import com.hm.picplz.ui.screen.common.card.ScheduleCardNone
+import com.hm.picplz.ui.screen.my_page.toggleSwitch.ToggleSwitch
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
-
-data class Profile(
-    val profileImage: Int,
-    val userName: String,
-    val instagram: String,
-    val introduction: String,
-)
-
-@Composable
-fun ProfileSection(navController: NavHostController) {
-    val dummyProfile =
-        Profile(
-            profileImage = R.drawable.logo,
-            userName = "임두현",
-            instagram = "duduhyeon",
-            introduction = "합정사는 임두현입니다.",
-        )
-
-    Box(
-        modifier =
-            Modifier
-                .fillMaxWidth(),
-    ) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 15.dp),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = dummyProfile.profileImage),
-                    contentDescription = "profile-image",
-                    modifier =
-                        Modifier
-                            .size(70.dp)
-                            .border(1.dp, MainThemeColor.Gray2, CircleShape)
-                            .clip(CircleShape),
-                )
-                Spacer(modifier = Modifier.width(15.dp))
-                Column {
-                    Text(text = dummyProfile.userName, style = MainThemeFont.TitleSmall)
-                    Spacer(modifier = Modifier.height(9.8.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.instagram),
-                            contentDescription = "instagram",
-                        )
-                        Spacer(modifier = Modifier.width(2.4.dp))
-                        Text(text = dummyProfile.instagram, color = MainThemeColor.Gray4)
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = dummyProfile.introduction,
-                style = MainThemeFont.Caption,
-                color = MainThemeColor.Gray6,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedButton(
-                onClick = { navController.navigate(MyPageModifyProfile) },
-                shape = RoundedCornerShape(5.dp),
-                border = BorderStroke(1.dp, MainThemeColor.Gray3),
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 15.dp),
-            ) {
-                Text(
-                    text = "프로필 수정",
-                    style = MainThemeFont.ButtonDefault,
-                    color = MainThemeColor.Black,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ReservationSection(navController: NavHostController) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(text = "진행중인 촬영", style = MainThemeFont.TitleSmall)
-            CommonIconButton(
-                label = "내 촬영 내역",
-                backgroundColor = Color.Transparent,
-                textColor = MainThemeColor.Gray60,
-                textStyle = MainThemeFont.Caption,
-                iconResId = R.drawable.depth_arrow,
-                location = "right",
-                horizontalPadding = 0.dp,
-                verticalPadding = 0.dp,
-                gap = 8.dp,
-                onClick = { navController.navigate(MyPageShootingHistory) },
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-//        TODO: 예약 있을 때 없을 때 분기처리
-//        ScheduleCard(
-//            userName = "합정동 불주먹",
-//            userProfile = R.drawable.edit_grey4,
-//            status = ReservationStatus.INPROGRESS,
-//            type = ReservationType.ASAP,
-//            packageType = PackageType.KAKAO,
-//            date = "5월 26일 오전 9시 30분",
-//            location = "종로구 효자로 33",
-//            onClick = {}
-//        )
-        ScheduleCardNone(
-            mainText = "진행중인 촬영이 없어요",
-            subText = "촬영지를 검색하고 작가들을 둘러보세요",
-            onClick = { /* TODO */ },
-        )
-    }
-}
-
-@Composable
-fun FollowPhotographerSection() {
-    Column {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(text = "팔로우 작가", style = MainThemeFont.TitleSmall)
-            CommonIconButton(
-                label = "전체 목록",
-                backgroundColor = Color.Transparent,
-                textColor = MainThemeColor.Gray60,
-                textStyle = MainThemeFont.Caption,
-                iconResId = R.drawable.depth_arrow,
-                location = "right",
-                horizontalPadding = 0.dp,
-                verticalPadding = 0.dp,
-                gap = 8.dp,
-                onClick = { },
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        LazyRow(
-            modifier = Modifier.padding(start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(30.dp),
-            contentPadding = PaddingValues(end = 16.dp),
-        ) {
-//            TODO: 작가 데이터 연동
-            item {
-                PhotographerCard(
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    status = PhotographerStatus.ENABLED,
-                    onClick = {},
-                )
-            }
-            item {
-                PhotographerCard(
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    status = PhotographerStatus.ENABLED,
-                    onClick = {},
-                )
-            }
-            item {
-                PhotographerCard(
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    status = PhotographerStatus.ENABLED,
-                    onClick = {},
-                )
-            }
-            item {
-                PhotographerCard(
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    status = PhotographerStatus.ENABLED,
-                    onClick = {},
-                )
-            }
-            item {
-                PhotographerCard(
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    status = PhotographerStatus.DISABLED,
-                    onClick = {},
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ScrapSection() {
-    Column {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(text = "스크랩", style = MainThemeFont.TitleSmall)
-            CommonIconButton(
-                label = "전체 목록",
-                backgroundColor = Color.Transparent,
-                textColor = MainThemeColor.Gray60,
-                textStyle = MainThemeFont.Caption,
-                iconResId = R.drawable.depth_arrow,
-                location = "right",
-                horizontalPadding = 0.dp,
-                verticalPadding = 0.dp,
-                gap = 8.dp,
-                onClick = { },
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        LazyRow(
-            modifier = Modifier.padding(start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(11.dp),
-            contentPadding = PaddingValues(end = 16.dp),
-        ) {
-//            TODO: 작가 데이터 연동
-            item {
-                PortfolioCard(
-                    portfolioImage = R.drawable.logo,
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    location = "무대륙",
-                    bookmarkCnt = 23,
-                    isBookMarked = false,
-                    bookmarkClick = {},
-                    onClick = {},
-                )
-            }
-            item {
-                PortfolioCard(
-                    portfolioImage = R.drawable.logo,
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    location = "무대륙",
-                    bookmarkCnt = 23,
-                    isBookMarked = false,
-                    bookmarkClick = {},
-                    onClick = {},
-                )
-            }
-            item {
-                PortfolioCard(
-                    portfolioImage = R.drawable.logo,
-                    profileImage = R.drawable.user_undefined,
-                    username = "유가영",
-                    location = "무대륙",
-                    bookmarkCnt = 23,
-                    isBookMarked = false,
-                    bookmarkClick = {},
-                    onClick = {},
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun EtcSection() {
-    // TODO: 디자인 작업 완료 후 적용
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-    ) {
-        Text(text = "내 리뷰", style = MainThemeFont.ButtonDefault)
-        Text(text = "문의하기", style = MainThemeFont.ButtonDefault)
-        Text(text = "계정 정보 수정", style = MainThemeFont.ButtonDefault)
-        Text(text = "이용 약관", style = MainThemeFont.ButtonDefault)
-    }
-}
+import com.hm.picplz.core.ui.R as CoreR
 
 @Composable
 fun MyPageScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: MyPageViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is MyPageSideEffect.NavigateToModifyProfile -> {
+                    navController.navigate(MyPageModifyProfile)
+                }
+                is MyPageSideEffect.NavigateToShootingHistory -> {
+                    navController.navigate(MyPageShootingHistory)
+                }
+                is MyPageSideEffect.NavigateToSettings -> {
+                    Toast.makeText(context, "설정 기능은 준비 중입니다.", Toast.LENGTH_SHORT).show()
+                }
+                is MyPageSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    MyPageScreen(
+        state = state,
+        onIntent = viewModel::handleIntent,
+        navController = navController,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun MyPageScreen(
+    state: MyPageState,
+    onIntent: (MyPageIntent) -> Unit,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth(),
-            ) {
-                Column {
-                    Row(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp, 11.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(
-                            text = "마이 페이지",
-                            style = MainThemeFont.BodySmallButton2,
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "setting",
-                        )
-                    }
-                    Row(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .background(MainThemeColor.Green120)
-                                .padding(horizontal = 16.dp, vertical = 15.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-//                        TODO: 분기 처리
-//                        Text(
-//                            text = "작가로 전환",
-//                            style = MainThemeFont.BodyBold,
-//                            color = MainThemeColor.White
-//                        )
-//                        ToggleSwitch(
-//                            checked = isToggled,
-//                            onCheckedChange = { isToggled = it }
-//                        )
-                        Text(
-                            text = "작가로도 활동하기",
-                            style = MainThemeFont.BodyBold,
-                            color = MainThemeColor.White,
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.triangle_right),
-                            contentDescription = "arrow",
-                            tint = MainThemeColor.White,
-                            modifier = Modifier.clickable { },
-                        )
-                    }
-                }
-            }
+            MyPageTopBar(
+                hasPhotographerRole = state.hasPhotographerRole,
+                onIntent = onIntent,
+            )
         },
         bottomBar = {
-            BottomNavigationBar(
-                navController = navController,
-            )
+            BottomNavigationBar(navController = navController)
         },
         modifier =
             modifier
@@ -412,37 +124,484 @@ fun MyPageScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState()),
         ) {
-            ProfileSection(navController)
+            ProfileRow(
+                nickname = state.nickname,
+                profileImageUri = state.profileImageUri,
+                onModifyProfileClick = { onIntent(MyPageIntent.NavigateToModifyProfile) },
+            )
 
-            Spacer(modifier = Modifier.height(28.5.dp))
+            HorizontalDivider(thickness = 1.dp, color = MainThemeColor.Gray2)
 
-            ReservationSection(navController)
-
-            Spacer(modifier = Modifier.height(47.dp))
-
-            FollowPhotographerSection()
-
-            Spacer(modifier = Modifier.height(47.dp))
-
-//            ScrapSection()
-//
-//            Spacer(modifier = Modifier.height(20.dp))
+            ShootingSection(
+                ongoingShootings = state.ongoingShootings,
+                onHistoryClick = { onIntent(MyPageIntent.NavigateToShootingHistory) },
+            )
 
             HorizontalDivider(thickness = 10.dp, color = MainThemeColor.Gray1)
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            EtcSection()
+            MenuSection(onIntent = onIntent)
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun MyPageTopBar(
+    hasPhotographerRole: Boolean,
+    onIntent: (MyPageIntent) -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(44.dp)
+                    .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.my_page_title),
+                style = MainThemeFont.BodyBold,
+            )
+            Icon(
+                painter = painterResource(id = CoreR.drawable.setting),
+                contentDescription = stringResource(R.string.my_page_title),
+                modifier =
+                    Modifier
+                        .size(23.dp)
+                        .combinedClickable(
+                            onClick = { onIntent(MyPageIntent.NavigateToSettings) },
+                            onLongClick = { onIntent(MyPageIntent.DevToggleShootings) },
+                        ),
+            )
+        }
+
+        if (hasPhotographerRole) {
+            PhotographerBanner(onIntent = onIntent)
+        } else {
+            BecomePhotographerBanner(onIntent = onIntent)
+        }
+    }
+}
+
+@Composable
+private fun PhotographerBanner(onIntent: (MyPageIntent) -> Unit) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(bannerHeight)
+                .background(MainThemeColor.Green120)
+                .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.my_page_switch_photographer),
+            style = MainThemeFont.BodyBold,
+            color = MainThemeColor.White,
+        )
+        ToggleSwitch(
+            checked = false,
+            onCheckedChange = { onIntent(MyPageIntent.SwitchToPhotographer) },
+            width = 56.dp,
+            height = 28.dp,
+            thumbSize = 19.dp,
+            trackColor = MainThemeColor.Gray1,
+            trackStroke = MainThemeColor.Gray2,
+        )
+    }
+}
+
+@Composable
+private fun BecomePhotographerBanner(onIntent: (MyPageIntent) -> Unit) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(bannerHeight)
+                .background(MainThemeColor.Green120)
+                .clickable { onIntent(MyPageIntent.NavigateToPhotographerSignUp) }
+                .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.my_page_become_photographer),
+            style = MainThemeFont.BodyBold,
+            color = MainThemeColor.White,
+        )
+        Icon(
+            painter = painterResource(id = CoreR.drawable.triangle_right),
+            contentDescription = stringResource(R.string.my_page_become_photographer),
+            tint = MainThemeColor.White,
+        )
+    }
+}
+
+@Composable
+private fun ProfileRow(
+    nickname: String,
+    profileImageUri: String,
+    onModifyProfileClick: () -> Unit,
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(76.dp)
+                .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (profileImageUri.isNotEmpty()) {
+            AsyncImage(
+                model = profileImageUri,
+                contentDescription = nickname,
+                modifier =
+                    Modifier
+                        .size(36.dp)
+                        .border(1.dp, MainThemeColor.Gray2, CircleShape)
+                        .clip(CircleShape),
+            )
+        } else {
+            Box(
+                modifier =
+                    Modifier
+                        .size(36.dp)
+                        .border(1.dp, MainThemeColor.Gray2, CircleShape)
+                        .clip(CircleShape)
+                        .background(MainThemeColor.Gray2),
+            )
+        }
+
+        Text(
+            text = nickname.ifEmpty { "-" },
+            style = MainThemeFont.BodyBold,
+            color = MainThemeColor.Black,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        OutlinedButton(
+            onClick = onModifyProfileClick,
+            shape = RoundedCornerShape(5.dp),
+            border = BorderStroke(1.dp, MainThemeColor.Gray3),
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.my_page_modify_profile),
+                style = MainThemeFont.BodyBold,
+                color = MainThemeColor.Gray4,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShootingSection(
+    ongoingShootings: List<OngoingShootingItem>,
+    onHistoryClick: () -> Unit,
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp, bottom = 40.dp),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text =
+                    if (ongoingShootings.isEmpty()) {
+                        stringResource(R.string.my_page_ongoing_shooting)
+                    } else {
+                        stringResource(R.string.my_page_ongoing_shooting_count, ongoingShootings.size)
+                    },
+                style = MainThemeFont.TitleSmall,
+            )
+            Row(
+                modifier = Modifier.clickable { onHistoryClick() },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.my_page_shooting_history),
+                    style = MainThemeFont.Caption,
+                    color = MainThemeColor.Gray3,
+                )
+                Box(
+                    modifier = Modifier.size(20.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(id = CoreR.drawable.depth_arrow),
+                        contentDescription = stringResource(R.string.my_page_shooting_history),
+                        tint = MainThemeColor.Gray3,
+                        modifier = Modifier.size(5.dp, 10.dp),
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (ongoingShootings.isEmpty()) {
+            EmptyShootingCard(modifier = Modifier.padding(horizontal = 16.dp))
+        } else {
+            val cardWidth = LocalConfiguration.current.screenWidthDp.dp - 32.dp
+            val listState = rememberLazyListState()
+            LazyRow(
+                state = listState,
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                flingBehavior = rememberSnapFlingBehavior(lazyListState = listState),
+            ) {
+                items(ongoingShootings.size) { index ->
+                    ShootingCard(
+                        item = ongoingShootings[index],
+                        modifier = Modifier.width(cardWidth),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyShootingCard(modifier: Modifier = Modifier) {
+    Row(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(5.dp))
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.my_page_no_ongoing_shooting),
+                style = MainThemeFont.ButtonDefault,
+                color = MainThemeColor.Black,
+            )
+            Text(
+                text = stringResource(R.string.my_page_no_ongoing_shooting_sub),
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+            )
+        }
+        Icon(
+            painter = painterResource(id = CoreR.drawable.triangle_right),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = MainThemeColor.Black,
+        )
+    }
+}
+
+@Composable
+private fun ShootingCard(
+    item: OngoingShootingItem,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier =
+            modifier
+                .background(MainThemeColor.Gray1, RoundedCornerShape(5.dp))
+                .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(5.dp))
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            if (item.photographerImageUri.isNotEmpty()) {
+                AsyncImage(
+                    model = item.photographerImageUri,
+                    contentDescription = item.photographerName,
+                    modifier =
+                        Modifier
+                            .size(42.dp)
+                            .clip(CircleShape),
+                )
+            } else {
+                Box(
+                    modifier =
+                        Modifier
+                            .size(42.dp)
+                            .clip(CircleShape)
+                            .background(MainThemeColor.Gray2),
+                )
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = item.photographerName, style = MainThemeFont.BodyBold)
+                Text(
+                    text = item.status,
+                    style = MainThemeFont.Caption,
+                    color = MainThemeColor.Green100,
+                    modifier =
+                        Modifier
+                            .background(
+                                MainThemeColor.Green30,
+                                RoundedCornerShape(5.dp),
+                            )
+                            .border(
+                                1.dp,
+                                MainThemeColor.Green100,
+                                RoundedCornerShape(5.dp),
+                            )
+                            .padding(horizontal = 6.dp, vertical = 1.dp),
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(text = item.packageName, style = MainThemeFont.Title)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        HorizontalDivider(thickness = 1.dp, color = MainThemeColor.Gray2)
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Icon(
+                    painter = painterResource(id = CoreR.drawable.clock_green),
+                    contentDescription = stringResource(R.string.my_page_shooting_date),
+                    tint = MainThemeColor.Green120,
+                    modifier = Modifier.size(14.dp),
+                )
+                Text(
+                    text = stringResource(R.string.my_page_shooting_date),
+                    style = MainThemeFont.Body,
+                    color = MainThemeColor.Gray4,
+                )
+            }
+            Text(
+                text = item.shootingDate,
+                style = MainThemeFont.BodyBold,
+                color = MainThemeColor.Black,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Icon(
+                    painter = painterResource(id = CoreR.drawable.location_green),
+                    contentDescription = stringResource(R.string.my_page_shooting_location),
+                    tint = MainThemeColor.Green120,
+                    modifier = Modifier.size(14.dp),
+                )
+                Text(
+                    text = stringResource(R.string.my_page_shooting_location),
+                    style = MainThemeFont.Body,
+                    color = MainThemeColor.Gray4,
+                )
+            }
+            Text(
+                text = item.shootingLocation,
+                style = MainThemeFont.BodyBold,
+                color = MainThemeColor.Black,
+            )
+        }
+    }
+}
+
+@Composable
+private fun MenuSection(onIntent: (MyPageIntent) -> Unit) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.my_page_follow_photographer),
+            style = MainThemeFont.BodyLarge,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { onIntent(MyPageIntent.NavigateToFollowedPhotographers) }
+                    .padding(vertical = 12.dp),
+        )
+        Text(
+            text = stringResource(R.string.my_page_my_reviews),
+            style = MainThemeFont.BodyLarge,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { onIntent(MyPageIntent.NavigateToMyReviews) }
+                    .padding(vertical = 12.dp),
+        )
+        Text(
+            text = stringResource(R.string.my_page_terms),
+            style = MainThemeFont.BodyLarge,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { onIntent(MyPageIntent.NavigateToTerms) }
+                    .padding(vertical = 12.dp),
+        )
+    }
+}
+
+private val bannerHeight = 50.dp
+
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun MyPageScreenPreview() {
-    val navController = rememberNavController()
-
+private fun MyPageScreenNoPhotographerPreview() {
     PicplzTheme {
-        MyPageScreen(navController = navController)
+        MyPageScreen(
+            state =
+                MyPageState(
+                    nickname = "임두현",
+                    hasPhotographerRole = false,
+                ),
+            onIntent = {},
+            navController = rememberNavController(),
+        )
+    }
+}
+
+@Suppress("UnusedPrivateMember")
+@Preview(showBackground = true)
+@Composable
+private fun MyPageScreenWithPhotographerPreview() {
+    PicplzTheme {
+        MyPageScreen(
+            state =
+                MyPageState(
+                    nickname = "임두현",
+                    hasPhotographerRole = true,
+                ),
+            onIntent = {},
+            navController = rememberNavController(),
+        )
     }
 }

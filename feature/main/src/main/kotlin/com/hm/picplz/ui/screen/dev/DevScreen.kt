@@ -127,6 +127,16 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory) }
             DevButton("MyPageOrderSheet") { navController.navigate(MyPageOrderSheet) }
+            Text(
+                text = "💡 마이페이지 모드 전환: 배너 클릭 (작가↔고객)",
+                fontSize = 12.sp,
+                color = MainThemeColor.Gray4,
+            )
+            Text(
+                text = "💡 촬영 데이터 토글: 톱니바퀴 길게 누르기",
+                fontSize = 12.sp,
+                color = MainThemeColor.Gray4,
+            )
 
             // === Photographer ===
             SectionTitle("Photographer")
