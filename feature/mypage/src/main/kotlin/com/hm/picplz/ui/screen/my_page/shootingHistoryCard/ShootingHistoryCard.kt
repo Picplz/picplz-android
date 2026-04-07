@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,13 +27,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.BadgeTheme
 import com.hm.picplz.ui.screen.common.CommonBadge
-import com.hm.picplz.ui.screen.common.CommonBottomOutlinedButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -65,7 +66,8 @@ private object ShootingHistoryCardDefaults {
     val CardCornerRadius = 5.dp
     val CardHorizontalPadding = 18.dp
     val CardVerticalPadding = 20.dp
-    val ProfileImageSize = 40.dp
+    val ProfileImageSize = 24.dp
+    val ContentGap = 12.dp
 }
 
 @Composable
@@ -96,7 +98,7 @@ fun ShootingHistoryCard(
                     MainThemeColor.Gray2,
                     RoundedCornerShape(ShootingHistoryCardDefaults.CardCornerRadius),
                 )
-                .background(MainThemeColor.Gray1),
+                .background(MainThemeColor.White),
     ) {
         Column(
             modifier =
@@ -106,37 +108,54 @@ fun ShootingHistoryCard(
                         horizontal = ShootingHistoryCardDefaults.CardHorizontalPadding,
                         vertical = ShootingHistoryCardDefaults.CardVerticalPadding,
                     ),
+            verticalArrangement = Arrangement.spacedBy(ShootingHistoryCardDefaults.ContentGap),
         ) {
-            PhotographerHeader(
-                photographerName = photographerName,
-                photographerImageUri = photographerImageUri,
-                paymentDate = paymentDate,
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(text = productName, style = MainThemeFont.Body)
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            PriceBadgeRow(
-                formattedPrice = formattedPrice,
-                status = status,
-            )
+            Column {
+                PhotographerHeader(
+                    photographerName = photographerName,
+                    photographerImageUri = photographerImageUri,
+                    paymentDate = paymentDate,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = productName, style = MainThemeFont.Body)
+                Spacer(modifier = Modifier.height(4.dp))
+                PriceBadgeRow(
+                    formattedPrice = formattedPrice,
+                    status = status,
+                )
+            }
 
             HorizontalDivider(
                 thickness = 1.dp,
                 color = MainThemeColor.Gray2,
-                modifier = Modifier.padding(vertical = 12.dp),
             )
 
-            ShootingInfoSection(
+            ShootingDateLocationSection(
                 shootingDate = shootingDate,
                 shootingLocation = shootingLocation,
-                onClickOrderDetail = onClickOrderDetail,
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onClickOrderDetail() },
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.shooting_history_view_order_detail),
+                    style = MainThemeFont.Caption,
+                    color = MainThemeColor.Gray3,
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.depth_arrow),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = MainThemeColor.Gray3,
+                )
+            }
 
             ActionButtons(
                 status = status,
@@ -190,7 +209,7 @@ private fun PhotographerHeader(
         Text(
             text = stringResource(R.string.shooting_history_payment_date, paymentDate),
             style = MainThemeFont.Caption,
-            color = MainThemeColor.Gray4,
+            color = MainThemeColor.Gray3,
         )
     }
 }
@@ -206,7 +225,9 @@ private fun PriceBadgeRow(
     ) {
         Text(
             text = stringResource(R.string.shooting_history_price_won, formattedPrice),
-            style = MainThemeFont.Title,
+            style = MainThemeFont.BodyLarge,
+            fontWeight = FontWeight.Bold,
+            color = MainThemeColor.Gray6,
         )
         CommonBadge(
             label = status.label,
@@ -215,18 +236,26 @@ private fun PriceBadgeRow(
                     ShootingStatus.COMPLETED -> BadgeTheme.ACTIVE
                     ShootingStatus.CANCELLED -> BadgeTheme.INACTIVE
                 },
+            modifier =
+                Modifier.border(
+                    1.dp,
+                    when (status) {
+                        ShootingStatus.COMPLETED -> MainThemeColor.Green100
+                        ShootingStatus.CANCELLED -> MainThemeColor.Pink2
+                    },
+                    RoundedCornerShape(5.dp),
+                ),
         )
     }
 }
 
 @Composable
-private fun ShootingInfoSection(
+private fun ShootingDateLocationSection(
     shootingDate: String,
     shootingLocation: String,
-    onClickOrderDetail: () -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(3.dp),
     ) {
         Row {
             Text(
@@ -235,33 +264,32 @@ private fun ShootingInfoSection(
                 color = MainThemeColor.Gray4,
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Text(text = shootingDate, style = MainThemeFont.BodyBold)
+            ShootingDateText(shootingDate)
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.shooting_history_location_label),
-                    style = MainThemeFont.Body,
-                    color = MainThemeColor.Gray4,
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = shootingLocation, style = MainThemeFont.BodyBold)
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = stringResource(R.string.shooting_history_view_order_detail),
-                style = MainThemeFont.Caption,
+                text = stringResource(R.string.shooting_history_location_label),
+                style = MainThemeFont.Body,
                 color = MainThemeColor.Gray4,
-                modifier = Modifier.clickable { onClickOrderDetail() },
             )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = shootingLocation,
+                style = MainThemeFont.BodyBold,
+                color = MainThemeColor.Gray5,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShootingDateText(shootingDate: String) {
+    val parts = shootingDate.split("|").map { it.trim() }
+    Row {
+        Text(text = parts[0], style = MainThemeFont.BodyBold, color = MainThemeColor.Gray5)
+        if (parts.size > 1) {
+            Text(text = " | ", style = MainThemeFont.BodyBold, color = MainThemeColor.Gray3)
+            Text(text = parts[1], style = MainThemeFont.BodyBold, color = MainThemeColor.Gray5)
         }
     }
 }
@@ -275,10 +303,11 @@ private fun ActionButtons(
 ) {
     when (status) {
         ShootingStatus.CANCELLED -> {
-            CommonBottomOutlinedButton(
+            ShootingHistoryButton(
                 text = stringResource(R.string.shooting_history_go_chat),
                 onClick = onClickChat,
                 enabled = hasChatRoom,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         ShootingStatus.COMPLETED -> {
@@ -286,19 +315,53 @@ private fun ActionButtons(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                CommonBottomOutlinedButton(
+                ShootingHistoryButton(
                     text = stringResource(R.string.shooting_history_go_chat),
                     onClick = onClickChat,
-                    modifier = Modifier.weight(1f),
                     enabled = hasChatRoom,
+                    modifier = Modifier.weight(1f),
                 )
-                CommonBottomOutlinedButton(
+                ShootingHistoryButton(
                     text = stringResource(R.string.shooting_history_write_review),
                     onClick = onClickReview,
                     modifier = Modifier.weight(1f),
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ShootingHistoryButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    val backgroundColor = if (enabled) MainThemeColor.White else MainThemeColor.Gray2
+    val textColor = if (enabled) MainThemeColor.Gray6 else MainThemeColor.Gray3
+    val borderModifier =
+        if (enabled) {
+            Modifier.border(1.dp, MainThemeColor.Gray3, RoundedCornerShape(5.dp))
+        } else {
+            Modifier
+        }
+
+    Box(
+        modifier =
+            modifier
+                .height(40.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .then(borderModifier)
+                .background(backgroundColor)
+                .clickable(enabled = enabled) { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            style = MainThemeFont.Body,
+            color = textColor,
+        )
     }
 }
 

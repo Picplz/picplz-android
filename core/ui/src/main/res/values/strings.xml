@@ -53,7 +53,7 @@
     <string name="shooting_history_price_won">%s원</string>
     <string name="shooting_history_date_label">촬영 일시</string>
     <string name="shooting_history_location_label">촬영 장소</string>
-    <string name="shooting_history_view_order_detail">주문 상세보기 ></string>
+    <string name="shooting_history_view_order_detail">주문 상세보기</string>
     <string name="shooting_history_go_chat">채팅 가기</string>
     <string name="shooting_history_write_review">리뷰 쓰기</string>
     <string name="shooting_history_delete">내역 삭제</string>
