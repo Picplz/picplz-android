@@ -46,4 +46,16 @@
     <string name="review_photo">리뷰 사진</string>
     <string name="review_image">리뷰 이미지</string>
     <string name="like">좋아요</string>
+
+    <!-- ShootingHistoryCard -->
+    <string name="shooting_history_title">지난 촬영 내역</string>
+    <string name="shooting_history_payment_date">%s 결제</string>
+    <string name="shooting_history_price_won">%s원</string>
+    <string name="shooting_history_date_label">촬영 일시</string>
+    <string name="shooting_history_location_label">촬영 장소</string>
+    <string name="shooting_history_view_order_detail">주문 상세보기</string>
+    <string name="shooting_history_go_chat">채팅 가기</string>
+    <string name="shooting_history_write_review">리뷰 쓰기</string>
+    <string name="shooting_history_delete">내역 삭제</string>
+    <string name="shooting_history_no_chat_room">채팅방이 없습니다.</string>
 </resources>

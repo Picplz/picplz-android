@@ -29,26 +29,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.theme.MainThemeFont
 import kotlin.math.abs
 
+private object SwipeableDefaults {
+    val MaxSwipeWidth = 140.dp
+    val DeleteAreaHeight = 253.dp
+    val DeleteIconSize = 20.dp
+    val CardCornerRadius = 5.dp
+}
+
 @Composable
 fun SwipeableShootingHistoryCard(
     modifier: Modifier = Modifier,
-    userName: String = "",
-    userProfile: Int = R.drawable.default_profile,
-    status: ShootingStatus = ShootingStatus.CANCLED,
-    packageType: PackageType = PackageType.PROFILE,
-    paymentDate: String = "2025.03.01",
-    date: String = "",
-    location: String = "",
+    photographerName: String,
+    photographerImageUri: String,
+    productName: String,
+    price: Int,
+    status: ShootingStatus,
+    paymentDate: String,
+    shootingDate: String,
+    shootingLocation: String,
+    hasChatRoom: Boolean = true,
     onDismiss: () -> Unit = {},
-    onClickOrderSheet: () -> Unit = {},
+    onClickChat: () -> Unit = {},
+    onClickReview: () -> Unit = {},
+    onClickOrderDetail: () -> Unit = {},
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
-    val maxSwipeDistance = with(LocalDensity.current) { 140.dp.toPx() } // 최대 140px까지만 스와이프
+    val maxSwipeDistance = with(LocalDensity.current) { SwipeableDefaults.MaxSwipeWidth.toPx() }
 
     val animatedOffsetX by animateFloatAsState(
         targetValue = offsetX,
@@ -70,14 +82,13 @@ fun SwipeableShootingHistoryCard(
                 Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
-                    .clip(RoundedCornerShape(5.dp)),
+                    .clip(RoundedCornerShape(SwipeableDefaults.CardCornerRadius)),
         ) {
-            // 삭제 영역 (오른쪽에 고정)
             Box(
                 modifier =
                     Modifier
-                        .height(253.dp)
-                        .width(140.dp)
+                        .height(SwipeableDefaults.DeleteAreaHeight)
+                        .width(SwipeableDefaults.MaxSwipeWidth)
                         .align(Alignment.CenterEnd)
                         .background(
                             Color(0xFFEF4747).copy(alpha = deleteBackgroundAlpha),
@@ -96,13 +107,13 @@ fun SwipeableShootingHistoryCard(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.bin),
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(R.string.shooting_history_delete),
                             tint = Color.White,
-                            modifier = Modifier.size(20.dp),
+                            modifier = Modifier.size(SwipeableDefaults.DeleteIconSize),
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "내역 삭제️",
+                            text = stringResource(R.string.shooting_history_delete),
                             color = Color.White,
                             style = MainThemeFont.Caption,
                         )
@@ -111,7 +122,6 @@ fun SwipeableShootingHistoryCard(
             }
         }
 
-        // 메인 컨텐츠 (스와이프되는 부분)
         Box(
             modifier =
                 Modifier
@@ -119,35 +129,37 @@ fun SwipeableShootingHistoryCard(
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
-                                // 드래그 종료 시 위치 결정
                                 offsetX =
                                     when {
-                                        offsetX < -maxSwipeDistance / 2 -> -maxSwipeDistance // 절반 이상 스와이프하면 완전히 열기
-                                        offsetX > maxSwipeDistance / 2 -> maxSwipeDistance // 오른쪽으로 스와이프한 경우
-                                        else -> 0f // 원래 위치로 복귀
+                                        offsetX < -maxSwipeDistance / 2 -> -maxSwipeDistance
+                                        offsetX > maxSwipeDistance / 2 -> maxSwipeDistance
+                                        else -> 0f
                                     }
                             },
                         ) { _, dragAmount ->
-                            // 왼쪽으로만 스와이프 가능하도록 제한
                             val newOffset = offsetX + dragAmount
                             offsetX =
                                 when {
-                                    newOffset > 0 -> 0f // 오른쪽으로는 스와이프 불가
-                                    newOffset < -maxSwipeDistance -> -maxSwipeDistance // 최대 거리 제한
+                                    newOffset > 0 -> 0f
+                                    newOffset < -maxSwipeDistance -> -maxSwipeDistance
                                     else -> newOffset
                                 }
                         }
                     },
         ) {
             ShootingHistoryCard(
-                userName = userName,
-                userProfile = userProfile,
+                photographerName = photographerName,
+                photographerImageUri = photographerImageUri,
+                productName = productName,
+                price = price,
                 status = status,
-                packageType = packageType,
                 paymentDate = paymentDate,
-                date = date,
-                location = location,
-                onClickOrderSheet = onClickOrderSheet,
+                shootingDate = shootingDate,
+                shootingLocation = shootingLocation,
+                hasChatRoom = hasChatRoom,
+                onClickChat = onClickChat,
+                onClickReview = onClickReview,
+                onClickOrderDetail = onClickOrderDetail,
             )
         }
     }
