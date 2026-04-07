@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 마이페이지 -->
+    <string name="my_page_title">마이 페이지</string>
+    <string name="my_page_switch_photographer">작가로 전환</string>
+    <string name="my_page_become_photographer">작가로도 활동하기</string>
+    <string name="my_page_modify_profile">프로필 수정</string>
+    <string name="my_page_ongoing_shooting">진행중인 촬영</string>
+    <string name="my_page_ongoing_shooting_count">진행중인 촬영 (%d)</string>
+    <string name="my_page_shooting_history">지난 촬영 내역</string>
+    <string name="my_page_no_ongoing_shooting">진행중인 촬영이 없어요</string>
+    <string name="my_page_no_ongoing_shooting_sub">촬영지를 검색하고 작가들을 둘러보세요</string>
+    <string name="my_page_follow_photographer">팔로우 작가</string>
+    <string name="my_page_my_reviews">내 리뷰</string>
+    <string name="my_page_terms">이용 약관</string>
+    <string name="my_page_ad">광고</string>
+    <string name="my_page_shooting_date">촬영 일시</string>
+    <string name="my_page_shooting_location">촬영 장소</string>
+
+    <!-- 프로필 수정 -->
+    <string name="modify_profile_title">프로필 수정</string>
+    <string name="modify_profile_nickname">닉네임</string>
+    <string name="modify_profile_nickname_placeholder">닉네임을 입력하세요</string>
+    <string name="modify_profile_nickname_hint">한글, 영문, 숫자만 가능합니다.</string>
+    <string name="modify_profile_nickname_error">허용되지 않는 문자가 포함되어 있습니다.</string>
+    <string name="modify_profile_done">완료</string>
+    <string name="modify_profile_image">프로필 이미지</string>
+    <string name="modify_profile_camera">카메라</string>
+</resources>
