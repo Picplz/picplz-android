@@ -23,18 +23,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.BadgeTheme
 import com.hm.picplz.ui.screen.common.CommonBadge
-import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonBottomOutlinedButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
+import java.text.NumberFormat
+import java.util.Locale
 
 enum class PackageType(val label: String) {
     PROFILE("프로필 패키지"),
@@ -43,197 +46,294 @@ enum class PackageType(val label: String) {
 }
 
 enum class ReservationStatus(val label: String) {
-    PENDING("예약 대기"), // 예약대기
-    CONFIRMED("거래 확정"), // 거래확정
-    INPROGRESS("촬영 진행"), // 촬영진행
+    PENDING("예약 대기"),
+    CONFIRMED("거래 확정"),
+    INPROGRESS("촬영 진행"),
 }
 
 enum class ShootingStatus(val label: String) {
-    COMPLEETED("촬영 완료"),
-    CANCLED("취소 완료"),
+    COMPLETED("촬영 완료"),
+    CANCELLED("촬영 취소"),
 }
 
 enum class ReservationType(val label: String) {
-    ASAP("바로 촬영"), // ASAP
-    NORMAL("일반 예약"), // 일반예약
+    ASAP("바로 촬영"),
+    NORMAL("일반 예약"),
+}
+
+private object ShootingHistoryCardDefaults {
+    val CardCornerRadius = 5.dp
+    val CardHorizontalPadding = 18.dp
+    val CardVerticalPadding = 20.dp
+    val ProfileImageSize = 40.dp
 }
 
 @Composable
 fun ShootingHistoryCard(
     modifier: Modifier = Modifier,
-    horizontalPadding: Dp = 18.dp,
-    verticalPadding: Dp = 23.5.dp,
-    borderRadius: Dp = 5.dp,
-    userName: String = "",
-    userProfile: Int = R.drawable.default_profile,
-    status: ShootingStatus = ShootingStatus.CANCLED,
-    packageType: PackageType = PackageType.PROFILE,
-    paymentDate: String = "2025.03.01",
-    date: String = "",
-    location: String = "",
-    onClickOrderSheet: () -> Unit = {},
+    photographerName: String,
+    photographerImageUri: String,
+    productName: String,
+    price: Int,
+    status: ShootingStatus,
+    paymentDate: String,
+    shootingDate: String,
+    shootingLocation: String,
+    hasChatRoom: Boolean = true,
+    onClickChat: () -> Unit = {},
+    onClickReview: () -> Unit = {},
+    onClickOrderDetail: () -> Unit = {},
 ) {
+    val formattedPrice = NumberFormat.getNumberInstance(Locale.KOREA).format(price)
+
     Box(
         modifier =
             modifier
                 .wrapContentSize()
-                .clip(RoundedCornerShape(borderRadius))
-                .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(borderRadius))
+                .clip(RoundedCornerShape(ShootingHistoryCardDefaults.CardCornerRadius))
+                .border(
+                    1.dp,
+                    MainThemeColor.Gray2,
+                    RoundedCornerShape(ShootingHistoryCardDefaults.CardCornerRadius),
+                )
                 .background(MainThemeColor.Gray1),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontalPadding, verticalPadding),
+                    .padding(
+                        horizontal = ShootingHistoryCardDefaults.CardHorizontalPadding,
+                        vertical = ShootingHistoryCardDefaults.CardVerticalPadding,
+                    ),
         ) {
-            Column {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(id = userProfile),
-                            contentDescription = "user-profile",
-                            modifier =
-                                Modifier
-                                    .size(40.dp)
-                                    .border(1.dp, MainThemeColor.Gray3, CircleShape)
-                                    .clip(CircleShape),
-                        )
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(2.dp),
-                        ) {
-                            Text(text = userName, style = MainThemeFont.BodyBold)
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(2.5.dp),
-                            ) {
-                                when (status) {
-                                    ShootingStatus.CANCLED ->
-                                        CommonBadge(
-                                            label = status.label,
-                                            theme = BadgeTheme.INACTIVE,
-                                            modifier =
-                                                Modifier.border(
-                                                    1.dp,
-                                                    MainThemeColor.Pink2,
-                                                    RoundedCornerShape(5.dp),
-                                                ),
-                                        )
+            PhotographerHeader(
+                photographerName = photographerName,
+                photographerImageUri = photographerImageUri,
+                paymentDate = paymentDate,
+            )
 
-                                    ShootingStatus.COMPLEETED ->
-                                        CommonBadge(
-                                            label = status.label,
-                                            theme = BadgeTheme.ACTIVE,
-                                            modifier =
-                                                Modifier.border(
-                                                    1.dp,
-                                                    MainThemeColor.Olive,
-                                                    RoundedCornerShape(5.dp),
-                                                ),
-                                        )
-                                }
-                            }
-                        }
-                    }
-                    Text(
-                        text = "$paymentDate 결제",
-                        style = MainThemeFont.Caption,
-                        color = MainThemeColor.Gray4,
-                    )
-                }
-                Spacer(modifier = Modifier.height(13.5.dp))
-                Text(text = packageType.label, style = MainThemeFont.Title)
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MainThemeColor.Gray2,
-                    modifier = Modifier.padding(vertical = 8.dp),
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(text = productName, style = MainThemeFont.Body)
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            PriceBadgeRow(
+                formattedPrice = formattedPrice,
+                status = status,
+            )
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MainThemeColor.Gray2,
+                modifier = Modifier.padding(vertical = 12.dp),
+            )
+
+            ShootingInfoSection(
+                shootingDate = shootingDate,
+                shootingLocation = shootingLocation,
+                onClickOrderDetail = onClickOrderDetail,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ActionButtons(
+                status = status,
+                hasChatRoom = hasChatRoom,
+                onClickChat = onClickChat,
+                onClickReview = onClickReview,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PhotographerHeader(
+    photographerName: String,
+    photographerImageUri: String,
+    paymentDate: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (photographerImageUri.isNotEmpty()) {
+                AsyncImage(
+                    model = photographerImageUri,
+                    contentDescription = stringResource(R.string.user_profile),
+                    modifier =
+                        Modifier
+                            .size(ShootingHistoryCardDefaults.ProfileImageSize)
+                            .border(1.dp, MainThemeColor.Gray3, CircleShape)
+                            .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
                 )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.clock_green),
-                            contentDescription = "clock",
-                            modifier = Modifier.size(13.dp),
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "촬영 일시",
-                            style = MainThemeFont.Body,
-                            color = MainThemeColor.Gray4,
-                        )
-                        Spacer(modifier = Modifier.width(14.dp))
-                        Text(text = date, style = MainThemeFont.BodyBold)
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Row {
-                            Image(
-                                painter = painterResource(id = R.drawable.location_green),
-                                contentDescription = "clock",
-                                modifier = Modifier.size(13.dp),
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "촬영 장소",
-                                style = MainThemeFont.Body,
-                                color = MainThemeColor.Gray4,
-                            )
-                            Spacer(modifier = Modifier.width(14.dp))
-                            Text(text = location, style = MainThemeFont.BodyBold)
-                        }
-                        Text(
-                            text = "주문 상세",
-                            style = MainThemeFont.Caption,
-                            color = MainThemeColor.Gray4,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier.clickable { onClickOrderSheet() },
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(23.dp))
-                    CommonBottomButton(
-                        text = if (status === ShootingStatus.COMPLEETED) "리뷰 쓰러가기" else "다시 예약하기",
-                        onClick = { },
-                    )
-                }
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.default_profile),
+                    contentDescription = stringResource(R.string.user_profile),
+                    modifier =
+                        Modifier
+                            .size(ShootingHistoryCardDefaults.ProfileImageSize)
+                            .border(1.dp, MainThemeColor.Gray3, CircleShape)
+                            .clip(CircleShape),
+                )
+            }
+            Text(text = photographerName, style = MainThemeFont.BodyBold)
+        }
+        Text(
+            text = stringResource(R.string.shooting_history_payment_date, paymentDate),
+            style = MainThemeFont.Caption,
+            color = MainThemeColor.Gray4,
+        )
+    }
+}
+
+@Composable
+private fun PriceBadgeRow(
+    formattedPrice: String,
+    status: ShootingStatus,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.shooting_history_price_won, formattedPrice),
+            style = MainThemeFont.Title,
+        )
+        CommonBadge(
+            label = status.label,
+            theme =
+                when (status) {
+                    ShootingStatus.COMPLETED -> BadgeTheme.ACTIVE
+                    ShootingStatus.CANCELLED -> BadgeTheme.INACTIVE
+                },
+        )
+    }
+}
+
+@Composable
+private fun ShootingInfoSection(
+    shootingDate: String,
+    shootingLocation: String,
+    onClickOrderDetail: () -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Row {
+            Text(
+                text = stringResource(R.string.shooting_history_date_label),
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(text = shootingDate, style = MainThemeFont.BodyBold)
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.shooting_history_location_label),
+                    style = MainThemeFont.Body,
+                    color = MainThemeColor.Gray4,
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(text = shootingLocation, style = MainThemeFont.BodyBold)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                text = stringResource(R.string.shooting_history_view_order_detail),
+                style = MainThemeFont.Caption,
+                color = MainThemeColor.Gray4,
+                modifier = Modifier.clickable { onClickOrderDetail() },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActionButtons(
+    status: ShootingStatus,
+    hasChatRoom: Boolean,
+    onClickChat: () -> Unit,
+    onClickReview: () -> Unit,
+) {
+    when (status) {
+        ShootingStatus.CANCELLED -> {
+            CommonBottomOutlinedButton(
+                text = stringResource(R.string.shooting_history_go_chat),
+                onClick = onClickChat,
+                enabled = hasChatRoom,
+            )
+        }
+        ShootingStatus.COMPLETED -> {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                CommonBottomOutlinedButton(
+                    text = stringResource(R.string.shooting_history_go_chat),
+                    onClick = onClickChat,
+                    modifier = Modifier.weight(1f),
+                    enabled = hasChatRoom,
+                )
+                CommonBottomOutlinedButton(
+                    text = stringResource(R.string.shooting_history_write_review),
+                    onClick = onClickReview,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun ShootingHistoryCardCompletedPreview() {
+private fun ShootingHistoryCardCancelledPreview() {
     PicplzTheme {
         ShootingHistoryCard(
-            userName = "합정동 불주먹",
-            userProfile = R.drawable.edit_grey4,
-            status = ShootingStatus.COMPLEETED,
-            date = "5월 26일 오전 9시 30분",
-            location = "종로구 효자로 33",
+            photographerName = "합정동작가",
+            photographerImageUri = "",
+            productName = "남친생기는 프사",
+            price = 12000,
+            status = ShootingStatus.CANCELLED,
+            paymentDate = "2025.03.01",
+            shootingDate = "25.03.24 | 오후2:30",
+            shootingLocation = "종로구 효자로 33 어디어디빌딩",
         )
     }
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-fun ShootingHistoryCardCancledPreview() {
+private fun ShootingHistoryCardCompletedPreview() {
     PicplzTheme {
         ShootingHistoryCard(
-            userName = "합정동 불주먹",
-            userProfile = R.drawable.edit_grey4,
-            status = ShootingStatus.CANCLED,
-            date = "5월 26일 오전 9시 30분",
-            location = "종로구 효자로 33",
+            photographerName = "유가영사진",
+            photographerImageUri = "",
+            productName = "인스타 피드꾸미기",
+            price = 12000,
+            status = ShootingStatus.COMPLETED,
+            paymentDate = "2025.03.01",
+            shootingDate = "25.03.24 | 오후2:30",
+            shootingLocation = "종로구 효자로 33 어디어디 어디",
         )
     }
 }
