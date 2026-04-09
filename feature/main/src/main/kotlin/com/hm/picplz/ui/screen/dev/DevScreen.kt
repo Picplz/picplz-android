@@ -125,7 +125,10 @@ fun DevScreen(navController: NavHostController) {
             SectionTitle("Main Sub")
             DevButton("MainSearch") { navController.navigate(MainSearch) }
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
-            DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory) }
+            DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory()) }
+            DevButton("MyPageShootingHistory (Empty)") {
+                navController.navigate(MyPageShootingHistory(forceEmpty = true))
+            }
             DevButton("MyPageOrderSheet") { navController.navigate(MyPageOrderSheet) }
             Text(
                 text = "💡 마이페이지 모드 전환: 배너 클릭 (작가↔고객)",

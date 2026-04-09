@@ -71,7 +71,10 @@ data class SignUpAddDevice(val category: String = "phone") : NavigationRoute
 
 @Serializable object MyPageModifyProfile : NavigationRoute
 
-@Serializable object MyPageShootingHistory : NavigationRoute
+@Serializable
+data class MyPageShootingHistory(
+    val forceEmpty: Boolean = false,
+) : NavigationRoute
 
 @Serializable object MyPageOrderSheet : NavigationRoute
 
