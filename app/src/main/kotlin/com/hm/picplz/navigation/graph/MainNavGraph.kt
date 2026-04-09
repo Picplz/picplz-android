@@ -67,8 +67,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         MyPageModifyProfileScreen(navController = navController)
     }
 
-    composable<MyPageShootingHistory> { backStackEntry ->
-        backStackEntry.toRoute<MyPageShootingHistory>()
+    composable<MyPageShootingHistory> {
         MyPageShootingHistoryScreen(navController = navController)
     }
 
