@@ -44,6 +44,7 @@ import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
+import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.PhotographerMain
 import com.hm.picplz.navigation.model.QuickShoot
@@ -179,6 +180,7 @@ fun DevScreen(navController: NavHostController) {
             // === Reservation ===
             SectionTitle("Reservation")
             DevButton("DetailReservation(예약 상세)") { navController.navigate(DetailReservation) }
+            DevButton("OrderDetail(결제 후 취소 주문 상세)") { navController.navigate(OrderDetail("order123")) }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
