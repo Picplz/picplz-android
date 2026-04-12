@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.hm.picplz.navigation.model.CancelReservation
 import com.hm.picplz.navigation.model.CancelReservationConfirm
 import com.hm.picplz.navigation.model.Chat
 import com.hm.picplz.navigation.model.ChatRoom
@@ -18,6 +19,7 @@ import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.Reservation
+import com.hm.picplz.ui.screen.cancel_reservation.CancelReservationScreen
 import com.hm.picplz.ui.screen.cancel_reservation_confirm.CancelReservationConfirmScreen
 import com.hm.picplz.ui.screen.chat.ChatScreen
 import com.hm.picplz.ui.screen.chat_room.ChatRoomScreen
@@ -80,11 +82,11 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             onNavigateBack = {
                 navController.popBackStack()
             },
-            onNavigateCancelReservation = {
+            onNavigateCancelReservationConfirm = {
                 navController.navigate(CancelReservationConfirm)
             },
-            onNavigateToOrderDetail = {
-                navController.navigate(OrderDetail)
+            onNavigateToOrderDetail = { orderId ->
+                navController.navigate(OrderDetail(orderId = orderId))
             },
         )
     }
@@ -102,12 +104,26 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         )
     }
 
-    composable<OrderDetail> {
+    composable<OrderDetail> { backStackEntry ->
+        val args = backStackEntry.toRoute<OrderDetail>()
         OrderDetailScreen(
             onNavigateBack = {
                 navController.popBackStack()
             },
-            onNavigateNextStep = { },
+            onNavigateNextStep = {
+                navController.navigate(CancelReservation(orderId = args.orderId))
+            },
+        )
+    }
+
+    composable<CancelReservation> {
+        CancelReservationScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateToCancelConfirm = {
+                navController.navigate(CancelReservationConfirm)
+            },
         )
     }
 }

@@ -23,9 +23,8 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 
 @Composable
 fun CancelReservationScreen(
-    orderId: String,
     onNavigateBack: () -> Unit,
-    onNavigateToCancelConfirm: (orderId: String, reasons: Set<CancelReason>, directInput: String) -> Unit,
+    onNavigateToCancelConfirm: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CancelReservationViewModel = hiltViewModel(),
 ) {
@@ -34,10 +33,6 @@ fun CancelReservationScreen(
         rememberPagerState(initialPage = state.currentPagerPage.ordinal) {
             CancelReservationPagerPage.size
         }
-
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(CancelReservationIntent.Initialize(orderId))
-    }
 
     LaunchedEffect(state.currentPagerPage) {
         pagerState.animateScrollToPage(state.currentPagerPage.ordinal)
@@ -51,11 +46,7 @@ fun CancelReservationScreen(
                 }
 
                 is CancelReservationSideEffect.ShowCancelConfirmModal -> {
-                    onNavigateToCancelConfirm(
-                        state.orderId,
-                        state.selectedReasons,
-                        state.directInputText,
-                    )
+                    onNavigateToCancelConfirm()
                 }
             }
         }

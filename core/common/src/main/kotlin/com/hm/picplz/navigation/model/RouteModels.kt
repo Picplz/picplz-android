@@ -113,4 +113,7 @@ data object DetailReservation : NavigationRoute
 data object CancelReservationConfirm : NavigationRoute
 
 @Serializable
-data object OrderDetail : NavigationRoute
+data class OrderDetail(val orderId: String) : NavigationRoute
+
+@Serializable
+data class CancelReservation(val orderId: String) : NavigationRoute

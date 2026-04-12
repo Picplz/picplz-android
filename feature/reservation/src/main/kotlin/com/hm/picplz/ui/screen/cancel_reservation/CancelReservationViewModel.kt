@@ -1,6 +1,9 @@
 package com.hm.picplz.ui.screen.cancel_reservation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.toRoute
+import com.hm.picplz.navigation.model.CancelReservation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +15,12 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class CancelReservationViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(CancelReservationState.idle())
+class CancelReservationViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val orderId: String = savedStateHandle.toRoute<CancelReservation>().orderId
+
+    private val _state = MutableStateFlow(CancelReservationState.idle(orderId))
     val state: StateFlow<CancelReservationState> = _state.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<CancelReservationSideEffect>()
@@ -21,10 +28,6 @@ class CancelReservationViewModel @Inject constructor() : ViewModel() {
 
     fun handleIntent(intent: CancelReservationIntent) {
         when (intent) {
-            is CancelReservationIntent.Initialize -> {
-                _state.update { it.copy(orderId = intent.orderId) }
-            }
-
             is CancelReservationIntent.ToggleReason -> {
                 _state.update { currentState ->
                     val newReasons = currentState.selectedReasons.toMutableSet()

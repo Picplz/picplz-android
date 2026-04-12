@@ -9,6 +9,6 @@ data class CancelReservationState(
     val errorMessage: String? = null,
 ) {
     companion object {
-        fun idle(): CancelReservationState = CancelReservationState()
+        fun idle(orderId: String): CancelReservationState = CancelReservationState(orderId = orderId)
     }
 }

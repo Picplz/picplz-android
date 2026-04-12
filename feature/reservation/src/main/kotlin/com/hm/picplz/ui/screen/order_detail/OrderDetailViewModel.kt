@@ -1,7 +1,10 @@
 package com.hm.picplz.ui.screen.order_detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.hm.picplz.navigation.model.OrderDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +14,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OrderDetailViewModel @Inject constructor() : ViewModel() {
+class OrderDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val orderId: String = savedStateHandle.toRoute<OrderDetail>().orderId
+
     private val _state = MutableStateFlow(OrderDetailState.idle())
     val state: StateFlow<OrderDetailState> = _state
 
@@ -19,7 +26,7 @@ class OrderDetailViewModel @Inject constructor() : ViewModel() {
     val sideEffect: SharedFlow<OrderDetailSideEffect> = _sideEffect
 
     init {
-        loadOrderDetail("")
+        loadOrderDetail(orderId)
     }
 
     fun handleIntent(intent: OrderDetailIntent) {

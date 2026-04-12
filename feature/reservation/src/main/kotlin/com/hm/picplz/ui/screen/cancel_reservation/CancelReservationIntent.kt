@@ -1,8 +1,6 @@
 package com.hm.picplz.ui.screen.cancel_reservation
 
 sealed interface CancelReservationIntent {
-    data class Initialize(val orderId: String) : CancelReservationIntent
-
     data class ToggleReason(val reason: CancelReason) : CancelReservationIntent
 
     data class UpdateDirectInput(val text: String) : CancelReservationIntent
