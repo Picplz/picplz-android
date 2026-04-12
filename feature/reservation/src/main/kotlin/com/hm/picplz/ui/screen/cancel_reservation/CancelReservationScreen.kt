@@ -139,7 +139,7 @@ private fun CancelReservationScreenContent(
                         CancelReservationPagerPage.REFUND_GUIDE -> "취소 확인"
                     },
                 onClick = onNextClick,
-                enabled = state.selectedReasons.isNotEmpty(),
+                enabled = state.isNextButtonEnabled(),
             )
         }
     }

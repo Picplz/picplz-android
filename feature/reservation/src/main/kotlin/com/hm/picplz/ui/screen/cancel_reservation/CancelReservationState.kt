@@ -8,6 +8,10 @@ data class CancelReservationState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 ) {
+    fun isNextButtonEnabled(): Boolean =
+        selectedReasons.isNotEmpty() &&
+            (!selectedReasons.contains(CancelReason.DIRECT_INPUT) || directInputText.isNotBlank())
+
     companion object {
         fun idle(orderId: String): CancelReservationState = CancelReservationState(orderId = orderId)
     }
