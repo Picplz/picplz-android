@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.cancel_reservation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hm.picplz.navigation.model.CancelReservation
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,6 +72,8 @@ class CancelReservationViewModel @Inject constructor(
     }
 
     private fun emitSideEffect(sideEffect: CancelReservationSideEffect) {
-        _sideEffect.tryEmit(sideEffect)
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
     }
 }
