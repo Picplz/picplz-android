@@ -58,4 +58,9 @@
     <string name="shooting_history_write_review">리뷰 쓰기</string>
     <string name="shooting_history_delete">내역 삭제</string>
     <string name="shooting_history_no_chat_room">채팅방이 없습니다.</string>
+
+    <!-- ShootingHistory EmptyState -->
+    <string name="shooting_history_empty_title">아직 촬영 내역이 없어요</string>
+    <string name="shooting_history_empty_subtitle">촬영을 진행해 보세요</string>
+    <string name="shooting_history_empty_char_desc">촬영 내역 없음 캐릭터</string>
 </resources>
