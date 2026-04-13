@@ -26,4 +26,38 @@
     <string name="modify_profile_done">완료</string>
     <string name="modify_profile_image">프로필 이미지</string>
     <string name="modify_profile_camera">카메라</string>
+
+    <!-- 주문 상세 -->
+    <string name="order_detail_title">주문 상세</string>
+    <string name="order_detail_order_number">주문번호</string>
+    <string name="order_detail_customer_info">주문 고객 정보</string>
+    <string name="order_detail_name_label">이름</string>
+    <string name="order_detail_phone_label">휴대폰 번호</string>
+    <string name="order_detail_photographer_name">작가명</string>
+    <string name="order_detail_product_info">주문 상품 정보</string>
+    <string name="order_detail_shooting_time">촬영 희망 시각</string>
+    <string name="order_detail_shooting_location">촬영 장소</string>
+    <string name="order_detail_final_payment_header">최종 결제 금액</string>
+    <string name="order_detail_product_price">상품 금액</string>
+    <string name="order_detail_discount">할인 금액</string>
+    <string name="order_detail_total_payment">최종 결제 금액</string>
+    <string name="order_detail_credit_card">신용/체크카드</string>
+    <string name="order_detail_receipt">영수증 조회</string>
+    <string name="order_detail_price_won_format">%s원</string>
+    <string name="order_detail_price_symbol_format">%s₩</string>
+    <string name="order_detail_package_image">상품 이미지</string>
+    <string name="order_detail_map">촬영 장소 지도</string>
+    <string name="order_detail_installment">일시불</string>
+    <string name="order_detail_receipt_unavailable">영수증 조회 기능은 준비 중입니다.</string>
+
+    <!-- 푸터 -->
+    <string name="footer_company_name">PICPLZ</string>
+    <string name="footer_company_info">픽플즈 | 대표이사 : 유가영</string>
+    <string name="footer_address">주소: 효성해링턴 315호</string>
+    <string name="footer_business_number">사업자등록번호: -</string>
+    <string name="footer_commerce_registration">통신판매업신고: -</string>
+    <string name="footer_privacy_officer">개인정보보호 책임자: -</string>
+    <string name="footer_email">이메일: picplz@thankyou.com</string>
+    <string name="footer_customer_center">고객센터:</string>
+    <string name="footer_logo">PICPLZ 로고</string>
 </resources>

@@ -56,5 +56,8 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
+    // KakaoMap
+    implementation(libs.kakao.maps)
+
     debugImplementation(libs.androidx.ui.tooling)
 }
