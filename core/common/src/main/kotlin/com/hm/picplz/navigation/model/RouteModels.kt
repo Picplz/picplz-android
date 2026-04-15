@@ -69,6 +69,8 @@ data class SignUpAddDevice(val category: String = "phone") : NavigationRoute
 
 @Serializable object MyPage : NavigationRoute
 
+@Serializable object MyPageFollowedPhotographers : NavigationRoute
+
 @Serializable object MyPageModifyProfile : NavigationRoute
 
 @Serializable

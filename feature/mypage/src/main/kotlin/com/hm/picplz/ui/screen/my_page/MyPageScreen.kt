@@ -50,6 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.hm.picplz.feature.mypage.R
+import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.ui.navigation.BottomNavigationBar
@@ -73,6 +74,9 @@ fun MyPageScreen(
             when (effect) {
                 is MyPageSideEffect.NavigateToModifyProfile -> {
                     navController.navigate(MyPageModifyProfile)
+                }
+                is MyPageSideEffect.NavigateToFollowedPhotographers -> {
+                    navController.navigate(MyPageFollowedPhotographers)
                 }
                 is MyPageSideEffect.NavigateToShootingHistory -> {
                     navController.navigate(MyPageShootingHistory)
