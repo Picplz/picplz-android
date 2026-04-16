@@ -369,7 +369,6 @@ private fun ExpandableReviewText(
     onToggleExpanded: () -> Unit,
 ) {
     var isOverflowing by remember(text) { mutableStateOf(false) }
-    var canExpand by remember(text) { mutableStateOf(false) }
     val moreText = stringResource(R.string.my_review_more)
     val lessText = stringResource(R.string.my_review_less)
     var collapsedAnnotatedText by remember(text, moreText) {
@@ -399,24 +398,20 @@ private fun ExpandableReviewText(
             style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
         )
     } else {
-        Box(
-            modifier = Modifier.clickable(onClick = { if (canExpand) onToggleExpanded() }),
-        ) {
-            Text(
-                text = collapsedAnnotatedText,
-                style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                onTextLayout = { layoutResult ->
-                    if (layoutResult.hasVisualOverflow) {
-                        isOverflowing = true
-                        canExpand = true
-                        val visibleTextEnd = layoutResult.getLineEnd(1, visibleEnd = true)
-                        collapsedAnnotatedText = buildCollapsedReviewText(text, visibleTextEnd, moreText)
-                    }
-                },
-            )
-        }
+        Text(
+            text = collapsedAnnotatedText,
+            style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
+            modifier = Modifier.clickable(enabled = isOverflowing, onClick = onToggleExpanded),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            onTextLayout = { layoutResult ->
+                if (layoutResult.hasVisualOverflow) {
+                    isOverflowing = true
+                    val visibleTextEnd = layoutResult.getLineEnd(1, visibleEnd = true)
+                    collapsedAnnotatedText = buildCollapsedReviewText(text, visibleTextEnd, moreText)
+                }
+            },
+        )
     }
 }
 
