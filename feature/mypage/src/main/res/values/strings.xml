@@ -12,6 +12,15 @@
     <string name="my_page_no_ongoing_shooting_sub">촬영지를 검색하고 작가들을 둘러보세요</string>
     <string name="my_page_follow_photographer">팔로우 작가</string>
     <string name="my_page_my_reviews">내 리뷰</string>
+    <string name="my_review_delete">삭제</string>
+    <string name="my_review_more">더보기</string>
+    <string name="my_review_less">접기</string>
+    <string name="my_review_delete_dialog_title">리뷰를 삭제할까요?</string>
+    <string name="my_review_delete_dialog_description">%1$s 리뷰를 삭제하면 다시 복구할 수 없어요.</string>
+    <string name="my_review_delete_dialog_cancel">취소</string>
+    <string name="my_review_delete_dialog_confirm">삭제</string>
+    <string name="my_review_empty_title">아직 작성한 리뷰가 없어요</string>
+    <string name="my_review_empty_description">촬영 후 남긴 리뷰가 이곳에 모여 보여요</string>
     <string name="my_page_terms">이용 약관</string>
     <string name="my_page_ad">광고</string>
     <string name="my_page_shooting_date">촬영 일시</string>

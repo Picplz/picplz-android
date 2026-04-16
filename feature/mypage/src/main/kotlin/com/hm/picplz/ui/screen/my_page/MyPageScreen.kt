@@ -51,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.my_page.toggleSwitch.ToggleSwitch
@@ -73,6 +74,9 @@ fun MyPageScreen(
             when (effect) {
                 is MyPageSideEffect.NavigateToModifyProfile -> {
                     navController.navigate(MyPageModifyProfile)
+                }
+                is MyPageSideEffect.NavigateToMyReviews -> {
+                    navController.navigate(MyPageMyReviews)
                 }
                 is MyPageSideEffect.NavigateToShootingHistory -> {
                     navController.navigate(MyPageShootingHistory)

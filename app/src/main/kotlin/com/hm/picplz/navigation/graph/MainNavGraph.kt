@@ -14,6 +14,7 @@ import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
@@ -27,6 +28,7 @@ import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.main.MainSearchScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
+import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
@@ -65,6 +67,10 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPageModifyProfile> {
         MyPageModifyProfileScreen(navController = navController)
+    }
+
+    composable<MyPageMyReviews> {
+        MyReviewScreen(navController = navController)
     }
 
     composable<MyPageShootingHistory> { backStackEntry ->
