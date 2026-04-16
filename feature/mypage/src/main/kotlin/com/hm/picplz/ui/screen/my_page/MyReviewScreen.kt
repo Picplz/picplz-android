@@ -1,6 +1,5 @@
 package com.hm.picplz.ui.screen.my_page
 
-import CommonDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,9 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,19 +34,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.hm.picplz.feature.mypage.R
+import com.hm.picplz.ui.screen.common.CommonDestructiveConfirmDialog
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
@@ -57,6 +63,16 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
 import com.hm.picplz.core.ui.R as CoreUiR
+
+private val DeletePillColor = Color(0xFFE83737)
+private val MoreTextStyle =
+    SpanStyle(
+        color = MainThemeColor.Gray6,
+        fontFamily = MainThemeFont.BodyBold.fontFamily,
+        fontWeight = MainThemeFont.BodyBold.fontWeight,
+        fontSize = MainThemeFont.BodyBold.fontSize,
+        letterSpacing = MainThemeFont.BodyBold.letterSpacing,
+    )
 
 @Composable
 fun MyReviewScreen(
@@ -116,8 +132,7 @@ internal fun MyReviewScreenContent(
         } else {
             LazyColumn(
                 modifier = Modifier.padding(innerPadding),
-                contentPadding = PaddingValues(horizontal = 15.dp, vertical = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 10.dp),
             ) {
                 items(
                     items = state.reviews,
@@ -133,6 +148,13 @@ internal fun MyReviewScreenContent(
                             onIntent(MyReviewIntent.RequestDelete(review.id))
                         },
                     )
+
+                    if (review != state.reviews.last()) {
+                        HorizontalDivider(
+                            color = MainThemeColor.Gray2,
+                            thickness = 1.dp,
+                        )
+                    }
                 }
             }
         }
@@ -140,7 +162,6 @@ internal fun MyReviewScreenContent(
 
     if (pendingDeleteReview != null) {
         MyReviewDeleteDialog(
-            photographerName = pendingDeleteReview.photographerName,
             onDismiss = {
                 onIntent(MyReviewIntent.DismissDeleteDialog)
             },
@@ -171,10 +192,8 @@ private fun MyReviewCard(
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(5.dp))
-                .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(5.dp))
                 .background(MainThemeColor.White)
-                .padding(horizontal = 18.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+                .padding(vertical = 20.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -185,7 +204,7 @@ private fun MyReviewCard(
                 contentDescription = review.photographerName,
             )
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -193,42 +212,49 @@ private fun MyReviewCard(
                     style = MainThemeFont.BodyBold,
                     color = MainThemeColor.Black,
                 )
-                Spacer(modifier = Modifier.height(2.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Spacer(modifier = Modifier.height(1.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
                     starIcons.forEach { iconRes ->
                         Image(
                             painter = painterResource(iconRes),
                             contentDescription = stringResource(CoreUiR.string.star_rating),
-                            modifier = Modifier.size(11.dp),
+                            modifier = Modifier.size(15.dp),
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = stringResource(R.string.my_review_delete),
-                    style = MainThemeFont.Caption,
-                    color = MainThemeColor.White,
+                Box(
                     modifier =
                         Modifier
+                            .height(17.dp)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(MainThemeColor.Red)
+                            .background(DeletePillColor)
                             .clickable(onClick = onDeleteClick)
-                            .padding(horizontal = 6.dp, vertical = 3.dp),
-                )
+                            .padding(horizontal = 4.dp, vertical = 1.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.my_review_delete),
+                        style = MainThemeFont.Caption.copy(fontSize = 10.sp, lineHeight = 14.sp),
+                        color = MainThemeColor.White,
+                    )
+                }
                 Text(
                     text = review.createdAt,
-                    style = MainThemeFont.Body,
+                    style = MainThemeFont.Caption,
                     color = MainThemeColor.Gray5,
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(14.dp))
 
         if (review.imageUris.isNotEmpty()) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -242,11 +268,12 @@ private fun MyReviewCard(
                         contentScale = ContentScale.Crop,
                         modifier =
                             Modifier
-                                .size(114.dp)
-                                .clip(RoundedCornerShape(5.dp)),
+                                .size(113.dp),
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(14.dp))
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
@@ -260,11 +287,15 @@ private fun MyReviewCard(
             )
         }
 
+        Spacer(modifier = Modifier.height(12.dp))
+
         ExpandableReviewText(
             text = review.reviewText,
             isExpanded = isExpanded,
             onToggleExpanded = onToggleExpanded,
         )
+
+        Spacer(modifier = Modifier.height(14.dp))
 
         Row(
             modifier = Modifier.align(Alignment.End),
@@ -296,7 +327,7 @@ private fun ReviewProfileImage(
             contentScale = ContentScale.Crop,
             modifier =
                 Modifier
-                    .size(37.dp)
+                    .size(36.dp)
                     .clip(CircleShape)
                     .border(1.dp, MainThemeColor.Gray3, CircleShape),
         )
@@ -306,7 +337,7 @@ private fun ReviewProfileImage(
             contentDescription = contentDescription,
             modifier =
                 Modifier
-                    .size(37.dp)
+                    .size(36.dp)
                     .clip(CircleShape)
                     .border(1.dp, MainThemeColor.Gray3, CircleShape),
         )
@@ -339,93 +370,86 @@ private fun ExpandableReviewText(
     onToggleExpanded: () -> Unit,
 ) {
     var isOverflowing by remember(text) { mutableStateOf(false) }
+    val moreText = stringResource(R.string.my_review_more)
+    val lessText = stringResource(R.string.my_review_less)
+    var collapsedAnnotatedText by remember(text, moreText) {
+        mutableStateOf(
+            buildAnnotatedString {
+                append(text)
+            },
+        )
+    }
 
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    if (isExpanded) {
         Text(
-            text = text,
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Black,
-            maxLines = if (isExpanded) Int.MAX_VALUE else 2,
+            text =
+                buildAnnotatedString {
+                    append(text)
+                    append(" ")
+                    withLink(
+                        LinkAnnotation.Clickable(
+                            tag = "toggle_less",
+                            styles = TextLinkStyles(style = MoreTextStyle),
+                            linkInteractionListener = { onToggleExpanded() },
+                        ),
+                    ) {
+                        append(lessText)
+                    }
+                },
+            style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
+        )
+    } else {
+        Text(
+            text = collapsedAnnotatedText,
+            style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
+            modifier = Modifier.clickable(enabled = isOverflowing, onClick = onToggleExpanded),
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             onTextLayout = { layoutResult ->
-                if (!isExpanded) {
-                    isOverflowing = layoutResult.hasVisualOverflow
+                if (layoutResult.hasVisualOverflow) {
+                    isOverflowing = true
+                    val visibleTextEnd = layoutResult.getLineEnd(1, visibleEnd = true)
+                    collapsedAnnotatedText = buildCollapsedReviewText(text, visibleTextEnd, moreText)
                 }
             },
         )
-
-        if (isExpanded || isOverflowing) {
-            Text(
-                text = stringResource(if (isExpanded) R.string.my_review_less else R.string.my_review_more),
-                style = MainThemeFont.Caption,
-                color = MainThemeColor.Gray4,
-                modifier = Modifier.clickable(onClick = onToggleExpanded),
-            )
-        }
     }
 }
 
+private fun buildCollapsedReviewText(
+    text: String,
+    visibleTextEnd: Int,
+    moreText: String,
+) =
+    buildAnnotatedString {
+        val suffix = "...$moreText"
+        val safeEnd = (visibleTextEnd - suffix.length).coerceAtLeast(0)
+        append(text.take(safeEnd).trimEnd())
+        append("...")
+        withLink(
+            LinkAnnotation.Clickable(
+                tag = "toggle_more",
+                styles = TextLinkStyles(style = MoreTextStyle),
+                linkInteractionListener = {},
+            ),
+        ) {
+            append(moreText)
+        }
+    }
+
 @Composable
 private fun MyReviewDeleteDialog(
-    photographerName: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
-    CommonDialog(
+    CommonDestructiveConfirmDialog(
+        title = stringResource(R.string.my_review_delete_dialog_title),
+        description = stringResource(R.string.my_review_delete_dialog_description),
+        cancelText = stringResource(R.string.my_review_delete_dialog_cancel),
+        confirmText = stringResource(R.string.my_review_delete_dialog_confirm),
         onDismissRequest = onDismiss,
-        hasQuit = false,
-    ) {
-        Column {
-            Text(
-                text = stringResource(R.string.my_review_delete_dialog_title),
-                style = MainThemeFont.BodyBold,
-                color = MainThemeColor.Black,
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = stringResource(R.string.my_review_delete_dialog_description, photographerName),
-                style = MainThemeFont.Body,
-                color = MainThemeColor.Gray5,
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                OutlinedButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(5.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.my_review_delete_dialog_cancel),
-                        style = MainThemeFont.Body,
-                        color = MainThemeColor.Gray5,
-                    )
-                }
-
-                Button(
-                    onClick = onConfirm,
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(5.dp),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MainThemeColor.Red,
-                            contentColor = MainThemeColor.White,
-                        ),
-                ) {
-                    Text(
-                        text = stringResource(R.string.my_review_delete_dialog_confirm),
-                        style = MainThemeFont.Body,
-                    )
-                }
-            }
-        }
-    }
+        onConfirm = onConfirm,
+    )
 }
 
 @Composable

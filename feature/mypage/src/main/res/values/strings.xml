@@ -15,8 +15,8 @@
     <string name="my_review_delete">삭제</string>
     <string name="my_review_more">더보기</string>
     <string name="my_review_less">접기</string>
-    <string name="my_review_delete_dialog_title">리뷰를 삭제할까요?</string>
-    <string name="my_review_delete_dialog_description">%1$s 리뷰를 삭제하면 다시 복구할 수 없어요.</string>
+    <string name="my_review_delete_dialog_title">리뷰를 삭제하시겠습니까?</string>
+    <string name="my_review_delete_dialog_description">삭제된 리뷰는\n되돌릴 수 없습니다.</string>
     <string name="my_review_delete_dialog_cancel">취소</string>
     <string name="my_review_delete_dialog_confirm">삭제</string>
     <string name="my_review_empty_title">아직 작성한 리뷰가 없어요</string>
