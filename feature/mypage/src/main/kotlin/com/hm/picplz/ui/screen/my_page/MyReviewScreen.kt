@@ -426,13 +426,7 @@ private fun buildCollapsedReviewText(
         val safeEnd = (visibleTextEnd - suffix.length).coerceAtLeast(0)
         append(text.take(safeEnd).trimEnd())
         append("...")
-        withLink(
-            LinkAnnotation.Clickable(
-                tag = "toggle_more",
-                styles = TextLinkStyles(style = MoreTextStyle),
-                linkInteractionListener = {},
-            ),
-        ) {
+        withStyle(style = MoreTextStyle) {
             append(moreText)
         }
     }
