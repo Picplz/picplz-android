@@ -28,10 +28,10 @@ import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.main.MainSearchScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
-import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
+import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
