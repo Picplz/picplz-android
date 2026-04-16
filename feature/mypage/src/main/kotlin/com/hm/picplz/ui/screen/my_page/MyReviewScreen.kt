@@ -42,17 +42,16 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withLink
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.ui.screen.common.CommonDestructiveConfirmDialog
@@ -370,6 +369,7 @@ private fun ExpandableReviewText(
     onToggleExpanded: () -> Unit,
 ) {
     var isOverflowing by remember(text) { mutableStateOf(false) }
+    var canExpand by remember(text) { mutableStateOf(false) }
     val moreText = stringResource(R.string.my_review_more)
     val lessText = stringResource(R.string.my_review_less)
     var collapsedAnnotatedText by remember(text, moreText) {
@@ -399,20 +399,24 @@ private fun ExpandableReviewText(
             style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
         )
     } else {
-        Text(
-            text = collapsedAnnotatedText,
-            style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
-            modifier = Modifier.clickable(enabled = isOverflowing, onClick = onToggleExpanded),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            onTextLayout = { layoutResult ->
-                if (layoutResult.hasVisualOverflow) {
-                    isOverflowing = true
-                    val visibleTextEnd = layoutResult.getLineEnd(1, visibleEnd = true)
-                    collapsedAnnotatedText = buildCollapsedReviewText(text, visibleTextEnd, moreText)
-                }
-            },
-        )
+        Box(
+            modifier = Modifier.clickable(onClick = { if (canExpand) onToggleExpanded() }),
+        ) {
+            Text(
+                text = collapsedAnnotatedText,
+                style = MainThemeFont.Body.copy(color = MainThemeColor.Gray6),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                onTextLayout = { layoutResult ->
+                    if (layoutResult.hasVisualOverflow) {
+                        isOverflowing = true
+                        canExpand = true
+                        val visibleTextEnd = layoutResult.getLineEnd(1, visibleEnd = true)
+                        collapsedAnnotatedText = buildCollapsedReviewText(text, visibleTextEnd, moreText)
+                    }
+                },
+            )
+        }
     }
 }
 
@@ -420,7 +424,7 @@ private fun buildCollapsedReviewText(
     text: String,
     visibleTextEnd: Int,
     moreText: String,
-) =
+): androidx.compose.ui.text.AnnotatedString =
     buildAnnotatedString {
         val suffix = "...$moreText"
         val safeEnd = (visibleTextEnd - suffix.length).coerceAtLeast(0)
