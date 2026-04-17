@@ -75,7 +75,7 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
                         ReservationStatus.WAITING_APPROVAL,
                         ReservationStatus.WAITING_PAYMENT,
                         -> {
-                            _sideEffect.emit(DetailReservationSideEffect.NavigateToCancelReservation)
+                            _sideEffect.emit(DetailReservationSideEffect.NavigateToCancelReservationConfirm)
                         }
 
                         ReservationStatus.RESERVED,

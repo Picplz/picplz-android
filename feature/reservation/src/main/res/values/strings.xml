@@ -60,4 +60,19 @@
     <string name="order_detail_section_shooting_schedule">촬영 희망 시각</string>
     <string name="order_detail_button_next">다음</string>
     <string name="price_format">%,d₩</string>
+
+    <!-- 취소 사유 입력 화면 -->
+    <string name="cancel_reason_input_title">취소 사유를 알려주세요</string>
+    <string name="cancel_reason_input_subtitle">* 중복 선택 가능</string>
+    <string name="cancel_reason_input_placeholder">취소 사유를 입력해주세요. (%1$d자 이내)</string>
+    <string name="cancel_reason_option_schedule">촬영 스케줄 다른 일정이 생겼어요</string>
+    <string name="cancel_reason_option_product">원금 상품을 변경하고 싶어요</string>
+    <string name="cancel_reason_option_photographer_late">자기의 단벌 늦거나 놀랐싶었어요</string>
+    <string name="cancel_reason_option_location">촬영 위치 문제가 생겼어요</string>
+    <string name="cancel_reason_option_other">자기가 추기 결체를 유도해요</string>
+    <string name="cancel_reason_option_mind">그냥 마음이 바뀌었어요</string>
+    <string name="cancel_reason_option_direct_input">직접 입력</string>
+
+    <!-- 예약 취소 화면 -->
+    <string name="cancel_reservation_top_bar_title">예약 취소</string>
 </resources>
