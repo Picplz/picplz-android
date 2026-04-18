@@ -11,6 +11,13 @@
     <string name="my_page_no_ongoing_shooting">진행중인 촬영이 없어요</string>
     <string name="my_page_no_ongoing_shooting_sub">촬영지를 검색하고 작가들을 둘러보세요</string>
     <string name="my_page_follow_photographer">팔로우 작가</string>
+    <string name="followed_photographers_available_now">바로촬영</string>
+    <string name="followed_photographers_loading">팔로우 작가를 불러오는 중이에요</string>
+    <string name="followed_photographers_unavailable_title">아직 준비 중인 기능이에요</string>
+    <string name="followed_photographers_unavailable_description">정식 지원 전까지는 팔로우한 작가를 여기서 확인할 수 없어요</string>
+    <string name="followed_photographers_empty_title">아직 팔로우한 작가가 없어요</string>
+    <string name="followed_photographers_empty_description">마음에 드는 작가를 팔로우하면 이곳에서 모아볼 수 있어요</string>
+    <string name="followed_photographers_area_overflow">외 %1$d개</string>
     <string name="my_page_my_reviews">내 리뷰</string>
     <string name="my_page_terms">이용 약관</string>
     <string name="my_page_ad">광고</string>

@@ -14,6 +14,7 @@ import com.hm.picplz.navigation.model.Feed
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.navigation.model.MyPage
+import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPageShootingHistory
@@ -28,6 +29,7 @@ import com.hm.picplz.ui.screen.dev.DevScreen
 import com.hm.picplz.ui.screen.feed.FeedScreen
 import com.hm.picplz.ui.screen.main.MainScreen
 import com.hm.picplz.ui.screen.main.MainSearchScreen
+import com.hm.picplz.ui.screen.my_page.FollowedPhotographersScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
@@ -63,6 +65,10 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPage> {
         MyPageScreen(navController = navController)
+    }
+
+    composable<MyPageFollowedPhotographers> {
+        FollowedPhotographersScreen(navController = navController)
     }
 
     composable<MyPageModifyProfile> {
