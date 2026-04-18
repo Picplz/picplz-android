@@ -33,9 +33,7 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.NavigateToSettings)
                 }
                 is MyPageIntent.NavigateToFollowedPhotographers -> {
-                    sendSideEffect(
-                        MyPageSideEffect.ShowToast("팔로우 작가 기능은 준비 중입니다."),
-                    )
+                    sendSideEffect(MyPageSideEffect.NavigateToFollowedPhotographers)
                 }
                 is MyPageIntent.NavigateToMyReviews -> {
                     sendSideEffect(MyPageSideEffect.NavigateToMyReviews)

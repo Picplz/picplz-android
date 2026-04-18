@@ -69,6 +69,8 @@ data class SignUpAddDevice(val category: String = "phone") : NavigationRoute
 
 @Serializable object MyPage : NavigationRoute
 
+@Serializable object MyPageFollowedPhotographers : NavigationRoute
+
 @Serializable object MyPageModifyProfile : NavigationRoute
 
 @Serializable object MyPageMyReviews : NavigationRoute
@@ -118,4 +120,7 @@ data object DetailReservation : NavigationRoute
 data object CancelReservationConfirm : NavigationRoute
 
 @Serializable
-data object OrderDetail : NavigationRoute
+data class OrderDetail(val orderId: String) : NavigationRoute
+
+@Serializable
+data class CancelReservation(val orderId: String) : NavigationRoute
