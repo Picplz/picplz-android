@@ -36,9 +36,7 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.NavigateToFollowedPhotographers)
                 }
                 is MyPageIntent.NavigateToMyReviews -> {
-                    sendSideEffect(
-                        MyPageSideEffect.ShowToast("내 리뷰 기능은 준비 중입니다."),
-                    )
+                    sendSideEffect(MyPageSideEffect.NavigateToMyReviews)
                 }
                 is MyPageIntent.NavigateToTerms -> {
                     sendSideEffect(
