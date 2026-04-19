@@ -43,9 +43,9 @@ import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
-import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
