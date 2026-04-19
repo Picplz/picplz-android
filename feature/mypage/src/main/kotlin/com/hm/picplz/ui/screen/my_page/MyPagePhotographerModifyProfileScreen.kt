@@ -78,6 +78,8 @@ private object MyPagePhotographerModifyProfileLayoutDefaults {
     val CounterHorizontalPadding = 16.dp
     val CounterBottomPadding = 2.dp
     val IntroductionCounterBottomSpacing = 14.dp
+    val IntroductionCounterReservedBottomPadding =
+        IntroductionFieldBottomPadding + CounterBottomPadding + IntroductionCounterBottomSpacing
     val FieldHelperTopPadding = 4.dp
 }
 
@@ -362,37 +364,43 @@ private fun PhotographerIntroductionSection(
             style = MainThemeFont.TitleSmall,
         )
         Spacer(Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.LabelToFieldSpacing))
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionFieldHeight),
+        ) {
             ModifyProfileOutlinedTextField(
                 value = introduction,
                 onValueChange = {
                     onIntroductionChange(it.take(INTRODUCTION_MAX_LENGTH))
                 },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionFieldHeight),
+                modifier = Modifier.fillMaxSize(),
                 placeholder = stringResource(R.string.modify_profile_introduction_placeholder),
                 textStyle = MainThemeFont.Body.copy(color = MainThemeColor.Black),
                 singleLine = false,
                 isValid = true,
                 contentTopPadding = MyPagePhotographerModifyProfileLayoutDefaults.IntroductionFieldTopPadding,
-                contentBottomPadding = MyPagePhotographerModifyProfileLayoutDefaults.IntroductionFieldBottomPadding,
+                contentBottomPadding =
+                    MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterReservedBottomPadding,
             )
-            Text(
-                text = stringResource(R.string.modify_profile_introduction_counter, introduction.length),
-                style = IntroductionCounterTextStyle,
-                color = MainThemeColor.Gray3,
+            Column(
                 modifier =
                     Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(
-                            end = MyPagePhotographerModifyProfileLayoutDefaults.CounterHorizontalPadding,
-                            bottom = MyPagePhotographerModifyProfileLayoutDefaults.CounterBottomPadding,
-                        ),
-            )
+                        .padding(end = MyPagePhotographerModifyProfileLayoutDefaults.CounterHorizontalPadding),
+                horizontalAlignment = Alignment.End,
+            ) {
+                Text(
+                    text = stringResource(R.string.modify_profile_introduction_counter, introduction.length),
+                    style = IntroductionCounterTextStyle,
+                    color = MainThemeColor.Gray3,
+                    modifier =
+                        Modifier.padding(bottom = MyPagePhotographerModifyProfileLayoutDefaults.CounterBottomPadding),
+                )
+                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterBottomSpacing))
+            }
         }
-        Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterBottomSpacing))
         if (saveErrorMessage != null) {
             Text(
                 text = saveErrorMessage,
