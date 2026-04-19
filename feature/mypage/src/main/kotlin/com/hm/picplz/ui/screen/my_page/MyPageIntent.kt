@@ -3,6 +3,8 @@ package com.hm.picplz.ui.screen.my_page
 sealed interface MyPageIntent {
     data object NavigateToModifyProfile : MyPageIntent
 
+    data object NavigateToPhotographerModifyProfile : MyPageIntent
+
     data object NavigateToShootingHistory : MyPageIntent
 
     data object NavigateToSettings : MyPageIntent

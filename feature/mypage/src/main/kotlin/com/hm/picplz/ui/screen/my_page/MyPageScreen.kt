@@ -69,6 +69,7 @@ import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
+import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.navigation.BottomNavigationBar
@@ -123,6 +124,9 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.NavigateToModifyProfile -> {
                     navController.navigate(MyPageModifyProfile)
+                }
+                is MyPageSideEffect.NavigateToPhotographerModifyProfile -> {
+                    navController.navigate(MyPagePhotographerModifyProfile)
                 }
                 is MyPageSideEffect.NavigateToMyReviews -> {
                     navController.navigate(MyPageMyReviews)
@@ -391,7 +395,7 @@ private fun PhotographerMyPageContent(
     ) {
         PhotographerProfileCard(
             photographerProfile = photographerProfile,
-            onModifyProfileClick = { onIntent(MyPageIntent.NavigateToModifyProfile) },
+            onModifyProfileClick = { onIntent(MyPageIntent.NavigateToPhotographerModifyProfile) },
             onPreviewClick = { onIntent(MyPageIntent.NavigateToPhotographerPreview) },
             onRegionEditClick = { onIntent(MyPageIntent.NavigateToPhotographerRegionEdit) },
             onKeywordEditClick = { onIntent(MyPageIntent.NavigateToPhotographerKeywordEdit) },

@@ -80,6 +80,8 @@ data class MyPagePhotographer(
 
 @Serializable object MyPageModifyProfile : NavigationRoute
 
+@Serializable object MyPagePhotographerModifyProfile : NavigationRoute
+
 @Serializable object MyPageMyReviews : NavigationRoute
 
 @Serializable

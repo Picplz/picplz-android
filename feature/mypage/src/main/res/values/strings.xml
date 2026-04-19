@@ -93,10 +93,17 @@
     <string name="modify_profile_nickname">닉네임</string>
     <string name="modify_profile_nickname_placeholder">닉네임을 입력하세요</string>
     <string name="modify_profile_nickname_hint">한글, 영문, 숫자만 가능합니다.</string>
+    <string name="modify_profile_nickname_checking">닉네임을 확인하고 있습니다.</string>
     <string name="modify_profile_nickname_error">허용되지 않는 문자가 포함되어 있습니다.</string>
     <string name="modify_profile_done">완료</string>
     <string name="modify_profile_image">프로필 이미지</string>
     <string name="modify_profile_camera">카메라</string>
+    <string name="modify_profile_instagram_id">인스타그램 아이디</string>
+    <string name="modify_profile_instagram_placeholder">인스타그램 아이디를 적어주세요</string>
+    <string name="modify_profile_introduction">자기소개</string>
+    <string name="modify_profile_introduction_placeholder">자기소개를 적어주세요</string>
+    <string name="modify_profile_introduction_counter">%1$d/100</string>
+    <string name="modify_profile_save_unsupported">프로필 저장은 아직 지원되지 않습니다.</string>
 
     <!-- 주문 상세 -->
     <string name="order_detail_title">주문 상세</string>

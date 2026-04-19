@@ -5,6 +5,8 @@ sealed interface MyPageSideEffect {
 
     data object NavigateToModifyProfile : MyPageSideEffect
 
+    data object NavigateToPhotographerModifyProfile : MyPageSideEffect
+
     data object NavigateToMyReviews : MyPageSideEffect
 
     data object NavigateToFollowedPhotographers : MyPageSideEffect
