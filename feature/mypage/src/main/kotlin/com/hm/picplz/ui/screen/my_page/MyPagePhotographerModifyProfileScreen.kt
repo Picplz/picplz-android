@@ -60,11 +60,11 @@ import com.hm.picplz.core.ui.R as CoreR
 private const val INTRODUCTION_MAX_LENGTH = 100
 
 private object MyPagePhotographerModifyProfileLayoutDefaults {
-    val BottomButtonStartPadding = 30.dp
-    val BottomContentSpacing = 120.dp
+    val BottomActionAreaHeight = 120.dp
     val HorizontalPadding = 16.dp
     val SectionVerticalPadding = 12.dp
     val LabelToFieldSpacing = 12.dp
+    val NicknameBlockBottomSpacing = 12.dp
     val ProfileImageSize = 102.dp
     val CameraButtonTouchTarget = 32.dp
     val CameraIconSize = 26.dp
@@ -77,6 +77,7 @@ private object MyPagePhotographerModifyProfileLayoutDefaults {
     val IntroductionFieldBottomPadding = 18.dp
     val CounterHorizontalPadding = 16.dp
     val CounterBottomPadding = 2.dp
+    val IntroductionCounterBottomSpacing = 14.dp
     val FieldHelperTopPadding = 4.dp
 }
 
@@ -128,20 +129,6 @@ fun MyPagePhotographerModifyProfileScreen(
                 viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.NavigateBack)
             }
         },
-        floatingActionButton = {
-            Box(
-                modifier =
-                    Modifier
-                        .padding(start = MyPagePhotographerModifyProfileLayoutDefaults.BottomButtonStartPadding)
-                        .imePadding(),
-            ) {
-                CommonBottomButton(
-                    text = stringResource(R.string.modify_profile_done),
-                    onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
-                    enabled = state.isCompleteEnabled && !state.isLoading,
-                )
-            }
-        },
         modifier =
             modifier
                 .fillMaxSize()
@@ -154,46 +141,69 @@ fun MyPagePhotographerModifyProfileScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .imePadding()
-                    .verticalScroll(scrollState),
+                    .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Column(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.height(10.dp))
 
-            PhotographerProfileImageSection(
-                profileImageUri = state.profileImageUri,
-                onChangeImage = { filePickerLauncher.launch("image/*") },
-            )
+                PhotographerProfileImageSection(
+                    profileImageUri = state.profileImageUri,
+                    onChangeImage = { filePickerLauncher.launch("image/*") },
+                )
 
-            Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.ProfileToFormSpacing))
+                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.ProfileToFormSpacing))
 
-            PhotographerNicknameSection(
-                nickname = state.nickname,
-                isCheckingNickname = state.isCheckingNickname,
-                errorMessage = state.representativeNicknameError?.message,
-                onNicknameChange = {
-                    viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeNickname(it))
-                },
-            )
+                PhotographerNicknameSection(
+                    nickname = state.nickname,
+                    isCheckingNickname = state.isCheckingNickname,
+                    errorMessage = state.representativeNicknameError?.message,
+                    onNicknameChange = {
+                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeNickname(it))
+                    },
+                )
 
-            PhotographerTextFieldSection(
-                title = stringResource(R.string.modify_profile_instagram_id),
-                value = state.instagramId,
-                placeholder = stringResource(R.string.modify_profile_instagram_placeholder),
-                onValueChange = {
-                    viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeInstagramId(it))
-                },
-            )
+                PhotographerTextFieldSection(
+                    title = stringResource(R.string.modify_profile_instagram_id),
+                    value = state.instagramId,
+                    placeholder = stringResource(R.string.modify_profile_instagram_placeholder),
+                    onValueChange = {
+                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeInstagramId(it))
+                    },
+                )
 
-            PhotographerIntroductionSection(
-                introduction = state.introduction,
-                saveErrorMessage = state.saveErrorMessageResId?.let { stringResource(it) },
-                onIntroductionChange = {
-                    viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeIntroduction(it))
-                },
-            )
+                PhotographerIntroductionSection(
+                    introduction = state.introduction,
+                    saveErrorMessage = state.saveErrorMessageResId?.let { stringResource(it) },
+                    onIntroductionChange = {
+                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeIntroduction(it))
+                    },
+                )
 
-            Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.BottomContentSpacing))
+                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.SectionVerticalPadding))
+            }
+
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(MyPagePhotographerModifyProfileLayoutDefaults.BottomActionAreaHeight)
+                        .padding(horizontal = MyPagePhotographerModifyProfileLayoutDefaults.HorizontalPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                CommonBottomButton(
+                    text = stringResource(R.string.modify_profile_done),
+                    onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
+                    enabled = state.isCompleteEnabled && !state.isLoading,
+                )
+            }
         }
     }
 }
@@ -290,6 +300,7 @@ private fun PhotographerNicknameSection(
                     .padding(top = MyPagePhotographerModifyProfileLayoutDefaults.FieldHelperTopPadding),
             textAlign = TextAlign.End,
         )
+        Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.NicknameBlockBottomSpacing))
     }
 }
 
@@ -355,9 +366,7 @@ private fun PhotographerIntroductionSection(
             ModifyProfileOutlinedTextField(
                 value = introduction,
                 onValueChange = {
-                    if (it.length <= INTRODUCTION_MAX_LENGTH) {
-                        onIntroductionChange(it)
-                    }
+                    onIntroductionChange(it.take(INTRODUCTION_MAX_LENGTH))
                 },
                 modifier =
                     Modifier
@@ -373,7 +382,7 @@ private fun PhotographerIntroductionSection(
             Text(
                 text = stringResource(R.string.modify_profile_introduction_counter, introduction.length),
                 style = IntroductionCounterTextStyle,
-                color = MainThemeColor.Gray4,
+                color = MainThemeColor.Gray3,
                 modifier =
                     Modifier
                         .align(Alignment.BottomEnd)
@@ -383,6 +392,7 @@ private fun PhotographerIntroductionSection(
                         ),
             )
         }
+        Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterBottomSpacing))
         if (saveErrorMessage != null) {
             Text(
                 text = saveErrorMessage,
