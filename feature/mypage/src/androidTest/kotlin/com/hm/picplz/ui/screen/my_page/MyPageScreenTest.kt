@@ -138,7 +138,7 @@ class MyPageScreenTest {
             hasPhotographerRole = true,
             photographerProfile =
                 PhotographerProfile(
-                    displayName = "가영포토",
+                    displayName = "유가영 작가",
                     followerCount = 128,
                     packageCount = if (packagePreview == null) 0 else 1,
                     portfolioCount = 0,

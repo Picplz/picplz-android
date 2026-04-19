@@ -139,7 +139,7 @@ class MyPageViewModel
                     ongoingShootings = emptyList(),
                     photographerProfile =
                         PhotographerProfile(
-                            displayName = "가영포토",
+                            displayName = "유가영 작가",
                             profileImageUri = "",
                             followerCount = 128,
                             packageCount = 0,

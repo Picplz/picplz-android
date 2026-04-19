@@ -77,6 +77,8 @@ import com.hm.picplz.ui.screen.my_page.toggleSwitch.ToggleSwitch
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
+import com.hm.picplz.ui.util.ReviewUtil
+import com.hm.picplz.ui.util.StarType
 import java.text.NumberFormat
 import java.util.Locale
 import com.hm.picplz.core.ui.R as CoreR
@@ -403,6 +405,7 @@ private fun PhotographerMyPageContent(
         PhotographerDetailsSection(
             packagePreview = photographerProfile.packagePreview,
             portfolioPreviewImageUrls = photographerProfile.portfolioPreviewImageUrls,
+            averageRating = photographerProfile.satisfactionSummary.averageRating,
             onPackageEditClick = { onIntent(MyPageIntent.NavigateToPackageEdit) },
             onPortfolioEditClick = { onIntent(MyPageIntent.NavigateToPortfolioEdit) },
         )
@@ -413,6 +416,7 @@ private fun PhotographerMyPageContent(
 private fun PhotographerDetailsSection(
     packagePreview: PhotographerPackagePreview?,
     portfolioPreviewImageUrls: List<String>,
+    averageRating: String,
     onPackageEditClick: () -> Unit,
     onPortfolioEditClick: () -> Unit,
 ) {
@@ -433,7 +437,7 @@ private fun PhotographerDetailsSection(
             onEditClick = onPortfolioEditClick,
         )
 
-        PhotographerSatisfactionSection()
+        PhotographerSatisfactionSection(averageRating = averageRating)
 
         Spacer(modifier = Modifier.height(65.dp))
     }
@@ -962,7 +966,8 @@ private fun FilledPhotographerPortfolioRow(previewImageUrls: List<String>) {
 }
 
 @Composable
-private fun PhotographerSatisfactionSection() {
+private fun PhotographerSatisfactionSection(averageRating: String) {
+    val rating = averageRating.toFloatOrNull() ?: 0f
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -980,16 +985,16 @@ private fun PhotographerSatisfactionSection() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(1.dp),
         ) {
-            repeat(5) {
+            ReviewUtil.calculateStarRating(rating, StarType.MAIN).forEach { starResId ->
                 Image(
-                    painter = painterResource(id = CoreR.drawable.star_empty),
+                    painter = painterResource(id = starResId),
                     contentDescription = stringResource(CoreR.string.star_rating),
                     modifier = Modifier.size(20.dp),
                 )
             }
 
             Text(
-                text = "0.0",
+                text = averageRating,
                 style = MainThemeFont.Body,
                 color = MainThemeColor.Gray4,
                 modifier = Modifier.padding(start = 4.dp),
@@ -1400,7 +1405,7 @@ private fun MyPageScreenWithPhotographerPreview() {
                     hasPhotographerRole = true,
                     photographerProfile =
                         PhotographerProfile(
-                            displayName = "가영포토",
+                            displayName = "유가영 작가",
                             followerCount = 128,
                             packageCount = 0,
                             portfolioCount = 0,
@@ -1437,7 +1442,7 @@ private fun MyPageScreenWithPhotographerPackagePreview() {
                     hasPhotographerRole = true,
                     photographerProfile =
                         PhotographerProfile(
-                            displayName = "가영포토",
+                            displayName = "유가영 작가",
                             followerCount = 128,
                             packageCount = 1,
                             portfolioCount = 0,

@@ -17,8 +17,15 @@ object ReviewUtil {
         totalRating: Float,
         type: StarType = StarType.MAIN,
     ): List<Int> {
-        val fullStars = totalRating.toInt()
-        val hasHalfStar = type == StarType.MAIN && (totalRating - fullStars).toDouble() == 0.5
+        val normalizedRating =
+            if (type == StarType.MAIN) {
+                kotlin.math.floor(totalRating * 2f) / 2f
+            } else {
+                totalRating
+            }
+
+        val fullStars = normalizedRating.toInt()
+        val hasHalfStar = type == StarType.MAIN && (normalizedRating - fullStars).toDouble() == 0.5
         val emptyStars = 5 - fullStars - if (hasHalfStar) 1 else 0
 
         return buildList {
