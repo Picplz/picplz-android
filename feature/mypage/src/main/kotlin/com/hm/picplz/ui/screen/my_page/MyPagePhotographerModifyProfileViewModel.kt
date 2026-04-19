@@ -66,7 +66,13 @@ class MyPagePhotographerModifyProfileViewModel
         private fun loadMemberProfile() {
             val memberId = getCurrentMemberIdUseCase()
             if (memberId == null) {
-                _state.update { it.copy(saveErrorMessageResId = R.string.modify_profile_member_not_found) }
+                viewModelScope.launch {
+                    _sideEffect.send(
+                        MyPagePhotographerModifyProfileSideEffect.ShowToast(
+                            R.string.modify_profile_member_not_found,
+                        ),
+                    )
+                }
                 return
             }
 
@@ -95,9 +101,14 @@ class MyPagePhotographerModifyProfileViewModel
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                saveErrorMessageResId = R.string.modify_profile_load_failed,
+                                saveErrorMessageResId = null,
                             )
                         }
+                        _sideEffect.send(
+                            MyPagePhotographerModifyProfileSideEffect.ShowToast(
+                                R.string.modify_profile_load_failed,
+                            ),
+                        )
                     }
             }
         }

@@ -12,7 +12,10 @@ import com.hm.picplz.domain.usecase.GetCurrentMemberIdUseCase
 import com.hm.picplz.domain.usecase.GetMemberProfileUseCase
 import com.hm.picplz.domain.usecase.UpdateMemberProfileUseCase
 import com.hm.picplz.domain.usecase.UploadProfileImageUseCase
+import com.hm.picplz.feature.mypage.R
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -92,6 +95,22 @@ class MyPagePhotographerModifyProfileViewModelTest {
             assertFalse(viewModel.state.value.hasChanges)
         }
 
+    @Test
+    fun `load failure shows toast and does not keep inline save error`() =
+        runTest {
+            val memberRepository = FakeMemberRepository(loadShouldFail = true)
+            val viewModel = createViewModel(memberRepository = memberRepository)
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            advanceUntilIdle()
+
+            assertEquals(null, viewModel.state.value.saveErrorMessageResId)
+            assertEquals(
+                MyPagePhotographerModifyProfileSideEffect.ShowToast(R.string.modify_profile_load_failed),
+                sideEffectDeferred.await(),
+            )
+        }
+
     private fun createViewModel(
         memberRepository: FakeMemberRepository = FakeMemberRepository(),
         memberId: Long = 1L,
@@ -106,6 +125,7 @@ class MyPagePhotographerModifyProfileViewModelTest {
 
     private class FakeMemberRepository(
         private val isAvailable: Boolean = true,
+        private val loadShouldFail: Boolean = false,
     ) : MemberRepository {
         val requestedNicknames = mutableListOf<String>()
         var updatedCommand: UpdateMemberProfileCommand? = null
@@ -116,15 +136,19 @@ class MyPagePhotographerModifyProfileViewModelTest {
         }
 
         override suspend fun getMemberProfile(memberId: Long): Result<MemberProfile> =
-            Result.success(
-                MemberProfile(
-                    id = memberId,
-                    nickname = "유가영",
-                    profileImage = null,
-                    introduction = "안녕하세요, 임두현 사진작가입니다.",
-                    instagram = "imdooring",
-                ),
-            )
+            if (loadShouldFail) {
+                Result.failure(IllegalStateException("load failed"))
+            } else {
+                Result.success(
+                    MemberProfile(
+                        id = memberId,
+                        nickname = "유가영",
+                        profileImage = null,
+                        introduction = "안녕하세요, 임두현 사진작가입니다.",
+                        instagram = "imdooring",
+                    ),
+                )
+            }
 
         override suspend fun updateMemberProfile(command: UpdateMemberProfileCommand): Result<Unit> {
             updatedCommand = command

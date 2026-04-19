@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -49,6 +52,11 @@ import kotlinx.coroutines.flow.collectLatest
 import com.hm.picplz.core.ui.R as CoreR
 
 private const val INTRODUCTION_MAX_LENGTH = 100
+
+private object MyPagePhotographerModifyProfileLayoutDefaults {
+    val BottomButtonStartPadding = 30.dp
+    val BottomContentSpacing = 120.dp
+}
 
 @Composable
 fun MyPagePhotographerModifyProfileScreen(
@@ -97,7 +105,12 @@ fun MyPagePhotographerModifyProfileScreen(
             }
         },
         floatingActionButton = {
-            Box(modifier = Modifier.padding(start = 30.dp)) {
+            Box(
+                modifier =
+                    Modifier
+                        .padding(start = MyPagePhotographerModifyProfileLayoutDefaults.BottomButtonStartPadding)
+                        .imePadding(),
+            ) {
                 CommonBottomButton(
                     text = stringResource(R.string.modify_profile_done),
                     onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
@@ -110,11 +123,15 @@ fun MyPagePhotographerModifyProfileScreen(
                 .fillMaxSize()
                 .systemBarsPadding(),
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
+
         Column(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(innerPadding),
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .imePadding()
+                    .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(10.dp))
@@ -151,6 +168,8 @@ fun MyPagePhotographerModifyProfileScreen(
                     viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeIntroduction(it))
                 },
             )
+
+            Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.BottomContentSpacing))
         }
     }
 }
