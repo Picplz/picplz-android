@@ -1,6 +1,8 @@
 package com.hm.picplz.ui.screen.my_page
 
 sealed interface MyPageSideEffect {
+    data object NavigateToPhotographerSignUp : MyPageSideEffect
+
     data object NavigateToModifyProfile : MyPageSideEffect
 
     data object NavigateToMyReviews : MyPageSideEffect
@@ -11,5 +13,5 @@ sealed interface MyPageSideEffect {
 
     data object NavigateToSettings : MyPageSideEffect
 
-    data class ShowToast(val message: String) : MyPageSideEffect
+    data class ShowToast(val messageResId: Int) : MyPageSideEffect
 }

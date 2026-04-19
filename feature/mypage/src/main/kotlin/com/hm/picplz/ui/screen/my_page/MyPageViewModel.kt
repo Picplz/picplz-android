@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.feature.mypage.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.hm.picplz.core.ui.R as CoreR
 
 @HiltViewModel
 class MyPageViewModel
@@ -40,23 +42,52 @@ class MyPageViewModel
                 }
                 is MyPageIntent.NavigateToTerms -> {
                     sendSideEffect(
-                        MyPageSideEffect.ShowToast("이용 약관 기능은 준비 중입니다."),
+                        MyPageSideEffect.ShowToast(R.string.my_page_terms_pending),
                     )
                 }
-                is MyPageIntent.SwitchToPhotographer -> {
-                    // DEV: 토글로 모드 전환 확인용
+                is MyPageIntent.ToggleUserMode -> {
                     _state.update { it.copy(hasPhotographerRole = !it.hasPhotographerRole) }
                 }
                 is MyPageIntent.NavigateToPhotographerSignUp -> {
-                    _state.update { it.copy(hasPhotographerRole = true) }
+                    sendSideEffect(MyPageSideEffect.NavigateToPhotographerSignUp)
                 }
-                is MyPageIntent.DevToggleShootings -> {
+                is MyPageIntent.NavigateToPhotographerPreview -> {
+                    val hasPackages = _state.value.photographerProfile.hasPackages
+                    if (hasPackages) {
+                        sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_pending))
+                    } else {
+                        sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_requires_package))
+                    }
+                }
+                is MyPageIntent.NavigateToPhotographerRegionEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_region_edit_pending))
+                }
+                is MyPageIntent.NavigateToPhotographerKeywordEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_keyword_edit_pending))
+                }
+                is MyPageIntent.NavigateToPhotographerEquipmentEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_equipment_edit_pending))
+                }
+                is MyPageIntent.NavigateToSettlement -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
+                }
+                is MyPageIntent.NavigateToPackageEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_package_edit_pending))
+                }
+                is MyPageIntent.NavigateToPortfolioEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
+                }
+                is MyPageIntent.ApplyDevPhotographerPreview -> {
                     _state.update {
-                        if (it.ongoingShootings.isEmpty()) {
-                            it.copy(ongoingShootings = DEV_MOCK_SHOOTINGS)
-                        } else {
-                            it.copy(ongoingShootings = emptyList())
-                        }
+                        it.copy(
+                            ongoingShootings = if (intent.hasShootings) DEV_MOCK_SHOOTINGS else emptyList(),
+                            photographerProfile =
+                                it.photographerProfile.copy(
+                                    packageCount = if (intent.hasPackagePreview) 1 else 0,
+                                    hasPackages = intent.hasPackagePreview,
+                                    packagePreview = if (intent.hasPackagePreview) DEV_MOCK_PACKAGE else null,
+                                ),
+                        )
                     }
                 }
             }
@@ -95,6 +126,37 @@ class MyPageViewModel
                     profileImageUri = "",
                     hasPhotographerRole = false,
                     ongoingShootings = emptyList(),
+                    photographerProfile =
+                        PhotographerProfile(
+                            displayName = "가영포토",
+                            profileImageUri = "",
+                            followerCount = 128,
+                            packageCount = 0,
+                            portfolioCount = 0,
+                            instagramId = "미등록",
+                            isInstagramRegistered = false,
+                            introduction = "안녕하세요, 유가영 작가입니다.",
+                            regionSummary = "서울 마포구, 서울 용산구 외 16개 지역",
+                            keywordSummary = "#캐주얼, #심플, #공주감성 외 3개 키워드",
+                            equipmentSummary = "아이폰 16 PRO, 아이폰 X 외 3개 장비",
+                            hasPackages = false,
+                            packagePreview = null,
+                            satisfactionSummary =
+                                PhotographerSatisfactionSummary(
+                                    averageRating = "4.9",
+                                    reviewCount = 48,
+                                    repeatBookingRate = 82,
+                                ),
+                        ),
+                )
+
+            private val DEV_MOCK_PACKAGE =
+                PhotographerPackagePreview(
+                    imageResId = CoreR.drawable.logo,
+                    title = "남친생기는 프사",
+                    price = 66000,
+                    meta = "프로필 촬영 · 30분",
+                    description = "원본 20장과 보정본 3장을 제공해요.",
                 )
         }
     }

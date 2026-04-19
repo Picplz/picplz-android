@@ -7,7 +7,7 @@ fun AreaData.toDomain(): Area {
     return Area(
         id = id,
         name = name,
-        dong = dong,
+        dong = dong ?: name,
         ri = ri,
     )
 }

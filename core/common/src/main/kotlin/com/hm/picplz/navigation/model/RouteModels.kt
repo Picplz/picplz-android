@@ -71,6 +71,12 @@ data class SignUpAddDevice(val category: String = "phone") : NavigationRoute
 
 @Serializable object MyPageFollowedPhotographers : NavigationRoute
 
+@Serializable
+data class MyPagePhotographer(
+    val hasShootings: Boolean = false,
+    val hasPackagePreview: Boolean = false,
+) : NavigationRoute
+
 @Serializable object MyPageModifyProfile : NavigationRoute
 
 @Serializable object MyPageMyReviews : NavigationRoute

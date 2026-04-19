@@ -28,15 +28,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.ChipMode
 import com.hm.picplz.navigation.model.SignUpCompletion
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddVibeChip
+import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.DismissToast
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateWithSubmit
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.SetEditingChipId
@@ -184,6 +185,15 @@ fun SignUpPhotographyVibeScreen(
                     enabled = currentState.selectedVibeChipList != listOf<ChipItem>(),
                 )
             }
+        }
+        currentState.toastMessage?.let { message ->
+            CommonToast(
+                message = message,
+                isVisible = currentState.showToast,
+                onDismiss = {
+                    viewModel.handleIntent(DismissToast)
+                },
+            )
         }
     }
 

@@ -2,9 +2,40 @@
 <resources>
     <!-- 마이페이지 -->
     <string name="my_page_title">마이 페이지</string>
-    <string name="my_page_switch_photographer">작가로 전환</string>
+    <string name="my_page_switch_photographer">고객으로 전환</string>
     <string name="my_page_become_photographer">작가로도 활동하기</string>
     <string name="my_page_modify_profile">프로필 수정</string>
+    <string name="my_page_preview_profile">프로필 미리보기</string>
+    <string name="my_page_followers_count">팔로워 %d명</string>
+    <string name="my_page_metric_followers">팔로워</string>
+    <string name="my_page_metric_packages">패키지</string>
+    <string name="my_page_metric_portfolios">포트폴리오</string>
+    <string name="my_page_instagram_label">인스타그램</string>
+    <string name="my_page_unregistered">미등록</string>
+    <string name="my_page_region_label">주 촬영지</string>
+    <string name="my_page_keyword_label">키워드</string>
+    <string name="my_page_equipment_label">장비</string>
+    <string name="my_page_edit">편집</string>
+    <string name="my_page_region_edit">주 촬영지 편집</string>
+    <string name="my_page_keyword_edit">키워드 편집</string>
+    <string name="my_page_equipment_edit">장비 편집</string>
+    <string name="my_page_photographer_history">지난 촬영 내역</string>
+    <string name="my_page_settlement">정산 내역</string>
+    <string name="my_page_package_title">촬영 패키지</string>
+    <string name="my_page_package_edit">편집</string>
+    <string name="my_page_empty_package">아직 등록하신 패키지가 없습니다.&#10;우측 상단의 편집을 눌러&#10;새로운 패키지를 추가해 보세요.</string>
+    <string name="my_page_portfolio_title">포트폴리오</string>
+    <string name="my_page_empty_portfolio">아직 등록하신 포트폴리오가 없습니다.&#10;우측 상단의 편집을 눌러&#10;사진을 추가해 보세요.</string>
+    <string name="my_page_satisfaction_title">만족도</string>
+    <string name="my_page_satisfaction_subtitle">촬영 후 남겨주신 고객 지표예요</string>
+    <string name="my_page_satisfaction_rating">평균 평점</string>
+    <string name="my_page_satisfaction_reviews">후기</string>
+    <string name="my_page_satisfaction_repeat_booking">재예약률</string>
+    <string name="my_page_registered_package">등록된 촬영 패키지가 있습니다.</string>
+    <string name="my_page_edit_arrow">화살표</string>
+    <string name="my_page_history_shortcut_icon">지난 촬영 내역 아이콘</string>
+    <string name="my_page_settlement_shortcut_icon">정산 내역 아이콘</string>
+    <string name="my_page_settings">설정</string>
     <string name="my_page_ongoing_shooting">진행중인 촬영</string>
     <string name="my_page_ongoing_shooting_count">진행중인 촬영 (%d)</string>
     <string name="my_page_shooting_history">지난 촬영 내역</string>
@@ -32,6 +63,18 @@
     <string name="my_page_ad">광고</string>
     <string name="my_page_shooting_date">촬영 일시</string>
     <string name="my_page_shooting_location">촬영 장소</string>
+    <string name="my_page_feature_pending">해당 기능은 준비 중입니다.</string>
+    <string name="my_page_settings_pending">설정 기능은 준비 중입니다.</string>
+    <string name="my_page_followed_photographer_pending">팔로우 작가 기능은 준비 중입니다.</string>
+    <string name="my_page_terms_pending">이용 약관 기능은 준비 중입니다.</string>
+    <string name="my_page_region_edit_pending">주 촬영지 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_keyword_edit_pending">키워드 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_equipment_edit_pending">장비 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_settlement_pending">정산 내역 기능은 준비 중입니다.</string>
+    <string name="my_page_package_edit_pending">촬영 패키지 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_portfolio_edit_pending">포트폴리오 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_preview_pending">프로필 미리보기 기능은 준비 중입니다.</string>
+    <string name="my_page_preview_requires_package">촬영 패키지를 등록해야 미리보기 화면을 볼 수 있습니다.</string>
 
     <!-- 프로필 수정 -->
     <string name="modify_profile_title">프로필 수정</string>

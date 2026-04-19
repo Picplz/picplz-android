@@ -18,6 +18,7 @@ import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.Reservation
@@ -71,6 +72,16 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPageFollowedPhotographers> {
         FollowedPhotographersScreen(navController = navController)
+    }
+
+    composable<MyPagePhotographer> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePhotographer>()
+        MyPageScreen(
+            navController = navController,
+            initialHasPhotographerRole = true,
+            initialHasShootings = args.hasShootings,
+            initialHasPackagePreview = args.hasPackagePreview,
+        )
     }
 
     composable<MyPageModifyProfile> {

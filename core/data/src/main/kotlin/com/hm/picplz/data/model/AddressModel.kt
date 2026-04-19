@@ -3,7 +3,7 @@ package com.hm.picplz.data.model
 data class AreaData(
     val id: Long,
     val name: String,
-    val dong: String,
+    val dong: String?,
     val ri: String?,
 )
 
