@@ -398,7 +398,12 @@ private fun PhotographerIntroductionSection(
                     modifier =
                         Modifier.padding(bottom = MyPagePhotographerModifyProfileLayoutDefaults.CounterBottomPadding),
                 )
-                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterBottomSpacing))
+                Spacer(
+                    modifier =
+                        Modifier.height(
+                            MyPagePhotographerModifyProfileLayoutDefaults.IntroductionCounterBottomSpacing,
+                        ),
+                )
             }
         }
         if (saveErrorMessage != null) {
