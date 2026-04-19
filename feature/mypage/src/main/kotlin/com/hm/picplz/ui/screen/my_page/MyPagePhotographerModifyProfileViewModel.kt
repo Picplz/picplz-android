@@ -4,7 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.util.NicknameValidator
+import com.hm.picplz.domain.model.UpdateMemberProfileCommand
 import com.hm.picplz.domain.usecase.CheckNicknameAvailabilityUseCase
+import com.hm.picplz.domain.usecase.GetCurrentMemberIdUseCase
+import com.hm.picplz.domain.usecase.GetMemberProfileUseCase
+import com.hm.picplz.domain.usecase.UpdateMemberProfileUseCase
+import com.hm.picplz.domain.usecase.UploadProfileImageUseCase
 import com.hm.picplz.feature.mypage.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -21,6 +26,10 @@ class MyPagePhotographerModifyProfileViewModel
     @Inject
     constructor(
         private val checkNicknameAvailabilityUseCase: CheckNicknameAvailabilityUseCase,
+        private val getCurrentMemberIdUseCase: GetCurrentMemberIdUseCase,
+        private val getMemberProfileUseCase: GetMemberProfileUseCase,
+        private val updateMemberProfileUseCase: UpdateMemberProfileUseCase,
+        private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     ) : ViewModel() {
         private val _state = MutableStateFlow(MyPagePhotographerModifyProfileState.idle())
         val state: StateFlow<MyPagePhotographerModifyProfileState> get() = _state
@@ -29,6 +38,10 @@ class MyPagePhotographerModifyProfileViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         private var duplicateCheckJob: Job? = null
+
+        init {
+            loadMemberProfile()
+        }
 
         fun handleIntent(intent: MyPagePhotographerModifyProfileIntent) {
             when (intent) {
@@ -42,8 +55,50 @@ class MyPagePhotographerModifyProfileViewModel
                 is MyPagePhotographerModifyProfileIntent.ChangeProfileImage -> {
                     _state.update { it.copy(profileImageUri = intent.uri, saveErrorMessageResId = null) }
                 }
+                is MyPagePhotographerModifyProfileIntent.UploadProfileImage -> {
+                    uploadProfileImage(intent.imageBytes, intent.filename)
+                }
                 is MyPagePhotographerModifyProfileIntent.Save -> save()
                 is MyPagePhotographerModifyProfileIntent.NavigateBack -> navigateBack()
+            }
+        }
+
+        private fun loadMemberProfile() {
+            val memberId = getCurrentMemberIdUseCase()
+            if (memberId == null) {
+                _state.update { it.copy(saveErrorMessageResId = R.string.modify_profile_member_not_found) }
+                return
+            }
+
+            _state.update { it.copy(isLoading = true, memberId = memberId) }
+            viewModelScope.launch {
+                getMemberProfileUseCase(memberId)
+                    .onSuccess { profile ->
+                        _state.update {
+                            it.copy(
+                                memberId = profile.id,
+                                originalNickname = profile.nickname,
+                                nickname = profile.nickname,
+                                originalInstagramId = profile.instagram.orEmpty(),
+                                instagramId = profile.instagram.orEmpty(),
+                                originalIntroduction = profile.introduction.orEmpty(),
+                                introduction = profile.introduction.orEmpty(),
+                                originalProfileImageObjectKey = profile.profileImage,
+                                profileImageObjectKey = profile.profileImage,
+                                originalProfileImageUri = profile.profileImage.orEmpty(),
+                                profileImageUri = profile.profileImage.orEmpty(),
+                                isLoading = false,
+                                saveErrorMessageResId = null,
+                            )
+                        }
+                    }.onFailure {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                saveErrorMessageResId = R.string.modify_profile_load_failed,
+                            )
+                        }
+                    }
             }
         }
 
@@ -100,16 +155,67 @@ class MyPagePhotographerModifyProfileViewModel
         }
 
         private fun save() {
-            if (!_state.value.isCompleteEnabled) {
+            val currentState = _state.value
+            if (!currentState.isCompleteEnabled || currentState.isSaving) {
                 return
             }
 
             _state.update { it.copy(isSaving = true, saveErrorMessageResId = null) }
-            _state.update {
-                it.copy(
-                    isSaving = false,
-                    saveErrorMessageResId = R.string.modify_profile_save_unsupported,
-                )
+            viewModelScope.launch {
+                updateMemberProfileUseCase(
+                    UpdateMemberProfileCommand(
+                        id = currentState.memberId ?: return@launch,
+                        nickname = currentState.nickname,
+                        profileImage = currentState.profileImageObjectKey,
+                        introduction = currentState.introduction.ifBlank { null },
+                        instagram = currentState.instagramId.ifBlank { null },
+                    ),
+                ).onSuccess {
+                    _state.update {
+                        it.copy(
+                            originalNickname = it.nickname,
+                            originalInstagramId = it.instagramId,
+                            originalIntroduction = it.introduction,
+                            originalProfileImageObjectKey = it.profileImageObjectKey,
+                            originalProfileImageUri = it.profileImageUri,
+                            isSaving = false,
+                            saveErrorMessageResId = null,
+                        )
+                    }
+                    _sideEffect.send(MyPagePhotographerModifyProfileSideEffect.NavigateBack)
+                }.onFailure {
+                    _state.update {
+                        it.copy(
+                            isSaving = false,
+                            saveErrorMessageResId = R.string.modify_profile_save_failed,
+                        )
+                    }
+                }
+            }
+        }
+
+        private fun uploadProfileImage(
+            imageBytes: ByteArray,
+            filename: String,
+        ) {
+            _state.update { it.copy(isUploadingImage = true, saveErrorMessageResId = null) }
+            viewModelScope.launch {
+                uploadProfileImageUseCase(imageBytes, filename)
+                    .onSuccess { objectKey ->
+                        _state.update {
+                            it.copy(
+                                profileImageObjectKey = objectKey,
+                                isUploadingImage = false,
+                            )
+                        }
+                    }.onFailure {
+                        _state.update {
+                            it.copy(
+                                isUploadingImage = false,
+                                saveErrorMessageResId = R.string.modify_profile_image_upload_failed,
+                            )
+                        }
+                    }
             }
         }
 

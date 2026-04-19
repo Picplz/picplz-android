@@ -9,6 +9,19 @@ sealed interface MyPagePhotographerModifyProfileIntent {
 
     data class ChangeProfileImage(val uri: String) : MyPagePhotographerModifyProfileIntent
 
+    data class UploadProfileImage(
+        val imageBytes: ByteArray,
+        val filename: String,
+    ) : MyPagePhotographerModifyProfileIntent {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is UploadProfileImage) return false
+            return filename == other.filename && imageBytes.contentEquals(other.imageBytes)
+        }
+
+        override fun hashCode(): Int = 31 * imageBytes.contentHashCode() + filename.hashCode()
+    }
+
     data object Save : MyPagePhotographerModifyProfileIntent
 
     data object NavigateBack : MyPagePhotographerModifyProfileIntent

@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.my_page
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -55,6 +57,7 @@ fun MyPagePhotographerModifyProfileScreen(
     viewModel: MyPagePhotographerModifyProfileViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
+    val context = LocalContext.current
 
     val filePickerLauncher =
         rememberLauncherForActivityResult(
@@ -62,6 +65,16 @@ fun MyPagePhotographerModifyProfileScreen(
         ) { uri: Uri? ->
             uri?.toString()?.let {
                 viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeProfileImage(it))
+                val imageBytes = context.contentResolver.openInputStream(uri)?.use { stream -> stream.readBytes() }
+                if (imageBytes != null) {
+                    val filename = uri.lastPathSegment ?: "profile.jpg"
+                    viewModel.handleIntent(
+                        MyPagePhotographerModifyProfileIntent.UploadProfileImage(
+                            imageBytes = imageBytes,
+                            filename = filename,
+                        ),
+                    )
+                }
             }
         }
 
@@ -69,6 +82,9 @@ fun MyPagePhotographerModifyProfileScreen(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 MyPagePhotographerModifyProfileSideEffect.NavigateBack -> navController.popBackStack()
+                is MyPagePhotographerModifyProfileSideEffect.ShowToast -> {
+                    Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -85,7 +101,7 @@ fun MyPagePhotographerModifyProfileScreen(
                 CommonBottomButton(
                     text = stringResource(R.string.modify_profile_done),
                     onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
-                    enabled = state.isCompleteEnabled,
+                    enabled = state.isCompleteEnabled && !state.isLoading,
                 )
             }
         },

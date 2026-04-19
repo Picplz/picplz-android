@@ -47,4 +47,6 @@ class AuthRepositoryImpl
         override fun isKakaoTalkLoginAvailable(context: Context): Boolean {
             return kakaoAuthService.isKakaoTalkLoginAvailable(context)
         }
+
+        override fun getCurrentMemberId(): Long? = tokenManager.getMemberId()
     }
