@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -53,6 +55,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -85,6 +88,7 @@ fun MyPageScreen(
     initialHasPhotographerRole: Boolean = false,
     initialHasShootings: Boolean = false,
     initialHasPackagePreview: Boolean = false,
+    initialHasPortfolioPreview: Boolean = false,
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -97,12 +101,13 @@ fun MyPageScreen(
         }
     }
 
-    LaunchedEffect(initialHasShootings, initialHasPackagePreview) {
+    LaunchedEffect(initialHasShootings, initialHasPackagePreview, initialHasPortfolioPreview) {
         if (initialHasPhotographerRole) {
             viewModel.handleIntent(
                 MyPageIntent.ApplyDevPhotographerPreview(
                     hasShootings = initialHasShootings,
                     hasPackagePreview = initialHasPackagePreview,
+                    hasPortfolioPreview = initialHasPortfolioPreview,
                 ),
             )
         }
@@ -397,6 +402,7 @@ private fun PhotographerMyPageContent(
 
         PhotographerDetailsSection(
             packagePreview = photographerProfile.packagePreview,
+            portfolioPreviewImageUrls = photographerProfile.portfolioPreviewImageUrls,
             onPackageEditClick = { onIntent(MyPageIntent.NavigateToPackageEdit) },
             onPortfolioEditClick = { onIntent(MyPageIntent.NavigateToPortfolioEdit) },
         )
@@ -406,6 +412,7 @@ private fun PhotographerMyPageContent(
 @Composable
 private fun PhotographerDetailsSection(
     packagePreview: PhotographerPackagePreview?,
+    portfolioPreviewImageUrls: List<String>,
     onPackageEditClick: () -> Unit,
     onPortfolioEditClick: () -> Unit,
 ) {
@@ -421,7 +428,10 @@ private fun PhotographerDetailsSection(
             onEditClick = onPackageEditClick,
         )
 
-        PhotographerPortfolioSection(onEditClick = onPortfolioEditClick)
+        PhotographerPortfolioSection(
+            previewImageUrls = portfolioPreviewImageUrls,
+            onEditClick = onPortfolioEditClick,
+        )
 
         PhotographerSatisfactionSection()
 
@@ -889,7 +899,10 @@ private fun CenteredGuideLines(lines: List<String>) {
 }
 
 @Composable
-private fun PhotographerPortfolioSection(onEditClick: () -> Unit) {
+private fun PhotographerPortfolioSection(
+    previewImageUrls: List<String>,
+    onEditClick: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -903,9 +916,48 @@ private fun PhotographerPortfolioSection(onEditClick: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        EmptyPhotographerPortfolioCard()
+        if (previewImageUrls.isEmpty()) {
+            EmptyPhotographerPortfolioCard()
+        } else {
+            FilledPhotographerPortfolioRow(previewImageUrls = previewImageUrls)
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun FilledPhotographerPortfolioRow(previewImageUrls: List<String>) {
+    val chunkedImages = previewImageUrls.chunked(3)
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        chunkedImages.forEach { rowImages ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                rowImages.forEach { imageUrl ->
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = stringResource(R.string.my_page_portfolio_title),
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .padding(2.dp)
+                                .clip(RoundedCornerShape(0.dp)),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
+                repeat(3 - rowImages.size) {
+                    Spacer(
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .padding(2.dp),
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -1040,8 +1092,8 @@ private fun FilledPhotographerPackageCard(packagePreview: PhotographerPackagePre
                 .clip(RoundedCornerShape(5.dp))
                 .background(MainThemeColor.White),
     ) {
-        Image(
-            painter = painterResource(id = packagePreview.imageResId),
+        AsyncImage(
+            model = packagePreview.imageUrl,
             contentDescription = packagePreview.title,
             modifier =
                 Modifier
@@ -1398,7 +1450,9 @@ private fun MyPageScreenWithPhotographerPackagePreview() {
                             hasPackages = true,
                             packagePreview =
                                 PhotographerPackagePreview(
-                                    imageResId = CoreR.drawable.logo,
+                                    imageUrl =
+                                        "https://images.unsplash.com/photo-1513279922550-250c2129b13a" +
+                                            "?auto=format&fit=crop&w=1200&q=80",
                                     title = "남친생기는 프사",
                                     price = 66000,
                                     meta = "프로필 촬영 · 30분",

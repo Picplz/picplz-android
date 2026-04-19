@@ -81,6 +81,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             initialHasPhotographerRole = true,
             initialHasShootings = args.hasShootings,
             initialHasPackagePreview = args.hasPackagePreview,
+            initialHasPortfolioPreview = args.hasPortfolioPreview,
         )
     }
 

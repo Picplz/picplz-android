@@ -34,5 +34,6 @@ sealed interface MyPageIntent {
     data class ApplyDevPhotographerPreview(
         val hasShootings: Boolean,
         val hasPackagePreview: Boolean,
+        val hasPortfolioPreview: Boolean,
     ) : MyPageIntent
 }

@@ -27,11 +27,12 @@ data class PhotographerProfile(
     val equipmentSummary: String = "",
     val hasPackages: Boolean = false,
     val packagePreview: PhotographerPackagePreview? = null,
+    val portfolioPreviewImageUrls: List<String> = emptyList(),
     val satisfactionSummary: PhotographerSatisfactionSummary = PhotographerSatisfactionSummary(),
 )
 
 data class PhotographerPackagePreview(
-    val imageResId: Int,
+    val imageUrl: String,
     val title: String,
     val price: Int,
     val meta: String,

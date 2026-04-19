@@ -166,14 +166,14 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MyPage (작가 마이페이지 - 패키지 있음)") {
                 navController.navigate(MyPagePhotographer(hasPackagePreview = true))
             }
-            DevButton("MyPage (작가 마이페이지 - 촬영 있음)") {
-                navController.navigate(MyPagePhotographer(hasShootings = true))
+            DevButton("MyPage (작가 마이페이지 - 포트폴리오 있음)") {
+                navController.navigate(MyPagePhotographer(hasPortfolioPreview = true))
             }
             DevButton("MyPage (작가 마이페이지 - 전체)") {
                 navController.navigate(
                     MyPagePhotographer(
-                        hasShootings = true,
                         hasPackagePreview = true,
+                        hasPortfolioPreview = true,
                     ),
                 )
             }

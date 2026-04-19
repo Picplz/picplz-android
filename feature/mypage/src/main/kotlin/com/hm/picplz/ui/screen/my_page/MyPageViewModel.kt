@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.hm.picplz.core.ui.R as CoreR
 
 @HiltViewModel
 class MyPageViewModel
@@ -84,8 +83,20 @@ class MyPageViewModel
                             photographerProfile =
                                 it.photographerProfile.copy(
                                     packageCount = if (intent.hasPackagePreview) 1 else 0,
+                                    portfolioCount =
+                                        if (intent.hasPortfolioPreview) {
+                                            DEV_MOCK_PORTFOLIO_URLS.size
+                                        } else {
+                                            0
+                                        },
                                     hasPackages = intent.hasPackagePreview,
                                     packagePreview = if (intent.hasPackagePreview) DEV_MOCK_PACKAGE else null,
+                                    portfolioPreviewImageUrls =
+                                        if (intent.hasPortfolioPreview) {
+                                            DEV_MOCK_PORTFOLIO_URLS
+                                        } else {
+                                            emptyList()
+                                        },
                                 ),
                         )
                     }
@@ -141,6 +152,7 @@ class MyPageViewModel
                             equipmentSummary = "아이폰 16 PRO, 아이폰 X 외 3개 장비",
                             hasPackages = false,
                             packagePreview = null,
+                            portfolioPreviewImageUrls = emptyList(),
                             satisfactionSummary =
                                 PhotographerSatisfactionSummary(
                                     averageRating = "4.9",
@@ -152,7 +164,8 @@ class MyPageViewModel
 
             private val DEV_MOCK_PACKAGE =
                 PhotographerPackagePreview(
-                    imageResId = CoreR.drawable.logo,
+                    imageUrl =
+                        "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1200&q=80",
                     title = "남친 생기는 프사❤️",
                     price = 9900,
                     meta = "15분 이내",
@@ -160,6 +173,14 @@ class MyPageViewModel
                         "여자친구 /남자친구 생기는 카톡프사 찍어드립니다~ 요즘 인스타그램 감성으로 이쁘게!\n" +
                             "사용기기: 아이폰 X / 아이폰 16pro\n" +
                             "베스트컷 5개정도 같이 뽑아드려용!",
+                )
+
+            private val DEV_MOCK_PORTFOLIO_URLS =
+                listOf(
+                    "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1468327768560-75b778cbb551?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80",
                 )
         }
     }
