@@ -133,8 +133,8 @@ class MyPageViewModel
                             followerCount = 128,
                             packageCount = 0,
                             portfolioCount = 0,
-                            instagramId = "미등록",
-                            isInstagramRegistered = false,
+                            instagramId = "imdooring",
+                            isInstagramRegistered = true,
                             introduction = "안녕하세요, 유가영 작가입니다.",
                             regionSummary = "서울 마포구, 서울 용산구 외 16개 지역",
                             keywordSummary = "#캐주얼, #심플, #공주감성 외 3개 키워드",
@@ -153,10 +153,13 @@ class MyPageViewModel
             private val DEV_MOCK_PACKAGE =
                 PhotographerPackagePreview(
                     imageResId = CoreR.drawable.logo,
-                    title = "남친생기는 프사",
-                    price = 66000,
-                    meta = "프로필 촬영 · 30분",
-                    description = "원본 20장과 보정본 3장을 제공해요.",
+                    title = "남친 생기는 프사❤️",
+                    price = 9900,
+                    meta = "15분 이내",
+                    description =
+                        "여자친구 /남자친구 생기는 카톡프사 찍어드립니다~ 요즘 인스타그램 감성으로 이쁘게!\n" +
+                            "사용기기: 아이폰 X / 아이폰 16pro\n" +
+                            "베스트컷 5개정도 같이 뽑아드려용!",
                 )
         }
     }

@@ -43,14 +43,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -264,19 +268,20 @@ private fun PhotographerBanner(onIntent: (MyPageIntent) -> Unit) {
                 .height(bannerHeight)
                 .background(MainThemeColor.Green120)
                 .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(modifier = Modifier.size(56.dp, 28.dp))
         Text(
             text = stringResource(R.string.my_page_switch_photographer),
             style = MainThemeFont.BodyBold,
             color = MainThemeColor.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f),
         )
         ToggleSwitch(
             checked = true,
             onCheckedChange = { onIntent(MyPageIntent.ToggleUserMode) },
+            checkedTrackColor = MainThemeColor.Green100,
+            checkedBorderColor = MainThemeColor.Green100,
+            checkedInnerTrackColor = MainThemeColor.Green100,
         )
     }
 }
@@ -389,22 +394,38 @@ private fun PhotographerMyPageContent(
         )
 
         HorizontalDivider(thickness = 10.dp, color = MainThemeColor.Gray1)
-        Spacer(modifier = Modifier.height(40.dp))
 
-        PhotographerPackageSection(
+        PhotographerDetailsSection(
             packagePreview = photographerProfile.packagePreview,
-            onEditClick = { onIntent(MyPageIntent.NavigateToPackageEdit) },
+            onPackageEditClick = { onIntent(MyPageIntent.NavigateToPackageEdit) },
+            onPortfolioEditClick = { onIntent(MyPageIntent.NavigateToPortfolioEdit) },
+        )
+    }
+}
+
+@Composable
+private fun PhotographerDetailsSection(
+    packagePreview: PhotographerPackagePreview?,
+    onPackageEditClick: () -> Unit,
+    onPortfolioEditClick: () -> Unit,
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(MainThemeColor.White)
+                .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 0.dp),
+    ) {
+        PhotographerPackageSection(
+            packagePreview = packagePreview,
+            onEditClick = onPackageEditClick,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        PhotographerPortfolioSection(onEditClick = onPortfolioEditClick)
 
-        PhotographerPortfolioSection(onEditClick = { onIntent(MyPageIntent.NavigateToPortfolioEdit) })
+        PhotographerSatisfactionSection()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PhotographerSatisfactionSection(satisfactionSummary = photographerProfile.satisfactionSummary)
-
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(65.dp))
     }
 }
 
@@ -426,6 +447,8 @@ private fun PhotographerProfileCard(
                 .background(MainThemeColor.White)
                 .padding(horizontal = 16.dp, vertical = 20.dp),
     ) {
+        val uriHandler = LocalUriHandler.current
+
         Row(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -440,7 +463,7 @@ private fun PhotographerProfileCard(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = photographerProfile.displayName,
@@ -464,16 +487,20 @@ private fun PhotographerProfileCard(
                         painter = painterResource(id = CoreR.drawable.instagram),
                         contentDescription = stringResource(R.string.my_page_instagram_label),
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(10.dp),
                     )
                     Text(
                         text = photographerProfile.instagramId,
-                        style = MainThemeFont.Body,
-                        color =
-                            if (photographerProfile.isInstagramRegistered) {
-                                MainThemeColor.Black
-                            } else {
-                                MainThemeColor.Gray4
+                        style =
+                            MainThemeFont.Caption.copy(
+                                fontFamily = FontFamily.SansSerif,
+                                fontWeight = FontWeight.Normal,
+                                textDecoration = TextDecoration.Underline,
+                            ),
+                        color = MainThemeColor.Gray3,
+                        modifier =
+                            Modifier.clickable(enabled = photographerProfile.isInstagramRegistered) {
+                                uriHandler.openUri("https://www.instagram.com/${photographerProfile.instagramId}/")
                             },
                     )
                 }
@@ -517,13 +544,13 @@ private fun PhotographerProfileCard(
             editText = stringResource(R.string.my_page_region_edit),
             onClick = onRegionEditClick,
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         PhotographerInfoRow(
             summary = photographerProfile.keywordSummary,
             editText = stringResource(R.string.my_page_keyword_edit),
             onClick = onKeywordEditClick,
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         PhotographerInfoRow(
             summary = photographerProfile.equipmentSummary,
             editText = stringResource(R.string.my_page_equipment_edit),
@@ -562,22 +589,34 @@ private fun PhotographerPackageSection(
     onEditClick: () -> Unit,
 ) {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MainThemeColor.White)
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
+        Spacer(modifier = Modifier.height(12.dp))
+
         SectionHeader(
             title = stringResource(R.string.my_page_package_title),
+            editText = stringResource(R.string.my_page_package_edit),
             onEditClick = onEditClick,
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         if (packagePreview == null) {
             EmptyPhotographerPackageCard()
+            Spacer(modifier = Modifier.height(24.dp))
+
+            CenteredGuideLines(
+                lines =
+                    listOf(
+                        stringResource(R.string.my_page_package_guide_line1),
+                        stringResource(R.string.my_page_package_guide_line2),
+                    ),
+            )
         } else {
             FilledPhotographerPackageCard(packagePreview = packagePreview)
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
@@ -673,6 +712,7 @@ private fun PhotographerInfoRow(
 @Composable
 private fun SectionHeader(
     title: String,
+    editText: String? = null,
     onEditClick: (() -> Unit)? = null,
 ) {
     Row(
@@ -686,7 +726,10 @@ private fun SectionHeader(
             color = MainThemeColor.Black,
         )
         if (onEditClick != null) {
-            EditToken(onClick = onEditClick)
+            EditToken(
+                text = editText,
+                onClick = onEditClick,
+            )
         }
     }
 }
@@ -828,83 +871,78 @@ private fun ShootingSection(
 }
 
 @Composable
-private fun PhotographerPortfolioSection(onEditClick: () -> Unit) {
+private fun CenteredGuideLines(lines: List<String>) {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MainThemeColor.White)
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(0.dp),
     ) {
-        SectionHeader(
-            title = stringResource(R.string.my_page_portfolio_title),
-            onEditClick = onEditClick,
-        )
-
-        EmptyPhotographerPortfolioCard()
-    }
-}
-
-@Composable
-private fun PhotographerSatisfactionSection(satisfactionSummary: PhotographerSatisfactionSummary) {
-    Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MainThemeColor.White)
-                .padding(horizontal = 16.dp, vertical = 24.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.my_page_satisfaction_title),
-            style = MainThemeFont.TitleSmall,
-            color = MainThemeColor.Black,
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(MainThemeColor.Gray1)
-                    .padding(start = 22.dp, top = 19.dp, end = 22.dp, bottom = 19.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            SatisfactionRow(
-                label = stringResource(R.string.my_page_satisfaction_rating),
-                value = satisfactionSummary.averageRating,
-            )
-            SatisfactionRow(
-                label = stringResource(R.string.my_page_satisfaction_reviews),
-                value = satisfactionSummary.reviewCount.toString(),
-            )
-            SatisfactionRow(
-                label = stringResource(R.string.my_page_satisfaction_repeat_booking),
-                value = "${satisfactionSummary.repeatBookingRate}%",
+        lines.forEach { line ->
+            Text(
+                text = line,
+                style = MainThemeFont.BodyBold,
+                color = MainThemeColor.Gray6,
+                textAlign = TextAlign.Center,
             )
         }
     }
 }
 
 @Composable
-private fun SatisfactionRow(
-    label: String,
-    value: String,
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically,
+private fun PhotographerPortfolioSection(onEditClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = label,
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Gray4,
+        Spacer(modifier = Modifier.height(40.dp))
+
+        SectionHeader(
+            title = stringResource(R.string.my_page_portfolio_title),
+            editText = stringResource(R.string.my_page_portfolio_edit),
+            onEditClick = onEditClick,
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        EmptyPhotographerPortfolioCard()
+
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun PhotographerSatisfactionSection() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(24.dp))
+
         Text(
-            text = value,
-            style = MainThemeFont.Body,
+            text = stringResource(R.string.my_page_satisfaction_title),
+            style = MainThemeFont.TitleSmall,
             color = MainThemeColor.Black,
         )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(1.dp),
+        ) {
+            repeat(5) {
+                Image(
+                    painter = painterResource(id = CoreR.drawable.star_empty),
+                    contentDescription = stringResource(CoreR.string.star_rating),
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+
+            Text(
+                text = "0.0",
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
     }
 }
 
@@ -933,11 +971,14 @@ private fun EmptyPhotographerPackageCard() {
                 .background(MainThemeColor.Gray1),
         contentAlignment = Alignment.TopStart,
     ) {
-        Text(
-            text = stringResource(R.string.my_page_empty_package),
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Gray4,
-            modifier = Modifier.padding(start = 22.dp, top = 19.dp, end = 22.dp),
+        EmptyStateLines(
+            lines =
+                listOf(
+                    stringResource(R.string.my_page_empty_package_line1),
+                    stringResource(R.string.my_page_empty_package_line2),
+                    stringResource(R.string.my_page_empty_package_line3),
+                ),
+            modifier = Modifier.padding(start = 22.dp, top = 19.dp),
         )
     }
 }
@@ -953,12 +994,35 @@ private fun EmptyPhotographerPortfolioCard() {
                 .background(MainThemeColor.Gray1),
         contentAlignment = Alignment.TopStart,
     ) {
-        Text(
-            text = stringResource(R.string.my_page_empty_portfolio),
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Gray4,
-            modifier = Modifier.padding(start = 22.dp, top = 19.dp, end = 22.dp),
+        EmptyStateLines(
+            lines =
+                listOf(
+                    stringResource(R.string.my_page_empty_portfolio_line1),
+                    stringResource(R.string.my_page_empty_portfolio_line2),
+                    stringResource(R.string.my_page_empty_portfolio_line3),
+                ),
+            modifier = Modifier.padding(start = 22.dp, top = 19.dp),
         )
+    }
+}
+
+@Composable
+private fun EmptyStateLines(
+    lines: List<String>,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(0.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        lines.forEach { line ->
+            Text(
+                text = line,
+                style = MainThemeFont.BodyLarge.copy(lineHeight = 22.4.sp),
+                color = MainThemeColor.Gray4,
+            )
+        }
     }
 }
 
@@ -974,7 +1038,7 @@ private fun FilledPhotographerPackageCard(packagePreview: PhotographerPackagePre
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(5.dp))
-                .background(MainThemeColor.Gray1),
+                .background(MainThemeColor.White),
     ) {
         Image(
             painter = painterResource(id = packagePreview.imageResId),
@@ -991,31 +1055,57 @@ private fun FilledPhotographerPackageCard(packagePreview: PhotographerPackagePre
         Column(
             modifier =
                 Modifier
-                    .padding(start = 22.dp, end = 22.dp, bottom = 19.dp),
+                    .fillMaxWidth()
+                    .padding(bottom = 19.dp),
         ) {
             Text(
                 text = packagePreview.title,
-                style = MainThemeFont.TitleSmall,
+                style = MainThemeFont.Title,
                 color = MainThemeColor.Black,
             )
             Text(
                 text = stringResource(R.string.order_detail_price_won_format, formattedPrice),
-                style = MainThemeFont.BodyBold,
+                style = MainThemeFont.Title,
                 color = MainThemeColor.Black,
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = packagePreview.meta,
-                style = MainThemeFont.Body,
-                color = MainThemeColor.Gray4,
+            Spacer(modifier = Modifier.height(16.dp))
+            PackageMetaRow(
+                label = stringResource(R.string.my_page_package_meta_time),
+                value = packagePreview.meta,
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = packagePreview.description,
-                style = MainThemeFont.Body,
-                color = MainThemeColor.Gray4,
+            PackageMetaRow(
+                label = stringResource(R.string.my_page_package_meta_guide),
+                value = packagePreview.description,
+                singleLine = false,
             )
         }
+    }
+}
+
+@Composable
+private fun PackageMetaRow(
+    label: String,
+    value: String,
+    singleLine: Boolean = true,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = if (singleLine) Alignment.CenterVertically else Alignment.Top,
+    ) {
+        Text(
+            text = label,
+            style = MainThemeFont.InnerTag,
+            color = MainThemeColor.Gray6,
+        )
+        Text(
+            text = value,
+            style = MainThemeFont.Caption,
+            color = MainThemeColor.Gray4,
+            maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 

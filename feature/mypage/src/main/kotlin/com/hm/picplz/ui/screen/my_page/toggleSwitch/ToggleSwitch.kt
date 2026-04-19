@@ -7,8 +7,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -49,6 +51,7 @@ fun ToggleSwitch(
     thumbSize: Dp = 20.dp,
     checkedTrackColor: Color = MainThemeColor.Green120,
     checkedBorderColor: Color = MainThemeColor.Green100,
+    checkedInnerTrackColor: Color = MainThemeColor.Green100,
     uncheckedTrackColor: Color = MainThemeColor.Gray2,
     uncheckedBorderColor: Color = MainThemeColor.Gray3,
     thumbColor: Color = MainThemeColor.White,
@@ -63,7 +66,7 @@ fun ToggleSwitch(
     val innerShadowPaint =
         remember {
             Paint().apply {
-                color = Color.Black.copy(alpha = 0.18f)
+                color = Color.Black.copy(alpha = 0.28f)
                 style = PaintingStyle.Stroke
                 strokeWidth = 5f
                 isAntiAlias = true
@@ -117,6 +120,17 @@ fun ToggleSwitch(
                 },
         contentAlignment = Alignment.CenterStart,
     ) {
+        if (checked) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(2.dp)
+                        .clip(RoundedCornerShape((height - 4.dp) / 2))
+                        .background(checkedInnerTrackColor.copy(alpha = 0.55f)),
+            )
+        }
+
         Box(
             modifier =
                 Modifier
