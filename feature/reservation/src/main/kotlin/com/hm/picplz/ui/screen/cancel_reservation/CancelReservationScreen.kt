@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReasonInputContent
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationStepIndicator
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationTopBar
+import com.hm.picplz.ui.screen.cancel_reservation.composable.RefundGuideContent
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 
 @Composable
@@ -68,6 +69,9 @@ fun CancelReservationScreen(
         onPageChange = { pagerPage ->
             viewModel.handleIntent(CancelReservationIntent.UpdatePagerPage(pagerPage))
         },
+        onAgreementChange = { isChecked ->
+            viewModel.handleIntent(CancelReservationIntent.UpdateAgreement(isChecked))
+        },
         onNextClick = {
             viewModel.handleIntent(CancelReservationIntent.OnNextClick)
         },
@@ -82,6 +86,7 @@ private fun CancelReservationScreenContent(
     onReasonToggle: (CancelReason) -> Unit,
     onDirectInputChange: (String) -> Unit,
     onPageChange: (CancelReservationPagerPage) -> Unit,
+    onAgreementChange: (Boolean) -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -124,8 +129,15 @@ private fun CancelReservationScreenContent(
 
                     CancelReservationPagerPage.REFUND_GUIDE -> {
                         RefundGuideContent(
-                            selectedReasons = state.selectedReasons,
-                            directInputText = state.directInputText,
+                            shootingDateFormatted = state.shootingDateFormatted,
+                            cancelDateFormatted = state.cancelDateFormatted,
+                            totalPrice = state.totalPrice,
+                            refundPrice = state.refundPrice,
+                            cancellationFee = state.cancellationFee,
+                            isAgreementChecked = state.isAgreementChecked,
+                            onAgreementChange = { isChecked ->
+                                onAgreementChange(isChecked)
+                            },
                         )
                     }
                 }
@@ -145,15 +157,6 @@ private fun CancelReservationScreenContent(
     }
 }
 
-@Composable
-private fun RefundGuideContent(
-    selectedReasons: Set<CancelReason>,
-    directInputText: String,
-    modifier: Modifier = Modifier,
-) {
-    // TODO: 환불 안내 화면 구현
-}
-
 @Preview
 @Composable
 private fun CancelReservationScreenPreview() {
@@ -170,6 +173,30 @@ private fun CancelReservationScreenPreview() {
         onReasonToggle = {},
         onDirectInputChange = {},
         onPageChange = {},
+        onAgreementChange = {},
+        onNextClick = {},
+    )
+}
+
+@Preview
+@Composable
+private fun CancelReservationScreenRefundGuidePreview() {
+    CancelReservationScreenContent(
+        state =
+            CancelReservationState(
+                orderId = "order123",
+                selectedReasons = setOf(CancelReason.SCHEDULE),
+                directInputText = "",
+                currentPagerPage = CancelReservationPagerPage.REFUND_GUIDE,
+                shootingDateFormatted = "25.01.09",
+                cancelDateFormatted = "25.01.05",
+            ),
+        pagerState = rememberPagerState(initialPage = 1) { CancelReservationPagerPage.size },
+        onBackClick = {},
+        onReasonToggle = {},
+        onDirectInputChange = {},
+        onPageChange = {},
+        onAgreementChange = {},
         onNextClick = {},
     )
 }
