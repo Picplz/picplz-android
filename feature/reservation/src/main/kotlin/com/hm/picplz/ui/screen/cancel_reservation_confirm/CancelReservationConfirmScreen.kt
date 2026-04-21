@@ -81,7 +81,9 @@ private fun CancelReservationConfirmScreenContent(
                     .padding(innerPadding)
                     .fillMaxWidth(),
         ) {
-            CancelReservationCheckIcon()
+            CancelReservationCheckIcon(
+                modifier = Modifier.padding(top = 80.dp, bottom = 24.dp),
+            )
 
             CancelReservationTitle()
 
@@ -105,7 +107,6 @@ private fun CancelReservationCheckIcon(modifier: Modifier = Modifier) {
     Image(
         modifier =
             modifier
-                .padding(top = 40.dp, bottom = 24.dp)
                 .fillMaxWidth(),
         painter = painterResource(CoreR.drawable.check_circle),
         contentDescription = "예약 취소 완료",
