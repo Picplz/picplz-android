@@ -12,10 +12,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hm.picplz.feature.reservation.R
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReasonInputContent
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationStepIndicator
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationTopBar
@@ -145,11 +147,7 @@ private fun CancelReservationScreenContent(
 
             CommonBottomButton(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 48.dp),
-                text =
-                    when (state.currentPagerPage) {
-                        CancelReservationPagerPage.REASON_INPUT -> "다음"
-                        CancelReservationPagerPage.REFUND_GUIDE -> "취소 확인"
-                    },
+                text = stringResource(R.string.refund_button_next),
                 onClick = onNextClick,
                 enabled = state.isNextButtonEnabled(),
             )
