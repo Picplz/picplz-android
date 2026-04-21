@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.feature.mypage.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,23 +41,64 @@ class MyPageViewModel
                 }
                 is MyPageIntent.NavigateToTerms -> {
                     sendSideEffect(
-                        MyPageSideEffect.ShowToast("이용 약관 기능은 준비 중입니다."),
+                        MyPageSideEffect.ShowToast(R.string.my_page_terms_pending),
                     )
                 }
-                is MyPageIntent.SwitchToPhotographer -> {
-                    // DEV: 토글로 모드 전환 확인용
+                is MyPageIntent.ToggleUserMode -> {
                     _state.update { it.copy(hasPhotographerRole = !it.hasPhotographerRole) }
                 }
                 is MyPageIntent.NavigateToPhotographerSignUp -> {
-                    _state.update { it.copy(hasPhotographerRole = true) }
+                    sendSideEffect(MyPageSideEffect.NavigateToPhotographerSignUp)
                 }
-                is MyPageIntent.DevToggleShootings -> {
+                is MyPageIntent.NavigateToPhotographerPreview -> {
+                    val hasPackages = _state.value.photographerProfile.hasPackages
+                    if (hasPackages) {
+                        sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_pending))
+                    } else {
+                        sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_requires_package))
+                    }
+                }
+                is MyPageIntent.NavigateToPhotographerRegionEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_region_edit_pending))
+                }
+                is MyPageIntent.NavigateToPhotographerKeywordEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_keyword_edit_pending))
+                }
+                is MyPageIntent.NavigateToPhotographerEquipmentEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_equipment_edit_pending))
+                }
+                is MyPageIntent.NavigateToSettlement -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
+                }
+                is MyPageIntent.NavigateToPackageEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_package_edit_pending))
+                }
+                is MyPageIntent.NavigateToPortfolioEdit -> {
+                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
+                }
+                is MyPageIntent.ApplyDevPhotographerPreview -> {
                     _state.update {
-                        if (it.ongoingShootings.isEmpty()) {
-                            it.copy(ongoingShootings = DEV_MOCK_SHOOTINGS)
-                        } else {
-                            it.copy(ongoingShootings = emptyList())
-                        }
+                        it.copy(
+                            ongoingShootings = if (intent.hasShootings) DEV_MOCK_SHOOTINGS else emptyList(),
+                            photographerProfile =
+                                it.photographerProfile.copy(
+                                    packageCount = if (intent.hasPackagePreview) 1 else 0,
+                                    portfolioCount =
+                                        if (intent.hasPortfolioPreview) {
+                                            DEV_MOCK_PORTFOLIO_URLS.size
+                                        } else {
+                                            0
+                                        },
+                                    hasPackages = intent.hasPackagePreview,
+                                    packagePreview = if (intent.hasPackagePreview) DEV_MOCK_PACKAGE else null,
+                                    portfolioPreviewImageUrls =
+                                        if (intent.hasPortfolioPreview) {
+                                            DEV_MOCK_PORTFOLIO_URLS
+                                        } else {
+                                            emptyList()
+                                        },
+                                ),
+                        )
                     }
                 }
             }
@@ -95,6 +137,50 @@ class MyPageViewModel
                     profileImageUri = "",
                     hasPhotographerRole = false,
                     ongoingShootings = emptyList(),
+                    photographerProfile =
+                        PhotographerProfile(
+                            displayName = "유가영 작가",
+                            profileImageUri = "",
+                            followerCount = 128,
+                            packageCount = 0,
+                            portfolioCount = 0,
+                            instagramId = "imdooring",
+                            isInstagramRegistered = true,
+                            introduction = "안녕하세요, 유가영 작가입니다.",
+                            regionSummary = "서울 마포구, 서울 용산구 외 16개 지역",
+                            keywordSummary = "#캐주얼, #심플, #공주감성 외 3개 키워드",
+                            equipmentSummary = "아이폰 16 PRO, 아이폰 X 외 3개 장비",
+                            hasPackages = false,
+                            packagePreview = null,
+                            portfolioPreviewImageUrls = emptyList(),
+                            satisfactionSummary =
+                                PhotographerSatisfactionSummary(
+                                    averageRating = "4.9",
+                                    reviewCount = 48,
+                                    repeatBookingRate = 82,
+                                ),
+                        ),
+                )
+
+            private val DEV_MOCK_PACKAGE =
+                PhotographerPackagePreview(
+                    imageUrl =
+                        "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1200&q=80",
+                    title = "남친 생기는 프사❤️",
+                    price = 9900,
+                    meta = "15분 이내",
+                    description =
+                        "여자친구 /남자친구 생기는 카톡프사 찍어드립니다~ 요즘 인스타그램 감성으로 이쁘게!\n" +
+                            "사용기기: 아이폰 X / 아이폰 16pro\n" +
+                            "베스트컷 5개정도 같이 뽑아드려용!",
+                )
+
+            private val DEV_MOCK_PORTFOLIO_URLS =
+                listOf(
+                    "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1468327768560-75b778cbb551?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=800&q=80",
                 )
         }
     }

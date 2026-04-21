@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.model.UserType
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun SignUpSelectTypeScreen(
     modifier: Modifier = Modifier,
-    viewModel: SignUpCommonViewModel = viewModel(),
+    viewModel: SignUpCommonViewModel = hiltViewModel(),
     mainNavController: NavController,
     signUpCommonNavController: NavController,
 ) {

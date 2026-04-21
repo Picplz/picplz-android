@@ -1,9 +1,9 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.common.mockdata.emptyUserData
@@ -20,7 +20,9 @@ fun SignUpPhotographerScreen(
 ) {
     val signUpPhotographerNavController = rememberNavController()
 
-    viewModel.handleIntent(SignUpPhotographerIntent.SetUserInfo(userInfo ?: emptyUserData))
+    LaunchedEffect(userInfo) {
+        viewModel.handleIntent(SignUpPhotographerIntent.SetUserInfo(userInfo ?: emptyUserData))
+    }
 
     SignUpPhotographerNavHost(
         mainNavController = mainNavController,

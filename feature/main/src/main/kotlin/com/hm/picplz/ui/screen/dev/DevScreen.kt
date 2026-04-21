@@ -29,7 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.hm.picplz.common.mockdata.emptyUserData
+import com.hm.picplz.common.model.User
+import com.hm.picplz.common.model.UserType
 import com.hm.picplz.navigation.model.Chat
 import com.hm.picplz.navigation.model.ChatRoom
 import com.hm.picplz.navigation.model.DetailPhotographer
@@ -43,6 +44,7 @@ import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
@@ -58,6 +60,24 @@ import com.hm.picplz.ui.theme.MainThemeColor
 @Composable
 fun DevScreen(navController: NavHostController) {
     val context = LocalContext.current
+    val prepareDevPhotographerSignUp = {
+        context.getSharedPreferences("picplz_auth", Context.MODE_PRIVATE)
+            .edit()
+            .putString("social_code", "dev-social-code")
+            .putString("social_email", "dev-user@picplz.com")
+            .putString("social_provider", "KAKAO")
+            .apply()
+    }
+    val devPhotographerUserInfo =
+        User(
+            id = "dev-user",
+            nickname = "테스트작가",
+            email = "dev-photographer@picplz.com",
+            userType = UserType.User,
+            profileImageUri = null,
+            profileImageObjectKey = null,
+        )
+
     Scaffold(
         containerColor = MainThemeColor.White,
     ) { innerPadding ->
@@ -107,12 +127,31 @@ fun DevScreen(navController: NavHostController) {
             DevButton("SignUpProfile (프로필 이미지)") {
                 navController.navigate(SignUpIntro(startAt = "profile"))
             }
-            DevButton("SignUpPhotographer") { navController.navigate(SignUpPhotographer(userInfo = emptyUserData)) }
-            DevButton("SignUpDevice (Direct)") { navController.navigate(SignUpPhotographer(startAt = "device")) }
-            DevButton("SignUpPhotographyVibe (분위기 키워드)") {
-                navController.navigate(SignUpPhotographer(startAt = "vibe"))
+            DevButton("SignUpPhotographer") {
+                prepareDevPhotographerSignUp()
+                navController.navigate(SignUpPhotographer(userInfo = devPhotographerUserInfo))
             }
-            DevButton("SignUpCompletion") { navController.navigate(SignUpCompletion(userInfo = emptyUserData)) }
+            DevButton("SignUpDevice (Direct)") {
+                prepareDevPhotographerSignUp()
+                navController.navigate(
+                    SignUpPhotographer(
+                        userInfo = devPhotographerUserInfo,
+                        startAt = "device",
+                    ),
+                )
+            }
+            DevButton("SignUpPhotographyVibe (분위기 키워드)") {
+                prepareDevPhotographerSignUp()
+                navController.navigate(
+                    SignUpPhotographer(
+                        userInfo = devPhotographerUserInfo,
+                        startAt = "vibe",
+                    ),
+                )
+            }
+            DevButton("SignUpCompletion") {
+                navController.navigate(SignUpCompletion(userInfo = devPhotographerUserInfo))
+            }
 
             // === Main Tabs ===
             SectionTitle("Main Tabs")
@@ -121,6 +160,23 @@ fun DevScreen(navController: NavHostController) {
             DevButton("Reservation (예약)") { navController.navigate(Reservation) }
             DevButton("Chat (채팅)") { navController.navigate(Chat) }
             DevButton("MyPage (마이페이지)") { navController.navigate(MyPage) }
+            DevButton("MyPage (작가 마이페이지 - 기본)") {
+                navController.navigate(MyPagePhotographer())
+            }
+            DevButton("MyPage (작가 마이페이지 - 패키지 있음)") {
+                navController.navigate(MyPagePhotographer(hasPackagePreview = true))
+            }
+            DevButton("MyPage (작가 마이페이지 - 포트폴리오 있음)") {
+                navController.navigate(MyPagePhotographer(hasPortfolioPreview = true))
+            }
+            DevButton("MyPage (작가 마이페이지 - 전체)") {
+                navController.navigate(
+                    MyPagePhotographer(
+                        hasPackagePreview = true,
+                        hasPortfolioPreview = true,
+                    ),
+                )
+            }
 
             // === Main Sub Screens ===
             SectionTitle("Main Sub")
@@ -131,17 +187,6 @@ fun DevScreen(navController: NavHostController) {
                 navController.navigate(MyPageShootingHistory(forceEmpty = true))
             }
             DevButton("MyPageOrderSheet") { navController.navigate(MyPageOrderSheet) }
-            Text(
-                text = "💡 마이페이지 모드 전환: 배너 클릭 (작가↔고객)",
-                fontSize = 12.sp,
-                color = MainThemeColor.Gray4,
-            )
-            Text(
-                text = "💡 촬영 데이터 토글: 톱니바퀴 길게 누르기",
-                fontSize = 12.sp,
-                color = MainThemeColor.Gray4,
-            )
-
             // === Photographer ===
             SectionTitle("Photographer")
             DevButton("QuickShoot (빠른촬영)") { navController.navigate(QuickShoot) }

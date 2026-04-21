@@ -206,12 +206,47 @@ class SignUpPhotographerViewModel
                                 it.copy(
                                     isSubmitting = false,
                                     error = IllegalStateException("소셜 로그인 정보가 없습니다"),
+                                    showToast = true,
+                                    toastMessage = "로그인 정보를 찾지 못했습니다. 다시 로그인해 주세요.",
                                 )
                             }
                             return@launch
                         }
 
                         val currentState = _state.value
+                        if (currentState.userInfo.nickname.isNullOrBlank()) {
+                            _state.update {
+                                it.copy(
+                                    isSubmitting = false,
+                                    showToast = true,
+                                    toastMessage = "닉네임 정보가 없어 가입을 진행할 수 없습니다.",
+                                )
+                            }
+                            return@launch
+                        }
+
+                        if (currentState.selectedAreas.isEmpty()) {
+                            _state.update {
+                                it.copy(
+                                    isSubmitting = false,
+                                    showToast = true,
+                                    toastMessage = "주 촬영지를 하나 이상 선택해 주세요.",
+                                )
+                            }
+                            return@launch
+                        }
+
+                        if (currentState.phoneDevices.isEmpty() && currentState.cameraDevices.isEmpty()) {
+                            _state.update {
+                                it.copy(
+                                    isSubmitting = false,
+                                    showToast = true,
+                                    toastMessage = "촬영 장비를 하나 이상 등록해 주세요.",
+                                )
+                            }
+                            return@launch
+                        }
+
                         val request =
                             CreatePhotographerRequest(
                                 nickname = currentState.userInfo.nickname.orEmpty(),
@@ -228,14 +263,22 @@ class SignUpPhotographerViewModel
                                         )
                                     },
                                 cameras =
-                                    currentState.cameraDevices.map {
+                                    currentState.phoneDevices.map {
                                         PhotographerCameraRequest(
-                                            type = "CAMERA",
+                                            type = "PHONE",
                                             brand = it.companyName,
                                             name = it.modelName,
-                                            cameraType = it.cameraType,
+                                            cameraType = null,
                                         )
-                                    },
+                                    } +
+                                        currentState.cameraDevices.map {
+                                            PhotographerCameraRequest(
+                                                type = "CAMERA",
+                                                brand = it.companyName,
+                                                name = it.modelName,
+                                                cameraType = it.cameraType,
+                                            )
+                                        },
                             )
 
                         photographerService.createPhotographer(request)
@@ -251,6 +294,8 @@ class SignUpPhotographerViewModel
                                     it.copy(
                                         isSubmitting = false,
                                         error = error,
+                                        showToast = true,
+                                        toastMessage = "가입을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.",
                                     )
                                 }
                             }
