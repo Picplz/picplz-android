@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hm.picplz.navigation.model.CancelReservation
+import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,10 +48,6 @@ class CancelReservationViewModel @Inject constructor(
                 _state.update { it.copy(directInputText = intent.text.take(100)) }
             }
 
-            is CancelReservationIntent.UpdatePagerPage -> {
-                _state.update { it.copy(currentPagerPage = intent.page) }
-            }
-
             is CancelReservationIntent.UpdateAgreement -> {
                 _state.update { it.copy(isAgreementChecked = intent.isChecked) }
             }
@@ -61,6 +59,34 @@ class CancelReservationViewModel @Inject constructor(
             is CancelReservationIntent.OnNextClick -> {
                 handleNextClick()
             }
+
+            CancelReservationIntent.ConfirmCancel -> {
+                _state.update { it.copy(showCancelDialog = false) }
+
+                emitSideEffect(CancelReservationSideEffect.NavigateToCancelReservationConfirm)
+            }
+
+            CancelReservationIntent.DismissCancelDialog -> {
+                _state.update { it.copy(showCancelDialog = false) }
+            }
+
+            CancelReservationIntent.DismissRefundPolicyTooltip -> {
+                _state.update {
+                    it.copy(
+                        showRefundPolicyTooltip = false,
+                        showCancelDialog = true,
+                    )
+                }
+            }
+
+            CancelReservationIntent.ShowRefundPolicyDialog -> {
+                _state.update {
+                    it.copy(
+                        showRefundPolicyTooltip = true,
+                        showCancelDialog = false,
+                    )
+                }
+            }
         }
     }
 
@@ -70,6 +96,7 @@ class CancelReservationViewModel @Inject constructor(
             CancelReservationPagerPage.REASON_INPUT -> {
                 emitSideEffect(CancelReservationSideEffect.NavigateBack)
             }
+
             CancelReservationPagerPage.REFUND_GUIDE -> {
                 _state.update { it.copy(currentPagerPage = CancelReservationPagerPage.REASON_INPUT) }
             }
@@ -82,8 +109,22 @@ class CancelReservationViewModel @Inject constructor(
             CancelReservationPagerPage.REASON_INPUT -> {
                 _state.update { it.copy(currentPagerPage = CancelReservationPagerPage.REFUND_GUIDE) }
             }
+
             CancelReservationPagerPage.REFUND_GUIDE -> {
-                emitSideEffect(CancelReservationSideEffect.ShowCancelConfirmModal)
+                val currentState = _state.value
+                val refundCondition =
+                    RefundCondition.calculate(
+                        currentDateTime = LocalDateTime.now(),
+                        shootingDateTime = currentState.shootingDate,
+                        confirmedDateTime = currentState.cancelDate,
+                    )
+
+                _state.update {
+                    it.copy(
+                        showCancelDialog = true,
+                        refundCondition = refundCondition,
+                    )
+                }
             }
         }
     }

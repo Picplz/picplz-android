@@ -23,6 +23,8 @@ import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationSt
 import com.hm.picplz.ui.screen.cancel_reservation.composable.CancelReservationTopBar
 import com.hm.picplz.ui.screen.cancel_reservation.composable.RefundGuideContent
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPolicyDialog
 
 @Composable
 fun CancelReservationScreen(
@@ -48,7 +50,7 @@ fun CancelReservationScreen(
                     onNavigateBack()
                 }
 
-                is CancelReservationSideEffect.ShowCancelConfirmModal -> {
+                CancelReservationSideEffect.NavigateToCancelReservationConfirm -> {
                     onNavigateToCancelConfirm()
                 }
             }
@@ -68,14 +70,23 @@ fun CancelReservationScreen(
         onDirectInputChange = { text ->
             viewModel.handleIntent(CancelReservationIntent.UpdateDirectInput(text))
         },
-        onPageChange = { pagerPage ->
-            viewModel.handleIntent(CancelReservationIntent.UpdatePagerPage(pagerPage))
-        },
         onAgreementChange = { isChecked ->
             viewModel.handleIntent(CancelReservationIntent.UpdateAgreement(isChecked))
         },
         onNextClick = {
             viewModel.handleIntent(CancelReservationIntent.OnNextClick)
+        },
+        onCancelDialogDismiss = {
+            viewModel.handleIntent(CancelReservationIntent.DismissCancelDialog)
+        },
+        onCancelDialogConfirm = {
+            viewModel.handleIntent(CancelReservationIntent.ConfirmCancel)
+        },
+        onInfoClick = {
+            viewModel.handleIntent(CancelReservationIntent.ShowRefundPolicyDialog)
+        },
+        onRefundPolicyDismiss = {
+            viewModel.handleIntent(CancelReservationIntent.DismissRefundPolicyTooltip)
         },
     )
 }
@@ -87,9 +98,12 @@ private fun CancelReservationScreenContent(
     onBackClick: () -> Unit,
     onReasonToggle: (CancelReason) -> Unit,
     onDirectInputChange: (String) -> Unit,
-    onPageChange: (CancelReservationPagerPage) -> Unit,
     onAgreementChange: (Boolean) -> Unit,
     onNextClick: () -> Unit,
+    onCancelDialogDismiss: () -> Unit,
+    onCancelDialogConfirm: () -> Unit,
+    onInfoClick: () -> Unit,
+    onRefundPolicyDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -101,6 +115,23 @@ private fun CancelReservationScreenContent(
             )
         },
     ) { innerPadding ->
+        if (state.showCancelDialog) {
+            ReservationCancelDialog(
+                status = state.reservationStatus,
+                refundCondition = state.refundCondition,
+                onDismiss = onCancelDialogDismiss,
+                onCancel = onCancelDialogDismiss,
+                onConfirm = onCancelDialogConfirm,
+                onInfoClick = onInfoClick,
+            )
+        }
+
+        if (state.showRefundPolicyTooltip) {
+            ReservationRefundPolicyDialog(
+                onDismissRequest = onRefundPolicyDismiss,
+            )
+        }
+
         Column(
             modifier =
                 Modifier
@@ -170,9 +201,12 @@ private fun CancelReservationScreenPreview() {
         onBackClick = {},
         onReasonToggle = {},
         onDirectInputChange = {},
-        onPageChange = {},
         onAgreementChange = {},
         onNextClick = {},
+        onCancelDialogDismiss = {},
+        onCancelDialogConfirm = {},
+        onInfoClick = {},
+        onRefundPolicyDismiss = {},
     )
 }
 
@@ -193,8 +227,11 @@ private fun CancelReservationScreenRefundGuidePreview() {
         onBackClick = {},
         onReasonToggle = {},
         onDirectInputChange = {},
-        onPageChange = {},
         onAgreementChange = {},
         onNextClick = {},
+        onCancelDialogDismiss = {},
+        onCancelDialogConfirm = {},
+        onInfoClick = {},
+        onRefundPolicyDismiss = {},
     )
 }
