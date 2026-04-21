@@ -50,23 +50,40 @@ class CancelReservationViewModel @Inject constructor(
                 _state.update { it.copy(currentPagerPage = intent.page) }
             }
 
+            is CancelReservationIntent.UpdateAgreement -> {
+                _state.update { it.copy(isAgreementChecked = intent.isChecked) }
+            }
+
             is CancelReservationIntent.OnBackClick -> {
-                emitSideEffect(CancelReservationSideEffect.NavigateBack)
+                handleBackClick()
             }
 
             is CancelReservationIntent.OnNextClick -> {
-                // 페이지에 따라 다른 동작
-                val currentPage = _state.value.currentPagerPage
-                when (currentPage) {
-                    CancelReservationPagerPage.REASON_INPUT -> {
-                        // 취소 사유 입력 완료 → 환불 안내로
-                        _state.update { it.copy(currentPagerPage = CancelReservationPagerPage.REFUND_GUIDE) }
-                    }
-                    CancelReservationPagerPage.REFUND_GUIDE -> {
-                        // 환불 안내 완료 → 취소 확인 모달
-                        emitSideEffect(CancelReservationSideEffect.ShowCancelConfirmModal)
-                    }
-                }
+                handleNextClick()
+            }
+        }
+    }
+
+    private fun handleBackClick() {
+        val currentPage = _state.value.currentPagerPage
+        when (currentPage) {
+            CancelReservationPagerPage.REASON_INPUT -> {
+                emitSideEffect(CancelReservationSideEffect.NavigateBack)
+            }
+            CancelReservationPagerPage.REFUND_GUIDE -> {
+                _state.update { it.copy(currentPagerPage = CancelReservationPagerPage.REASON_INPUT) }
+            }
+        }
+    }
+
+    private fun handleNextClick() {
+        val currentPage = _state.value.currentPagerPage
+        when (currentPage) {
+            CancelReservationPagerPage.REASON_INPUT -> {
+                _state.update { it.copy(currentPagerPage = CancelReservationPagerPage.REFUND_GUIDE) }
+            }
+            CancelReservationPagerPage.REFUND_GUIDE -> {
+                emitSideEffect(CancelReservationSideEffect.ShowCancelConfirmModal)
             }
         }
     }

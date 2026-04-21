@@ -75,4 +75,20 @@
 
     <!-- 예약 취소 화면 -->
     <string name="cancel_reservation_top_bar_title">예약 취소</string>
+
+    <!-- 환불 안내 화면 -->
+    <string name="refund_guide_title">환불 예정 금액을 확인해주세요.</string>
+    <string name="refund_shooting_date">촬영 예정일</string>
+    <string name="refund_cancel_date">취소일</string>
+    <string name="refund_amount_title">환불 금액</string>
+    <string name="refund_total_amount">총 환불 금액</string>
+    <string name="refund_paid_amount">결제 금액</string>
+    <string name="refund_cancellation_fee_label">취소 수수료</string>
+    <string name="refund_cancellation_fee_rate">10%</string>
+    <string name="refund_policy_title">취소/환불 규정</string>
+    <string name="refund_policy_list">• 촬영 기준 7일 전까지: 100% 환불\n• 촬영 기준 3일 전까지: 90% 환불\n• 촬영 기준 2일 전까지: 70% 환불\n• 촬영 기준 1일 전까지: 50% 환불\n• 당일 취소 또는 No-show: 환불 불가</string>
+    <string name="refund_agreement_text">위 내용을 모두 확인하였으며, 이에 동의합니다.</string>
+
+    <!-- 포맷 문자열 -->
+    <string name="amount_format">%,d원</string>
 </resources>

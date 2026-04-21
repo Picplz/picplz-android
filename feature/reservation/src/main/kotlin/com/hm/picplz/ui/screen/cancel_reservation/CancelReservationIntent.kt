@@ -7,6 +7,8 @@ sealed interface CancelReservationIntent {
 
     data class UpdatePagerPage(val page: CancelReservationPagerPage) : CancelReservationIntent
 
+    data class UpdateAgreement(val isChecked: Boolean) : CancelReservationIntent
+
     data object OnBackClick : CancelReservationIntent
 
     data object OnNextClick : CancelReservationIntent

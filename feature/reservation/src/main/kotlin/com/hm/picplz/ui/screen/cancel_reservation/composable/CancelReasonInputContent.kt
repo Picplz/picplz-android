@@ -53,7 +53,7 @@ fun CancelReasonInputContent(
             }
 
             items(CancelReason.entries) { reason ->
-                CancelReasonCheckbox(
+                CheckboxWithLabel(
                     text = stringResource(reason.stringRes),
                     isSelected = selectedReasons.contains(reason),
                     onToggle = { onReasonToggle(reason) },

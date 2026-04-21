@@ -15,7 +15,7 @@ import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 
 @Composable
-fun CancelReasonCheckbox(
+fun CheckboxWithLabel(
     text: String,
     isSelected: Boolean,
     onToggle: () -> Unit,
@@ -43,9 +43,9 @@ fun CancelReasonCheckbox(
 
 @Preview(showBackground = true)
 @Composable
-private fun CancelReasonCheckboxPreviewUnchecked() {
+private fun CheckboxWithLabelPreviewUnchecked() {
     PicplzTheme {
-        CancelReasonCheckbox(
+        CheckboxWithLabel(
             text = "촬영 스케줄 다른 일정이 생겼어요",
             isSelected = false,
             onToggle = {},
@@ -56,9 +56,9 @@ private fun CancelReasonCheckboxPreviewUnchecked() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CancelReasonCheckboxPreviewChecked() {
+private fun CheckboxWithLabelPreviewChecked() {
     PicplzTheme {
-        CancelReasonCheckbox(
+        CheckboxWithLabel(
             text = "촬영 스케줄 다른 일정이 생겼어요",
             isSelected = true,
             onToggle = {},
@@ -69,26 +69,26 @@ private fun CancelReasonCheckboxPreviewChecked() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CancelReasonCheckboxPreviewMultiple() {
+private fun CheckboxWithLabelPreviewMultiple() {
     PicplzTheme {
         Column(
             modifier = Modifier.padding(16.dp),
         ) {
-            CancelReasonCheckbox(
+            CheckboxWithLabel(
                 text = "촬영 스케줄 다른 일정이 생겼어요",
                 isSelected = true,
                 onToggle = {},
                 modifier = Modifier.padding(vertical = 12.dp),
             )
 
-            CancelReasonCheckbox(
+            CheckboxWithLabel(
                 text = "원금 상품을 변경하고 싶어요",
                 isSelected = false,
                 onToggle = {},
                 modifier = Modifier.padding(vertical = 12.dp),
             )
 
-            CancelReasonCheckbox(
+            CheckboxWithLabel(
                 text = "그냥 마음이 바뀌었어요",
                 isSelected = true,
                 onToggle = {},
