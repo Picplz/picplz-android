@@ -48,4 +48,80 @@ object DateTimeUtil {
             }
         return calendar.timeInMillis
     }
+
+    // === 예약 관련 날짜 계산 함수 (API 24 안전) ===
+
+    /**
+     * 두 시간 사이의 시간 차이를 계산합니다. (버전 분기 처리)
+     * @param startMillis 시작 시간 (milliseconds)
+     * @param endMillis 종료 시간 (milliseconds)
+     * @return 시간 차이
+     */
+    fun hoursBetween(
+        startMillis: Long,
+        endMillis: Long,
+    ): Long {
+        return (endMillis - startMillis) / (1000 * 60 * 60)
+    }
+
+    /**
+     * 두 날짜 사이의 일수 차이를 계산합니다. (시간 제거 후 비교)
+     * @param startMillis 시작 날짜 (milliseconds)
+     * @param endMillis 종료 날짜 (milliseconds)
+     * @return 일수 차이
+     */
+    fun daysBetween(
+        startMillis: Long,
+        endMillis: Long,
+    ): Long {
+        val startDate =
+            Calendar.getInstance().apply {
+                timeInMillis = startMillis
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+        val endDate =
+            Calendar.getInstance().apply {
+                timeInMillis = endMillis
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+        return (endDate.timeInMillis - startDate.timeInMillis) / (1000 * 60 * 60 * 24)
+    }
+
+    /**
+     * 주어진 pattern 으로 날짜를 포맷팅합니다.
+     * @param timestamp 날짜 (milliseconds)
+     * @param pattern 포맷 패턴 (예: "yy.MM.dd")
+     * @return 포맷된 문자열
+     */
+    fun formatDate(
+        timestamp: Long,
+        pattern: String,
+    ): String {
+        val format = SimpleDateFormat(pattern, Locale.getDefault())
+        return format.format(Date(timestamp))
+    }
+
+    /**
+     * 주어진 날짜에서 days 만큼 더한 날짜를 반환합니다.
+     * @param timestamp 시작 날짜 (milliseconds)
+     * @param days 더할 일수
+     * @return 더해진 날짜 (milliseconds)
+     */
+    fun plusDays(
+        timestamp: Long,
+        days: Int,
+    ): Long {
+        return Calendar.getInstance()
+            .apply {
+                timeInMillis = timestamp
+                add(Calendar.DAY_OF_MONTH, days)
+            }
+            .timeInMillis
+    }
 }

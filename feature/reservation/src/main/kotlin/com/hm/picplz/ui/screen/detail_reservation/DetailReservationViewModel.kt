@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.detail_reservation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.common.util.DateTimeUtil
 import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,13 +25,14 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
     init {
         // TODO: API에서 촬영 일시 데이터를 받아와야 합니다.
         // 임시로 더미 데이터 설정 (촬영일: 4일 후)
-        val dummyShootingDateTime = LocalDateTime.now().plusDays(4)
-        val dummyConfirmedDateTime = LocalDateTime.now().minusHours(12)
+        val currentTimeMillis = System.currentTimeMillis()
+        val dummyShootingDateTimeMillis = DateTimeUtil.plusDays(currentTimeMillis, 4)
+        val dummyConfirmedDateTimeMillis = currentTimeMillis - (12 * 60 * 60 * 1000) // 12시간 전
 
         _state.update {
             it.copy(
-                shootingDateTime = dummyShootingDateTime,
-                confirmedDateTime = dummyConfirmedDateTime,
+                shootingDateTimeMillis = dummyShootingDateTimeMillis,
+                confirmedDateTimeMillis = dummyConfirmedDateTimeMillis,
             )
         }
     }
@@ -50,9 +51,9 @@ class DetailReservationViewModel @Inject constructor() : ViewModel() {
                 val currentState = _state.value
                 val refundCondition =
                     RefundCondition.calculate(
-                        currentDateTime = LocalDateTime.now(),
-                        shootingDateTime = currentState.shootingDateTime,
-                        confirmedDateTime = currentState.confirmedDateTime,
+                        currentMillis = System.currentTimeMillis(),
+                        shootingMillis = currentState.shootingDateTimeMillis,
+                        confirmedMillis = currentState.confirmedDateTimeMillis,
                     )
 
                 _state.update {

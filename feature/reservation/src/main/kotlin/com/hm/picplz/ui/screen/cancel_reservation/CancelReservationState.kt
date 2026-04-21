@@ -1,9 +1,8 @@
 package com.hm.picplz.ui.screen.cancel_reservation
 
+import com.hm.picplz.common.util.DateTimeUtil
 import com.hm.picplz.ui.screen.detail_reservation.model.RefundCondition
 import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 data class CancelReservationState(
     val orderId: String = "",
@@ -13,8 +12,8 @@ data class CancelReservationState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     // 환불 안내 관련
-    val shootingDate: LocalDateTime = LocalDateTime.now().plusDays(4),
-    val cancelDate: LocalDateTime = LocalDateTime.now(),
+    val shootingDateMillis: Long = System.currentTimeMillis(),
+    val cancelDateMillis: Long = System.currentTimeMillis(),
     val shootingDateFormatted: String = "",
     val cancelDateFormatted: String = "",
     val totalPrice: Int = 12900,
@@ -40,16 +39,16 @@ data class CancelReservationState(
 
     companion object {
         fun idle(orderId: String): CancelReservationState {
-            val dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
-            val shootingDate = LocalDateTime.now().plusDays(4)
-            val cancelDate = LocalDateTime.now()
+            val currentTimeMillis = System.currentTimeMillis()
+            val shootingDateMillis = DateTimeUtil.plusDays(currentTimeMillis, 4)
+            val cancelDateMillis = currentTimeMillis
 
             return CancelReservationState(
                 orderId = orderId,
-                shootingDate = shootingDate,
-                cancelDate = cancelDate,
-                shootingDateFormatted = shootingDate.format(dateFormatter),
-                cancelDateFormatted = cancelDate.format(dateFormatter),
+                shootingDateMillis = shootingDateMillis,
+                cancelDateMillis = cancelDateMillis,
+                shootingDateFormatted = DateTimeUtil.formatDate(shootingDateMillis, "yy.MM.dd"),
+                cancelDateFormatted = DateTimeUtil.formatDate(cancelDateMillis, "yy.MM.dd"),
             )
         }
     }
