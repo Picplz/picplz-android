@@ -1,7 +1,10 @@
 package com.hm.picplz.ui.screen.cancel_reservation_confirm
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.hm.picplz.navigation.model.CancelReservationConfirm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +14,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CancelReservationConfirmViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(CancelReservationConfirmState())
+class CancelReservationConfirmViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val cancelType = savedStateHandle.toRoute<CancelReservationConfirm>().cancelType
+
+    private val _state = MutableStateFlow(CancelReservationConfirmState(cancelType = cancelType))
     val state: StateFlow<CancelReservationConfirmState> get() = _state
 
     private val _sideEffect = MutableSharedFlow<CancelReservationConfirmSideEffect>()

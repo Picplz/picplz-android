@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.hm.picplz.common.model.CancelConfirmType
 import com.hm.picplz.navigation.model.CancelReservation
 import com.hm.picplz.navigation.model.CancelReservationConfirm
 import com.hm.picplz.navigation.model.Chat
@@ -96,7 +97,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 navController.popBackStack()
             },
             onNavigateCancelReservationConfirm = {
-                navController.navigate(CancelReservationConfirm)
+                navController.navigate(CancelReservationConfirm(cancelType = CancelConfirmType.WITHOUT_REFUND))
             },
             onNavigateToOrderDetail = { orderId ->
                 navController.navigate(OrderDetail(orderId = orderId))
@@ -135,7 +136,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 navController.popBackStack()
             },
             onNavigateToCancelConfirm = {
-                navController.navigate(CancelReservationConfirm)
+                navController.navigate(CancelReservationConfirm(cancelType = CancelConfirmType.WITH_REFUND))
             },
         )
     }

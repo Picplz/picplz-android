@@ -1,5 +1,6 @@
 package com.hm.picplz.navigation.model
 
+import com.hm.picplz.common.model.CancelConfirmType
 import com.hm.picplz.common.model.User
 import kotlinx.serialization.Serializable
 
@@ -117,7 +118,7 @@ data class DetailPhotographerPortfolioDetail(val portfolioId: Int, val photoInde
 data object DetailReservation : NavigationRoute
 
 @Serializable
-data object CancelReservationConfirm : NavigationRoute
+data class CancelReservationConfirm(val cancelType: CancelConfirmType) : NavigationRoute
 
 @Serializable
 data class OrderDetail(val orderId: String) : NavigationRoute
