@@ -88,6 +88,7 @@
     <string name="refund_policy_title">취소/환불 규정</string>
     <string name="refund_policy_list">• 촬영 기준 7일 전까지: 100% 환불\n• 촬영 기준 3일 전까지: 90% 환불\n• 촬영 기준 2일 전까지: 70% 환불\n• 촬영 기준 1일 전까지: 50% 환불\n• 당일 취소 또는 No-show: 환불 불가</string>
     <string name="refund_agreement_text">위 내용을 모두 확인하였으며, 이에 동의합니다.</string>
+    <string name="refund_button_next">다음</string>
 
     <!-- 포맷 문자열 -->
     <string name="amount_format">%,d원</string>
