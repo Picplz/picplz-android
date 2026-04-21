@@ -27,6 +27,9 @@ class MyPageViewModel
                 is MyPageIntent.NavigateToModifyProfile -> {
                     sendSideEffect(MyPageSideEffect.NavigateToModifyProfile)
                 }
+                is MyPageIntent.NavigateToPhotographerModifyProfile -> {
+                    sendSideEffect(MyPageSideEffect.NavigateToPhotographerModifyProfile)
+                }
                 is MyPageIntent.NavigateToShootingHistory -> {
                     sendSideEffect(MyPageSideEffect.NavigateToShootingHistory)
                 }

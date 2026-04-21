@@ -12,4 +12,6 @@ interface AuthRepository {
     suspend fun unlinkKakao(): Result<Unit>
 
     fun isKakaoTalkLoginAvailable(context: Context): Boolean
+
+    fun getCurrentMemberId(): Long?
 }

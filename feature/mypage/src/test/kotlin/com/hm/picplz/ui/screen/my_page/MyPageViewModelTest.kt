@@ -28,4 +28,19 @@ class MyPageViewModelTest {
                 sideEffectDeferred.await(),
             )
         }
+
+    @Test
+    fun `navigate to photographer modify profile emits dedicated navigation side effect`() =
+        runTest {
+            val viewModel = MyPageViewModel()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(MyPageIntent.NavigateToPhotographerModifyProfile)
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPageSideEffect.NavigateToPhotographerModifyProfile,
+                sideEffectDeferred.await(),
+            )
+        }
 }

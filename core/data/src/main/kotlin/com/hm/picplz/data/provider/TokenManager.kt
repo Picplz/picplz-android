@@ -2,7 +2,9 @@ package com.hm.picplz.data.provider
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import dagger.hilt.android.qualifiers.ApplicationContext
+import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -84,6 +86,17 @@ class TokenManager
         fun getSocialEmail(): String? = prefs.getString(KEY_SOCIAL_EMAIL, null)
 
         fun getSocialProvider(): String? = prefs.getString(KEY_SOCIAL_PROVIDER, null)
+
+        fun getMemberId(): Long? {
+            val token = getToken() ?: return null
+            val payload = token.split('.').getOrNull(1) ?: return null
+            val normalizedPayload = payload.padEnd((payload.length + 3) / 4 * 4, '=')
+
+            return runCatching {
+                val decodedPayload = Base64.decode(normalizedPayload, Base64.URL_SAFE or Base64.NO_WRAP)
+                JSONObject(String(decodedPayload)).optString("sub").toLongOrNull()
+            }.getOrNull()
+        }
 
         fun clearSocialInfo() {
             prefs.edit()

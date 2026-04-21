@@ -45,6 +45,7 @@ import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
@@ -182,6 +183,7 @@ fun DevScreen(navController: NavHostController) {
             SectionTitle("Main Sub")
             DevButton("MainSearch") { navController.navigate(MainSearch) }
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
+            DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
             DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory()) }
             DevButton("MyPageShootingHistory (Empty)") {
                 navController.navigate(MyPageShootingHistory(forceEmpty = true))
