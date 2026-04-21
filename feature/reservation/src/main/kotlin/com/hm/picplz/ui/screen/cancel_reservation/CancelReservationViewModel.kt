@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,9 +113,9 @@ class CancelReservationViewModel @Inject constructor(
                 val currentState = _state.value
                 val refundCondition =
                     RefundCondition.calculate(
-                        currentDateTime = LocalDateTime.now(),
-                        shootingDateTime = currentState.shootingDate,
-                        confirmedDateTime = currentState.cancelDate,
+                        currentMillis = System.currentTimeMillis(),
+                        shootingMillis = currentState.shootingDateMillis,
+                        confirmedMillis = currentState.cancelDateMillis,
                     )
 
                 _state.update {
