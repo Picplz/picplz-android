@@ -1,6 +1,13 @@
 package com.hm.picplz.ui.screen.my_page
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +35,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,7 +51,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -93,6 +106,18 @@ fun MyPagePhotographerModifyProfileScreen(
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val photoPermissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+        ) { granted ->
+            syncPhotoPermissionState(
+                context = context,
+                viewModel = viewModel,
+                grantedOverride = granted,
+            )
+        }
 
     val filePickerLauncher =
         rememberLauncherForActivityResult(
@@ -114,9 +139,47 @@ fun MyPagePhotographerModifyProfileScreen(
         }
 
     LaunchedEffect(Unit) {
+        syncPhotoPermissionState(
+            context = context,
+            viewModel = viewModel,
+        )
+    }
+
+    DisposableEffect(lifecycleOwner, context) {
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    syncPhotoPermissionState(
+                        context = context,
+                        viewModel = viewModel,
+                    )
+                }
+            }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 MyPagePhotographerModifyProfileSideEffect.NavigateBack -> navController.popBackStack()
+                MyPagePhotographerModifyProfileSideEffect.RequestPhotoPermission -> {
+                    setHasRequestedPhotoPermission(context)
+                    photoPermissionLauncher.launch(photoPermission())
+                }
+                MyPagePhotographerModifyProfileSideEffect.OpenPhotoPermissionSettings -> {
+                    context.startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:${context.packageName}"),
+                        ),
+                    )
+                }
+                MyPagePhotographerModifyProfileSideEffect.LaunchImagePicker -> {
+                    filePickerLauncher.launch("image/*")
+                }
                 is MyPagePhotographerModifyProfileSideEffect.ShowToast -> {
                     Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
                 }
@@ -136,79 +199,168 @@ fun MyPagePhotographerModifyProfileScreen(
                 .fillMaxSize()
                 .systemBarsPadding(),
     ) { innerPadding ->
-        val scrollState = rememberScrollState()
+        if (state.showPhotoPermissionScreen) {
+            MyPagePhotoPermissionScreen(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                actionLabel =
+                    stringResource(
+                        if (state.shouldOpenPhotoPermissionSettings) {
+                            R.string.modify_profile_photo_permission_settings_button
+                        } else {
+                            R.string.modify_profile_photo_permission_allow_button
+                        },
+                    ),
+                onActionClick = {
+                    viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ClickPhotoPermissionAction)
+                },
+            )
+        } else {
+            val scrollState = rememberScrollState()
 
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
             Column(
                 modifier =
                     Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState),
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .imePadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .verticalScroll(scrollState),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                PhotographerProfileImageSection(
-                    profileImageUri = state.profileImageUri,
-                    onChangeImage = { filePickerLauncher.launch("image/*") },
-                )
+                    PhotographerProfileImageSection(
+                        profileImageUri = state.profileImageUri,
+                        onChangeImage = {
+                            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ClickProfileImage)
+                        },
+                    )
 
-                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.ProfileToFormSpacing))
+                    Spacer(
+                        modifier =
+                            Modifier.height(
+                                MyPagePhotographerModifyProfileLayoutDefaults.ProfileToFormSpacing,
+                            ),
+                    )
 
-                PhotographerNicknameSection(
-                    nickname = state.nickname,
-                    isCheckingNickname = state.isCheckingNickname,
-                    errorMessage = state.representativeNicknameError?.message,
-                    onNicknameChange = {
-                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeNickname(it))
-                    },
-                )
+                    PhotographerNicknameSection(
+                        nickname = state.nickname,
+                        isCheckingNickname = state.isCheckingNickname,
+                        errorMessage = state.representativeNicknameError?.message,
+                        onNicknameChange = {
+                            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeNickname(it))
+                        },
+                    )
 
-                PhotographerTextFieldSection(
-                    title = stringResource(R.string.modify_profile_instagram_id),
-                    value = state.instagramId,
-                    placeholder = stringResource(R.string.modify_profile_instagram_placeholder),
-                    onValueChange = {
-                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeInstagramId(it))
-                    },
-                )
+                    PhotographerTextFieldSection(
+                        title = stringResource(R.string.modify_profile_instagram_id),
+                        value = state.instagramId,
+                        placeholder = stringResource(R.string.modify_profile_instagram_placeholder),
+                        onValueChange = {
+                            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeInstagramId(it))
+                        },
+                    )
 
-                PhotographerIntroductionSection(
-                    introduction = state.introduction,
-                    saveErrorMessage = state.saveErrorMessageResId?.let { stringResource(it) },
-                    onIntroductionChange = {
-                        viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeIntroduction(it))
-                    },
-                )
+                    PhotographerIntroductionSection(
+                        introduction = state.introduction,
+                        saveErrorMessage = state.saveErrorMessageResId?.let { stringResource(it) },
+                        onIntroductionChange = {
+                            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeIntroduction(it))
+                        },
+                    )
 
-                Spacer(modifier = Modifier.height(MyPagePhotographerModifyProfileLayoutDefaults.SectionVerticalPadding))
-            }
+                    Spacer(
+                        modifier =
+                            Modifier.height(
+                                MyPagePhotographerModifyProfileLayoutDefaults.SectionVerticalPadding,
+                            ),
+                    )
+                }
 
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(MyPagePhotographerModifyProfileLayoutDefaults.BottomActionAreaHeight)
-                        .padding(horizontal = MyPagePhotographerModifyProfileLayoutDefaults.HorizontalPadding),
-                contentAlignment = Alignment.Center,
-            ) {
-                CommonBottomButton(
-                    text = stringResource(R.string.modify_profile_done),
-                    onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
-                    enabled = state.isCompleteEnabled && !state.isLoading,
-                )
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(MyPagePhotographerModifyProfileLayoutDefaults.BottomActionAreaHeight)
+                            .padding(horizontal = MyPagePhotographerModifyProfileLayoutDefaults.HorizontalPadding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CommonBottomButton(
+                        text = stringResource(R.string.modify_profile_done),
+                        onClick = { viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.Save) },
+                        enabled = state.isCompleteEnabled && !state.isLoading,
+                    )
+                }
             }
         }
     }
 }
+
+private fun syncPhotoPermissionState(
+    context: Context,
+    viewModel: MyPagePhotographerModifyProfileViewModel,
+    grantedOverride: Boolean? = null,
+) {
+    val granted = grantedOverride ?: hasPhotoPermission(context)
+    val hasRequested = hasRequestedPhotoPermission(context)
+    val permanentlyDenied = !granted && hasRequested && !shouldShowPhotoPermissionRationale(context)
+
+    viewModel.handleIntent(
+        MyPagePhotographerModifyProfileIntent.SyncPhotoPermissionState(
+            granted = granted,
+            hasRequested = hasRequested,
+            permanentlyDenied = permanentlyDenied,
+        ),
+    )
+}
+
+private fun photoPermission(): String =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+private fun hasPhotoPermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(
+        context,
+        photoPermission(),
+    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
+private fun shouldShowPhotoPermissionRationale(context: Context): Boolean {
+    val activity = context.findActivity() ?: return false
+    return ActivityCompat.shouldShowRequestPermissionRationale(activity, photoPermission())
+}
+
+private fun Context.findActivity(): Activity? =
+    when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
+    }
+
+private fun hasRequestedPhotoPermission(context: Context): Boolean =
+    context.getSharedPreferences(PHOTO_PERMISSION_PREFS_NAME, Context.MODE_PRIVATE)
+        .getBoolean(KEY_HAS_REQUESTED_PHOTO_PERMISSION, false)
+
+private fun setHasRequestedPhotoPermission(context: Context) {
+    context.getSharedPreferences(PHOTO_PERMISSION_PREFS_NAME, Context.MODE_PRIVATE)
+        .edit()
+        .putBoolean(KEY_HAS_REQUESTED_PHOTO_PERMISSION, true)
+        .apply()
+}
+
+private const val PHOTO_PERMISSION_PREFS_NAME = "mypage_photo_permission_prefs"
+private const val KEY_HAS_REQUESTED_PHOTO_PERMISSION = "has_requested_photo_permission"
 
 @Composable
 private fun PhotographerProfileImageSection(

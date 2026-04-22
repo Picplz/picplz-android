@@ -1,6 +1,16 @@
 package com.hm.picplz.ui.screen.my_page
 
 sealed interface MyPagePhotographerModifyProfileIntent {
+    data object ClickPhotoPermissionAction : MyPagePhotographerModifyProfileIntent
+
+    data object ClickProfileImage : MyPagePhotographerModifyProfileIntent
+
+    data class SyncPhotoPermissionState(
+        val granted: Boolean,
+        val hasRequested: Boolean,
+        val permanentlyDenied: Boolean,
+    ) : MyPagePhotographerModifyProfileIntent
+
     data class ChangeNickname(val value: String) : MyPagePhotographerModifyProfileIntent
 
     data class ChangeInstagramId(val value: String) : MyPagePhotographerModifyProfileIntent
