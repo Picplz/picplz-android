@@ -5,6 +5,8 @@ import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortType
 sealed interface DetailPhotographerIntent {
     data object NavigateToPrev : DetailPhotographerIntent
 
+    data object SelectBooking : DetailPhotographerIntent
+
     data object ToggleFollow : DetailPhotographerIntent
 
     data object ToggleInfoExpanded : DetailPhotographerIntent
@@ -24,6 +26,8 @@ sealed interface DetailPhotographerIntent {
     data object DismissFullScreenPhoto : DetailPhotographerIntent
 
     data object ToggleReportSheet : DetailPhotographerIntent
+
+    data object DismissPreviewActionDialog : DetailPhotographerIntent
 
     data class SwitchReview(val reviewIndex: Int) : DetailPhotographerIntent
 

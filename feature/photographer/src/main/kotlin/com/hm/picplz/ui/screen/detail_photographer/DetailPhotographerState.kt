@@ -13,6 +13,7 @@ import com.hm.picplz.data.model.ShootingPackage
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortType
 
 data class DetailPhotographerState(
+    val isPreviewMode: Boolean = false,
     val profileInfo: PhotographerInfo = mockPhotographerInfo,
     val reviewSummary: PhotographerReviewSummary = mockReviewSummary,
     val reviews: List<PhotographerReview> = mockReviews,
@@ -28,6 +29,7 @@ data class DetailPhotographerState(
     val currentReviewIndex: Int = 0,
     val fullScreenImageUri: String? = null,
     val isReportSheetVisible: Boolean = false,
+    val previewActionDialog: DetailPreviewAction? = null,
     val toastMessage: String? = null,
 ) {
     companion object {
@@ -35,8 +37,30 @@ data class DetailPhotographerState(
             return DetailPhotographerState()
         }
 
+        fun preview(): DetailPhotographerState {
+            return DetailPhotographerState(
+                isPreviewMode = true,
+                profileInfo = mockPhotographerInfo.copy(photoPortfolios = emptyList()),
+                reviewSummary =
+                    mockReviewSummary.copy(
+                        totalReviewCount = 0,
+                        totalPhotoReviewCount = 0,
+                        photoReviews = emptyList(),
+                    ),
+                reviews = emptyList(),
+                portfolios = emptyList(),
+            )
+        }
+
         fun blocked(): DetailPhotographerState {
             return DetailPhotographerState(isBlocked = true)
         }
     }
+}
+
+enum class DetailPreviewAction {
+    Booking,
+    Follow,
+    Block,
+    Report,
 }

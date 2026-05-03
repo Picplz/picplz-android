@@ -87,6 +87,10 @@
     <string name="my_page_portfolio_edit_pending">포트폴리오 편집 기능은 준비 중입니다.</string>
     <string name="my_page_preview_pending">프로필 미리보기 기능은 준비 중입니다.</string>
     <string name="my_page_preview_requires_package">촬영 패키지를 등록해야 미리보기 화면을 볼 수 있습니다.</string>
+    <string name="package_edit_title">촬영 패키지 등록</string>
+    <string name="package_edit_placeholder_title">패키지 등록을 준비 중입니다</string>
+    <string name="package_edit_placeholder_description">지금은 미리보기 진입 조건만 확인할 수 있으며, 실제 패키지 등록은 추후 API 연동 후 지원됩니다.</string>
+    <string name="package_edit_save">저장</string>
 
     <!-- 프로필 수정 -->
     <string name="modify_profile_title">프로필 수정</string>

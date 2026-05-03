@@ -14,6 +14,7 @@ data class MyPageState(
 }
 
 data class PhotographerProfile(
+    val photographerId: Int = 0,
     val displayName: String = "",
     val profileImageUri: String = "",
     val followerCount: Int = 0,
@@ -29,7 +30,10 @@ data class PhotographerProfile(
     val packagePreview: PhotographerPackagePreview? = null,
     val portfolioPreviewImageUrls: List<String> = emptyList(),
     val satisfactionSummary: PhotographerSatisfactionSummary = PhotographerSatisfactionSummary(),
-)
+) {
+    val canPreviewProfile: Boolean
+        get() = hasPackages && photographerId > 0
+}
 
 data class PhotographerPackagePreview(
     val imageUrl: String,

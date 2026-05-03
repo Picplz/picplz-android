@@ -66,9 +66,11 @@ import coil.compose.AsyncImage
 import com.hm.picplz.common.model.User
 import com.hm.picplz.common.model.UserType
 import com.hm.picplz.feature.mypage.R
+import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
+import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.SignUpPhotographer
@@ -128,6 +130,9 @@ fun MyPageScreen(
                 is MyPageSideEffect.NavigateToPhotographerModifyProfile -> {
                     navController.navigate(MyPagePhotographerModifyProfile)
                 }
+                is MyPageSideEffect.NavigateToPackageEdit -> {
+                    navController.navigate(MyPagePackageEdit)
+                }
                 is MyPageSideEffect.NavigateToMyReviews -> {
                     navController.navigate(MyPageMyReviews)
                 }
@@ -136,6 +141,14 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.NavigateToShootingHistory -> {
                     navController.navigate(MyPageShootingHistory)
+                }
+                is MyPageSideEffect.NavigateToPhotographerPreview -> {
+                    navController.navigate(
+                        DetailPhotographer(
+                            photographerId = effect.photographerId,
+                            previewMode = true,
+                        ),
+                    )
                 }
                 is MyPageSideEffect.NavigateToSettings -> {
                     toastMessage = context.getString(R.string.my_page_settings_pending)
@@ -535,6 +548,8 @@ private fun PhotographerProfileCard(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        val canPreviewProfile = photographerProfile.canPreviewProfile
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -551,7 +566,7 @@ private fun PhotographerProfileCard(
                 modifier = Modifier.weight(1f),
                 isPrimary = false,
                 showArrow = true,
-                enabled = photographerProfile.hasPackages,
+                enabled = canPreviewProfile,
             )
         }
 

@@ -44,6 +44,7 @@ import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.navigation.model.MyPage
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
@@ -178,12 +179,21 @@ fun DevScreen(navController: NavHostController) {
                     ),
                 )
             }
+            DevButton("MyPage (작가 미리보기 테스트)") {
+                navController.navigate(
+                    MyPagePhotographer(
+                        hasPackagePreview = true,
+                        hasPortfolioPreview = false,
+                    ),
+                )
+            }
 
             // === Main Sub Screens ===
             SectionTitle("Main Sub")
             DevButton("MainSearch") { navController.navigate(MainSearch) }
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
+            DevButton("MyPagePackageEdit (패키지 등록 placeholder)") { navController.navigate(MyPagePackageEdit) }
             DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory()) }
             DevButton("MyPageShootingHistory (Empty)") {
                 navController.navigate(MyPageShootingHistory(forceEmpty = true))
@@ -210,6 +220,9 @@ fun DevScreen(navController: NavHostController) {
             // === Detail Photographer ===
             SectionTitle("Detail Photographer")
             DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer(1)) }
+            DevButton("DetailPhotographer (작가 preview mode)") {
+                navController.navigate(DetailPhotographer(1, previewMode = true))
+            }
             DevButton("DetailPhotographer (차단)") { navController.navigate(DetailPhotographer(-1)) }
             DevButton("ReviewPhotographer") { navController.navigate(ReviewPhotographer(1)) }
             DevButton("DetailPhotographerPhotoReviews") {

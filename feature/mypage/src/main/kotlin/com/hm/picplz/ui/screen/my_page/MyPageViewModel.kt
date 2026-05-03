@@ -54,9 +54,13 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.NavigateToPhotographerSignUp)
                 }
                 is MyPageIntent.NavigateToPhotographerPreview -> {
-                    val hasPackages = _state.value.photographerProfile.hasPackages
-                    if (hasPackages) {
-                        sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_pending))
+                    val photographerProfile = _state.value.photographerProfile
+                    if (photographerProfile.canPreviewProfile) {
+                        sendSideEffect(
+                            MyPageSideEffect.NavigateToPhotographerPreview(
+                                photographerProfile.photographerId,
+                            ),
+                        )
                     } else {
                         sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_preview_requires_package))
                     }
@@ -74,7 +78,7 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
                 }
                 is MyPageIntent.NavigateToPackageEdit -> {
-                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_package_edit_pending))
+                    sendSideEffect(MyPageSideEffect.NavigateToPackageEdit)
                 }
                 is MyPageIntent.NavigateToPortfolioEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
@@ -142,6 +146,7 @@ class MyPageViewModel
                     ongoingShootings = emptyList(),
                     photographerProfile =
                         PhotographerProfile(
+                            photographerId = 1,
                             displayName = "유가영 작가",
                             profileImageUri = "",
                             followerCount = 128,
