@@ -1,13 +1,12 @@
 package com.hm.picplz.ui.screen.my_page
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -17,20 +16,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 
 private object MyPagePhotoPermissionScreenDefaults {
-    val HorizontalPadding = 24.dp
-    val TitleDescriptionSpacing = 20.dp
-    val DescriptionButtonSpacing = 32.dp
-    val ButtonWidth = 256.dp
-    val ButtonHeight = 50.dp
-    val ButtonCornerRadius = 5.dp
-    val ButtonVerticalPadding = 14.dp
-    val ButtonHorizontalPadding = 20.dp
+    val HorizontalPadding: Dp = 24.dp
+    const val TOP_WEIGHT = 0.42f
+    const val BOTTOM_WEIGHT = 0.58f
+    val TitleDescriptionSpacing: Dp = 20.dp
+    val DescriptionButtonSpacing: Dp = 32.dp
+    val ButtonHeight: Dp = 50.dp
+    val ButtonCornerRadius: Dp = 5.dp
+    val ButtonVerticalPadding: Dp = 14.dp
+    val ButtonHorizontalPadding: Dp = 20.dp
 }
 
 @Composable
@@ -39,10 +40,12 @@ fun MyPagePhotoPermissionScreen(
     actionLabel: String,
     onActionClick: () -> Unit,
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.weight(MyPagePhotoPermissionScreenDefaults.TOP_WEIGHT))
+
         Column(
             modifier = Modifier.padding(horizontal = MyPagePhotoPermissionScreenDefaults.HorizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,12 +68,11 @@ fun MyPagePhotoPermissionScreen(
             PhotoPermissionActionButton(
                 text = actionLabel,
                 onClick = onActionClick,
-                modifier =
-                    Modifier
-                        .width(MyPagePhotoPermissionScreenDefaults.ButtonWidth)
-                        .height(MyPagePhotoPermissionScreenDefaults.ButtonHeight),
+                modifier = Modifier.height(MyPagePhotoPermissionScreenDefaults.ButtonHeight),
             )
         }
+
+        Spacer(modifier = Modifier.weight(MyPagePhotoPermissionScreenDefaults.BOTTOM_WEIGHT))
     }
 }
 
@@ -95,6 +97,10 @@ private fun PhotoPermissionActionButton(
                 horizontal = MyPagePhotoPermissionScreenDefaults.ButtonHorizontalPadding,
             ),
     ) {
-        Text(text = text)
+        Text(
+            text = text,
+            style = MainThemeFont.ButtonDefault,
+            color = MainThemeColor.White,
+        )
     }
 }

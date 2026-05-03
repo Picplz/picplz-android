@@ -145,6 +145,7 @@ main ← develop ← feat/이슈번호
 - 파일 위치: `core/ui/src/main/res/values/strings.xml` (공통) 또는 각 feature 모듈의 `res/values/strings.xml`
 - 네이밍: `{화면}_{용도}` (예: `quick_shoot_permission_denied_title`, `cancel_reservation_button_home`)
 - `contentDescription`도 string resource 사용
+- Compose `Text`에서 줄바꿈이 필요한 문자열은 `\n` 사용 — `&#10;` 엔티티는 실제 UI에서 줄바꿈이 보장되지 않음
 
 ## MIGRATION STATUS (refactor/77)
 
