@@ -1,5 +1,6 @@
 package com.hm.picplz.domain.repository
 
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
 
@@ -20,4 +21,8 @@ interface PhotographerRepository {
     suspend fun addPhotoMood(photoMood: String): Result<Unit>
 
     suspend fun deletePhotoMood(photoMood: String): Result<Unit>
+
+    suspend fun getActiveAreas(photographerId: Long): Result<List<Area>>
+
+    suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>>
 }

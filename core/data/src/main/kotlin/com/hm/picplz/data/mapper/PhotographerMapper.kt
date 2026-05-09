@@ -1,12 +1,14 @@
 package com.hm.picplz.data.mapper
 
 import com.hm.picplz.common.model.PhotoReview
+import com.hm.picplz.data.model.ActiveAreaResponse
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotographerDetailDto
 import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.model.ReviewPhotoDto
 import com.hm.picplz.data.model.ReviewSummaryDto
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.Photographer
 import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReview
@@ -105,5 +107,14 @@ fun ProductDto.toShootingPackage(): ShootingPackage {
         imageUri = imageUrl ?: productPhotos?.firstOrNull().orEmpty(),
         shootingTime = shootingTime ?: shootDuration?.let { "${it}분" }.orEmpty(),
         description = description ?: otherDetails.orEmpty(),
+    )
+}
+
+fun ActiveAreaResponse.toArea(): Area {
+    return Area(
+        id = code,
+        name = name,
+        dong = name,
+        ri = null,
     )
 }

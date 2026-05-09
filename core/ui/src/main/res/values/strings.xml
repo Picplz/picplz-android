@@ -19,6 +19,7 @@
     <string name="keyword">키워드</string>
     <string name="equipment">장비</string>
     <string name="area_overflow_format">외 %d개</string>
+    <string name="area_tag_remove">삭제</string>
 
     <!-- ReviewSection -->
     <string name="shooting_satisfaction">촬영 만족도</string>
