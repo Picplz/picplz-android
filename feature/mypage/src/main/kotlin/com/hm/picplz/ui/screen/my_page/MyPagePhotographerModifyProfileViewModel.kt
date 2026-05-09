@@ -45,6 +45,17 @@ class MyPagePhotographerModifyProfileViewModel
 
         fun handleIntent(intent: MyPagePhotographerModifyProfileIntent) {
             when (intent) {
+                MyPagePhotographerModifyProfileIntent.ClickPhotoPermissionAction -> handlePhotoPermissionAction()
+                MyPagePhotographerModifyProfileIntent.ClickProfileImage -> handleProfileImageClick()
+                is MyPagePhotographerModifyProfileIntent.SyncPhotoPermissionState -> {
+                    _state.update {
+                        it.copy(
+                            photoPermissionGranted = intent.granted,
+                            hasRequestedPhotoPermission = intent.hasRequested,
+                            isPhotoPermissionPermanentlyDenied = intent.permanentlyDenied,
+                        )
+                    }
+                }
                 is MyPagePhotographerModifyProfileIntent.ChangeNickname -> handleNicknameChange(intent.value)
                 is MyPagePhotographerModifyProfileIntent.ChangeInstagramId -> {
                     _state.update { it.copy(instagramId = intent.value, saveErrorMessageResId = null) }
@@ -60,6 +71,26 @@ class MyPagePhotographerModifyProfileViewModel
                 }
                 is MyPagePhotographerModifyProfileIntent.Save -> save()
                 is MyPagePhotographerModifyProfileIntent.NavigateBack -> navigateBack()
+            }
+        }
+
+        private fun handleProfileImageClick() {
+            viewModelScope.launch {
+                if (_state.value.photoPermissionGranted) {
+                    _sideEffect.send(MyPagePhotographerModifyProfileSideEffect.LaunchImagePicker)
+                } else {
+                    handlePhotoPermissionAction()
+                }
+            }
+        }
+
+        private fun handlePhotoPermissionAction() {
+            viewModelScope.launch {
+                if (_state.value.shouldOpenPhotoPermissionSettings) {
+                    _sideEffect.send(MyPagePhotographerModifyProfileSideEffect.OpenPhotoPermissionSettings)
+                } else {
+                    _sideEffect.send(MyPagePhotographerModifyProfileSideEffect.RequestPhotoPermission)
+                }
             }
         }
 
@@ -92,6 +123,7 @@ class MyPagePhotographerModifyProfileViewModel
                                 originalProfileImageObjectKey = profile.profileImage,
                                 profileImageObjectKey = profile.profileImage,
                                 originalProfileImageUri = profile.profileImage.orEmpty(),
+                                uploadedProfileImageUri = profile.profileImage.orEmpty(),
                                 profileImageUri = profile.profileImage.orEmpty(),
                                 isLoading = false,
                                 saveErrorMessageResId = null,
@@ -189,6 +221,7 @@ class MyPagePhotographerModifyProfileViewModel
                             originalIntroduction = it.introduction,
                             originalProfileImageObjectKey = it.profileImageObjectKey,
                             originalProfileImageUri = it.profileImageUri,
+                            uploadedProfileImageUri = it.profileImageUri,
                             isSaving = false,
                             saveErrorMessageResId = null,
                         )
@@ -216,12 +249,14 @@ class MyPagePhotographerModifyProfileViewModel
                         _state.update {
                             it.copy(
                                 profileImageObjectKey = objectKey,
+                                uploadedProfileImageUri = it.profileImageUri,
                                 isUploadingImage = false,
                             )
                         }
                     }.onFailure {
                         _state.update {
                             it.copy(
+                                profileImageUri = it.uploadedProfileImageUri,
                                 isUploadingImage = false,
                                 saveErrorMessageResId = R.string.modify_profile_image_upload_failed,
                             )

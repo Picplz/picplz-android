@@ -23,6 +23,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import java.util.ArrayDeque
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MyPagePhotographerModifyProfileViewModelTest {
@@ -111,16 +112,154 @@ class MyPagePhotographerModifyProfileViewModelTest {
             )
         }
 
+    @Test
+    fun `click profile image launches image picker side effect`() =
+        runTest {
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.SyncPhotoPermissionState(
+                    granted = true,
+                    hasRequested = true,
+                    permanentlyDenied = false,
+                ),
+            )
+
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ClickProfileImage)
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPagePhotographerModifyProfileSideEffect.LaunchImagePicker,
+                sideEffectDeferred.await(),
+            )
+        }
+
+    @Test
+    fun `photo permission action requests permission when settings redirect is not needed`() =
+        runTest {
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.SyncPhotoPermissionState(
+                    granted = false,
+                    hasRequested = false,
+                    permanentlyDenied = false,
+                ),
+            )
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ClickPhotoPermissionAction)
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPagePhotographerModifyProfileSideEffect.RequestPhotoPermission,
+                sideEffectDeferred.await(),
+            )
+        }
+
+    @Test
+    fun `photo permission action opens settings when permission is permanently denied`() =
+        runTest {
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.SyncPhotoPermissionState(
+                    granted = false,
+                    hasRequested = true,
+                    permanentlyDenied = true,
+                ),
+            )
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ClickPhotoPermissionAction)
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPagePhotographerModifyProfileSideEffect.OpenPhotoPermissionSettings,
+                sideEffectDeferred.await(),
+            )
+        }
+
+    @Test
+    fun `upload failure restores previous preview and clears image-only dirty state`() =
+        runTest {
+            val viewModel =
+                createViewModel(
+                    s3Repository =
+                        FakeS3Repository(
+                            uploadResults = listOf(Result.failure(IllegalStateException("upload failed"))),
+                        ),
+                )
+            advanceUntilIdle()
+
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeProfileImage("content://picked-image"))
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.UploadProfileImage(
+                    imageBytes = byteArrayOf(1),
+                    filename = "profile.jpg",
+                ),
+            )
+            advanceUntilIdle()
+
+            assertEquals("", viewModel.state.value.profileImageUri)
+            assertEquals(null, viewModel.state.value.profileImageObjectKey)
+            assertEquals(R.string.modify_profile_image_upload_failed, viewModel.state.value.saveErrorMessageResId)
+            assertFalse(viewModel.state.value.isCompleteEnabled)
+        }
+
+    @Test
+    fun `upload failure after previous success restores last valid preview and preserves object key`() =
+        runTest {
+            val viewModel =
+                createViewModel(
+                    s3Repository =
+                        FakeS3Repository(
+                            uploadResults =
+                                listOf(
+                                    Result.success("profile/first-object-key.jpg"),
+                                    Result.failure(IllegalStateException("upload failed")),
+                                ),
+                        ),
+                )
+            advanceUntilIdle()
+
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeProfileImage("content://first-image"))
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.UploadProfileImage(
+                    imageBytes = byteArrayOf(1),
+                    filename = "first.jpg",
+                ),
+            )
+            advanceUntilIdle()
+
+            viewModel.handleIntent(MyPagePhotographerModifyProfileIntent.ChangeProfileImage("content://second-image"))
+            viewModel.handleIntent(
+                MyPagePhotographerModifyProfileIntent.UploadProfileImage(
+                    imageBytes = byteArrayOf(2),
+                    filename = "second.jpg",
+                ),
+            )
+            advanceUntilIdle()
+
+            assertEquals("content://first-image", viewModel.state.value.profileImageUri)
+            assertEquals("profile/first-object-key.jpg", viewModel.state.value.profileImageObjectKey)
+            assertEquals(R.string.modify_profile_image_upload_failed, viewModel.state.value.saveErrorMessageResId)
+            assertTrue(viewModel.state.value.isCompleteEnabled)
+        }
+
     private fun createViewModel(
         memberRepository: FakeMemberRepository = FakeMemberRepository(),
         memberId: Long = 1L,
+        s3Repository: FakeS3Repository = FakeS3Repository(),
     ): MyPagePhotographerModifyProfileViewModel =
         MyPagePhotographerModifyProfileViewModel(
             checkNicknameAvailabilityUseCase = CheckNicknameAvailabilityUseCase(memberRepository),
             getCurrentMemberIdUseCase = GetCurrentMemberIdUseCase(FakeAuthRepository(memberId)),
             getMemberProfileUseCase = GetMemberProfileUseCase(memberRepository),
             updateMemberProfileUseCase = UpdateMemberProfileUseCase(memberRepository),
-            uploadProfileImageUseCase = UploadProfileImageUseCase(FakeS3Repository()),
+            uploadProfileImageUseCase = UploadProfileImageUseCase(s3Repository),
         )
 
     private class FakeMemberRepository(
@@ -171,9 +310,22 @@ class MyPagePhotographerModifyProfileViewModelTest {
     }
 
     private class FakeS3Repository : S3Repository {
+        private val uploadResults = ArrayDeque<Result<String>>()
+
+        constructor(
+            uploadResults: List<Result<String>> = listOf(Result.success("profile/object-key.jpg")),
+        ) {
+            this.uploadResults.addAll(uploadResults)
+        }
+
         override suspend fun uploadProfileImage(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> = Result.success("profile/object-key.jpg")
+        ): Result<String> =
+            if (uploadResults.isEmpty()) {
+                Result.success("profile/object-key.jpg")
+            } else {
+                uploadResults.removeFirst()
+            }
     }
 }

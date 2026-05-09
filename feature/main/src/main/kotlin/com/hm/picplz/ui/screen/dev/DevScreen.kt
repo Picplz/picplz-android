@@ -194,6 +194,14 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
             DevButton("MyPagePackageEdit (패키지 등록 placeholder)") { navController.navigate(MyPagePackageEdit) }
+            DevButton("MyPagePhotographerModifyProfile (권한 설정 → 거부 후 테스트)") {
+                context.startActivity(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:${context.packageName}"),
+                    ),
+                )
+            }
             DevButton("MyPageShootingHistory") { navController.navigate(MyPageShootingHistory()) }
             DevButton("MyPageShootingHistory (Empty)") {
                 navController.navigate(MyPageShootingHistory(forceEmpty = true))

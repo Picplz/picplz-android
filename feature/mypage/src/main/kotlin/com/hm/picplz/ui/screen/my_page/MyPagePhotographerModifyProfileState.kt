@@ -13,6 +13,10 @@ data class MyPagePhotographerModifyProfileState(
     val originalProfileImageObjectKey: String?,
     val profileImageObjectKey: String?,
     val originalProfileImageUri: String,
+    val photoPermissionGranted: Boolean = false,
+    val hasRequestedPhotoPermission: Boolean = false,
+    val isPhotoPermissionPermanentlyDenied: Boolean = false,
+    val uploadedProfileImageUri: String,
     val profileImageUri: String,
     val nicknameFieldErrors: List<NicknameFieldError> = emptyList(),
     val isCheckingNickname: Boolean = false,
@@ -23,6 +27,12 @@ data class MyPagePhotographerModifyProfileState(
 ) {
     val representativeNicknameError: NicknameFieldError?
         get() = nicknameFieldErrors.firstOrNull()
+
+    val showPhotoPermissionScreen: Boolean
+        get() = !photoPermissionGranted
+
+    val shouldOpenPhotoPermissionSettings: Boolean
+        get() = hasRequestedPhotoPermission && isPhotoPermissionPermanentlyDenied
 
     val hasChanges: Boolean
         get() =
@@ -57,6 +67,10 @@ data class MyPagePhotographerModifyProfileState(
                 originalProfileImageObjectKey = null,
                 profileImageObjectKey = null,
                 originalProfileImageUri = "",
+                photoPermissionGranted = false,
+                hasRequestedPhotoPermission = false,
+                isPhotoPermissionPermanentlyDenied = false,
+                uploadedProfileImageUri = "",
                 profileImageUri = "",
             )
     }
