@@ -33,6 +33,15 @@
     <string name="blocked_account_message">차단된 계정입니다.</string>
     <string name="unblock_button">차단 해제</string>
 
+    <!-- 작가 상세 - 미리보기 안내 -->
+    <string name="preview_action_dialog_title">미리보기에서는 이용할 수 없는 기능입니다</string>
+    <string name="preview_action_dialog_booking">고객 예약 동작은 미리보기에서 실행되지 않습니다.</string>
+    <string name="preview_action_dialog_follow">고객 팔로우 동작은 미리보기에서 실행되지 않습니다.</string>
+    <string name="preview_action_dialog_block">고객 차단 동작은 미리보기에서 실행되지 않습니다.</string>
+    <string name="preview_action_dialog_report">고객 신고 동작은 미리보기에서 실행되지 않습니다.</string>
+    <string name="preview_action_dialog_cancel">닫기</string>
+    <string name="preview_action_dialog_confirm">확인</string>
+
     <!-- 리뷰 페이지 -->
     <string name="review_title">리뷰</string>
     <string name="shooting_satisfaction">촬영 만족도</string>

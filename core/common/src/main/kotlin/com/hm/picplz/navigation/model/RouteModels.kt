@@ -83,6 +83,8 @@ data class MyPagePhotographer(
 
 @Serializable object MyPagePhotographerModifyProfile : NavigationRoute
 
+@Serializable object MyPagePackageEdit : NavigationRoute
+
 @Serializable object MyPageMyReviews : NavigationRoute
 
 @Serializable
@@ -101,7 +103,10 @@ data class MyPageShootingHistory(
 
 // === Detail Screens ===
 @Serializable
-data class DetailPhotographer(val photographerId: Int) : NavigationRoute
+data class DetailPhotographer(
+    val photographerId: Int,
+    val previewMode: Boolean = false,
+) : NavigationRoute
 
 @Serializable
 data class ReviewPhotographer(val photographerId: Int) : NavigationRoute

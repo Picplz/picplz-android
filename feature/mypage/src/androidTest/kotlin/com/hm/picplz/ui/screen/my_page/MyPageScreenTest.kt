@@ -7,13 +7,14 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.rememberNavController
 import androidx.test.platform.app.InstrumentationRegistry
 import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.ui.theme.PicplzTheme
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import com.hm.picplz.core.ui.R as CoreR
 
 class MyPageScreenTest {
     @get:Rule
@@ -53,6 +54,7 @@ class MyPageScreenTest {
     @Test
     fun photographerPreviewButtonIsEnabledWithPackage() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val intents = mutableListOf<MyPageIntent>()
 
         composeRule.setContent {
             PicplzTheme {
@@ -61,14 +63,14 @@ class MyPageScreenTest {
                         photographerState(
                             packagePreview =
                                 PhotographerPackagePreview(
-                                    imageResId = CoreR.drawable.logo,
+                                    imageUrl = "https://picsum.photos/seed/test-package/300/200",
                                     title = "남친생기는 프사",
                                     price = 66000,
                                     meta = "프로필 촬영 · 30분",
                                     description = "원본 20장과 보정본 3장을 제공해요.",
                                 ),
                         ),
-                    onIntent = {},
+                    onIntent = { intents += it },
                     navController = rememberNavController(),
                 )
             }
@@ -77,6 +79,11 @@ class MyPageScreenTest {
         composeRule
             .onNodeWithText(context.getString(R.string.my_page_preview_profile))
             .assertIsEnabled()
+            .performClick()
+
+        composeRule.runOnIdle {
+            assertTrue(intents.contains(MyPageIntent.NavigateToPhotographerPreview))
+        }
 
         composeRule.onNodeWithText("남친생기는 프사").assertIsDisplayed()
 
@@ -132,12 +139,35 @@ class MyPageScreenTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun packageEditPlaceholderShowsDisabledSave() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+        composeRule.setContent {
+            PicplzTheme {
+                MyPagePackageEditScreen(
+                    state = MyPagePackageEditState.idle(),
+                    onIntent = {},
+                )
+            }
+        }
+
+        composeRule
+            .onNodeWithText(context.getString(R.string.package_edit_placeholder_title))
+            .assertIsDisplayed()
+
+        composeRule
+            .onNodeWithText(context.getString(R.string.package_edit_save))
+            .assertIsNotEnabled()
+    }
+
     private fun photographerState(packagePreview: PhotographerPackagePreview?): MyPageState {
         return MyPageState(
             nickname = "임두현",
             hasPhotographerRole = true,
             photographerProfile =
                 PhotographerProfile(
+                    photographerId = 1,
                     displayName = "유가영 작가",
                     followerCount = 128,
                     packageCount = if (packagePreview == null) 0 else 1,

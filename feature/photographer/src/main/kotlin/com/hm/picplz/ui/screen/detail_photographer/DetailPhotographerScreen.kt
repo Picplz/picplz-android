@@ -14,33 +14,39 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.common.CommonButtonModal
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
 import com.hm.picplz.ui.theme.MainThemeColor
+import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.feature.photographer.R as PhotographerR
 
 @Composable
 fun DetailPhotographerScreen(
     viewModel: DetailPhotographerViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
     Scaffold(
@@ -82,7 +88,9 @@ fun DetailPhotographerScreen(
                         } else {
                             stringResource(R.string.booking_unavailable)
                         },
-                    onClick = { },
+                    onClick = {
+                        viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
+                    },
                     enabled = state.profileInfo.isBookable,
                 )
             }
@@ -166,7 +174,11 @@ fun DetailPhotographerScreen(
         onBlock = {
             viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
         },
-        onReport = { /* TODO: 작가 신고 플로우 (리뷰 신고와 별개) */ },
+        onReport = {
+            if (state.isPreviewMode) {
+                viewModel.handleIntent(DetailPhotographerIntent.ToggleReportSheet)
+            }
+        },
     )
 
     // 리뷰 신고 바텀시트
@@ -177,6 +189,15 @@ fun DetailPhotographerScreen(
         },
         onSelect = { /* TODO: 신고 API 연동 */ },
     )
+
+    state.previewActionDialog?.let { action ->
+        DetailPreviewActionDialog(
+            action = action,
+            onDismiss = {
+                viewModel.handleIntent(DetailPhotographerIntent.DismissPreviewActionDialog)
+            },
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
@@ -196,6 +217,50 @@ fun DetailPhotographerScreen(
         },
     )
 }
+
+@Composable
+private fun DetailPreviewActionDialog(
+    action: DetailPreviewAction,
+    onDismiss: () -> Unit,
+) {
+    CommonButtonModal(
+        onDismissRequest = onDismiss,
+        cancelText = stringResource(PhotographerR.string.preview_action_dialog_cancel),
+        confirmText = stringResource(PhotographerR.string.preview_action_dialog_confirm),
+        onCancel = onDismiss,
+        onConfirm = onDismiss,
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(PhotographerR.string.preview_action_dialog_title),
+                style = MainThemeFont.TitleSmall,
+                color = MainThemeColor.Black,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(previewActionDescriptionResId(action)),
+                style = MainThemeFont.Body,
+                color = MainThemeColor.Gray4,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+private fun previewActionDescriptionResId(action: DetailPreviewAction): Int =
+    when (action) {
+        DetailPreviewAction.Booking -> PhotographerR.string.preview_action_dialog_booking
+        DetailPreviewAction.Follow -> PhotographerR.string.preview_action_dialog_follow
+        DetailPreviewAction.Block -> PhotographerR.string.preview_action_dialog_block
+        DetailPreviewAction.Report -> PhotographerR.string.preview_action_dialog_report
+    }
 
 @Composable
 private fun SectionDivider() {
