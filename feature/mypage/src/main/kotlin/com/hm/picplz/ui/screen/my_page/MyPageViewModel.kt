@@ -69,7 +69,11 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_region_edit_pending))
                 }
                 is MyPageIntent.NavigateToPhotographerKeywordEdit -> {
-                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_keyword_edit_pending))
+                    sendSideEffect(
+                        MyPageSideEffect.NavigateToPhotographerKeywordEdit(
+                            _state.value.photographerProfile.photographerId,
+                        ),
+                    )
                 }
                 is MyPageIntent.NavigateToPhotographerEquipmentEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_equipment_edit_pending))

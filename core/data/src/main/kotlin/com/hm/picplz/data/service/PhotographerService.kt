@@ -5,6 +5,7 @@ import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.mapper.toReviewData
 import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.model.CreatePhotographerRequest
+import com.hm.picplz.data.model.PhotoMoodRequest
 import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
 import com.hm.picplz.data.source.PhotographerSource
@@ -16,6 +17,12 @@ import javax.inject.Inject
 
 interface PhotographerService {
     suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit>
+
+    suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>>
+
+    suspend fun addPhotoMood(photoMood: String): Result<Unit>
+
+    suspend fun deletePhotoMood(photoMood: String): Result<Unit>
 
     suspend fun getNearbyPhotographers(
         longitude: Double,
@@ -46,6 +53,15 @@ class PhotographerServiceImpl
     ) : PhotographerService {
         override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
             photographerSource.createPhotographer(request)
+
+        override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+            photographerSource.getPhotographerInfo(photographerId).map { it.photoMoods ?: emptyList() }
+
+        override suspend fun addPhotoMood(photoMood: String): Result<Unit> =
+            photographerSource.addPhotoMood(PhotoMoodRequest(photoMood = photoMood))
+
+        override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
+            photographerSource.deletePhotoMood(PhotoMoodRequest(photoMood = photoMood))
 
         override suspend fun getNearbyPhotographers(
             longitude: Double,

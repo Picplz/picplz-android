@@ -83,6 +83,11 @@ data class MyPagePhotographer(
 
 @Serializable object MyPagePhotographerModifyProfile : NavigationRoute
 
+@Serializable
+data class MyPagePhotographerKeywordEdit(
+    val photographerId: Long,
+) : NavigationRoute
+
 @Serializable object MyPagePackageEdit : NavigationRoute
 
 @Serializable object MyPageMyReviews : NavigationRoute

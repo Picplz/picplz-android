@@ -82,6 +82,25 @@
     <string name="my_page_region_edit_pending">주 촬영지 편집 기능은 준비 중입니다.</string>
     <string name="my_page_keyword_edit_pending">키워드 편집 기능은 준비 중입니다.</string>
     <string name="my_page_equipment_edit_pending">장비 편집 기능은 준비 중입니다.</string>
+    <string name="my_page_keyword_edit_title">키워드 편집</string>
+    <string name="my_page_keyword_edit_description">자신 있는 분위기 키워드를 선택해 주세요.</string>
+    <string name="my_page_keyword_edit_save">저장</string>
+    <string name="my_page_keyword_edit_duplicate">이미 추가된 키워드입니다.</string>
+    <string name="my_page_keyword_edit_load_failed">키워드를 불러오지 못했습니다.</string>
+    <string name="my_page_keyword_edit_save_failed">키워드 저장에 실패했습니다.</string>
+    <string-array name="my_page_default_mood_keywords">
+        <item>캐주얼</item>
+        <item>고급미</item>
+        <item>심플</item>
+        <item>단아</item>
+        <item>몽환적</item>
+        <item>빈티지</item>
+        <item>청량</item>
+        <item>화려</item>
+        <item>퇴폐적</item>
+        <item>키치</item>
+        <item>힙스터</item>
+    </string-array>
     <string name="my_page_settlement_pending">정산 내역 기능은 준비 중입니다.</string>
     <string name="my_page_package_edit_pending">촬영 패키지 편집 기능은 준비 중입니다.</string>
     <string name="my_page_portfolio_edit_pending">포트폴리오 편집 기능은 준비 중입니다.</string>

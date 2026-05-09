@@ -62,6 +62,20 @@ class MyPageViewModelTest {
         }
 
     @Test
+    fun `navigate to photographer keyword edit emits dedicated navigation side effect`() =
+        runTest {
+            val viewModel = MyPageViewModel()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(MyPageIntent.NavigateToPhotographerKeywordEdit)
+            advanceUntilIdle()
+
+            val sideEffect = sideEffectDeferred.await()
+            assertTrue(sideEffect is MyPageSideEffect.NavigateToPhotographerKeywordEdit)
+            assertEquals(1, (sideEffect as MyPageSideEffect.NavigateToPhotographerKeywordEdit).photographerId)
+        }
+
+    @Test
     fun `photographer preview without package emits requires package toast`() =
         runTest {
             val viewModel = MyPageViewModel()

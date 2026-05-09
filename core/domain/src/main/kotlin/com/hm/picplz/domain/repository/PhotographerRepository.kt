@@ -14,4 +14,10 @@ interface PhotographerRepository {
         photographerId: Long,
         reviewSort: String = "RECOMMENDED",
     ): Result<PhotographerDetail>
+
+    suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>>
+
+    suspend fun addPhotoMood(photoMood: String): Result<Unit>
+
+    suspend fun deletePhotoMood(photoMood: String): Result<Unit>
 }

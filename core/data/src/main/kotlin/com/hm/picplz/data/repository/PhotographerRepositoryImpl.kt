@@ -46,4 +46,12 @@ class PhotographerRepositoryImpl
                     )
                 }
             }
+
+        override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+            photographerService.getPhotographerMoodKeywords(photographerId)
+
+        override suspend fun addPhotoMood(photoMood: String): Result<Unit> = photographerService.addPhotoMood(photoMood)
+
+        override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
+            photographerService.deletePhotoMood(photoMood)
     }

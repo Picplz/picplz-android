@@ -3,6 +3,7 @@ package com.hm.picplz.data.api
 import com.hm.picplz.data.model.ApiResponse
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
+import com.hm.picplz.data.model.PhotoMoodRequest
 import com.hm.picplz.data.model.PhotographerDetailDto
 import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
@@ -11,6 +12,7 @@ import com.hm.picplz.data.model.ReviewListDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -19,6 +21,16 @@ interface PhotographerApi {
     @POST("api/v1/photographers")
     suspend fun createPhotographer(
         @Body request: CreatePhotographerRequest,
+    ): Response<Unit>
+
+    @POST("api/v1/photographers/photo-mood")
+    suspend fun addPhotoMood(
+        @Body request: PhotoMoodRequest,
+    ): Response<Unit>
+
+    @HTTP(method = "DELETE", path = "api/v1/photographers/photo-mood", hasBody = true)
+    suspend fun deletePhotoMood(
+        @Body request: PhotoMoodRequest,
     ): Response<Unit>
 
     @GET("api/v1/members/location/nearby")
