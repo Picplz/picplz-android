@@ -139,3 +139,6 @@ data class OrderDetail(val orderId: String) : NavigationRoute
 
 @Serializable
 data class CancelReservation(val orderId: String) : NavigationRoute
+
+@Serializable
+data class PhotographerChatRoom(val roomId: String) : NavigationRoute

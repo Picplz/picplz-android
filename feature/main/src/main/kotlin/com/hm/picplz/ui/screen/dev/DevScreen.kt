@@ -49,6 +49,7 @@ import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
+import com.hm.picplz.navigation.model.PhotographerChatRoom
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.PhotographerMain
 import com.hm.picplz.navigation.model.QuickShoot
@@ -247,6 +248,9 @@ fun DevScreen(navController: NavHostController) {
             // === Chat ===
             SectionTitle("Chat")
             DevButton("ChatRoom (test-room)") { navController.navigate(ChatRoom(roomId = "test-room-123")) }
+            DevButton("PhotographerChatRoom (작가 입장)") {
+                navController.navigate(PhotographerChatRoom(roomId = "test-room-123"))
+            }
 
             // === Reservation ===
             SectionTitle("Reservation")

@@ -24,6 +24,7 @@ import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
+import com.hm.picplz.navigation.model.PhotographerChatRoom
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.screen.cancel_reservation.CancelReservationScreen
 import com.hm.picplz.ui.screen.cancel_reservation_confirm.CancelReservationConfirmScreen
@@ -43,6 +44,7 @@ import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
 import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
+import com.hm.picplz.ui.screen.photographer_chat_room.PhotographerChatRoomScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -69,6 +71,16 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     composable<ChatRoom> { backStackEntry ->
         val args = backStackEntry.toRoute<ChatRoom>()
         ChatRoomScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            _roomId = args.roomId,
+        )
+    }
+
+    composable<PhotographerChatRoom> { backStackEntry ->
+        val args = backStackEntry.toRoute<PhotographerChatRoom>()
+        PhotographerChatRoomScreen(
             onNavigateBack = {
                 navController.popBackStack()
             },

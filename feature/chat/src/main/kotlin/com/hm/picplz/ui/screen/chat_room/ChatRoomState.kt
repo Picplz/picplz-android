@@ -346,6 +346,39 @@ val dummyChatMessages =
         ),
     )
 
+val dummyReservationChatMessages =
+    listOf(
+        ChatMessage(
+            id = 100,
+            direction = MessageDirection.RECEIVED,
+            sender =
+                User(
+                    id = "2",
+                    nickname = "유가영작가",
+                    profileImageUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large",
+                ),
+            receiver =
+                User(
+                    id = "1",
+                    nickname = "나",
+                    profileImageUri = null,
+                ),
+            content =
+                MessageContent.Notification(
+                    title = "[자연스러운프사] 상품",
+                    subtitle = "예약 신청이 도착했어요",
+                    content = "애니프사 님으로부터 [자연스러운프사] 예약이 도착했습니다.",
+                    type = NotificationType.POSITIVE,
+                    button =
+                        MessageButton(
+                            text = "예약 정보 확인",
+                            actionType = ButtonActionType.CONFIRM_ORDER,
+                        ),
+                ),
+            timestamp = System.currentTimeMillis() - 1000,
+        ),
+    )
+
 val dummySuggestedChat =
     listOf(
         "촬영 소요 시간은 얼마나 걸리나요",
