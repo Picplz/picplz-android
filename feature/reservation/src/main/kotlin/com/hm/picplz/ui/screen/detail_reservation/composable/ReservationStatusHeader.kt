@@ -61,6 +61,7 @@ fun ReservationStatusHeader(
 fun PhotographerReservationStatusHeader(
     currentReservationStatus: ReservationStatus,
     onCancelClick: () -> Unit,
+    onCancelReject: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -72,11 +73,26 @@ fun PhotographerReservationStatusHeader(
             description = stringResource(currentReservationStatus.descriptionResId),
         )
 
-        if (currentReservationStatus.showCancelButton()) {
-            ReservationCancelButton(
-                text = stringResource(R.string.reservation_reject),
-                onClick = onCancelClick,
-            )
+        when (currentReservationStatus) {
+            ReservationStatus.WAITING_APPROVAL -> {
+                ReservationCancelButton(
+                    text = stringResource(R.string.reservation_reject),
+                    onClick = onCancelReject,
+                )
+            }
+
+            ReservationStatus.WAITING_PAYMENT,
+            ReservationStatus.RESERVED,
+            -> {
+                ReservationCancelButton(
+                    text = stringResource(R.string.reservation_cancel),
+                    onClick = onCancelClick,
+                )
+            }
+
+            else -> {
+                return
+            }
         }
     }
 }

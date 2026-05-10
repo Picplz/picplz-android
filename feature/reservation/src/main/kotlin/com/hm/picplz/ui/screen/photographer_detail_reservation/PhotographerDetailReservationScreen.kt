@@ -18,10 +18,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationBottomButtons
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationMap
 import com.hm.picplz.ui.screen.detail_reservation.composable.PhotographerReservationStatusHeader
+import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationApproveButton
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPolicyDialog
+import com.hm.picplz.ui.screen.detail_reservation.model.ReservationStatus
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Suppress("LongParameterList")
@@ -67,6 +69,12 @@ fun PhotographerDetailReservationScreen(
         onCancelClick = {
             viewModel.handelIntent(PhotographerDetailReservationIntent.ShowCancelDialog)
         },
+        onCancelReject = {
+            // TODO
+        },
+        onReservationApproveClick = {
+            // TODO
+        },
         onCancelDialogDismiss = {
             viewModel.handelIntent(PhotographerDetailReservationIntent.DismissCancelDialog)
         },
@@ -93,6 +101,8 @@ private fun PhotographerDetailReservationScreen(
     onHistoryClick: () -> Unit,
     onConfirmClick: () -> Unit,
     onCancelClick: () -> Unit,
+    onCancelReject: () -> Unit,
+    onReservationApproveClick: () -> Unit,
     onCancelDialogDismiss: () -> Unit,
     onCancelDialogConfirm: () -> Unit,
     onInfoClick: () -> Unit,
@@ -139,6 +149,7 @@ private fun PhotographerDetailReservationScreen(
                         modifier = Modifier.padding(vertical = 20.dp),
                         currentReservationStatus = state.reservationStatus,
                         onCancelClick = onCancelClick,
+                        onCancelReject = onCancelReject,
                     )
                 }
 
@@ -160,13 +171,20 @@ private fun PhotographerDetailReservationScreen(
                 }
             }
 
-            DetailReservationBottomButtons(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 48.dp),
-                currentReservationStatus = state.reservationStatus,
-                onChatClick = onChatClick,
-                onHistoryClick = onHistoryClick,
-                onConfirmClick = onConfirmClick,
-            )
+            if (state.reservationStatus != ReservationStatus.WAITING_APPROVAL) {
+                DetailReservationBottomButtons(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 48.dp),
+                    currentReservationStatus = state.reservationStatus,
+                    onChatClick = onChatClick,
+                    onHistoryClick = onHistoryClick,
+                    onConfirmClick = onConfirmClick,
+                )
+            } else {
+                ReservationApproveButton(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 48.dp),
+                    onClick = onReservationApproveClick,
+                )
+            }
         }
     }
 }
@@ -181,6 +199,8 @@ private fun PhotographerDetailReservationScreenPreview() {
         onHistoryClick = {},
         onConfirmClick = {},
         onCancelClick = {},
+        onCancelReject = {},
+        onReservationApproveClick = {},
         onCancelDialogDismiss = {},
         onCancelDialogConfirm = {},
         onInfoClick = {},

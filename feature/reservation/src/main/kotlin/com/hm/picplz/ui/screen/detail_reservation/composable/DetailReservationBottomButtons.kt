@@ -31,6 +31,7 @@ fun DetailReservationBottomButtons(
                 onClick = onChatClick,
             )
         }
+
         ReservationStatus.RESERVED -> {
             Row(
                 modifier = modifier,
@@ -47,6 +48,7 @@ fun DetailReservationBottomButtons(
                 )
             }
         }
+
         ReservationStatus.COMPLETED -> {
             Row(
                 modifier = modifier,
@@ -64,6 +66,18 @@ fun DetailReservationBottomButtons(
             }
         }
     }
+}
+
+@Composable
+fun ReservationApproveButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    CommonBottomButton(
+        modifier = modifier,
+        text = stringResource(R.string.reservation_button_reservation_approve),
+        onClick = onClick,
+    )
 }
 
 @Composable
