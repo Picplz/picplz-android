@@ -81,7 +81,10 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
     }
 
     composable<PhotographerEquipmentSetting> {
-        val photographerMainBackStackEntry = navController.previousBackStackEntry
+        val photographerMainBackStackEntry =
+            navController.previousBackStackEntry?.takeIf { entry ->
+                entry.destination.route == PhotographerMain::class.qualifiedName
+            }
         val photographerMainViewModel: PhotographerMainViewModel =
             if (photographerMainBackStackEntry != null) {
                 hiltViewModel(photographerMainBackStackEntry)

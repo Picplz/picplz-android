@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.photographer_main.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,9 @@ fun EquipmentSettingScreen(
     val enabledEquipment = currentState.equipmentList.filter { it.isEnabled }
     val phoneEquipment = enabledEquipment.filter { it.type.contains("폰") || it.type.contains("핸드폰") }
     val cameraEquipment = enabledEquipment - phoneEquipment.toSet()
+    val disabledEquipment = currentState.equipmentList.filterNot { it.isEnabled }
+    val disabledPhoneEquipment = disabledEquipment.filter { it.type.contains("폰") || it.type.contains("핸드폰") }
+    val disabledCameraEquipment = disabledEquipment - disabledPhoneEquipment.toSet()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -103,6 +107,14 @@ fun EquipmentSettingScreen(
                         EquipmentSection(
                             title = stringResource(R.string.equipment_setting_phone_section),
                             equipment = phoneEquipment,
+                            addButtonVisible = disabledPhoneEquipment.isNotEmpty(),
+                            onAddEquipment = {
+                                disabledPhoneEquipment.firstOrNull()?.let { equipment ->
+                                    viewModel.handleIntent(
+                                        PhotographerMainIntent.ToggleEquipmentEnabled(equipment.id),
+                                    )
+                                }
+                            },
                             onRemoveEquipment = { equipment ->
                                 viewModel.handleIntent(
                                     PhotographerMainIntent.ToggleEquipmentEnabled(equipment.id),
@@ -112,6 +124,14 @@ fun EquipmentSettingScreen(
                         EquipmentSection(
                             title = stringResource(R.string.equipment_setting_camera_section),
                             equipment = cameraEquipment,
+                            addButtonVisible = disabledCameraEquipment.isNotEmpty(),
+                            onAddEquipment = {
+                                disabledCameraEquipment.firstOrNull()?.let { equipment ->
+                                    viewModel.handleIntent(
+                                        PhotographerMainIntent.ToggleEquipmentEnabled(equipment.id),
+                                    )
+                                }
+                            },
                             onRemoveEquipment = { equipment ->
                                 viewModel.handleIntent(
                                     PhotographerMainIntent.ToggleEquipmentEnabled(equipment.id),
@@ -156,6 +176,8 @@ fun EquipmentSettingScreen(
 private fun EquipmentSection(
     title: String,
     equipment: List<Equipment>,
+    addButtonVisible: Boolean,
+    onAddEquipment: () -> Unit,
     onRemoveEquipment: (Equipment) -> Unit,
 ) {
     Column(
@@ -170,6 +192,24 @@ private fun EquipmentSection(
             EquipmentSettingItem(
                 equipment = item,
                 onRemove = { onRemoveEquipment(item) },
+            )
+        }
+        if (addButtonVisible) {
+            Text(
+                text = stringResource(R.string.equipment_setting_add_button),
+                style = pretendardTypography.bodyMedium,
+                color = MainThemeColor.Gray4,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(5.dp))
+                        .border(
+                            width = 1.dp,
+                            color = MainThemeColor.Gray2,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .padding(horizontal = 15.dp, vertical = 15.dp)
+                        .clickable(onClick = onAddEquipment),
             )
         }
     }
