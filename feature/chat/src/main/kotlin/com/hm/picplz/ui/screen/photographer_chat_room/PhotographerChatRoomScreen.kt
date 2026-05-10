@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.chat_room.dummyReservationChatMessages
 import com.hm.picplz.ui.screen.composable.ChatRoomScreenContent
+import com.hm.picplz.ui.screen.photographer_chat_room.composable.ReservationInfoBanner
 import com.hm.picplz.ui.theme.PicplzTheme
 
 @Composable
@@ -40,6 +41,16 @@ fun PhotographerChatRoomScreen(
         onMenuClick = {
             // TODO: Implement menu click action
         },
+        reservationInfoSection = {
+            ReservationInfoBanner(
+                customerName = state.customerName,
+                productName = state.productName,
+                customerProfileImageUri = state.customerImageUrl,
+                onClick = {
+                    // TODO: 예약 정보 화면으로 이동
+                },
+            )
+        },
     )
 }
 
@@ -54,6 +65,14 @@ private fun PhotographerChatRoomScreenPreview() {
             chatMessages = dummyReservationChatMessages,
             onBackClick = {},
             onMenuClick = {},
+            reservationInfoSection = {
+                ReservationInfoBanner(
+                    customerName = "애니프사",
+                    productName = "자연스러운프사",
+                    customerProfileImageUri = null,
+                    onClick = {},
+                )
+            },
         )
     }
 }

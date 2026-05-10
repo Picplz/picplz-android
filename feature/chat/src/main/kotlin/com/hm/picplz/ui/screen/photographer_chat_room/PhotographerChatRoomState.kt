@@ -7,6 +7,9 @@ data class PhotographerChatRoomState(
     val chatRoomId: Int = 0,
     val reservationStep: ReservationStep = ReservationStep.PENDING,
     val chatMessages: List<ChatMessage> = emptyList(),
+    val customerName: String = "",
+    val customerImageUrl: String = "",
+    val productName: String = "",
 ) {
     companion object {
         fun idle(): PhotographerChatRoomState {
