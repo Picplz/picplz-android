@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.ShootingPackage
+import com.hm.picplz.domain.model.ShootingPackage
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import java.text.NumberFormat

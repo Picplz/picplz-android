@@ -19,8 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.PhotographerReview
-import com.hm.picplz.data.model.PhotographerReviewSummary
+import com.hm.picplz.domain.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReviewSummary
 import com.hm.picplz.navigation.model.ReviewPhotographer
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.screen.detail_photographer.review.SingleReview
@@ -29,6 +29,7 @@ import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.pretendardTypography
 import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
+import java.util.Locale
 
 @Composable
 fun ReviewSection(
@@ -39,7 +40,7 @@ fun ReviewSection(
     photographerId: Int,
     onReport: () -> Unit,
 ) {
-    val totalRating = reviewSummary.averageRating
+    val totalRating = ReviewUtil.roundToFirstDecimal(reviewSummary.averageRating)
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN)
 
     Column(
@@ -62,7 +63,7 @@ fun ReviewSection(
             }
             Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = totalRating.toString(),
+                text = String.format(Locale.KOREA, "%.1f", totalRating),
                 style = pretendardTypography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = MainThemeColor.Gray4,

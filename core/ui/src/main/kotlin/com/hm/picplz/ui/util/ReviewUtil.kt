@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.util
 
 import com.hm.picplz.core.ui.R
+import kotlin.math.roundToInt
 
 enum class StarType(val full: Int, val empty: Int) {
     MAIN(R.drawable.star_full, R.drawable.star_empty),
@@ -13,6 +14,8 @@ enum class SingleReviewType {
 }
 
 object ReviewUtil {
+    fun roundToFirstDecimal(rating: Float): Float = (rating * 10).roundToInt() / 10f
+
     fun calculateStarRating(
         totalRating: Float,
         type: StarType = StarType.MAIN,

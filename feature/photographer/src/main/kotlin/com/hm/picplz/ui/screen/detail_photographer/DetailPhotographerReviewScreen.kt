@@ -49,6 +49,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.util.ReviewUtil
 import com.hm.picplz.ui.util.StarType
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Locale
 import com.hm.picplz.feature.photographer.R as PhotographerR
 
 @Composable
@@ -62,7 +63,7 @@ fun DetailPhotographerReviewScreen(
 
     val reviewSummary = state.reviewSummary
     val reviews = state.reviews
-    val totalRating = reviewSummary.averageRating
+    val totalRating = ReviewUtil.roundToFirstDecimal(reviewSummary.averageRating)
     val starList = ReviewUtil.calculateStarRating(totalRating, StarType.MAIN)
     val images = reviewSummary.photoReviews
 
@@ -111,7 +112,7 @@ fun DetailPhotographerReviewScreen(
                             }
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = totalRating.toString(),
+                                text = String.format(Locale.KOREA, "%.1f", totalRating),
                                 style = MainThemeFont.BodyBold,
                                 color = MainThemeColor.Gray4,
                             )

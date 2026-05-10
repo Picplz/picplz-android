@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonButtonModal
+import com.hm.picplz.ui.screen.common.CommonEmptyState
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
@@ -81,19 +82,21 @@ fun DetailPhotographerScreen(
             )
         },
         bottomBar = {
-            Box(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
-                CommonBottomButton(
-                    text =
-                        if (state.profileInfo.isBookable) {
-                            stringResource(R.string.booking_button)
-                        } else {
-                            stringResource(R.string.booking_unavailable)
+            if (!state.isLoading && state.error == null) {
+                Box(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+                    CommonBottomButton(
+                        text =
+                            if (state.profileInfo.isBookable) {
+                                stringResource(R.string.booking_button)
+                            } else {
+                                stringResource(R.string.booking_unavailable)
+                            },
+                        onClick = {
+                            viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
                         },
-                    onClick = {
-                        viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
-                    },
-                    enabled = state.profileInfo.isBookable,
-                )
+                        enabled = state.profileInfo.isBookable,
+                    )
+                }
             }
         },
         content = { innerPadding ->
@@ -110,18 +113,13 @@ fun DetailPhotographerScreen(
                     }
                 }
                 state.error != null -> {
-                    Box(
+                    CommonEmptyState(
+                        title = stringResource(R.string.photographer_detail_load_error),
                         modifier =
                             Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.photographer_detail_load_error),
-                            color = MainThemeColor.Gray4,
-                        )
-                    }
+                    )
                 }
                 else -> {
                     Column(

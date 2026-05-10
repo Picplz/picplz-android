@@ -37,9 +37,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.hm.picplz.common.model.PhotoReview
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.mockdata.mockPhotoReviews
-import com.hm.picplz.data.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReview
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -201,32 +201,38 @@ fun SingleReview(
         Spacer(modifier = Modifier.height(18.dp))
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            Row {
-                Text(
-                    text = stringResource(R.string.option_label),
-                    style = MainThemeFont.InnerTag,
-                    color = MainThemeColor.Gray4,
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = review.option,
-                    style = MainThemeFont.Caption,
-                    color = MainThemeColor.Gray4,
-                )
+            if (review.option.isNotBlank()) {
+                Row {
+                    Text(
+                        text = stringResource(R.string.option_label),
+                        style = MainThemeFont.InnerTag,
+                        color = MainThemeColor.Gray4,
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = review.option,
+                        style = MainThemeFont.Caption,
+                        color = MainThemeColor.Gray4,
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(3.dp))
-            Row {
-                Text(
-                    text = stringResource(R.string.shooting_location),
-                    style = MainThemeFont.InnerTag,
-                    color = MainThemeColor.Gray4,
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = review.location,
-                    style = MainThemeFont.Caption,
-                    color = MainThemeColor.Gray4,
-                )
+            if (review.option.isNotBlank() && review.location.isNotBlank()) {
+                Spacer(modifier = Modifier.height(3.dp))
+            }
+            if (review.location.isNotBlank()) {
+                Row {
+                    Text(
+                        text = stringResource(R.string.shooting_location),
+                        style = MainThemeFont.InnerTag,
+                        color = MainThemeColor.Gray4,
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = review.location,
+                        style = MainThemeFont.Caption,
+                        color = MainThemeColor.Gray4,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(13.dp))
@@ -273,7 +279,24 @@ fun SingleReviewPreview() {
             rating = 4.0f,
             createdAt = "2025-02-26",
             isReported = true,
-            photoReviews = mockPhotoReviews.slice(0..2),
+            photoReviews =
+                listOf(
+                    PhotoReview(
+                        reviewId = 1,
+                        photoReviewUri = "https://picsum.photos/seed/review-preview-1/500/600",
+                        index = 0,
+                    ),
+                    PhotoReview(
+                        reviewId = 1,
+                        photoReviewUri = "https://picsum.photos/seed/review-preview-2/500/600",
+                        index = 1,
+                    ),
+                    PhotoReview(
+                        reviewId = 1,
+                        photoReviewUri = "https://picsum.photos/seed/review-preview-3/500/600",
+                        index = 2,
+                    ),
+                ),
             photoReviewCount = 3,
             option = "프로필 Only",
             location = "서울 강남",

@@ -16,12 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.mockdata.mockPhotographerInfo
 import com.hm.picplz.navigation.model.DetailPhotographerPortfolioDetail
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -32,7 +33,7 @@ fun DetailPhotographerPhotoPortfoliosScreen(
     navController: NavController,
     photographerId: Int,
 ) {
-    val photoPortfolios = mockPhotographerInfo.photoPortfolios
+    val photoPortfolios = emptyList<PhotoPortfolio>()
     val paddingModifier = Modifier.padding(horizontal = 15.dp)
 
     val chunkedImages = photoPortfolios.chunked(3)
@@ -47,7 +48,7 @@ fun DetailPhotographerPhotoPortfoliosScreen(
                         .padding(innerPadding)
                         .fillMaxWidth(),
             ) {
-                CommonFixedTopBar(title = "포트폴리오") {
+                CommonFixedTopBar(title = stringResource(R.string.portfolio_detail_title)) {
                     navController.popBackStack()
                 }
 
@@ -75,7 +76,7 @@ fun DetailPhotographerPhotoPortfoliosScreen(
                                                     .crossfade(true) // 부드러운 전환 효과
                                                     .build(),
                                         ),
-                                    contentDescription = "포트폴리오 이미지",
+                                    contentDescription = stringResource(R.string.portfolio_detail_image),
                                     modifier =
                                         Modifier
                                             .weight(1f) // 각 이미지가 동일한 크기를 가짐

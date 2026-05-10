@@ -227,7 +227,9 @@ fun DevScreen(navController: NavHostController) {
 
             // === Detail Photographer ===
             SectionTitle("Detail Photographer")
-            DevButton("DetailPhotographer") { navController.navigate(DetailPhotographer(1)) }
+            DevButton("DetailPhotographer (1, error test)") { navController.navigate(DetailPhotographer(1)) }
+            DevButton("DetailPhotographer (14, sparse DB)") { navController.navigate(DetailPhotographer(14)) }
+            DevButton("DetailPhotographer (7, rich DB)") { navController.navigate(DetailPhotographer(7)) }
             DevButton("DetailPhotographer (작가 preview mode)") {
                 navController.navigate(DetailPhotographer(1, previewMode = true))
             }

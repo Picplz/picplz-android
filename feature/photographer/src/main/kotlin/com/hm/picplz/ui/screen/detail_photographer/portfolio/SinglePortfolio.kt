@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.mockdata.mockPhotoPortfolios
-import com.hm.picplz.data.model.PhotographerPortfolio
+import com.hm.picplz.domain.model.PhotographerPortfolio
 import com.hm.picplz.ui.screen.common.CommonDropdownMenu
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
 import com.hm.picplz.ui.screen.common.CommonIconButton
@@ -126,8 +126,20 @@ fun SinglePortfolioPreview() {
             title = "서울숲",
             location = "서울 까치산로",
             createdAt = "2024-02-01",
-            photoPortfolios = mockPhotoPortfolios.slice(5..10),
-            photoPortfolioCount = 6,
+            photoPortfolios =
+                listOf(
+                    PhotoPortfolio(
+                        portfolioId = 2,
+                        photoPortfolioUri = "https://picsum.photos/seed/portfolio-preview-1/500/600",
+                        index = 0,
+                    ),
+                    PhotoPortfolio(
+                        portfolioId = 2,
+                        photoPortfolioUri = "https://picsum.photos/seed/portfolio-preview-2/500/600",
+                        index = 1,
+                    ),
+                ),
+            photoPortfolioCount = 2,
         )
 
     PicplzTheme {

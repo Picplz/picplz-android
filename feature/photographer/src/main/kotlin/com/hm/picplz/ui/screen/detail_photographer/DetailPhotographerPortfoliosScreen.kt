@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.hm.picplz.common.util.CommonUtil
-import com.hm.picplz.data.model.PhotographerPortfolio
+import com.hm.picplz.domain.model.PhotographerPortfolio
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
 import com.hm.picplz.ui.screen.detail_photographer.portfolio.SinglePortfolio
 import com.hm.picplz.ui.theme.MainThemeColor
