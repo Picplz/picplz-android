@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler
 
+import com.hm.picplz.feature.auth.R
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.ClearSearchResults
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.RemoveSelectedArea
@@ -32,6 +33,13 @@ class AreaSearchHandler {
                 val isAlreadySelected =
                     currentState.selectedAreas.any { it.id == intent.area.id }
 
+                if (isAlreadySelected) {
+                    return currentState.copy(
+                        toastMessageResId = R.string.sign_up_main_location_already_selected,
+                        showToast = true,
+                    )
+                }
+
                 if (!isAlreadySelected && currentState.selectedAreas.size >= 5) {
                     return currentState.copy(
                         toastMessage = "활동 지역은 최대 5개까지 선택할 수 있습니다.",
@@ -39,14 +47,7 @@ class AreaSearchHandler {
                     )
                 }
 
-                val newSelectedAreas =
-                    if (isAlreadySelected) {
-                        currentState.selectedAreas.filter { it.id != intent.area.id }
-                    } else {
-                        currentState.selectedAreas + intent.area
-                    }
-
-                currentState.copy(selectedAreas = newSelectedAreas)
+                currentState.copy(selectedAreas = currentState.selectedAreas + intent.area)
             }
 
             is RemoveSelectedArea -> {

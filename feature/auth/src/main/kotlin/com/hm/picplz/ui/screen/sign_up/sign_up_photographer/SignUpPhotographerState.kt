@@ -43,6 +43,7 @@ data class SignUpPhotographerState(
     val selectedAreas: List<Area> = emptyList(),
     val searchError: String? = null,
     val toastMessage: String? = null,
+    val toastMessageResId: Int? = null,
     val showToast: Boolean = false,
     val availableCameraBrands: List<DeviceBrand> = emptyList(),
     val availableCameraTypes: List<String> = emptyList(),

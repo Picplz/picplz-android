@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
@@ -40,6 +41,7 @@ fun CommonToast(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
+    bottomOffset: Dp = CommonToastDefaults.BottomOffset,
 ) {
     LaunchedEffect(isVisible) {
         if (isVisible) {
@@ -58,7 +60,7 @@ fun CommonToast(
                 modifier
                     .fillMaxSize()
                     .padding(horizontal = CommonToastDefaults.HorizontalPadding)
-                    .padding(bottom = CommonToastDefaults.BottomOffset),
+                    .padding(bottom = bottomOffset),
             contentAlignment = Alignment.BottomCenter,
         ) {
             Box(

@@ -183,7 +183,7 @@ class SignUpPhotographerViewModel
                 }
 
                 is SignUpPhotographerIntent.DismissToast -> {
-                    _state.update { it.copy(showToast = false, toastMessage = null) }
+                    _state.update { it.copy(showToast = false, toastMessage = null, toastMessageResId = null) }
                 }
 
                 is SignUpPhotographerIntent.Navigate -> {
