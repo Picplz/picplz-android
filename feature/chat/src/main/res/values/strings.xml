@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 작가 채팅방 - 예약 정보 배너 -->
+    <string name="photographer_chat_room_reservation_info_label">예약 정보 - %1$s 님</string>
+</resources>

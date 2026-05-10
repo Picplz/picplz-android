@@ -346,6 +346,43 @@ val dummyChatMessages =
         ),
     )
 
+val reservationCustomerName = "애니프사"
+val reservationProductName = "자연스러운프사"
+val reservationProfileUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
+
+val dummyReservationChatMessages =
+    listOf(
+        ChatMessage(
+            id = 100,
+            direction = MessageDirection.RECEIVED,
+            sender =
+                User(
+                    id = "2",
+                    nickname = reservationCustomerName,
+                    profileImageUri = reservationProfileUri,
+                ),
+            receiver =
+                User(
+                    id = "1",
+                    nickname = "나",
+                    profileImageUri = null,
+                ),
+            content =
+                MessageContent.Notification(
+                    title = "[$reservationProductName] 상품",
+                    subtitle = "예약 신청이 도착했어요",
+                    content = "$reservationCustomerName 님으로부터 [$reservationProductName] 예약이 도착했습니다.",
+                    type = NotificationType.POSITIVE,
+                    button =
+                        MessageButton(
+                            text = "예약 정보 확인",
+                            actionType = ButtonActionType.CONFIRM_ORDER,
+                        ),
+                ),
+            timestamp = System.currentTimeMillis() - 1000,
+        ),
+    )
+
 val dummySuggestedChat =
     listOf(
         "촬영 소요 시간은 얼마나 걸리나요",

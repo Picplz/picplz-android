@@ -58,7 +58,7 @@ fun ReservationStep(
                 color = MainThemeColor.Black,
             )
             Text(
-                text = "서비스 진행",
+                text = "예약 진행",
                 style = caption,
                 color =
                     if (
