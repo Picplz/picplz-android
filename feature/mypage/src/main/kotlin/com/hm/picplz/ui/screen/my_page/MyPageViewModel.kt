@@ -87,6 +87,16 @@ class MyPageViewModel
                 is MyPageIntent.NavigateToPortfolioEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
                 }
+                is MyPageIntent.ApplyPhotographerKeywordSummary -> {
+                    _state.update {
+                        it.copy(
+                            photographerProfile =
+                                it.photographerProfile.copy(
+                                    keywordSummary = intent.keywordSummary,
+                                ),
+                        )
+                    }
+                }
                 is MyPageIntent.ApplyDevPhotographerPreview -> {
                     _state.update {
                         it.copy(

@@ -124,7 +124,10 @@ class MyPagePhotographerKeywordEditViewModelTest {
 
             assertEquals(listOf("심플"), repository.addedKeywords)
             assertEquals(listOf("캐주얼"), repository.deletedKeywords)
-            assertEquals(MyPagePhotographerKeywordEditSideEffect.NavigateToPrev, sideEffectDeferred.await())
+            assertEquals(
+                MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(keywordSummary = "#심플"),
+                sideEffectDeferred.await(),
+            )
         }
 
     @Test
@@ -183,7 +186,7 @@ class MyPagePhotographerKeywordEditViewModelTest {
             viewModel.handleIntent(MyPagePhotographerKeywordEditIntent.NavigateToPrev)
             advanceUntilIdle()
 
-            assertEquals(MyPagePhotographerKeywordEditSideEffect.NavigateToPrev, sideEffectDeferred.await())
+            assertEquals(MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(), sideEffectDeferred.await())
         }
 
     private fun createViewModel(

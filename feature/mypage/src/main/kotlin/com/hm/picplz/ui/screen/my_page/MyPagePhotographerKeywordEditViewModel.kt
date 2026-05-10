@@ -37,7 +37,7 @@ class MyPagePhotographerKeywordEditViewModel
                     )
                 is MyPagePhotographerKeywordEditIntent.NavigateToPrev ->
                     sendSideEffect(
-                        MyPagePhotographerKeywordEditSideEffect.NavigateToPrev,
+                        MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(),
                     )
                 is MyPagePhotographerKeywordEditIntent.SaveKeywords -> saveKeywords()
                 is MyPagePhotographerKeywordEditIntent.AddKeywordChip ->
@@ -205,7 +205,11 @@ class MyPagePhotographerKeywordEditViewModel
                     selectedKeywords = currentState.selectedKeywordChipList.map { it.label },
                 ).onSuccess {
                     _state.update { it.copy(isSaving = false) }
-                    sendSideEffect(MyPagePhotographerKeywordEditSideEffect.NavigateToPrev)
+                    sendSideEffect(
+                        MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(
+                            keywordSummary = currentState.selectedKeywordChipList.toKeywordSummary(),
+                        ),
+                    )
                 }.onFailure {
                     getPhotographerMoodKeywordsUseCase(currentState.photographerId)
                         .onSuccess { keywords -> applyKeywords(keywords) }
@@ -246,7 +250,23 @@ class MyPagePhotographerKeywordEditViewModel
             }
         }
 
+        private fun List<ChipItem>.toKeywordSummary(): String {
+            val keywords = map { it.label.trim() }.filter(String::isNotEmpty).distinct()
+            val visibleKeywords = keywords.take(KEYWORD_SUMMARY_VISIBLE_COUNT).joinToString { "#$it" }
+            val hiddenCount = keywords.size - KEYWORD_SUMMARY_VISIBLE_COUNT
+
+            return if (hiddenCount > 0) {
+                "$visibleKeywords 외 ${hiddenCount}개 키워드"
+            } else {
+                visibleKeywords
+            }
+        }
+
         private fun sendSideEffect(sideEffect: MyPagePhotographerKeywordEditSideEffect) {
             viewModelScope.launch { _sideEffect.send(sideEffect) }
+        }
+
+        companion object {
+            private const val KEYWORD_SUMMARY_VISIBLE_COUNT = 3
         }
     }

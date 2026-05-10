@@ -69,7 +69,14 @@ fun MyPagePhotographerKeywordEditRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
-                is MyPagePhotographerKeywordEditSideEffect.NavigateToPrev -> navController.popBackStack()
+                is MyPagePhotographerKeywordEditSideEffect.NavigateToPrev -> {
+                    sideEffect.keywordSummary?.let { keywordSummary ->
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set(KEY_PHOTOGRAPHER_KEYWORD_SUMMARY, keywordSummary)
+                    }
+                    navController.popBackStack()
+                }
             }
         }
     }

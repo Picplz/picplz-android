@@ -112,6 +112,15 @@ class MyPageViewModelTest {
         }
 
     @Test
+    fun `apply photographer keyword summary updates profile summary`() {
+        val viewModel = MyPageViewModel()
+
+        viewModel.handleIntent(MyPageIntent.ApplyPhotographerKeywordSummary("#캐주얼, #심플"))
+
+        assertEquals("#캐주얼, #심플", viewModel.state.value.photographerProfile.keywordSummary)
+    }
+
+    @Test
     fun `photographer preview availability requires package and photographer id`() {
         assertFalse(PhotographerProfile(hasPackages = false, photographerId = 1).canPreviewProfile)
         assertFalse(PhotographerProfile(hasPackages = true, photographerId = 0).canPreviewProfile)
