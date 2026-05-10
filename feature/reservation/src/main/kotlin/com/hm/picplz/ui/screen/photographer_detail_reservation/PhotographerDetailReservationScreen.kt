@@ -17,11 +17,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationBottomButtons
 import com.hm.picplz.ui.screen.detail_reservation.composable.DetailReservationMap
+import com.hm.picplz.ui.screen.detail_reservation.composable.PhotographerReservationStatusHeader
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationCancelDialog
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationInfoSection
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationProgressStepper
 import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationRefundPolicyDialog
-import com.hm.picplz.ui.screen.detail_reservation.composable.ReservationStatusHeader
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Suppress("LongParameterList")
@@ -135,7 +135,7 @@ private fun PhotographerDetailReservationScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 item {
-                    ReservationStatusHeader(
+                    PhotographerReservationStatusHeader(
                         modifier = Modifier.padding(vertical = 20.dp),
                         currentReservationStatus = state.reservationStatus,
                         onCancelClick = onCancelClick,
