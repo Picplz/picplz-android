@@ -55,7 +55,9 @@ class PhotographerServiceImpl
             photographerSource.createPhotographer(request)
 
         override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
-            photographerSource.getPhotographerInfo(photographerId).map { it.photoMoods ?: emptyList() }
+            photographerSource.getPhotographerInfo(photographerId).map { detail ->
+                detail.photoMoods?.mapNotNull { it?.trim() }?.filter(String::isNotEmpty) ?: emptyList()
+            }
 
         override suspend fun addPhotoMood(photoMood: String): Result<Unit> =
             photographerSource.addPhotoMood(PhotoMoodRequest(photoMood = photoMood))

@@ -1,6 +1,7 @@
 package com.hm.picplz.ui.screen.my_page
 
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.PhotographerRepository
 import com.hm.picplz.domain.usecase.GetPhotographerMoodKeywordsUseCase
 import com.hm.picplz.domain.usecase.UpdatePhotographerMoodKeywordsUseCase
@@ -226,6 +227,11 @@ private class FakePhotographerRepository(
         Result.success(
             FilteredPhotographers(active = emptyList(), inactive = emptyList()),
         )
+
+    override suspend fun getPhotographerDetail(
+        photographerId: Long,
+        reviewSort: String,
+    ): Result<PhotographerDetail> = Result.failure(UnsupportedOperationException())
 
     override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
         if (failsOnGet || (failsOnSecondGet && getCallCount++ > 0)) {
