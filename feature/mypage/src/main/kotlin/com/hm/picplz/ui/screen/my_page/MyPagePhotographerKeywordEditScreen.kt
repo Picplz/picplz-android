@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import ChipHeight
 import CommonChip
+import android.content.Context
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +46,7 @@ import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
 
 private const val ADD_KEYWORD_CHIP_ID = "ADD_KEYWORD"
+private const val KEYWORD_SUMMARY_VISIBLE_COUNT = 3
 
 @Composable
 fun MyPagePhotographerKeywordEditRoute(
@@ -54,6 +57,7 @@ fun MyPagePhotographerKeywordEditRoute(
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
     val defaultKeywords = stringArrayResource(R.array.my_page_default_mood_keywords).toList()
+    val context = LocalContext.current
 
     SetStatusBarStyle()
 
@@ -70,7 +74,7 @@ fun MyPagePhotographerKeywordEditRoute(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 is MyPagePhotographerKeywordEditSideEffect.NavigateToPrev -> {
-                    sideEffect.keywordSummary?.let { keywordSummary ->
+                    sideEffect.selectedKeywords?.toKeywordSummary(context)?.let { keywordSummary ->
                         navController.previousBackStackEntry
                             ?.savedStateHandle
                             ?.set(KEY_PHOTOGRAPHER_KEYWORD_SUMMARY, keywordSummary)
@@ -86,6 +90,17 @@ fun MyPagePhotographerKeywordEditRoute(
         onIntent = viewModel::handleIntent,
         modifier = modifier,
     )
+}
+
+private fun List<String>.toKeywordSummary(context: Context): String {
+    val visibleKeywords = take(KEYWORD_SUMMARY_VISIBLE_COUNT).joinToString { "#$it" }
+    val hiddenCount = size - KEYWORD_SUMMARY_VISIBLE_COUNT
+
+    return if (hiddenCount > 0) {
+        context.getString(R.string.my_page_keyword_summary_with_more, visibleKeywords, hiddenCount)
+    } else {
+        visibleKeywords
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)

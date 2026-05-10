@@ -126,7 +126,7 @@ class MyPagePhotographerKeywordEditViewModelTest {
             assertEquals(listOf("심플"), repository.addedKeywords)
             assertEquals(listOf("캐주얼"), repository.deletedKeywords)
             assertEquals(
-                MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(keywordSummary = "#심플"),
+                MyPagePhotographerKeywordEditSideEffect.NavigateToPrev(selectedKeywords = listOf("심플")),
                 sideEffectDeferred.await(),
             )
         }

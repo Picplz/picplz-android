@@ -88,6 +88,7 @@
     <string name="my_page_keyword_edit_duplicate">이미 추가된 키워드입니다.</string>
     <string name="my_page_keyword_edit_load_failed">키워드를 불러오지 못했습니다.</string>
     <string name="my_page_keyword_edit_save_failed">키워드 저장에 실패했습니다.</string>
+    <string name="my_page_keyword_summary_with_more">%1$s 외 %2$d개 키워드</string>
     <string-array name="my_page_default_mood_keywords">
         <item>캐주얼</item>
         <item>고급미</item>
