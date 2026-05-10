@@ -19,7 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,8 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hm.picplz.common.util.DateTimeUtil
 import com.hm.picplz.domain.model.ButtonActionType
 import com.hm.picplz.domain.model.MessageContent
@@ -54,13 +53,40 @@ import com.hm.picplz.ui.theme.Pretendard
 
 @Composable
 fun ChatRoomScreen(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ChatRoomViewModel = hiltViewModel(),
-    navController: NavHostController,
     @Suppress("UNUSED_PARAMETER") _roomId: String,
 ) {
-    val currentState = viewModel.state.collectAsState().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChatRoomSideEffect.NavigateToPrev -> onNavigateBack()
+            }
+        }
+    }
+
+    ChatRoomScreenContent(
+        modifier = modifier,
+        state = state,
+        onBackClick = {
+            viewModel.handleIntent(ChatRoomIntent.NavigateToPrev)
+        },
+        onMenuClick = {
+            // TODO: Implement menu click action
+        },
+    )
+}
+
+@Composable
+private fun ChatRoomScreenContent(
+    state: ChatRoomState,
+    onBackClick: () -> Unit,
+    onMenuClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         containerColor = MainThemeColor.White,
         topBar = {
@@ -68,14 +94,8 @@ fun ChatRoomScreen(
                 text = "유가영 작가",
                 subText = "당장 촬영 가능",
                 subTextStyle = caption.copy(color = MainThemeColor.Green120),
-                onClickBack = {
-                    viewModel.handleIntent(
-                        ChatRoomIntent.NavigateToPrev,
-                    )
-                },
-                onClickMenu = {
-                    // TODO: Implement menu click action
-                },
+                onClickBack = onBackClick,
+                onClickMenu = onMenuClick,
             )
         },
         modifier =
@@ -90,7 +110,7 @@ fun ChatRoomScreen(
                     .padding(innerPadding),
         ) {
             ReservationStep(
-                reservationStep = currentState.reservationStep,
+                reservationStep = state.reservationStep,
             )
             Box(
                 modifier =
@@ -264,26 +284,16 @@ fun ChatRoomScreen(
             ChatInput()
         }
     }
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is ChatRoomSideEffect.NavigateToPrev -> {
-                    navController.popBackStack()
-                }
-            }
-        }
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun ChatRoomScreenPreview() {
-    val navController = rememberNavController()
+private fun ChatRoomScreenPreview() {
     PicplzTheme {
-        ChatRoomScreen(
-            navController = navController,
-            _roomId = "1",
+        ChatRoomScreenContent(
+            state = ChatRoomState.idle(),
+            onBackClick = {},
+            onMenuClick = {},
         )
     }
 }

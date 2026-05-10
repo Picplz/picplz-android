@@ -68,7 +68,12 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<ChatRoom> { backStackEntry ->
         val args = backStackEntry.toRoute<ChatRoom>()
-        ChatRoomScreen(navController = navController, _roomId = args.roomId)
+        ChatRoomScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            _roomId = args.roomId,
+        )
     }
 
     composable<MyPage> {
