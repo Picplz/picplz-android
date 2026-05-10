@@ -11,4 +11,7 @@ data class PhotographerDetailReservationState(
     val confirmedDateTimeMillis: Long = System.currentTimeMillis(),
     val refundCondition: RefundCondition = RefundCondition.WITHIN_24_HOURS,
     val showRefundPolicyTooltip: Boolean = false,
+    val customerName: String = dummyCustomerName,
 )
+
+val dummyCustomerName = "애니프사"

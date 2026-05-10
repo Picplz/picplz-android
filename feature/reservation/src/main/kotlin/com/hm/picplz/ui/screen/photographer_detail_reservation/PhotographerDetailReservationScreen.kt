@@ -153,7 +153,10 @@ private fun PhotographerDetailReservationScreen(
                 }
 
                 item {
-                    ReservationInfoSection(modifier = Modifier.padding(top = 28.dp, bottom = 24.dp))
+                    ReservationInfoSection(
+                        modifier = Modifier.padding(top = 28.dp, bottom = 24.dp),
+                        customerName = state.customerName,
+                    )
                 }
             }
 
