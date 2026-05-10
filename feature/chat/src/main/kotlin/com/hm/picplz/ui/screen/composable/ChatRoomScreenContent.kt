@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hm.picplz.common.util.DateTimeUtil
-import com.hm.picplz.domain.model.ButtonActionType
 import com.hm.picplz.domain.model.ChatMessage
+import com.hm.picplz.domain.model.MessageButton
 import com.hm.picplz.domain.model.MessageContent
 import com.hm.picplz.domain.model.MessageDirection
 import com.hm.picplz.ui.screen.chat_room.ChatListItem
@@ -53,7 +53,7 @@ internal fun ChatRoomScreenContent(
     chatMessages: List<ChatMessage>,
     onBackClick: () -> Unit,
     onMenuClick: () -> Unit,
-    onMessageClick: () -> Unit,
+    onMessageButtonClick: (MessageButton) -> Unit,
     modifier: Modifier = Modifier,
     reservationInfoSection: @Composable (() -> Unit)? = null,
 ) {
@@ -197,14 +197,7 @@ internal fun ChatRoomScreenContent(
                                         is MessageContent.Notification -> {
                                             NotificationBubble(
                                                 chatMessage = item.message,
-                                                onButtonClick = { button ->
-                                                    when (button.actionType) {
-                                                        ButtonActionType.OPEN_ORDER_FORM -> {}
-                                                        ButtonActionType.FIND_ANOTHER_ARTIST -> {}
-                                                        ButtonActionType.CONFIRM_ORDER -> {}
-                                                        ButtonActionType.OPEN_URL -> {}
-                                                    }
-                                                },
+                                                onButtonClick = onMessageButtonClick,
                                             )
                                         }
 

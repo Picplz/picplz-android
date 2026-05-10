@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hm.picplz.domain.model.ButtonActionType
 import com.hm.picplz.ui.screen.chat_room.dummyReservationChatMessages
 import com.hm.picplz.ui.screen.composable.ChatRoomScreenContent
 import com.hm.picplz.ui.screen.photographer_chat_room.composable.ReservationInfoBanner
@@ -48,7 +49,14 @@ fun PhotographerChatRoomScreen(
         onMenuClick = {
             // TODO: Implement menu click action
         },
-        onMessageClick = {
+        onMessageButtonClick = { button ->
+            when (button.actionType) {
+                is ButtonActionType.OpenPhotographerDetailReservation -> {
+                    viewModel.handleIntent(PhotographerChatRoomIntent.ClickReservationDetail)
+                }
+
+                else -> { }
+            }
         },
         reservationInfoSection = {
             ReservationInfoBanner(
@@ -74,7 +82,7 @@ private fun PhotographerChatRoomScreenPreview() {
             chatMessages = dummyReservationChatMessages,
             onBackClick = {},
             onMenuClick = {},
-            onMessageClick = {},
+            onMessageButtonClick = {},
             reservationInfoSection = {
                 ReservationInfoBanner(
                     customerName = "애니프사",

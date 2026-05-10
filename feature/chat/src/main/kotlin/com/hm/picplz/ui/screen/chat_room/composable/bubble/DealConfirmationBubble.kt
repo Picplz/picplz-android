@@ -143,7 +143,7 @@ fun DealConfirmationBubbleReceivedPreview() {
                         MessageContent.DealConfirmation(
                             MessageButton(
                                 text = "거래 확정",
-                                actionType = ButtonActionType.CONFIRM_ORDER,
+                                actionType = ButtonActionType.ConfirmOrder,
                             ),
                         ),
                     timestamp = System.currentTimeMillis() - 100000,
