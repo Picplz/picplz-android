@@ -19,7 +19,7 @@ class AddressSourceImpl
     ) : AddressSource {
         override suspend fun searchArea(request: AreaSearchRequest): Result<List<AreaData>> =
             runCatching {
-                addressApi.searchAreas(request.keyword)
+                addressApi.searchAreas(request.keyword).data
             }
 
         override suspend fun getNearbyAreas(request: AreaNearbyRequest): Result<List<AreaData>> =
@@ -28,6 +28,6 @@ class AddressSourceImpl
                     rad = request.rad,
                     lat = request.lat,
                     lng = request.lng,
-                )
+                ).data
             }
     }

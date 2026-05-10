@@ -197,7 +197,7 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
             DevButton("MyPagePackageEdit (패키지 등록 placeholder)") { navController.navigate(MyPagePackageEdit) }
             DevButton("MyPagePhotographerActiveAreaEdit") {
-                navController.navigate(MyPagePhotographerActiveAreaEdit(photographerId = 1))
+                navController.navigate(MyPagePhotographerActiveAreaEdit(photographerId = 7))
             }
             DevButton("MyPagePhotographerModifyProfile (권한 설정 → 거부 후 테스트)") {
                 context.startActivity(
