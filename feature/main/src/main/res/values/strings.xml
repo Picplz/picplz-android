@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="equipment_setting_top_bar_title">촬영 기기 설정</string>
+    <string name="equipment_setting_title">촬영 기기를 선택해 주세요.</string>
+    <string name="equipment_setting_phone_section">내 핸드폰</string>
+    <string name="equipment_setting_camera_section">내 카메라</string>
+    <string name="equipment_setting_add_button">추가하기 +</string>
+    <string name="equipment_setting_save_button">저장</string>
+    <string name="equipment_setting_remove_content_description">%1$s 삭제</string>
+</resources>
