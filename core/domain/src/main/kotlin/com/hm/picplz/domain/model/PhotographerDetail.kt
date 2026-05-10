@@ -1,7 +1,13 @@
-package com.hm.picplz.data.model
+package com.hm.picplz.domain.model
 
 import com.hm.picplz.common.model.PhotoPortfolio
 import com.hm.picplz.common.model.PhotoReview
+
+data class PhotographerDetail(
+    val profileInfo: PhotographerInfo,
+    val reviewData: PhotographerReviewData,
+    val shootingPackages: List<ShootingPackage>,
+)
 
 data class PhotographerReviewData(
     val summary: PhotographerReviewSummary,
@@ -71,7 +77,3 @@ data class PhotographerPortfolio(
     val photoPortfolios: List<PhotoPortfolio>,
     val photoPortfolioCount: Int,
 )
-
-// typealias PhotographerReviewSummaryResponse = PhotographerReviewSummaryEntity
-// typealias PhotographerReviewResponse = PhotographerReview
-// typealias PhotographerReviewListResponse = List<PhotographerReview>

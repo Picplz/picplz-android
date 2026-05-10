@@ -3,16 +3,16 @@ package com.hm.picplz.data.mapper
 import com.hm.picplz.common.model.PhotoReview
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotographerDetailDto
-import com.hm.picplz.data.model.PhotographerInfo
-import com.hm.picplz.data.model.PhotographerReview
-import com.hm.picplz.data.model.PhotographerReviewData
-import com.hm.picplz.data.model.PhotographerReviewSummary
 import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.model.ReviewPhotoDto
 import com.hm.picplz.data.model.ReviewSummaryDto
-import com.hm.picplz.data.model.ShootingPackage
 import com.hm.picplz.domain.model.Photographer
+import com.hm.picplz.domain.model.PhotographerInfo
+import com.hm.picplz.domain.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReviewData
+import com.hm.picplz.domain.model.PhotographerReviewSummary
+import com.hm.picplz.domain.model.ShootingPackage
 
 fun NearbyPhotographerCard.toDomain(): Photographer {
     return Photographer(
@@ -23,8 +23,8 @@ fun NearbyPhotographerCard.toDomain(): Photographer {
         distance = distance,
         photoMoods = photoMoods,
         activeAreas = activeAreas,
-        instagram = "@photographer_$photographerId",
-        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${photographerId * 10 + it}" },
+        instagram = null,
+        portfolioPhotos = emptyList(),
     )
 }
 
@@ -44,7 +44,7 @@ fun PhotographerDetailDto.toPhotographerInfo(): PhotographerInfo {
         followCount = followers ?: 0,
         profileImageUri = profileImage ?: "",
         workingArea = area?.mapNotNull { it.name } ?: emptyList(),
-        keyword = photoMoods ?: emptyList(),
+        keyword = photoMoods?.mapNotNull { it?.takeUnless(String::isBlank) } ?: emptyList(),
         equipment = emptyList(),
         photoPortfolios = emptyList(),
     )
@@ -100,10 +100,10 @@ fun ReviewListDto.toReviewData(): PhotographerReviewData {
 fun ProductDto.toShootingPackage(): ShootingPackage {
     return ShootingPackage(
         packageId = productId.toInt(),
-        title = title ?: "",
-        price = price ?: 0,
-        imageUri = imageUrl ?: "",
-        shootingTime = shootingTime ?: "",
-        description = description ?: "",
+        title = title ?: name.orEmpty(),
+        price = price ?: shootPrice ?: 0,
+        imageUri = imageUrl ?: productPhotos?.firstOrNull().orEmpty(),
+        shootingTime = shootingTime ?: shootDuration?.let { "${it}분" }.orEmpty(),
+        description = description ?: otherDetails.orEmpty(),
     )
 }

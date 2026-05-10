@@ -5,13 +5,13 @@ import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.mapper.toReviewData
 import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.model.CreatePhotographerRequest
-import com.hm.picplz.data.model.PhotographerInfo
 import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PhotographerReviewData
 import com.hm.picplz.data.model.PortfolioDto
-import com.hm.picplz.data.model.ShootingPackage
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.PhotographerInfo
+import com.hm.picplz.domain.model.PhotographerReviewData
+import com.hm.picplz.domain.model.ShootingPackage
 import javax.inject.Inject
 
 interface PhotographerService {

@@ -24,9 +24,12 @@ import com.hm.picplz.ui.theme.MainThemeFont
 private const val ITEM_HEIGHT = 57
 private const val SHEET_PADDING = 80
 
-enum class ReviewSortType(val label: String) {
-    LATEST("최신순"),
-    LIKES("좋아요순"),
+enum class ReviewSortType(
+    val label: String,
+    val apiValue: String,
+) {
+    LATEST("최신순", "LATEST"),
+    LIKES("좋아요순", "RECOMMENDED"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

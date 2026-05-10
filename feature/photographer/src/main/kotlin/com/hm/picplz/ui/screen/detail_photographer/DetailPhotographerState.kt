@@ -1,12 +1,10 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
-import com.hm.picplz.data.mockdata.mockPhotographerInfo
-import com.hm.picplz.data.mockdata.mockReviewSummary
-import com.hm.picplz.data.model.PhotographerInfo
-import com.hm.picplz.data.model.PhotographerPortfolio
-import com.hm.picplz.data.model.PhotographerReview
-import com.hm.picplz.data.model.PhotographerReviewSummary
-import com.hm.picplz.data.model.ShootingPackage
+import com.hm.picplz.domain.model.PhotographerInfo
+import com.hm.picplz.domain.model.PhotographerPortfolio
+import com.hm.picplz.domain.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReviewSummary
+import com.hm.picplz.domain.model.ShootingPackage
 import com.hm.picplz.ui.screen.detail_photographer.review.ReviewSortType
 
 data class DetailPhotographerState(
@@ -21,7 +19,7 @@ data class DetailPhotographerState(
     val isAreaExpanded: Boolean = false,
     val isBlocked: Boolean = false,
     val isMenuSheetVisible: Boolean = false,
-    val reviewSortType: ReviewSortType = ReviewSortType.LATEST,
+    val reviewSortType: ReviewSortType = ReviewSortType.LIKES,
     val isSortSheetVisible: Boolean = false,
     val currentReviewIndex: Int = 0,
     val fullScreenImageUri: String? = null,
@@ -65,15 +63,11 @@ data class DetailPhotographerState(
         fun preview(): DetailPhotographerState {
             return DetailPhotographerState(
                 isPreviewMode = true,
-                profileInfo = mockPhotographerInfo.copy(photoPortfolios = emptyList()),
-                reviewSummary =
-                    mockReviewSummary.copy(
-                        totalReviewCount = 0,
-                        totalPhotoReviewCount = 0,
-                        photoReviews = emptyList(),
-                    ),
+                profileInfo = EMPTY_PROFILE,
+                reviewSummary = EMPTY_REVIEW_SUMMARY,
                 reviews = emptyList(),
                 portfolios = emptyList(),
+                shootingPackages = emptyList(),
                 isLoading = false,
             )
         }

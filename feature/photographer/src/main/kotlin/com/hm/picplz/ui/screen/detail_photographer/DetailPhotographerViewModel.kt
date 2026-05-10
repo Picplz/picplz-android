@@ -3,9 +3,8 @@ package com.hm.picplz.ui.screen.detail_photographer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.domain.usecase.GetPhotographerDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +18,10 @@ open class DetailPhotographerViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
-        private val photographerService: PhotographerService,
+        private val getPhotographerDetailUseCase: GetPhotographerDetailUseCase,
     ) : ViewModel() {
-        val photographerId: Int = savedStateHandle.get<Int>("photographerId") ?: 0
-        private val isPreviewMode: Boolean = savedStateHandle.get<Boolean>("previewMode") ?: false
+        val photographerId: Int = savedStateHandle["photographerId"] ?: 0
+        private val isPreviewMode: Boolean = savedStateHandle["previewMode"] ?: false
 
         private val _state =
             MutableStateFlow(
@@ -94,8 +93,10 @@ open class DetailPhotographerViewModel
                         it.copy(
                             reviewSortType = intent.sortType,
                             isSortSheetVisible = false,
+                            isLoading = true,
                         )
                     }
+                    loadPhotographerDetail(intent.sortType.apiValue)
                 }
                 is DetailPhotographerIntent.ToggleSortSheet -> {
                     _state.update { it.copy(isSortSheetVisible = !it.isSortSheetVisible) }
@@ -135,54 +136,27 @@ open class DetailPhotographerViewModel
             _state.update { it.copy(previewActionDialog = action) }
         }
 
-        private fun loadPhotographerDetail() {
+        private fun loadPhotographerDetail(reviewSort: String = _state.value.reviewSortType.apiValue) {
             viewModelScope.launch {
-                val id = photographerId.toLong()
-
-                val profileDeferred =
-                    async {
-                        photographerService.getPhotographerInfo(id)
-                    }
-                val reviewsDeferred =
-                    async {
-                        photographerService.getPhotographerReviews(id)
-                    }
-                val productsDeferred =
-                    async {
-                        photographerService.getPhotographerProducts(id)
-                    }
-
-                val profileResult = profileDeferred.await()
-                val reviewsResult = reviewsDeferred.await()
-                val productsResult = productsDeferred.await()
-
-                profileResult.onSuccess { info ->
+                getPhotographerDetailUseCase(photographerId.toLong(), reviewSort).onSuccess { detail ->
                     _state.update {
                         it.copy(
-                            profileInfo = info,
-                            isFollow = info.isFollow,
+                            profileInfo = detail.profileInfo,
+                            isFollow = detail.profileInfo.isFollow,
+                            reviews = detail.reviewData.reviews,
+                            reviewSummary = detail.reviewData.summary,
+                            shootingPackages = detail.shootingPackages,
+                            isLoading = false,
+                            error = null,
                         )
                     }
-                }
-
-                reviewsResult.onSuccess { data ->
+                }.onFailure {
                     _state.update {
                         it.copy(
-                            reviews = data.reviews,
-                            reviewSummary = data.summary,
+                            isLoading = false,
+                            error = "Failed to load photographer detail",
                         )
                     }
-                }
-
-                productsResult.onSuccess { packages ->
-                    _state.update { it.copy(shootingPackages = packages) }
-                }
-
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = if (profileResult.isFailure) "Failed to load photographer detail" else null,
-                    )
                 }
             }
         }

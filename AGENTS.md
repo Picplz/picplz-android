@@ -198,6 +198,12 @@ main ← develop ← feat/이슈번호
 
 **Source Rule**: All Sources wrap API calls in `runCatching` returning `Result<T>`
 
+**DTO/Model Boundary Rule**:
+- `core/data/model` is for backend request/response DTOs only.
+- Client-facing models used by ViewModels or Composables belong in `core/domain/model` or the owning feature module.
+- Convert backend DTOs through mapper files before exposing them outside `core:data`.
+- Code review must flag feature imports of `com.hm.picplz.data.model.*` unless the file is a DTO-specific test fixture.
+
 ## DATA LAYER FILES
 
 ```

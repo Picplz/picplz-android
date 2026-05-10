@@ -15,7 +15,7 @@ data/
 │   ├── PhotographerApi.kt
 │   ├── AddressApi.kt
 │   └── KakaoMapApi.kt
-├── model/            # DTOs with toDomain() mappers
+├── model/            # Network DTOs only
 ├── mapper/           # DTO → Domain transformers
 ├── repository/       # Repository implementations
 ├── service/          # Business logic wrappers
@@ -40,7 +40,7 @@ data/
 ```
 ViewModel → UseCase → Repository(Impl) → Source → Api → Network
                                               ↓
-                            DTO.toDomain() → Domain Model
+                            DTO → mapper → Domain/Feature Model
 ```
 
 ## BACKEND API
@@ -56,4 +56,5 @@ ViewModel → UseCase → Repository(Impl) → Source → Api → Network
 - **API Keys**: `ConfigProvider` implementation in `:app` module reads from `local.properties`
 - **Required keys**: `kakaoRestApiKey`, `devGuestToken`, `devUserToken`
 - **Error Handling**: All Sources wrap API calls in `Result<T>` using `runCatching`
-- **Mappers**: DTOs contain `toDomain()` extension or use dedicated mapper files
+- **Model Boundary**: `core:data/model` contains backend DTOs only. Domain/UI-facing models live in `core:domain/model` or the owning feature.
+- **Mappers**: use dedicated mapper files for DTO → domain/feature model conversion. Feature modules must not import `com.hm.picplz.data.model.*` except true DTO-only test fixtures.
