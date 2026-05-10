@@ -1,14 +1,16 @@
 package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.lifecycle.SavedStateHandle
-import com.hm.picplz.data.model.CreatePhotographerRequest
-import com.hm.picplz.data.model.PhotographerInfo
-import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PortfolioDto
-import com.hm.picplz.data.model.ProductDto
-import com.hm.picplz.data.model.ReviewListDto
-import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.common.model.PhotoReview
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.PhotographerDetail
+import com.hm.picplz.domain.model.PhotographerInfo
+import com.hm.picplz.domain.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReviewData
+import com.hm.picplz.domain.model.PhotographerReviewSummary
+import com.hm.picplz.domain.model.ShootingPackage
+import com.hm.picplz.domain.repository.PhotographerRepository
+import com.hm.picplz.domain.usecase.GetPhotographerDetailUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -26,15 +28,15 @@ class DetailPhotographerViewModelTest {
     @Test
     fun `preview mode does not load photographer info`() =
         runTest {
-            val service = FakePhotographerService()
+            val repository = FakePhotographerRepository()
 
             DetailPhotographerViewModel(
                 savedStateHandle = previewSavedStateHandle(),
-                photographerService = service,
+                getPhotographerDetailUseCase = GetPhotographerDetailUseCase(repository),
             )
             advanceUntilIdle()
 
-            assertEquals(0, service.getPhotographerInfoCallCount)
+            assertEquals(0, repository.getPhotographerDetailCallCount)
         }
 
     @Test
@@ -43,7 +45,7 @@ class DetailPhotographerViewModelTest {
             val viewModel =
                 DetailPhotographerViewModel(
                     savedStateHandle = previewSavedStateHandle(),
-                    photographerService = FakePhotographerService(),
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(FakePhotographerRepository()),
                 )
 
             assertTrue(viewModel.state.value.isPreviewMode)
@@ -53,7 +55,29 @@ class DetailPhotographerViewModelTest {
             assertEquals(0, viewModel.state.value.reviewSummary.totalPhotoReviewCount)
             assertTrue(viewModel.state.value.reviewSummary.photoReviews.isEmpty())
             assertTrue(viewModel.state.value.profileInfo.photoPortfolios.isEmpty())
-            assertTrue(viewModel.state.value.shootingPackages.isNotEmpty())
+            assertTrue(viewModel.state.value.shootingPackages.isEmpty())
+        }
+
+    @Test
+    fun `normal mode loads photographer detail into state`() =
+        runTest {
+            val repository = FakePhotographerRepository(Result.success(detailFixture()))
+
+            val viewModel =
+                DetailPhotographerViewModel(
+                    savedStateHandle = normalSavedStateHandle(),
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(repository),
+                )
+            advanceUntilIdle()
+
+            val state = viewModel.state.value
+            assertEquals(1, repository.getPhotographerDetailCallCount)
+            assertFalse(state.isLoading)
+            assertEquals("유가영", state.profileInfo.name)
+            assertTrue(state.isFollow)
+            assertEquals(1, state.reviews.size)
+            assertEquals(4.5f, state.reviewSummary.averageRating)
+            assertEquals(1, state.shootingPackages.size)
         }
 
     @Test
@@ -62,7 +86,7 @@ class DetailPhotographerViewModelTest {
             val viewModel =
                 DetailPhotographerViewModel(
                     savedStateHandle = previewSavedStateHandle(),
-                    photographerService = FakePhotographerService(),
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(FakePhotographerRepository()),
                 )
 
             viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
@@ -77,7 +101,7 @@ class DetailPhotographerViewModelTest {
             val viewModel =
                 DetailPhotographerViewModel(
                     savedStateHandle = previewSavedStateHandle(),
-                    photographerService = FakePhotographerService(),
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(FakePhotographerRepository()),
                 )
             val initialFollowState = viewModel.state.value.isFollow
 
@@ -91,11 +115,11 @@ class DetailPhotographerViewModelTest {
     @Test
     fun `normal mode follow toggles follow state`() =
         runTest {
-            val service = FakePhotographerService()
+            val repository = FakePhotographerRepository()
             val viewModel =
                 DetailPhotographerViewModel(
                     savedStateHandle = normalSavedStateHandle(),
-                    photographerService = service,
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(repository),
                 )
             advanceUntilIdle()
             val initialFollowState = viewModel.state.value.isFollow
@@ -103,7 +127,7 @@ class DetailPhotographerViewModelTest {
             viewModel.handleIntent(DetailPhotographerIntent.ToggleFollow)
 
             assertFalse(viewModel.state.value.isPreviewMode)
-            assertEquals(1, service.getPhotographerInfoCallCount)
+            assertEquals(1, repository.getPhotographerDetailCallCount)
             assertTrue(viewModel.state.value.previewActionDialog == null)
             assertEquals(!initialFollowState, viewModel.state.value.isFollow)
         }
@@ -114,7 +138,7 @@ class DetailPhotographerViewModelTest {
             val viewModel =
                 DetailPhotographerViewModel(
                     savedStateHandle = normalSavedStateHandle(),
-                    photographerService = FakePhotographerService(),
+                    getPhotographerDetailUseCase = GetPhotographerDetailUseCase(FakePhotographerRepository()),
                 )
 
             viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
@@ -140,11 +164,11 @@ class DetailPhotographerViewModelTest {
         )
 }
 
-private class FakePhotographerService : PhotographerService {
-    var getPhotographerInfoCallCount = 0
+private class FakePhotographerRepository(
+    private val detailResult: Result<PhotographerDetail> = Result.failure(NotImplementedError()),
+) : PhotographerRepository {
+    var getPhotographerDetailCallCount = 0
         private set
-
-    override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> = Result.success(Unit)
 
     override suspend fun getNearbyPhotographers(
         longitude: Double,
@@ -152,23 +176,78 @@ private class FakePhotographerService : PhotographerService {
         distance: Long,
     ): Result<FilteredPhotographers> = Result.failure(NotImplementedError())
 
-    override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerInfo> {
-        getPhotographerInfoCallCount += 1
-        return Result.failure(NotImplementedError())
-    }
-
-    override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
-        Result.failure(NotImplementedError())
-
-    override suspend fun getPhotographerReviews(
+    override suspend fun getPhotographerDetail(
         photographerId: Long,
-        page: Int,
-        size: Int,
-        sort: String,
-    ): Result<ReviewListDto> = Result.failure(NotImplementedError())
-
-    override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>> =
-        Result.failure(NotImplementedError())
-
-    override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> = Result.failure(NotImplementedError())
+        reviewSort: String,
+    ): Result<PhotographerDetail> {
+        getPhotographerDetailCallCount += 1
+        return detailResult
+    }
 }
+
+private fun detailFixture() =
+    PhotographerDetail(
+        profileInfo =
+            PhotographerInfo(
+                id = 7,
+                name = "유가영",
+                socialAccount = "imdooring",
+                infoText = "소개",
+                isActive = true,
+                isBookable = true,
+                isFollow = true,
+                followCount = 3,
+                profileImageUri = "https://example.com/profile.jpg",
+                workingArea = listOf("마포구"),
+                keyword = listOf("캐주얼"),
+                equipment = emptyList(),
+                photoPortfolios = emptyList(),
+            ),
+        reviewData =
+            PhotographerReviewData(
+                summary =
+                    PhotographerReviewSummary(
+                        averageRating = 4.5f,
+                        keywordBars = emptyList(),
+                        totalReviewCount = 1,
+                        totalPhotoReviewCount = 1,
+                        photoReviews =
+                            listOf(
+                                PhotoReview(
+                                    reviewId = 1,
+                                    photoReviewUri = "https://example.com/review.jpg",
+                                    index = 0,
+                                ),
+                            ),
+                    ),
+                reviews =
+                    listOf(
+                        PhotographerReview(
+                            reviewId = 1,
+                            profileImageUri = "https://example.com/customer.jpg",
+                            nickname = "사용자1",
+                            rating = 4.5f,
+                            createdAt = "2026-05-10T00:00:00",
+                            isReported = false,
+                            photoReviews = emptyList(),
+                            photoReviewCount = 0,
+                            option = "",
+                            location = "",
+                            reviewText = "좋았어요",
+                            isRecommended = false,
+                            recommendationCount = 0,
+                        ),
+                    ),
+            ),
+        shootingPackages =
+            listOf(
+                ShootingPackage(
+                    packageId = 1,
+                    title = "남친 생기는 프사",
+                    price = 9900,
+                    imageUri = "https://example.com/package.jpg",
+                    shootingTime = "15분",
+                    description = "상품 설명",
+                ),
+            ),
+    )

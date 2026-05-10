@@ -3,7 +3,7 @@ package com.hm.picplz.ui.screen.detail_photographer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.domain.usecase.GetPhotographerDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +18,10 @@ open class DetailPhotographerViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
-        private val photographerService: PhotographerService,
+        private val getPhotographerDetailUseCase: GetPhotographerDetailUseCase,
     ) : ViewModel() {
-        val photographerId: Int = savedStateHandle.get<Int>("photographerId") ?: 0
-        private val isPreviewMode: Boolean = savedStateHandle.get<Boolean>("previewMode") ?: false
+        val photographerId: Int = savedStateHandle["photographerId"] ?: 0
+        private val isPreviewMode: Boolean = savedStateHandle["previewMode"] ?: false
 
         private val _state =
             MutableStateFlow(
@@ -41,8 +41,8 @@ open class DetailPhotographerViewModel
         val sideEffect = _sideEffect.receiveAsFlow()
 
         init {
-            if (!isPreviewMode) {
-                loadPhotographerInfo()
+            if (!isPreviewMode && photographerId != DEV_BLOCKED_PHOTOGRAPHER_ID) {
+                loadPhotographerDetail()
             }
         }
 
@@ -93,8 +93,10 @@ open class DetailPhotographerViewModel
                         it.copy(
                             reviewSortType = intent.sortType,
                             isSortSheetVisible = false,
+                            isLoading = true,
                         )
                     }
+                    loadPhotographerDetail(intent.sortType.apiValue)
                 }
                 is DetailPhotographerIntent.ToggleSortSheet -> {
                     _state.update { it.copy(isSortSheetVisible = !it.isSortSheetVisible) }
@@ -134,12 +136,28 @@ open class DetailPhotographerViewModel
             _state.update { it.copy(previewActionDialog = action) }
         }
 
-        private fun loadPhotographerInfo() {
+        private fun loadPhotographerDetail(reviewSort: String = _state.value.reviewSortType.apiValue) {
             viewModelScope.launch {
-                photographerService.getPhotographerInfo(photographerId.toLong())
-                    .onSuccess { info ->
-                        _state.update { it.copy(profileInfo = info) }
+                getPhotographerDetailUseCase(photographerId.toLong(), reviewSort).onSuccess { detail ->
+                    _state.update {
+                        it.copy(
+                            profileInfo = detail.profileInfo,
+                            isFollow = detail.profileInfo.isFollow,
+                            reviews = detail.reviewData.reviews,
+                            reviewSummary = detail.reviewData.summary,
+                            shootingPackages = detail.shootingPackages,
+                            isLoading = false,
+                            error = null,
+                        )
                     }
+                }.onFailure {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Failed to load photographer detail",
+                        )
+                    }
+                }
             }
         }
     }

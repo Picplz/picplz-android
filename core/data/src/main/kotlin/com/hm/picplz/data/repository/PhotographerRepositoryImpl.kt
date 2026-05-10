@@ -1,10 +1,11 @@
 package com.hm.picplz.data.repository
 
-import android.util.Log
 import com.hm.picplz.data.service.PhotographerService
 import com.hm.picplz.domain.model.FilteredPhotographers
-import com.hm.picplz.domain.model.Photographer
+import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.PhotographerRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 class PhotographerRepositoryImpl
@@ -16,89 +17,33 @@ class PhotographerRepositoryImpl
             longitude: Double,
             latitude: Double,
             distance: Long,
-        ): Result<FilteredPhotographers> {
-            return photographerService.getNearbyPhotographers(longitude, latitude, distance)
-                .recoverCatching { error ->
-                    // TODO: 백엔드 GET /members/location/nearby 500 에러 수정 후 이 폴백 제거
-                    Log.w("PhotographerRepo", "API 실패, 더미 데이터 반환", error)
-                    FilteredPhotographers(
-                        active = DUMMY_PHOTOGRAPHERS.filter { it.isActive },
-                        inactive = DUMMY_PHOTOGRAPHERS.filter { !it.isActive },
+        ): Result<FilteredPhotographers> = photographerService.getNearbyPhotographers(longitude, latitude, distance)
+
+        override suspend fun getPhotographerDetail(
+            photographerId: Long,
+            reviewSort: String,
+        ): Result<PhotographerDetail> =
+            coroutineScope {
+                runCatching {
+                    val profileDeferred = async { photographerService.getPhotographerInfo(photographerId) }
+                    val reviewsDeferred =
+                        async {
+                            photographerService.getPhotographerReviews(
+                                photographerId = photographerId,
+                                sort = reviewSort,
+                            )
+                        }
+                    val productsDeferred = async { photographerService.getPhotographerProducts(photographerId) }
+
+                    val profileInfo = profileDeferred.await().getOrThrow()
+                    val reviewData = reviewsDeferred.await().getOrThrow()
+                    val shootingPackages = productsDeferred.await().getOrThrow()
+
+                    PhotographerDetail(
+                        profileInfo = profileInfo,
+                        reviewData = reviewData,
+                        shootingPackages = shootingPackages,
                     )
                 }
-        }
-
-        companion object {
-            // TODO: 백엔드 수정 후 삭제
-            @Suppress("MagicNumber")
-            private val DUMMY_PHOTOGRAPHERS =
-                listOf(
-                    Photographer(
-                        id = 14,
-                        name = "유가영 작가",
-                        profileImageUri = "https://picsum.photos/id/64/200",
-                        isActive = true,
-                        distance = 80,
-                        photoMoods = listOf("을지로 감성", "MZ 감성"),
-                        activeAreas = listOf("마포구", "구로구", "노원구", "강남구", "서초구", "용산구"),
-                        instagram = "@gayoung_photo",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${14 * 10 + it}" },
-                    ),
-                    Photographer(
-                        id = 15,
-                        name = "김도윤 작가",
-                        profileImageUri = "https://picsum.photos/id/65/200",
-                        isActive = true,
-                        distance = 200,
-                        photoMoods = listOf("빈티지", "힙한"),
-                        activeAreas = listOf("종로구", "중구"),
-                        instagram = "@doyoon.k",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${15 * 10 + it}" },
-                    ),
-                    Photographer(
-                        id = 16,
-                        name = "박서준 작가",
-                        profileImageUri = "https://picsum.photos/id/91/200",
-                        isActive = true,
-                        distance = 150,
-                        photoMoods = listOf("키치 감성", "퇴폐 감성", "MZ 감성"),
-                        activeAreas = listOf("마포구", "합정동", "이태원동"),
-                        instagram = "@seojun_studio",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${16 * 10 + it}" },
-                    ),
-                    Photographer(
-                        id = 17,
-                        name = "이하은 작가",
-                        profileImageUri = "https://picsum.photos/id/177/200",
-                        isActive = false,
-                        distance = 300,
-                        photoMoods = listOf("드리미", "감성적인"),
-                        activeAreas = listOf("서대문구", "은평구"),
-                        instagram = "@haeun.lens",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${17 * 10 + it}" },
-                    ),
-                    Photographer(
-                        id = 18,
-                        name = "정민수 작가",
-                        profileImageUri = "https://picsum.photos/id/180/200",
-                        isActive = false,
-                        distance = 450,
-                        photoMoods = listOf("캐주얼", "심플"),
-                        activeAreas = listOf("강북구", "도봉구", "성북구", "동대문구"),
-                        instagram = "@minsu_captures",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${18 * 10 + it}" },
-                    ),
-                    Photographer(
-                        id = 19,
-                        name = "최유진 작가",
-                        profileImageUri = "https://picsum.photos/id/203/200",
-                        isActive = false,
-                        distance = 500,
-                        photoMoods = listOf("화려한", "고급스러운"),
-                        activeAreas = listOf("송파구", "강동구"),
-                        instagram = "@yujin.photo",
-                        portfolioPhotos = List(4) { "https://picsum.photos/200/200?random=${19 * 10 + it}" },
-                    ),
-                )
-        }
+            }
     }

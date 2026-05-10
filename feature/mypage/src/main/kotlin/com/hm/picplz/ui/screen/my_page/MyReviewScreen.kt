@@ -42,7 +42,6 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
@@ -56,6 +55,7 @@ import coil.compose.AsyncImage
 import com.hm.picplz.feature.mypage.R
 import com.hm.picplz.ui.screen.common.CommonDestructiveConfirmDialog
 import com.hm.picplz.ui.screen.common.CommonFixedTopBar
+import com.hm.picplz.ui.screen.common.CommonReviewEmptyState
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -122,7 +122,7 @@ internal fun MyReviewScreenContent(
                 .systemBarsPadding(),
     ) { innerPadding ->
         if (state.reviews.isEmpty()) {
-            MyReviewEmptyState(
+            CommonReviewEmptyState(
                 modifier =
                     Modifier
                         .fillMaxSize()
@@ -443,45 +443,6 @@ private fun MyReviewDeleteDialog(
         onDismissRequest = onDismiss,
         onConfirm = onConfirm,
     )
-}
-
-@Composable
-private fun MyReviewEmptyState(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.my_review_empty_title),
-                style = MainThemeFont.TitleSmall,
-                color = MainThemeColor.Black,
-                textAlign = TextAlign.Center,
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Image(
-                modifier = Modifier.size(64.dp),
-                painter = painterResource(id = R.drawable.ic_shooting_history_empty),
-                contentDescription = stringResource(R.string.my_review_empty_title),
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.my_review_empty_description),
-                style = MainThemeFont.Body,
-                color = MainThemeColor.Gray5,
-                textAlign = TextAlign.Center,
-            )
-        }
-    }
 }
 
 @Preview(showBackground = true)

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonButtonModal
+import com.hm.picplz.ui.screen.common.CommonEmptyState
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.detail_photographer.review.ReportBottomSheet
@@ -80,88 +82,114 @@ fun DetailPhotographerScreen(
             )
         },
         bottomBar = {
-            Box(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
-                CommonBottomButton(
-                    text =
-                        if (state.profileInfo.isBookable) {
-                            stringResource(R.string.booking_button)
-                        } else {
-                            stringResource(R.string.booking_unavailable)
+            if (!state.isLoading && state.error == null) {
+                Box(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+                    CommonBottomButton(
+                        text =
+                            if (state.profileInfo.isBookable) {
+                                stringResource(R.string.booking_button)
+                            } else {
+                                stringResource(R.string.booking_unavailable)
+                            },
+                        onClick = {
+                            viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
                         },
-                    onClick = {
-                        viewModel.handleIntent(DetailPhotographerIntent.SelectBooking)
-                    },
-                    enabled = state.profileInfo.isBookable,
-                )
+                        enabled = state.profileInfo.isBookable,
+                    )
+                }
             }
         },
         content = { innerPadding ->
-            Column(
-                modifier =
-                    Modifier
-                        .padding(innerPadding)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState()),
-            ) {
-                if (state.isBlocked) {
-                    BlockedBanner(
-                        onUnblock = {
-                            viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
-                        },
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier =
+                            Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(color = MainThemeColor.Green120)
+                    }
+                }
+                state.error != null -> {
+                    CommonEmptyState(
+                        title = stringResource(R.string.photographer_detail_load_error),
+                        modifier =
+                            Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize(),
                     )
                 }
+                else -> {
+                    Column(
+                        modifier =
+                            Modifier
+                                .padding(innerPadding)
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState()),
+                    ) {
+                        if (state.isBlocked) {
+                            BlockedBanner(
+                                onUnblock = {
+                                    viewModel.handleIntent(DetailPhotographerIntent.ToggleBlock)
+                                },
+                            )
+                        }
 
-                DetailProfileSection(
-                    modifier = paddingModifier,
-                    profileInfo = state.profileInfo,
-                    isFollow = state.isFollow,
-                    isInfoExpanded = state.isInfoExpanded,
-                    isAreaExpanded = state.isAreaExpanded,
-                    onToggleFollow = {
-                        viewModel.handleIntent(DetailPhotographerIntent.ToggleFollow)
-                    },
-                    onToggleInfoExpanded = {
-                        viewModel.handleIntent(DetailPhotographerIntent.ToggleInfoExpanded)
-                    },
-                    onToggleAreaExpanded = {
-                        viewModel.handleIntent(DetailPhotographerIntent.ToggleAreaExpanded)
-                    },
-                )
-
-                SectionDivider()
-
-                ReviewSection(
-                    modifier = paddingModifier,
-                    navController = navController,
-                    reviewSummary = state.reviewSummary,
-                    reviews = state.reviews,
-                    photographerId = viewModel.photographerId,
-                    onReport = {
-                        viewModel.handleIntent(
-                            DetailPhotographerIntent.ToggleReportSheet,
+                        DetailProfileSection(
+                            modifier = paddingModifier,
+                            profileInfo = state.profileInfo,
+                            isFollow = state.isFollow,
+                            isInfoExpanded = state.isInfoExpanded,
+                            isAreaExpanded = state.isAreaExpanded,
+                            onToggleFollow = {
+                                viewModel.handleIntent(DetailPhotographerIntent.ToggleFollow)
+                            },
+                            onToggleInfoExpanded = {
+                                viewModel.handleIntent(DetailPhotographerIntent.ToggleInfoExpanded)
+                            },
+                            onToggleAreaExpanded = {
+                                viewModel.handleIntent(DetailPhotographerIntent.ToggleAreaExpanded)
+                            },
                         )
-                    },
-                )
 
-                ThinDivider()
+                        SectionDivider()
 
-                PortfolioSection(
-                    modifier = paddingModifier,
-                    navController = navController,
-                    photoPortfolios = state.profileInfo.photoPortfolios,
-                    photographerId = viewModel.photographerId,
-                )
+                        ReviewSection(
+                            modifier = paddingModifier,
+                            navController = navController,
+                            reviewSummary = state.reviewSummary,
+                            reviews = state.reviews,
+                            photographerId = viewModel.photographerId,
+                            onReport = {
+                                viewModel.handleIntent(
+                                    DetailPhotographerIntent.ToggleReportSheet,
+                                )
+                            },
+                        )
 
-                ThinDivider()
+                        ThinDivider()
 
-                Spacer(modifier = Modifier.height(20.dp))
+                        PortfolioSection(
+                            modifier = paddingModifier,
+                            navController = navController,
+                            photoPortfolios = state.profileInfo.photoPortfolios,
+                            photographerId = viewModel.photographerId,
+                        )
 
-                ShootingPackageSection(
-                    modifier = paddingModifier,
-                    packages = state.shootingPackages,
-                )
+                        ThinDivider()
 
-                Spacer(modifier = Modifier.height(40.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        ShootingPackageSection(
+                            modifier = paddingModifier,
+                            packages = state.shootingPackages,
+                        )
+
+                        Spacer(modifier = Modifier.height(40.dp))
+                    }
+                }
             }
         },
     )

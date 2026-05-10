@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.PhotographerInfo
+import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.ui.screen.common.CommonIconButton
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont
@@ -218,7 +218,7 @@ fun DetailProfileSection(
     InfoRow(
         modifier = modifier,
         label = stringResource(R.string.shooting_area),
-        values = profileInfo.workingArea,
+        values = profileInfo.workingArea.toDistrictNames(),
         visibleCount = VISIBLE_AREA_COUNT,
         isExpanded = isAreaExpanded,
         onToggleExpanded = onToggleAreaExpanded,
@@ -336,11 +336,11 @@ private fun AreaTextWithArrow(
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.depth_arrow),
+                            painter = painterResource(id = R.drawable.arrow_down),
                             contentDescription = null,
                             modifier =
                                 Modifier
-                                    .size(width = 6.dp, height = 10.dp)
+                                    .size(12.dp)
                                     .then(
                                         if (isExpanded) {
                                             Modifier.graphicsLayer { rotationZ = 180f }
@@ -437,3 +437,8 @@ private fun InfoRow(
         }
     }
 }
+
+private fun List<String>.toDistrictNames(): List<String> =
+    map { area ->
+        area.split(" ").firstOrNull { it.endsWith("구") } ?: area
+    }.distinct()

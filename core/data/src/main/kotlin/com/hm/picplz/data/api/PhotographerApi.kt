@@ -1,5 +1,6 @@
 package com.hm.picplz.data.api
 
+import com.hm.picplz.data.model.ApiResponse
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotographerDetailDto
@@ -30,12 +31,12 @@ interface PhotographerApi {
     @GET("api/v1/photographers/{photographerId}/info")
     suspend fun getPhotographerInfo(
         @Path("photographerId") photographerId: Long,
-    ): Response<PhotographerDetailDto>
+    ): Response<ApiResponse<PhotographerDetailDto>>
 
     @GET("api/v1/photographers/{photographerId}/rating")
     suspend fun getPhotographerRating(
         @Path("photographerId") photographerId: Long,
-    ): Response<PhotographerRatingDto>
+    ): Response<ApiResponse<PhotographerRatingDto>>
 
     @GET("api/v1/photographers/{photographerId}/reviews")
     suspend fun getPhotographerReviews(
@@ -43,15 +44,15 @@ interface PhotographerApi {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "RECOMMENDED",
-    ): Response<ReviewListDto>
+    ): Response<ApiResponse<ReviewListDto>>
 
     @GET("api/v1/photographers/{photographerId}/products")
     suspend fun getPhotographerProducts(
         @Path("photographerId") photographerId: Long,
-    ): Response<List<ProductDto>>
+    ): Response<ApiResponse<List<ProductDto>>>
 
     @GET("api/v1/portfolios/{portfolioId}")
     suspend fun getPortfolio(
         @Path("portfolioId") portfolioId: Long,
-    ): Response<PortfolioDto>
+    ): Response<ApiResponse<PortfolioDto>>
 }

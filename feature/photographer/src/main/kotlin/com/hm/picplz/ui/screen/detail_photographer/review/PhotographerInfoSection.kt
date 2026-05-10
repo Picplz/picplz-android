@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.core.ui.R
-import com.hm.picplz.data.model.PhotographerReview
+import com.hm.picplz.domain.model.PhotographerReview
 import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont

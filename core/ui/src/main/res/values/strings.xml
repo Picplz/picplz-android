@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- DetailPhotographerScreen -->
+    <string name="photographer_detail_load_error">작가 정보를 불러올 수 없습니다</string>
     <string name="photographer_name_format">%s 작가</string>
     <string name="photographer_profile_image">작가 프로필</string>
     <string name="menu">메뉴</string>
@@ -23,12 +24,16 @@
     <string name="shooting_satisfaction">촬영 만족도</string>
     <string name="star_rating">별점</string>
     <string name="no_reviews">아직 리뷰가\n없어요</string>
+    <string name="review_empty_title">아직 작성한 리뷰가 없어요</string>
+    <string name="review_empty_description">촬영 후 남긴 리뷰가 이곳에 모여 보여요</string>
     <string name="view_all_reviews_format">전체 리뷰 보러가기 (%d)</string>
 
     <!-- PortfolioSection -->
     <string name="portfolio">포트폴리오</string>
     <string name="no_portfolio">아직\n포트폴리오가\n없어요</string>
     <string name="portfolio_image">포트폴리오 이미지</string>
+    <string name="portfolio_detail_title">포트폴리오</string>
+    <string name="portfolio_detail_image">포트폴리오 이미지</string>
     <string name="view_more_portfolio">포트폴리오 더보기</string>
 
     <!-- ShootingPackageSection -->

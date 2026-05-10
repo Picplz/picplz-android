@@ -53,10 +53,10 @@ class PhotographerSourceImpl
             safeApiCall { photographerApi.getNearbyPhotographers(longitude, latitude, distance) }
 
         override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerDetailDto> =
-            safeApiCall { photographerApi.getPhotographerInfo(photographerId) }
+            safeApiCall({ photographerApi.getPhotographerInfo(photographerId) }) { it.data }
 
         override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
-            safeApiCall { photographerApi.getPhotographerRating(photographerId) }
+            safeApiCall({ photographerApi.getPhotographerRating(photographerId) }) { it.data }
 
         override suspend fun getPhotographerReviews(
             photographerId: Long,
@@ -64,11 +64,11 @@ class PhotographerSourceImpl
             size: Int,
             sort: String,
         ): Result<ReviewListDto> =
-            safeApiCall { photographerApi.getPhotographerReviews(photographerId, page, size, sort) }
+            safeApiCall({ photographerApi.getPhotographerReviews(photographerId, page, size, sort) }) { it.data }
 
         override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>> =
-            safeApiCall { photographerApi.getPhotographerProducts(photographerId) }
+            safeApiCall({ photographerApi.getPhotographerProducts(photographerId) }) { it.data }
 
         override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> =
-            safeApiCall { photographerApi.getPortfolio(portfolioId) }
+            safeApiCall({ photographerApi.getPortfolio(portfolioId) }) { it.data }
     }

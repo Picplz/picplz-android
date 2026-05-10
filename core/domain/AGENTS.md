@@ -46,3 +46,5 @@ domain/src/main/kotlin/com/hm/picplz/domain/
 - Plain `data class` with immutable properties
 - Sealed classes for polymorphic types (e.g., `MessageContent`)
 - Avoid Android framework dependencies where possible
+- Domain/UI-facing models that are consumed by feature modules belong here, not in `core:data/model`.
+- Backend response/request shapes stay in `core:data/model` as DTOs and are converted through mappers.
