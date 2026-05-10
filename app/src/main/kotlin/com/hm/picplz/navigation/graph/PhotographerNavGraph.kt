@@ -1,5 +1,6 @@
 package com.hm.picplz.navigation.graph
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -20,6 +21,7 @@ import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScree
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
 import com.hm.picplz.ui.screen.quick_shoot.QuickShootScreen
 
@@ -79,6 +81,17 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
     }
 
     composable<PhotographerEquipmentSetting> {
-        EquipmentSettingScreen(navController = navController)
+        val photographerMainBackStackEntry = navController.previousBackStackEntry
+        val photographerMainViewModel: PhotographerMainViewModel =
+            if (photographerMainBackStackEntry != null) {
+                hiltViewModel(photographerMainBackStackEntry)
+            } else {
+                hiltViewModel()
+            }
+
+        EquipmentSettingScreen(
+            viewModel = photographerMainViewModel,
+            navController = navController,
+        )
     }
 }
