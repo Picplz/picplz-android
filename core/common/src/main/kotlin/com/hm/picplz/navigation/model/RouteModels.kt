@@ -132,6 +132,9 @@ data class DetailPhotographerPortfolioDetail(val portfolioId: Int, val photoInde
 data object DetailReservation : NavigationRoute
 
 @Serializable
+data object PhotographerDetailReservation : NavigationRoute
+
+@Serializable
 data class CancelReservationConfirm(val cancelType: CancelConfirmType) : NavigationRoute
 
 @Serializable

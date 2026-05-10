@@ -25,6 +25,7 @@ import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
 import com.hm.picplz.navigation.model.PhotographerChatRoom
+import com.hm.picplz.navigation.model.PhotographerDetailReservation
 import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.screen.cancel_reservation.CancelReservationScreen
 import com.hm.picplz.ui.screen.cancel_reservation_confirm.CancelReservationConfirmScreen
@@ -45,6 +46,7 @@ import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
 import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
 import com.hm.picplz.ui.screen.photographer_chat_room.PhotographerChatRoomScreen
+import com.hm.picplz.ui.screen.photographer_detail_reservation.PhotographerDetailReservationScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -83,6 +85,9 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         PhotographerChatRoomScreen(
             onNavigateBack = {
                 navController.popBackStack()
+            },
+            onNavigatePhotographerDetailReservation = {
+                navController.navigate(PhotographerDetailReservation)
             },
             _roomId = args.roomId,
         )
@@ -143,6 +148,20 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             },
             onNavigateCancelReservationConfirm = {
                 navController.navigate(CancelReservationConfirm(cancelType = CancelConfirmType.WITHOUT_REFUND))
+            },
+            onNavigateToOrderDetail = { orderId ->
+                navController.navigate(OrderDetail(orderId = orderId))
+            },
+        )
+    }
+
+    composable<PhotographerDetailReservation> {
+        PhotographerDetailReservationScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateRejectReservationConfirm = {
+                // TODO
             },
             onNavigateToOrderDetail = { orderId ->
                 navController.navigate(OrderDetail(orderId = orderId))

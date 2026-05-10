@@ -15,6 +15,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 @Composable
 fun PhotographerChatRoomScreen(
     onNavigateBack: () -> Unit,
+    onNavigatePhotographerDetailReservation: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PhotographerChatRoomViewModel = hiltViewModel(),
     @Suppress("UNUSED_PARAMETER") _roomId: String,
@@ -24,7 +25,13 @@ fun PhotographerChatRoomScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is PhotographerChatRoomSideEffect.NavigateToPrev -> onNavigateBack()
+                is PhotographerChatRoomSideEffect.NavigateToPrev -> {
+                    onNavigateBack()
+                }
+
+                PhotographerChatRoomSideEffect.NavigateToPhotographerDetailReservation -> {
+                    onNavigatePhotographerDetailReservation()
+                }
             }
         }
     }
@@ -41,13 +48,15 @@ fun PhotographerChatRoomScreen(
         onMenuClick = {
             // TODO: Implement menu click action
         },
+        onMessageClick = {
+        },
         reservationInfoSection = {
             ReservationInfoBanner(
                 customerName = state.customerName,
                 productName = state.productName,
                 customerProfileImageUri = state.customerImageUrl,
                 onClick = {
-                    // TODO: 예약 정보 화면으로 이동
+                    viewModel.handleIntent(PhotographerChatRoomIntent.ClickReservationDetail)
                 },
             )
         },
@@ -65,6 +74,7 @@ private fun PhotographerChatRoomScreenPreview() {
             chatMessages = dummyReservationChatMessages,
             onBackClick = {},
             onMenuClick = {},
+            onMessageClick = {},
             reservationInfoSection = {
                 ReservationInfoBanner(
                     customerName = "애니프사",

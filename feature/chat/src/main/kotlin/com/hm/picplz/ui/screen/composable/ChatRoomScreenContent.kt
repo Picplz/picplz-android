@@ -53,6 +53,7 @@ internal fun ChatRoomScreenContent(
     chatMessages: List<ChatMessage>,
     onBackClick: () -> Unit,
     onMenuClick: () -> Unit,
+    onMessageClick: () -> Unit,
     modifier: Modifier = Modifier,
     reservationInfoSection: @Composable (() -> Unit)? = null,
 ) {
