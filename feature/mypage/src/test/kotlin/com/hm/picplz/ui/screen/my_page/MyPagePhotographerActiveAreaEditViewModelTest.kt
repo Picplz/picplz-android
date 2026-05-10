@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.AreaRepository
 import com.hm.picplz.domain.repository.LocationRepository
 import com.hm.picplz.domain.repository.PhotographerRepository
@@ -141,6 +142,11 @@ private class FakePhotographerRepository(
         latitude: Double,
         distance: Long,
     ): Result<FilteredPhotographers> = error("Not used")
+
+    override suspend fun getPhotographerDetail(
+        photographerId: Long,
+        reviewSort: String,
+    ): Result<PhotographerDetail> = error("Not used")
 
     override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> {
         requestedPhotographerId = photographerId
