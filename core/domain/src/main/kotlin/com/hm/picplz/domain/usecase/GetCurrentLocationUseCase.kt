@@ -1,7 +1,7 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.domain.model.LocationCoordinate
 import com.hm.picplz.domain.repository.LocationRepository
-import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
 class GetCurrentLocationUseCase
@@ -10,7 +10,7 @@ class GetCurrentLocationUseCase
         private val locationRepository: LocationRepository,
     ) {
         operator fun invoke(
-            onLocationReceived: (LatLng) -> Unit,
+            onLocationReceived: (LocationCoordinate) -> Unit,
             onPermissionDenied: () -> Unit = {},
         ) {
             locationRepository.getCurrentLocation(

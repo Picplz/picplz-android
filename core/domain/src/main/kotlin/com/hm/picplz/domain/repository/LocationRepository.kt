@@ -1,10 +1,10 @@
 package com.hm.picplz.domain.repository
 
-import com.kakao.vectormap.LatLng
+import com.hm.picplz.domain.model.LocationCoordinate
 
 interface LocationRepository {
     fun getCurrentLocation(
-        onLocationReceived: (LatLng) -> Unit,
+        onLocationReceived: (LocationCoordinate) -> Unit,
         onPermissionDenied: () -> Unit = {},
     )
 }

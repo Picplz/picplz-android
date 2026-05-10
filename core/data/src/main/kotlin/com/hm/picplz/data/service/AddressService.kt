@@ -25,8 +25,8 @@ class AddressServiceImpl
         override suspend fun searchArea(keyword: String): Result<List<Area>> {
             return addressSource.searchArea(
                 AreaSearchRequest(keyword = keyword),
-            ).map { response ->
-                response.data.map { areaData ->
+            ).map { areas ->
+                areas.map { areaData ->
                     areaData.toDomain()
                 }
             }
@@ -39,8 +39,8 @@ class AddressServiceImpl
         ): Result<List<Area>> {
             return addressSource.getNearbyAreas(
                 AreaNearbyRequest(rad = rad, lat = lat, lng = lng),
-            ).map { response ->
-                response.data.map { areaData ->
+            ).map { areas ->
+                areas.map { areaData ->
                     areaData.toDomain()
                 }
             }

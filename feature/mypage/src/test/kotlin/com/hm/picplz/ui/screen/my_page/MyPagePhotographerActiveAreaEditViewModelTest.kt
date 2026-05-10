@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
+import com.hm.picplz.domain.model.LocationCoordinate
 import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.AreaRepository
 import com.hm.picplz.domain.repository.LocationRepository
@@ -12,7 +13,6 @@ import com.hm.picplz.domain.usecase.GetPhotographerActiveAreasUseCase
 import com.hm.picplz.domain.usecase.SearchAreasUseCase
 import com.hm.picplz.domain.usecase.UpdatePhotographerActiveAreasUseCase
 import com.hm.picplz.feature.mypage.R
-import com.kakao.vectormap.LatLng
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
@@ -178,9 +178,9 @@ private class FakeAreaRepository(
 
 private class FakeLocationRepository : LocationRepository {
     override fun getCurrentLocation(
-        onLocationReceived: (LatLng) -> Unit,
+        onLocationReceived: (LocationCoordinate) -> Unit,
         onPermissionDenied: () -> Unit,
     ) {
-        onLocationReceived(LatLng.from(37.0, 127.0))
+        onLocationReceived(LocationCoordinate(latitude = 37.0, longitude = 127.0))
     }
 }
