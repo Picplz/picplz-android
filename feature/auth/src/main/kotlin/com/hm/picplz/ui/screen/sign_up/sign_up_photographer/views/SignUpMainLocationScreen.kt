@@ -1,5 +1,9 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.views
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
@@ -26,16 +29,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,6 +67,7 @@ import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.feature.auth.R as AuthR
 
 @Composable
 fun SignUpMainLocationScreen(
@@ -73,7 +78,17 @@ fun SignUpMainLocationScreen(
 ) {
     val currentState by viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
-    var isSearchFieldFocused by remember { mutableStateOf(false) }
+    val activity = LocalContext.current.findActivity()
+
+    DisposableEffect(activity) {
+        val previousSoftInputMode = activity?.window?.attributes?.softInputMode
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        onDispose {
+            previousSoftInputMode?.let { softInputMode ->
+                activity.window.setSoftInputMode(softInputMode)
+            }
+        }
+    }
 
     LaunchedEffect(currentState.searchQuery) {
         if (currentState.searchQuery.isNotBlank()) {
@@ -91,8 +106,7 @@ fun SignUpMainLocationScreen(
     Scaffold(
         modifier =
             modifier
-                .fillMaxSize()
-                .imePadding(),
+                .fillMaxSize(),
         containerColor = MainThemeColor.White,
     ) {
             innerPadding ->
@@ -108,7 +122,7 @@ fun SignUpMainLocationScreen(
                     },
         ) {
             CommonTopBar(
-                text = "주 촬영지",
+                text = stringResource(AuthR.string.sign_up_main_location_top_bar_title),
                 onClickBack = { viewModel.handleIntent(NavigateToPrev) },
             )
             Column(
@@ -134,6 +148,7 @@ fun SignUpMainLocationScreen(
                     },
                     placeholder = "구 단위로 검색 (ex, 마포구)",
                     onSearchClick = {
+                        focusManager.clearFocus()
                         viewModel.handleIntent(
                             SignUpPhotographerIntent.SearchArea(
                                 currentState.searchQuery,
@@ -141,42 +156,17 @@ fun SignUpMainLocationScreen(
                         )
                     },
                     keyboardActions = {
+                        focusManager.clearFocus()
                         viewModel.handleIntent(
                             SignUpPhotographerIntent.SearchArea(
                                 currentState.searchQuery,
                             ),
                         )
                     },
-                    onFocusChanged = { isFocused ->
-                        isSearchFieldFocused = isFocused
-                    },
                 )
-                if (currentState.selectedAreas.isNotEmpty()) {
-                    LazyRow(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        items(currentState.selectedAreas) { area ->
-                            AreaTag(
-                                label = area.name.split(" ").lastOrNull() ?: area.name,
-                                onRemove = {
-                                    focusManager.clearFocus()
-                                    viewModel.handleIntent(
-                                        SignUpPhotographerIntent.RemoveSelectedArea(area),
-                                    )
-                                },
-                            )
-                        }
-                    }
-                }
+                Spacer(modifier = Modifier.height(20.dp))
 
-                val spacingToIconText = if (currentState.hasSearchCompleted) 40.dp else 20.dp
-                Spacer(modifier = Modifier.height(spacingToIconText))
-
-                val showIconText = !isSearchFieldFocused || currentState.hasSearchCompleted
+                val showIconText = currentState.searchQuery.isBlank() || currentState.hasSearchCompleted
 
                 if (showIconText) {
                     Row(
@@ -199,13 +189,12 @@ fun SignUpMainLocationScreen(
                             color = MainThemeColor.Black,
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
                 Box(
                     modifier =
                         Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 15.dp),
+                            .fillMaxWidth(),
                 ) {
                     when {
                         currentState.isSearching -> {
@@ -223,7 +212,7 @@ fun SignUpMainLocationScreen(
                         currentState.searchResults.isNotEmpty() -> {
                             Column {
                                 LazyColumn(
-                                    modifier = Modifier.padding(top = 16.dp),
+                                    modifier = Modifier.padding(top = 4.dp),
                                 ) {
                                     itemsIndexed(currentState.searchResults) { index, area ->
                                         val isSelected = currentState.selectedAreas.any { it.id == area.id }
@@ -297,13 +286,36 @@ fun SignUpMainLocationScreen(
             Box(
                 modifier =
                     Modifier
-                        .height(120.dp)
+                        .height(112.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp),
-                contentAlignment = Alignment.Center,
             ) {
+                if (currentState.selectedAreas.isNotEmpty()) {
+                    LazyRow(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomStart)
+                                .padding(bottom = 64.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(currentState.selectedAreas) { area ->
+                            AreaTag(
+                                label = area.name.split(" ").lastOrNull() ?: area.name,
+                                onRemove = {
+                                    focusManager.clearFocus()
+                                    viewModel.handleIntent(
+                                        SignUpPhotographerIntent.RemoveSelectedArea(area),
+                                    )
+                                },
+                            )
+                        }
+                    }
+                }
+
                 CommonBottomButton(
                     text = "다음",
+                    modifier = Modifier.align(Alignment.BottomCenter),
                     onClick = {
                         viewModel.handleIntent(Navigate(SignUpDevice))
                     },
@@ -311,10 +323,12 @@ fun SignUpMainLocationScreen(
                 )
             }
         }
-        currentState.toastMessage?.let { message ->
+        val toastMessage = currentState.toastMessageResId?.let { stringResource(it) } ?: currentState.toastMessage
+        toastMessage?.let { message ->
             CommonToast(
                 message = message,
                 isVisible = currentState.showToast,
+                bottomOffset = 120.dp,
                 onDismiss = {
                     viewModel.handleIntent(SignUpPhotographerIntent.DismissToast)
                 },
@@ -333,6 +347,14 @@ fun SignUpMainLocationScreen(
                 else -> {}
             }
         }
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? {
+    return when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
     }
 }
 
