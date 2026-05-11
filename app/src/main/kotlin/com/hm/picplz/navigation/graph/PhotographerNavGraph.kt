@@ -105,10 +105,11 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
                     if (args.returnToMyPage) {
                         val poppedToMyPage = navController.popBackStack(MyPage, inclusive = false)
                         if (!poppedToMyPage) {
-                            val poppedToPhotographerMyPage = navController.popBackStack(
-                                route = MyPagePhotographer::class.qualifiedName.orEmpty(),
-                                inclusive = false,
-                            )
+                            val poppedToPhotographerMyPage =
+                                navController.popBackStack(
+                                    route = MyPagePhotographer::class.qualifiedName.orEmpty(),
+                                    inclusive = false,
+                                )
                             if (!poppedToPhotographerMyPage) {
                                 navController.popBackStack()
                             }

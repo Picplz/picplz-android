@@ -22,17 +22,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hm.picplz.domain.model.Device
 import com.hm.picplz.navigation.model.SignUpAddDevice
 import com.hm.picplz.navigation.model.SignUpPhotographyVibe
 import com.hm.picplz.ui.screen.common.CommonAddButton
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.device.DeviceListItem
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.Navigate
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.RemoveDeviceFromCategory
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceItem
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -101,8 +102,10 @@ fun SignUpDeviceScreen(
                                 style = pretendardTypography.titleSmall,
                             )
                             currentState.phoneDevices.forEach { device ->
-                                DeviceItem(
-                                    device = device,
+                                DeviceListItem(
+                                    companyName = device.companyName,
+                                    deviceName = device.displayName(),
+                                    removeContentDescription = "${device.displayName()} 삭제",
                                     onRemove = {
                                         viewModel.handleIntent(RemoveDeviceFromCategory(device))
                                     },
@@ -124,8 +127,10 @@ fun SignUpDeviceScreen(
                                 style = pretendardTypography.titleSmall,
                             )
                             currentState.cameraDevices.forEach { device ->
-                                DeviceItem(
-                                    device = device,
+                                DeviceListItem(
+                                    companyName = device.companyName,
+                                    deviceName = device.displayName(),
+                                    removeContentDescription = "${device.displayName()} 삭제",
                                     onRemove = {
                                         viewModel.handleIntent(RemoveDeviceFromCategory(device))
                                     },
@@ -171,6 +176,13 @@ fun SignUpDeviceScreen(
                 else -> {}
             }
         }
+    }
+}
+
+private fun Device.displayName(): String {
+    return when (this) {
+        is Device.PhoneDevice -> modelName ?: "모델명 없음"
+        is Device.CameraDevice -> "${modelName ?: "모델명 없음"} (${cameraType ?: "종류 없음"})"
     }
 }
 

@@ -51,11 +51,11 @@ import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
 import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
+import com.hm.picplz.ui.screen.photographer_chat_room.PhotographerChatRoomScreen
+import com.hm.picplz.ui.screen.photographer_detail_reservation.PhotographerDetailReservationScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
 import com.hm.picplz.ui.screen.photographer_main.composable.PhotographerAddDeviceScreen
-import com.hm.picplz.ui.screen.photographer_chat_room.PhotographerChatRoomScreen
-import com.hm.picplz.ui.screen.photographer_detail_reservation.PhotographerDetailReservationScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.photographer_main.composable
+package com.hm.picplz.ui.screen.common.device
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,18 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.hm.picplz.domain.model.Device
-import com.hm.picplz.feature.main.R
+import com.hm.picplz.core.ui.R
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
-import com.hm.picplz.core.ui.R as CoreUiR
 
 @Composable
-fun PhotographerDeviceItem(
-    device: Device,
+fun DeviceListItem(
+    companyName: String,
+    deviceName: String,
+    removeContentDescription: String,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -53,39 +52,24 @@ fun PhotographerDeviceItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = device.companyName,
+                text = companyName,
                 style = pretendardTypography.bodyMedium,
                 color = MainThemeColor.Gray4,
             )
             Spacer(modifier = Modifier.width(14.dp))
             Text(
-                text = device.displayName(),
+                text = deviceName,
                 style = MainFontFamily.bodyBold,
                 color = MainThemeColor.Gray5,
             )
         }
         Image(
-            painter = painterResource(id = CoreUiR.drawable.close_circle),
-            contentDescription =
-                stringResource(
-                    R.string.equipment_setting_remove_content_description,
-                    device.displayName(),
-                ),
+            painter = painterResource(id = R.drawable.close_circle),
+            contentDescription = removeContentDescription,
             modifier =
                 Modifier
                     .size(20.dp)
                     .clickable { onRemove() },
         )
-    }
-}
-
-@Composable
-private fun Device.displayName(): String {
-    return when (this) {
-        is Device.PhoneDevice -> modelName ?: stringResource(R.string.equipment_setting_empty_model_name)
-        is Device.CameraDevice -> {
-            val model = modelName ?: stringResource(R.string.equipment_setting_empty_model_name)
-            cameraType?.let { stringResource(R.string.equipment_setting_camera_item_format, model, it) } ?: model
-        }
     }
 }

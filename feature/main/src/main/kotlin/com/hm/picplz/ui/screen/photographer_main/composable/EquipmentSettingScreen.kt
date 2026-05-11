@@ -27,6 +27,7 @@ import com.hm.picplz.navigation.model.PhotographerAddDevice
 import com.hm.picplz.ui.screen.common.CommonAddButton
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.device.DeviceListItem
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainIntent
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 import com.hm.picplz.ui.theme.MainThemeColor
@@ -155,8 +156,10 @@ private fun DeviceSection(
             style = pretendardTypography.titleSmall,
         )
         devices.forEach { device ->
-            PhotographerDeviceItem(
-                device = device,
+            DeviceListItem(
+                companyName = device.companyName,
+                deviceName = device.displayName(),
+                removeContentDescription = device.removeContentDescription(),
                 onRemove = { onRemoveDevice(device) },
             )
         }
@@ -165,4 +168,20 @@ private fun DeviceSection(
             onClick = onAddDevice,
         )
     }
+}
+
+@Composable
+private fun Device.displayName(): String {
+    return when (this) {
+        is Device.PhoneDevice -> modelName ?: stringResource(R.string.equipment_setting_empty_model_name)
+        is Device.CameraDevice -> {
+            val model = modelName ?: stringResource(R.string.equipment_setting_empty_model_name)
+            cameraType?.let { stringResource(R.string.equipment_setting_camera_item_format, model, it) } ?: model
+        }
+    }
+}
+
+@Composable
+private fun Device.removeContentDescription(): String {
+    return stringResource(R.string.equipment_setting_remove_content_description, displayName())
 }

@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.photographer_main.composable
+package com.hm.picplz.ui.screen.common.device
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +22,7 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
-fun PhotographerDeviceSelectorBox(
+fun DeviceSelectorBox(
     text: String?,
     placeholder: String,
     isSelected: Boolean,
@@ -59,7 +59,7 @@ fun PhotographerDeviceSelectorBox(
             decorationBox = { innerTextField ->
                 Box(
                     modifier =
-                        Modifier
+                        modifier
                             .fillMaxWidth()
                             .border(
                                 width = 1.dp,
@@ -69,11 +69,11 @@ fun PhotographerDeviceSelectorBox(
                                         inputText.isNotEmpty() -> MainThemeColor.Black
                                         else -> MainThemeColor.Gray3
                                     },
-                                RoundedCornerShape(5.dp),
+                                shape = RoundedCornerShape(5.dp),
                             )
                             .background(
                                 color = MainThemeColor.Gray1,
-                                RoundedCornerShape(5.dp),
+                                shape = RoundedCornerShape(5.dp),
                             )
                             .padding(horizontal = 14.dp, vertical = 11.dp),
                     contentAlignment = Alignment.CenterStart,
@@ -102,19 +102,13 @@ fun PhotographerDeviceSelectorBox(
                                 isSelected -> MainThemeColor.Black
                                 else -> MainThemeColor.Gray3
                             },
-                        RoundedCornerShape(5.dp),
+                        shape = RoundedCornerShape(5.dp),
                     )
                     .background(
-                        color = if (enabled) MainThemeColor.White else MainThemeColor.Gray1,
-                        RoundedCornerShape(5.dp),
+                        color = MainThemeColor.Gray1,
+                        shape = RoundedCornerShape(5.dp),
                     )
-                    .let { boxModifier ->
-                        if (enabled) {
-                            boxModifier.clickable { onClick() }
-                        } else {
-                            boxModifier
-                        }
-                    }
+                    .clickable(enabled = enabled) { onClick() }
                     .padding(horizontal = 14.dp, vertical = 11.dp),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -124,8 +118,8 @@ fun PhotographerDeviceSelectorBox(
                 color =
                     when {
                         !enabled -> MainThemeColor.Gray3
-                        text == null -> MainThemeColor.Gray3
-                        else -> MainThemeColor.Black
+                        isSelected -> MainThemeColor.Black
+                        else -> MainThemeColor.Gray3
                     },
             )
         }

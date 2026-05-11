@@ -32,6 +32,8 @@ import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.device.DeviceSelectorBottomSheet
+import com.hm.picplz.ui.screen.common.device.DeviceSelectorBox
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.AddCurrentDeviceToList
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.DismissToast
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
@@ -47,8 +49,6 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIn
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerState
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceSelectorBottomSheet
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.DeviceSelectorBox
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
@@ -65,6 +65,7 @@ fun SignUpAddDeviceScreen(
 ) {
     val currentState = viewModel.state.collectAsState().value
     val focusManager = LocalFocusManager.current
+    val directInputText = "직접 입력"
 
     val topBarText =
         when (category) {
@@ -164,6 +165,7 @@ fun SignUpAddDeviceScreen(
     }
     DeviceSelectorBottomSheet(
         options = brands.map { it.name },
+        directInputText = directInputText,
         onOptionSelected = { brand ->
             when (category) {
                 DeviceCategory.PHONE -> {
@@ -219,6 +221,7 @@ fun SignUpAddDeviceScreen(
         val cameraTypeOptions = currentState.availableCameraTypes
         DeviceSelectorBottomSheet(
             options = cameraTypeOptions,
+            directInputText = directInputText,
             onOptionSelected = { type ->
                 val currentBrand = currentState.currentCamera?.companyName ?: ""
                 val currentModel = currentState.currentCamera?.modelName
@@ -242,6 +245,7 @@ fun SignUpAddDeviceScreen(
     }
     DeviceSelectorBottomSheet(
         options = models,
+        directInputText = directInputText,
         onOptionSelected = { model ->
             when (category) {
                 DeviceCategory.PHONE -> {

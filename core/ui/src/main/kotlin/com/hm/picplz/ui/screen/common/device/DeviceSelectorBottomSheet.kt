@@ -1,4 +1,4 @@
-package com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable
+package com.hm.picplz.ui.screen.common.device
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -28,10 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.ui.theme.MainThemeColor
-import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.theme.pretendardTypography
 
 @Composable
@@ -55,8 +53,9 @@ private fun DragHandle() {
 }
 
 @Composable
-fun DeviceSelectorContent(
+private fun DeviceSelectorContent(
     options: List<String>,
+    directInputText: String,
     onOptionSelected: (String) -> Unit,
     onDirectInput: (() -> Unit)?,
 ) {
@@ -91,7 +90,7 @@ fun DeviceSelectorContent(
                 shape = RoundedCornerShape(5.dp),
             ) {
                 Text(
-                    text = "직접 입력",
+                    text = directInputText,
                     style = pretendardTypography.bodyMedium,
                 )
             }
@@ -118,9 +117,7 @@ fun DeviceSelectorContent(
                         color = MainThemeColor.Black,
                     )
                 }
-                HorizontalDivider(
-                    color = MainThemeColor.Gray2,
-                )
+                HorizontalDivider(color = MainThemeColor.Gray2)
             }
         }
         Spacer(modifier = Modifier.navigationBarsPadding())
@@ -131,25 +128,27 @@ fun DeviceSelectorContent(
 @Composable
 fun DeviceSelectorBottomSheet(
     options: List<String>,
+    directInputText: String,
     onOptionSelected: (String) -> Unit,
-    onDirectInput: (() -> Unit)? = null,
     onDismiss: () -> Unit,
     visible: Boolean,
+    onDirectInput: (() -> Unit)? = null,
 ) {
     if (visible) {
         val bottomSheetState =
             rememberModalBottomSheetState(
                 skipPartiallyExpanded = true,
             )
+
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = bottomSheetState,
-            containerColor = MainThemeColor.White,
             dragHandle = { DragHandle() },
-            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = MainThemeColor.White,
         ) {
             DeviceSelectorContent(
                 options = options,
+                directInputText = directInputText,
                 onOptionSelected = { option ->
                     onOptionSelected(option)
                     onDismiss()
@@ -165,29 +164,5 @@ fun DeviceSelectorBottomSheet(
                     },
             )
         }
-    }
-}
-
-@Preview(showBackground = true, heightDp = 600)
-@Composable
-fun DeviceSelectorPreview() {
-    PicplzTheme {
-        DeviceSelectorContent(
-            options = listOf("애플", "삼성", "구글"),
-            onOptionSelected = {},
-            onDirectInput = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, heightDp = 600)
-@Composable
-fun DeviceSelectorModelPreview() {
-    PicplzTheme {
-        DeviceSelectorContent(
-            options = listOf("아이폰 15 Pro", "아이폰 15", "아이폰 14 Pro", "아이폰 14"),
-            onOptionSelected = {},
-            onDirectInput = {},
-        )
     }
 }

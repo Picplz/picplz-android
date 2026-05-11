@@ -30,6 +30,8 @@ import com.hm.picplz.feature.main.R
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonToast
 import com.hm.picplz.ui.screen.common.CommonTopBar
+import com.hm.picplz.ui.screen.common.device.DeviceSelectorBottomSheet
+import com.hm.picplz.ui.screen.common.device.DeviceSelectorBox
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainIntent
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainSideEffect
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainState
@@ -131,7 +133,7 @@ fun PhotographerAddDeviceScreen(
         }
     }
 
-    PhotographerDeviceSelectorBottomSheet(
+    DeviceSelectorBottomSheet(
         options =
             when (category) {
                 DeviceCategory.PHONE -> phoneBrandOptions.map { it.name }
@@ -191,7 +193,7 @@ fun PhotographerAddDeviceScreen(
     if (category == DeviceCategory.PHONE) {
         val models =
             phoneBrandOptions.find { it.name == currentState.currentPhone?.companyName }?.models.orEmpty()
-        PhotographerDeviceSelectorBottomSheet(
+        DeviceSelectorBottomSheet(
             options = models,
             directInputText = directInputText,
             onOptionSelected = { model ->
@@ -217,7 +219,7 @@ fun PhotographerAddDeviceScreen(
     }
 
     if (category == DeviceCategory.CAMERA) {
-        PhotographerDeviceSelectorBottomSheet(
+        DeviceSelectorBottomSheet(
             options = currentState.availableCameraTypes,
             directInputText = directInputText,
             onOptionSelected = { type ->
@@ -276,7 +278,7 @@ private fun PhoneDeviceForm(
     ) {
         Text(stringResource(R.string.equipment_setting_brand_label), style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
-        PhotographerDeviceSelectorBox(
+        DeviceSelectorBox(
             text = currentState.currentPhone?.companyName,
             placeholder =
                 if (currentState.phoneBrandDirectInput) {
@@ -310,7 +312,7 @@ private fun PhoneDeviceForm(
 
         Text(stringResource(R.string.equipment_setting_model_label), style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
-        PhotographerDeviceSelectorBox(
+        DeviceSelectorBox(
             text = currentState.currentPhone?.modelName,
             placeholder = phoneModelPlaceholder(currentState),
             isSelected = currentState.currentPhone?.modelName != null,
@@ -353,7 +355,7 @@ private fun CameraDeviceForm(
     ) {
         Text(stringResource(R.string.equipment_setting_brand_label), style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
-        PhotographerDeviceSelectorBox(
+        DeviceSelectorBox(
             text = currentState.currentCamera?.companyName?.takeIf { it.isNotEmpty() },
             placeholder =
                 if (currentState.cameraBrandDirectInput) {
@@ -389,7 +391,7 @@ private fun CameraDeviceForm(
 
         Text(stringResource(R.string.equipment_setting_camera_type_label), style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
-        PhotographerDeviceSelectorBox(
+        DeviceSelectorBox(
             text = currentState.currentCamera?.cameraType?.takeIf { it.isNotEmpty() },
             placeholder = stringResource(R.string.equipment_setting_select_placeholder),
             isSelected = !currentState.currentCamera?.cameraType.isNullOrEmpty(),
@@ -403,7 +405,7 @@ private fun CameraDeviceForm(
 
         Text(stringResource(R.string.equipment_setting_model_label), style = pretendardTypography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
-        PhotographerDeviceSelectorBox(
+        DeviceSelectorBox(
             text = currentState.currentCamera?.modelName?.takeIf { it.isNotEmpty() },
             placeholder = stringResource(R.string.equipment_setting_camera_model_input_placeholder),
             isSelected = !currentState.currentCamera?.modelName.isNullOrEmpty(),

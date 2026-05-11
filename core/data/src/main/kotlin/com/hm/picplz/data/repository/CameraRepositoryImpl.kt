@@ -11,5 +11,6 @@ class CameraRepositoryImpl
     constructor(
         private val cameraService: CameraService,
     ) : CameraRepository {
-        override suspend fun getCameraCatalog(): Result<CameraCatalog> = cameraService.getCameraList().map { it.toDomain() }
+        override suspend fun getCameraCatalog(): Result<CameraCatalog> =
+            cameraService.getCameraList().map { it.toDomain() }
     }
