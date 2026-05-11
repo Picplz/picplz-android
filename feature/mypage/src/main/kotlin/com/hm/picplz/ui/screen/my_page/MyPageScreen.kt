@@ -71,8 +71,8 @@ import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPagePackageEdit
-import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.SignUpPhotographer

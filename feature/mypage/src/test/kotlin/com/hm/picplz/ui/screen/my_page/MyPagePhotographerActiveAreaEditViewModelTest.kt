@@ -32,7 +32,7 @@ class MyPagePhotographerActiveAreaEditViewModelTest {
     @Test
     fun `initial load displays current active areas`() =
         runTest {
-            val photographerRepository = FakePhotographerRepository(activeAreas = listOf(area(2), area(1)))
+            val photographerRepository = FakeActiveAreaPhotographerRepository(activeAreas = listOf(area(2), area(1)))
             val viewModel =
                 createViewModel(
                     photographerRepository = photographerRepository,
@@ -50,7 +50,7 @@ class MyPagePhotographerActiveAreaEditViewModelTest {
         runTest {
             val viewModel =
                 createViewModel(
-                    photographerRepository = FakePhotographerRepository(activeAreas = (1L..5L).map(::area)),
+                    photographerRepository = FakeActiveAreaPhotographerRepository(activeAreas = (1L..5L).map(::area)),
                 )
             viewModel.handleIntent(MyPagePhotographerActiveAreaEditIntent.LoadActiveAreas(1))
             advanceUntilIdle()
@@ -65,7 +65,7 @@ class MyPagePhotographerActiveAreaEditViewModelTest {
     @Test
     fun `save sends areas in final tag order and navigates back`() =
         runTest {
-            val photographerRepository = FakePhotographerRepository(activeAreas = listOf(area(1)))
+            val photographerRepository = FakeActiveAreaPhotographerRepository(activeAreas = listOf(area(1)))
             val viewModel = createViewModel(photographerRepository = photographerRepository)
             viewModel.handleIntent(MyPagePhotographerActiveAreaEditIntent.LoadActiveAreas(1))
             advanceUntilIdle()
@@ -109,16 +109,31 @@ class MyPagePhotographerActiveAreaEditViewModelTest {
             assertFalse(viewModel.state.value.hasSearchCompleted)
         }
 
+    @Test
+    fun `blank search clears loading when location is unavailable`() =
+        runTest {
+            val viewModel = createViewModel(locationRepository = FakeLocationRepository(hasLocation = false))
+            advanceUntilIdle()
+
+            viewModel.handleIntent(MyPagePhotographerActiveAreaEditIntent.SearchArea)
+            advanceUntilIdle()
+
+            assertTrue(viewModel.state.value.searchResults.isEmpty())
+            assertFalse(viewModel.state.value.isSearching)
+            assertFalse(viewModel.state.value.hasSearchCompleted)
+        }
+
     private fun createViewModel(
-        photographerRepository: FakePhotographerRepository = FakePhotographerRepository(),
+        photographerRepository: PhotographerRepository = FakeActiveAreaPhotographerRepository(),
         areaRepository: FakeAreaRepository = FakeAreaRepository(),
+        locationRepository: LocationRepository = FakeLocationRepository(),
     ): MyPagePhotographerActiveAreaEditViewModel {
         return MyPagePhotographerActiveAreaEditViewModel(
             getPhotographerActiveAreasUseCase = GetPhotographerActiveAreasUseCase(photographerRepository),
             updatePhotographerActiveAreasUseCase = UpdatePhotographerActiveAreasUseCase(photographerRepository),
             searchAreasUseCase = SearchAreasUseCase(areaRepository),
             getNearbyAreasUseCase = GetNearbyAreasUseCase(areaRepository),
-            getCurrentLocationUseCase = GetCurrentLocationUseCase(FakeLocationRepository()),
+            getCurrentLocationUseCase = GetCurrentLocationUseCase(locationRepository),
         )
     }
 
@@ -131,7 +146,7 @@ class MyPagePhotographerActiveAreaEditViewModelTest {
         )
 }
 
-private class FakePhotographerRepository(
+private class FakeActiveAreaPhotographerRepository(
     private val activeAreas: List<Area> = emptyList(),
 ) : PhotographerRepository {
     var updatedAreas: List<Area> = emptyList()
@@ -147,6 +162,12 @@ private class FakePhotographerRepository(
         photographerId: Long,
         reviewSort: String,
     ): Result<PhotographerDetail> = error("Not used")
+
+    override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> = error("Not used")
+
+    override suspend fun addPhotoMood(photoMood: String): Result<Unit> = error("Not used")
+
+    override suspend fun deletePhotoMood(photoMood: String): Result<Unit> = error("Not used")
 
     override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> {
         requestedPhotographerId = photographerId
@@ -176,11 +197,17 @@ private class FakeAreaRepository(
     }
 }
 
-private class FakeLocationRepository : LocationRepository {
+private class FakeLocationRepository(
+    private val hasLocation: Boolean = true,
+) : LocationRepository {
     override fun getCurrentLocation(
         onLocationReceived: (LocationCoordinate) -> Unit,
         onPermissionDenied: () -> Unit,
     ) {
-        onLocationReceived(LocationCoordinate(latitude = 37.0, longitude = 127.0))
+        if (hasLocation) {
+            onLocationReceived(LocationCoordinate(latitude = 37.0, longitude = 127.0))
+        } else {
+            onPermissionDenied()
+        }
     }
 }

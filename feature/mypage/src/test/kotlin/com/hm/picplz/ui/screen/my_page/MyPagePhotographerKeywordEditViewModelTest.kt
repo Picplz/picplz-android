@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.my_page
 
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.PhotographerRepository
@@ -253,4 +254,8 @@ private class FakePhotographerRepository(
         deletedKeywords.add(photoMood)
         return Result.success(Unit)
     }
+
+    override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> = error("Not used")
+
+    override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> = error("Not used")
 }

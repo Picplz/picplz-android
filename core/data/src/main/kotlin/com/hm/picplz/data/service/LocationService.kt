@@ -26,7 +26,12 @@ class LocationService
                 locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
             }
 
-            val manager = locationManager ?: return
+            val manager =
+                locationManager
+                    ?: run {
+                        onPermissionDenied()
+                        return
+                    }
 
             if (!PermissionUtil.hasLocationPermissions(context)) {
                 onPermissionDenied()
@@ -51,6 +56,7 @@ class LocationService
                         onPermissionDenied,
                     )
                 }
+                else -> onPermissionDenied()
             }
         }
 

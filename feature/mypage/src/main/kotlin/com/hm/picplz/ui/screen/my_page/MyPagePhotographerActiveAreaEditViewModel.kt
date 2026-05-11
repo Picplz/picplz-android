@@ -10,6 +10,7 @@ import com.hm.picplz.domain.usecase.SearchAreasUseCase
 import com.hm.picplz.domain.usecase.UpdatePhotographerActiveAreasUseCase
 import com.hm.picplz.feature.mypage.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,8 @@ class MyPagePhotographerActiveAreaEditViewModel
 
         private val _sideEffect = Channel<MyPagePhotographerActiveAreaEditSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
+
+        private var searchJob: Job? = null
 
         fun handleIntent(intent: MyPagePhotographerActiveAreaEditIntent) {
             when (intent) {
@@ -91,37 +94,42 @@ class MyPagePhotographerActiveAreaEditViewModel
 
         private fun searchArea() {
             val keyword = _state.value.searchQuery.trim()
+            searchJob?.cancel()
             if (keyword.isBlank()) {
                 loadNearbyAreas()
                 return
             }
 
             _state.update { it.copy(isSearching = true) }
-            viewModelScope.launch {
-                searchAreasUseCase(keyword)
-                    .onSuccess { areas ->
-                        _state.update {
-                            it.copy(
-                                searchResults = areas,
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                            )
+            searchJob =
+                viewModelScope.launch {
+                    searchAreasUseCase(keyword)
+                        .onSuccess { areas ->
+                            if (_state.value.searchQuery.trim() != keyword) return@onSuccess
+                            _state.update {
+                                it.copy(
+                                    searchResults = areas,
+                                    isSearching = false,
+                                    hasSearchCompleted = true,
+                                )
+                            }
+                        }.onFailure {
+                            if (_state.value.searchQuery.trim() != keyword) return@onFailure
+                            _state.update {
+                                it.copy(
+                                    searchResults = emptyList(),
+                                    isSearching = false,
+                                    hasSearchCompleted = true,
+                                    toastMessageResId = R.string.active_area_edit_search_failed,
+                                )
+                            }
                         }
-                    }.onFailure {
-                        _state.update {
-                            it.copy(
-                                searchResults = emptyList(),
-                                isSearching = false,
-                                hasSearchCompleted = true,
-                                toastMessageResId = R.string.active_area_edit_search_failed,
-                            )
-                        }
-                    }
-            }
+                }
         }
 
         private fun loadNearbyAreas() {
             _state.update { it.copy(isSearching = true, hasSearchCompleted = false) }
+            searchJob = null
             getCurrentLocationUseCase(
                 onLocationReceived = { location ->
                     viewModelScope.launch {
@@ -130,6 +138,7 @@ class MyPagePhotographerActiveAreaEditViewModel
                             lat = location.latitude,
                             lng = location.longitude,
                         ).onSuccess { areas ->
+                            if (_state.value.searchQuery.isNotBlank()) return@onSuccess
                             _state.update {
                                 it.copy(
                                     searchResults = areas,
@@ -138,6 +147,7 @@ class MyPagePhotographerActiveAreaEditViewModel
                                 )
                             }
                         }.onFailure {
+                            if (_state.value.searchQuery.isNotBlank()) return@onFailure
                             _state.update {
                                 it.copy(
                                     searchResults = emptyList(),
@@ -165,9 +175,7 @@ class MyPagePhotographerActiveAreaEditViewModel
                 val isSelected = currentState.selectedAreas.any { it.id == area.id }
                 when {
                     isSelected -> {
-                        currentState.copy(
-                            selectedAreas = currentState.selectedAreas.filterNot { it.id == area.id },
-                        )
+                        currentState.copy(toastMessageResId = R.string.active_area_edit_already_selected)
                     }
                     currentState.selectedAreas.size >= MAX_ACTIVE_AREA_COUNT -> {
                         currentState.copy(toastMessageResId = R.string.active_area_edit_max_count_error)
