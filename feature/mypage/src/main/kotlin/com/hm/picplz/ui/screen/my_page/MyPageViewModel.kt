@@ -69,7 +69,11 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_region_edit_pending))
                 }
                 is MyPageIntent.NavigateToPhotographerKeywordEdit -> {
-                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_keyword_edit_pending))
+                    sendSideEffect(
+                        MyPageSideEffect.NavigateToPhotographerKeywordEdit(
+                            _state.value.photographerProfile.photographerId,
+                        ),
+                    )
                 }
                 is MyPageIntent.NavigateToPhotographerEquipmentEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_equipment_edit_pending))
@@ -82,6 +86,16 @@ class MyPageViewModel
                 }
                 is MyPageIntent.NavigateToPortfolioEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
+                }
+                is MyPageIntent.ApplyPhotographerKeywordSummary -> {
+                    _state.update {
+                        it.copy(
+                            photographerProfile =
+                                it.photographerProfile.copy(
+                                    keywordSummary = intent.keywordSummary,
+                                ),
+                        )
+                    }
                 }
                 is MyPageIntent.ApplyDevPhotographerPreview -> {
                     _state.update {

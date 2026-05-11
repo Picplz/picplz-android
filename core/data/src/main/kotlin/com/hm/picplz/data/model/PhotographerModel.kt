@@ -16,6 +16,10 @@ data class ActiveAreaRequest(
     val priority: Int,
 )
 
+data class PhotoMoodRequest(
+    val photoMood: String,
+)
+
 data class PhotographerCameraRequest(
     val type: String?,
     val brand: String,

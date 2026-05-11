@@ -62,6 +62,20 @@ class MyPageViewModelTest {
         }
 
     @Test
+    fun `navigate to photographer keyword edit emits dedicated navigation side effect`() =
+        runTest {
+            val viewModel = MyPageViewModel()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(MyPageIntent.NavigateToPhotographerKeywordEdit)
+            advanceUntilIdle()
+
+            val sideEffect = sideEffectDeferred.await()
+            assertTrue(sideEffect is MyPageSideEffect.NavigateToPhotographerKeywordEdit)
+            assertEquals(1, (sideEffect as MyPageSideEffect.NavigateToPhotographerKeywordEdit).photographerId)
+        }
+
+    @Test
     fun `photographer preview without package emits requires package toast`() =
         runTest {
             val viewModel = MyPageViewModel()
@@ -96,6 +110,15 @@ class MyPageViewModelTest {
             assertTrue(sideEffect is MyPageSideEffect.NavigateToPhotographerPreview)
             assertEquals(1, (sideEffect as MyPageSideEffect.NavigateToPhotographerPreview).photographerId)
         }
+
+    @Test
+    fun `apply photographer keyword summary updates profile summary`() {
+        val viewModel = MyPageViewModel()
+
+        viewModel.handleIntent(MyPageIntent.ApplyPhotographerKeywordSummary("#캐주얼, #심플"))
+
+        assertEquals("#캐주얼, #심플", viewModel.state.value.photographerProfile.keywordSummary)
+    }
 
     @Test
     fun `photographer preview availability requires package and photographer id`() {

@@ -21,6 +21,7 @@ import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
@@ -40,6 +41,7 @@ import com.hm.picplz.ui.screen.my_page.FollowedPhotographersScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPagePackageEditRoute
+import com.hm.picplz.ui.screen.my_page.MyPagePhotographerKeywordEditRoute
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
 import com.hm.picplz.ui.screen.my_page.MyPageShootingHistoryScreen
@@ -118,6 +120,14 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPagePhotographerModifyProfile> {
         MyPagePhotographerModifyProfileScreen(navController = navController)
+    }
+
+    composable<MyPagePhotographerKeywordEdit> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePhotographerKeywordEdit>()
+        MyPagePhotographerKeywordEditRoute(
+            navController = navController,
+            photographerId = args.photographerId,
+        )
     }
 
     composable<MyPagePackageEdit> {

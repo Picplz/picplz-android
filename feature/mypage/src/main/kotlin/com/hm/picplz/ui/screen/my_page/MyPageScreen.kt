@@ -71,6 +71,7 @@ import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPagePackageEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.SignUpPhotographer
@@ -86,6 +87,8 @@ import java.text.NumberFormat
 import java.util.Locale
 import com.hm.picplz.core.ui.R as CoreR
 
+internal const val KEY_PHOTOGRAPHER_KEYWORD_SUMMARY = "photographer_keyword_summary"
+
 @Composable
 fun MyPageScreen(
     modifier: Modifier = Modifier,
@@ -97,8 +100,22 @@ fun MyPageScreen(
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val keywordSummaryResultFlow =
+        remember(savedStateHandle) {
+            savedStateHandle?.getStateFlow<String?>(KEY_PHOTOGRAPHER_KEYWORD_SUMMARY, null)
+        }
+    val keywordSummaryResult by keywordSummaryResultFlow?.collectAsStateWithLifecycle()
+        ?: remember { mutableStateOf(null) }
     val context = LocalContext.current
     var toastMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(keywordSummaryResult) {
+        keywordSummaryResult?.let { keywordSummary ->
+            viewModel.handleIntent(MyPageIntent.ApplyPhotographerKeywordSummary(keywordSummary))
+            savedStateHandle?.remove<String>(KEY_PHOTOGRAPHER_KEYWORD_SUMMARY)
+        }
+    }
 
     LaunchedEffect(initialHasPhotographerRole) {
         if (initialHasPhotographerRole && !state.hasPhotographerRole) {
@@ -129,6 +146,11 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.NavigateToPhotographerModifyProfile -> {
                     navController.navigate(MyPagePhotographerModifyProfile)
+                }
+                is MyPageSideEffect.NavigateToPhotographerKeywordEdit -> {
+                    navController.navigate(
+                        MyPagePhotographerKeywordEdit(photographerId = effect.photographerId.toLong()),
+                    )
                 }
                 is MyPageSideEffect.NavigateToPackageEdit -> {
                     navController.navigate(MyPagePackageEdit)

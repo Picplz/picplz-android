@@ -33,6 +33,10 @@ sealed interface MyPageIntent {
 
     data object NavigateToPortfolioEdit : MyPageIntent
 
+    data class ApplyPhotographerKeywordSummary(
+        val keywordSummary: String,
+    ) : MyPageIntent
+
     data class ApplyDevPhotographerPreview(
         val hasShootings: Boolean,
         val hasPackagePreview: Boolean,
