@@ -142,7 +142,7 @@ fun NotificationBubblePreview() {
                             button =
                                 MessageButton(
                                     text = "확인",
-                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                    actionType = ButtonActionType.FindAnotherArtist,
                                 ),
                         ),
                     sender =
@@ -181,7 +181,7 @@ fun NotificationBubbleButtonPreview() {
                             button =
                                 MessageButton(
                                     text = "확인",
-                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                    actionType = ButtonActionType.FindAnotherArtist,
                                 ),
                         ),
                     sender =
@@ -221,7 +221,7 @@ fun NotificationBubbleSendPreview() {
                             button =
                                 MessageButton(
                                     text = "확인",
-                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                    actionType = ButtonActionType.FindAnotherArtist,
                                 ),
                             caption = "캡션",
                         ),
@@ -263,7 +263,7 @@ fun NotificationBubbleCaptionButtonPreview() {
                             button =
                                 MessageButton(
                                     text = "주문서 확인하기",
-                                    actionType = ButtonActionType.FIND_ANOTHER_ARTIST,
+                                    actionType = ButtonActionType.FindAnotherArtist,
                                 ),
                         ),
                     sender =

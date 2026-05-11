@@ -41,6 +41,12 @@ class PhotographerChatRoomViewModel
                         _sideEffect.emit(PhotographerChatRoomSideEffect.NavigateToPrev)
                     }
                 }
+
+                PhotographerChatRoomIntent.ClickReservationDetail -> {
+                    viewModelScope.launch {
+                        _sideEffect.emit(PhotographerChatRoomSideEffect.NavigateToPhotographerDetailReservation)
+                    }
+                }
             }
         }
     }

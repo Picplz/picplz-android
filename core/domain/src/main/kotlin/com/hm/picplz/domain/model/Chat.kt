@@ -30,11 +30,18 @@ enum class MessageDirection {
     RECEIVED,
 }
 
-enum class ButtonActionType {
-    OPEN_ORDER_FORM,
-    FIND_ANOTHER_ARTIST,
-    CONFIRM_ORDER,
-    OPEN_URL,
+sealed interface ButtonActionType {
+    data object OpenOrderForm : ButtonActionType
+
+    data object FindAnotherArtist : ButtonActionType
+
+    data object ConfirmOrder : ButtonActionType
+
+    data class OpenUrl(
+        val url: String,
+    ) : ButtonActionType
+
+    data object OpenPhotographerDetailReservation : ButtonActionType
 }
 
 data class MessageButton(

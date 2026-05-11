@@ -16,11 +16,20 @@ import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.MainThemeFont.Body
 
 @Composable
-fun ReservationInfoSection(modifier: Modifier = Modifier) {
+fun ReservationInfoSection(
+    modifier: Modifier = Modifier,
+    customerName: String = "",
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
+        if (customerName.isNotBlank()) {
+            ReservationInfoItem(
+                title = "고객명",
+                description = customerName,
+            )
+        }
         ReservationInfoItem(
             title = "촬영 상품명",
             description = "프로필 패키지",

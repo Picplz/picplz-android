@@ -136,7 +136,7 @@ val dummyChatMessages =
                     button =
                         MessageButton(
                             text = "확인",
-                            actionType = ButtonActionType.CONFIRM_ORDER,
+                            actionType = ButtonActionType.ConfirmOrder,
                         ),
                 ),
             timestamp = System.currentTimeMillis() - 1000,
@@ -192,7 +192,7 @@ val dummyChatMessages =
                     button =
                         MessageButton(
                             text = "거래 확정",
-                            actionType = ButtonActionType.CONFIRM_ORDER,
+                            actionType = ButtonActionType.ConfirmOrder,
                         ),
                 ),
             timestamp = System.currentTimeMillis() - 1000,
@@ -217,7 +217,7 @@ val dummyChatMessages =
                     button =
                         MessageButton(
                             text = "거래 확정",
-                            actionType = ButtonActionType.CONFIRM_ORDER,
+                            actionType = ButtonActionType.ConfirmOrder,
                         ),
                 ),
             timestamp = System.currentTimeMillis() - 1000,
@@ -313,7 +313,7 @@ val dummyChatMessages =
                     button =
                         MessageButton(
                             text = "확인",
-                            actionType = ButtonActionType.CONFIRM_ORDER,
+                            actionType = ButtonActionType.ConfirmOrder,
                         ),
                 ),
             timestamp = System.currentTimeMillis() - 1000,
@@ -376,7 +376,7 @@ val dummyReservationChatMessages =
                     button =
                         MessageButton(
                             text = "예약 정보 확인",
-                            actionType = ButtonActionType.CONFIRM_ORDER,
+                            actionType = ButtonActionType.OpenPhotographerDetailReservation,
                         ),
                 ),
             timestamp = System.currentTimeMillis() - 1000,

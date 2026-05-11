@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="reservation_cancel">예약 취소</string>
+    <string name="reservation_reject">예약 거절</string>
     <string name="reservation_step_waiting">예약 대기</string>
     <string name="reservation_step_in_progress">촬영 진행</string>
     <string name="reservation_step_confirmed">거래 확정</string>
@@ -15,6 +16,7 @@
     <string name="reservation_button_chat">채팅 바로가기</string>
     <string name="reservation_button_history">내역 보기</string>
     <string name="reservation_button_confirm">거래 확정하기</string>
+    <string name="reservation_button_reservation_approve">예약 승인</string>
 
     <!-- 예약 취소 다이얼로그 -->
     <string name="reservation_cancel_dialog_title">예약을 취소하시겠습니까?</string>

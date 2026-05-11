@@ -50,8 +50,49 @@ fun ReservationStatusHeader(
 
         if (currentReservationStatus.showCancelButton()) {
             ReservationCancelButton(
+                text = stringResource(R.string.reservation_cancel),
                 onClick = onCancelClick,
             )
+        }
+    }
+}
+
+@Composable
+fun PhotographerReservationStatusHeader(
+    currentReservationStatus: ReservationStatus,
+    onCancelClick: () -> Unit,
+    onCancelReject: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        ReservationStatusInfo(
+            title = stringResource(currentReservationStatus.titleResId),
+            description = stringResource(currentReservationStatus.descriptionResId),
+        )
+
+        when (currentReservationStatus) {
+            ReservationStatus.WAITING_APPROVAL -> {
+                ReservationCancelButton(
+                    text = stringResource(R.string.reservation_reject),
+                    onClick = onCancelReject,
+                )
+            }
+
+            ReservationStatus.WAITING_PAYMENT,
+            ReservationStatus.RESERVED,
+            -> {
+                ReservationCancelButton(
+                    text = stringResource(R.string.reservation_cancel),
+                    onClick = onCancelClick,
+                )
+            }
+
+            else -> {
+                return
+            }
         }
     }
 }
@@ -81,6 +122,7 @@ private fun ReservationStatusInfo(
 
 @Composable
 private fun ReservationCancelButton(
+    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -96,7 +138,7 @@ private fun ReservationCancelButton(
             onClick = onClick,
         ) {
             Text(
-                text = stringResource(R.string.reservation_cancel),
+                text = text,
                 modifier =
                     Modifier
                         .padding(horizontal = 15.dp, vertical = 6.dp)

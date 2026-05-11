@@ -36,6 +36,7 @@ fun ChatRoomScreen(
         onBackClick = {
             viewModel.handleIntent(ChatRoomIntent.NavigateToPrev)
         },
+        onMessageButtonClick = {},
         onMenuClick = {
             // TODO: Implement menu click action
         },
@@ -53,6 +54,7 @@ private fun ChatRoomScreenPreview() {
             chatMessages = dummyChatMessages,
             onBackClick = {},
             onMenuClick = {},
+            onMessageButtonClick = {},
         )
     }
 }
