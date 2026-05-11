@@ -7,4 +7,85 @@
     <string name="equipment_setting_add_button">추가하기 +</string>
     <string name="equipment_setting_save_button">저장</string>
     <string name="equipment_setting_remove_content_description">%1$s 삭제</string>
+    <string name="equipment_setting_empty_model_name">모델명 없음</string>
+    <string name="equipment_setting_camera_item_format">%1$s (%2$s)</string>
+    <string name="equipment_setting_add_phone_title">핸드폰 추가</string>
+    <string name="equipment_setting_add_camera_title">카메라 추가</string>
+    <string name="equipment_setting_add_device_button">추가하기</string>
+    <string name="equipment_setting_direct_input">직접 입력</string>
+    <string name="equipment_setting_brand_label">브랜드</string>
+    <string name="equipment_setting_model_label">모델명</string>
+    <string name="equipment_setting_camera_type_label">카메라 종류</string>
+    <string name="equipment_setting_select_placeholder">선택</string>
+    <string name="equipment_setting_brand_input_placeholder">브랜드명을 입력하세요</string>
+    <string name="equipment_setting_phone_model_input_placeholder">상세 모델명을 입력해 주세요 (ex, 아이폰 15 pro)</string>
+    <string name="equipment_setting_camera_model_input_placeholder">상세 모델명을 입력해 주세요 (ex, A0000)</string>
+    <string name="equipment_setting_model_before_brand_placeholder">먼저 브랜드를 선택해주세요</string>
+    <string name="equipment_setting_duplicate_device_message">이미 추가된 기기입니다.</string>
+    <string name="equipment_setting_phone_brand_apple">애플</string>
+    <string name="equipment_setting_phone_brand_samsung">삼성</string>
+
+    <string-array name="equipment_setting_apple_phone_models">
+        <item>아이폰 15 Pro Max</item>
+        <item>아이폰 15 Pro</item>
+        <item>아이폰 15 Plus</item>
+        <item>아이폰 15</item>
+        <item>아이폰 14 Pro Max</item>
+        <item>아이폰 14 Pro</item>
+        <item>아이폰 14 Plus</item>
+        <item>아이폰 14</item>
+        <item>아이폰 13 Pro Max</item>
+        <item>아이폰 13 Pro</item>
+        <item>아이폰 13 mini</item>
+        <item>아이폰 13</item>
+        <item>아이폰 12 Pro Max</item>
+        <item>아이폰 12 Pro</item>
+        <item>아이폰 12 mini</item>
+        <item>아이폰 12</item>
+        <item>아이폰 SE (3세대)</item>
+    </string-array>
+
+    <string-array name="equipment_setting_samsung_phone_models">
+        <item>갤럭시 S24 Ultra</item>
+        <item>갤럭시 S24+</item>
+        <item>갤럭시 S24</item>
+        <item>갤럭시 S23 Ultra</item>
+        <item>갤럭시 S23+</item>
+        <item>갤럭시 S23</item>
+        <item>갤럭시 S23 FE</item>
+        <item>갤럭시 S22 Ultra</item>
+        <item>갤럭시 S22+</item>
+        <item>갤럭시 S22</item>
+        <item>갤럭시 S21 Ultra</item>
+        <item>갤럭시 S21+</item>
+        <item>갤럭시 S21</item>
+        <item>갤럭시 S21 FE</item>
+        <item>갤럭시 노트 20 Ultra</item>
+        <item>갤럭시 노트 20</item>
+        <item>갤럭시 Z 폴드 5</item>
+        <item>갤럭시 Z 플립 5</item>
+        <item>갤럭시 Z 폴드 4</item>
+        <item>갤럭시 Z 플립 4</item>
+        <item>갤럭시 A54</item>
+        <item>갤럭시 A34</item>
+        <item>갤럭시 A24</item>
+        <item>갤럭시 A14</item>
+    </string-array>
+
+    <string-array name="equipment_setting_camera_brands">
+        <item>소니</item>
+        <item>캐논</item>
+        <item>니콘</item>
+        <item>후지필름</item>
+        <item>파나소닉</item>
+        <item>라이카</item>
+        <item>올림푸스</item>
+    </string-array>
+
+    <string-array name="equipment_setting_camera_types">
+        <item>DSLR 카메라</item>
+        <item>미러리스 카메라</item>
+        <item>디지털 카메라</item>
+        <item>필름 카메라</item>
+    </string-array>
 </resources>

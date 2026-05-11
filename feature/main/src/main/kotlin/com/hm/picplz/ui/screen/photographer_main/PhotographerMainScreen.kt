@@ -176,7 +176,7 @@ fun PhotographerMainScreen(
                         onClick = {
                             if (currentState.isActive.not()) {
                                 viewModel.handleIntent(
-                                    PhotographerMainIntent.Navigate(PhotographerEquipmentSetting),
+                                    PhotographerMainIntent.Navigate(PhotographerEquipmentSetting()),
                                 )
                             }
                         },

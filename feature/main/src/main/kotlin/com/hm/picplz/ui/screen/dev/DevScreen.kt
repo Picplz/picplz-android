@@ -222,7 +222,7 @@ fun DevScreen(navController: NavHostController) {
             DevButton("PhotographerMain (작가홈)") { navController.navigate(PhotographerMain) }
             DevButton("PhotographerEquipmentSetting") {
                 navController.navigate(
-                    PhotographerEquipmentSetting,
+                    PhotographerEquipmentSetting(),
                 )
             }
 

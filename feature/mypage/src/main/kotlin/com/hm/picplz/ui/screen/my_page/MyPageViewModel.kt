@@ -76,7 +76,7 @@ class MyPageViewModel
                     )
                 }
                 is MyPageIntent.NavigateToPhotographerEquipmentEdit -> {
-                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_equipment_edit_pending))
+                    sendSideEffect(MyPageSideEffect.NavigateToPhotographerEquipmentEdit)
                 }
                 is MyPageIntent.NavigateToSettlement -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
