@@ -88,6 +88,11 @@ data class MyPagePhotographerKeywordEdit(
     val photographerId: Long,
 ) : NavigationRoute
 
+@Serializable object MyPagePhotographerEquipmentSetting : NavigationRoute
+
+@Serializable
+data class MyPagePhotographerAddDevice(val category: String = "phone") : NavigationRoute
+
 @Serializable object MyPagePackageEdit : NavigationRoute
 
 @Serializable
@@ -105,9 +110,17 @@ data class MyPageShootingHistory(
 // === Photographer Screens ===
 @Serializable object QuickShoot : NavigationRoute
 
+@Serializable object PhotographerMainGraph : NavigationRoute
+
 @Serializable object PhotographerMain : NavigationRoute
 
-@Serializable object PhotographerEquipmentSetting : NavigationRoute
+@Serializable
+data class PhotographerEquipmentSetting(
+    val returnToMyPage: Boolean = false,
+) : NavigationRoute
+
+@Serializable
+data class PhotographerAddDevice(val category: String = "phone") : NavigationRoute
 
 // === Detail Screens ===
 @Serializable

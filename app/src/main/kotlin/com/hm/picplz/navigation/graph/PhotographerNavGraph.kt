@@ -1,16 +1,24 @@
 package com.hm.picplz.navigation.graph
 
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
 import com.hm.picplz.navigation.model.DetailPhotographerPortfolioDetail
 import com.hm.picplz.navigation.model.DetailPhotographerSingleReview
+import com.hm.picplz.navigation.model.MyPage
+import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.PhotographerAddDevice
 import com.hm.picplz.navigation.model.PhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.PhotographerMain
+import com.hm.picplz.navigation.model.PhotographerMainGraph
 import com.hm.picplz.navigation.model.QuickShoot
 import com.hm.picplz.navigation.model.ReviewPhotographer
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerPhotoPortfoliosScreen
@@ -20,16 +28,14 @@ import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerReviewScree
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerScreen
 import com.hm.picplz.ui.screen.detail_photographer.DetailPhotographerSingleReviewScreen
 import com.hm.picplz.ui.screen.photographer_main.PhotographerMainScreen
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
 import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
+import com.hm.picplz.ui.screen.photographer_main.composable.PhotographerAddDeviceScreen
 import com.hm.picplz.ui.screen.quick_shoot.QuickShootScreen
 
 fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
     composable<QuickShoot> {
         QuickShootScreen(mainNavController = navController)
-    }
-
-    composable<PhotographerMain> {
-        PhotographerMainScreen(navController = navController)
     }
 
     composable<DetailPhotographer> {
@@ -78,7 +84,63 @@ fun NavGraphBuilder.photographerNavGraph(navController: NavHostController) {
         )
     }
 
-    composable<PhotographerEquipmentSetting> {
-        EquipmentSettingScreen(navController = navController)
+    navigation<PhotographerMainGraph>(startDestination = PhotographerMain) {
+        composable<PhotographerMain> {
+            val photographerMainViewModel = navController.sharedPhotographerMainViewModel()
+
+            PhotographerMainScreen(
+                viewModel = photographerMainViewModel,
+                navController = navController,
+            )
+        }
+
+        composable<PhotographerEquipmentSetting> { backStackEntry ->
+            val args = backStackEntry.toRoute<PhotographerEquipmentSetting>()
+            val photographerMainViewModel = navController.sharedPhotographerMainViewModel()
+
+            EquipmentSettingScreen(
+                viewModel = photographerMainViewModel,
+                navController = navController,
+                onNavigateBack = {
+                    if (args.returnToMyPage) {
+                        val poppedToMyPage = navController.popBackStack(MyPage, inclusive = false)
+                        if (!poppedToMyPage) {
+                            val poppedToPhotographerMyPage =
+                                navController.popBackStack(
+                                    route = MyPagePhotographer::class.qualifiedName.orEmpty(),
+                                    inclusive = false,
+                                )
+                            if (!poppedToPhotographerMyPage) {
+                                navController.popBackStack()
+                            }
+                        }
+                    } else {
+                        navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<PhotographerAddDevice> { backStackEntry ->
+            val args = backStackEntry.toRoute<PhotographerAddDevice>()
+            val category =
+                when (args.category.lowercase()) {
+                    "camera" -> DeviceCategory.CAMERA
+                    else -> DeviceCategory.PHONE
+                }
+            val photographerMainViewModel = navController.sharedPhotographerMainViewModel()
+
+            PhotographerAddDeviceScreen(
+                category = category,
+                navController = navController,
+                viewModel = photographerMainViewModel,
+            )
+        }
     }
+}
+
+@Composable
+private fun NavHostController.sharedPhotographerMainViewModel(): PhotographerMainViewModel {
+    val route = PhotographerMainGraph::class.qualifiedName.orEmpty()
+    return hiltViewModel(getBackStackEntry(route))
 }

@@ -1,10 +1,12 @@
 package com.hm.picplz.navigation.graph
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.hm.picplz.common.model.CancelConfirmType
+import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.navigation.model.CancelReservation
 import com.hm.picplz.navigation.model.CancelReservationConfirm
 import com.hm.picplz.navigation.model.Chat
@@ -22,6 +24,8 @@ import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographer
 import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerAddDevice
+import com.hm.picplz.navigation.model.MyPagePhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
@@ -51,6 +55,9 @@ import com.hm.picplz.ui.screen.my_page.MyReviewScreen
 import com.hm.picplz.ui.screen.order_detail.OrderDetailScreen
 import com.hm.picplz.ui.screen.photographer_chat_room.PhotographerChatRoomScreen
 import com.hm.picplz.ui.screen.photographer_detail_reservation.PhotographerDetailReservationScreen
+import com.hm.picplz.ui.screen.photographer_main.PhotographerMainViewModel
+import com.hm.picplz.ui.screen.photographer_main.composable.EquipmentSettingScreen
+import com.hm.picplz.ui.screen.photographer_main.composable.PhotographerAddDeviceScreen
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
@@ -129,6 +136,39 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         MyPagePhotographerKeywordEditRoute(
             navController = navController,
             photographerId = args.photographerId,
+        )
+    }
+
+    composable<MyPagePhotographerEquipmentSetting> { backStackEntry ->
+        val equipmentViewModel: PhotographerMainViewModel = hiltViewModel(backStackEntry)
+        EquipmentSettingScreen(
+            viewModel = equipmentViewModel,
+            navController = navController,
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onNavigateAddDevice = { category ->
+                navController.navigate(MyPagePhotographerAddDevice(category = category))
+            },
+        )
+    }
+
+    composable<MyPagePhotographerAddDevice> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePhotographerAddDevice>()
+        val category =
+            when (args.category.lowercase()) {
+                "camera" -> DeviceCategory.CAMERA
+                else -> DeviceCategory.PHONE
+            }
+        val equipmentBackStackEntry = navController.getBackStackEntry(MyPagePhotographerEquipmentSetting)
+        val equipmentViewModel: PhotographerMainViewModel = hiltViewModel(equipmentBackStackEntry)
+        PhotographerAddDeviceScreen(
+            category = category,
+            navController = navController,
+            viewModel = equipmentViewModel,
+            onNavigateBack = {
+                navController.popBackStack()
+            },
         )
     }
 
