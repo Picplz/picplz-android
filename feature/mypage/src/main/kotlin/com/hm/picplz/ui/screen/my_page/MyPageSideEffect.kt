@@ -13,6 +13,8 @@ sealed interface MyPageSideEffect {
 
     data object NavigateToPackageEdit : MyPageSideEffect
 
+    data class NavigateToPhotographerActiveAreaEdit(val photographerId: Int) : MyPageSideEffect
+
     data object NavigateToMyReviews : MyPageSideEffect
 
     data object NavigateToFollowedPhotographers : MyPageSideEffect

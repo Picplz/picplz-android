@@ -71,6 +71,7 @@ import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
 import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPagePackageEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
@@ -158,6 +159,9 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.NavigateToPackageEdit -> {
                     navController.navigate(MyPagePackageEdit)
+                }
+                is MyPageSideEffect.NavigateToPhotographerActiveAreaEdit -> {
+                    navController.navigate(MyPagePhotographerActiveAreaEdit(effect.photographerId))
                 }
                 is MyPageSideEffect.NavigateToMyReviews -> {
                     navController.navigate(MyPageMyReviews)

@@ -20,6 +20,20 @@ data class PhotoMoodRequest(
     val photoMood: String,
 )
 
+data class UpdateActiveAreaRequest(
+    val areas: List<ActiveAreaRequest>,
+)
+
+data class UpdateActiveAreaResponse(
+    val areas: List<ActiveAreaResponse>,
+)
+
+data class ActiveAreaResponse(
+    val code: Long,
+    val name: String,
+    val priority: Int,
+)
+
 data class PhotographerCameraRequest(
     val type: String?,
     val brand: String,

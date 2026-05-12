@@ -95,6 +95,9 @@ data class MyPagePhotographerAddDevice(val category: String = "phone") : Navigat
 
 @Serializable object MyPagePackageEdit : NavigationRoute
 
+@Serializable
+data class MyPagePhotographerActiveAreaEdit(val photographerId: Int) : NavigationRoute
+
 @Serializable object MyPageMyReviews : NavigationRoute
 
 @Serializable

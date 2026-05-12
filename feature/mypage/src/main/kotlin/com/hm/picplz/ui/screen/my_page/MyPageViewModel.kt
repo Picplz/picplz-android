@@ -66,7 +66,11 @@ class MyPageViewModel
                     }
                 }
                 is MyPageIntent.NavigateToPhotographerRegionEdit -> {
-                    sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_region_edit_pending))
+                    sendSideEffect(
+                        MyPageSideEffect.NavigateToPhotographerActiveAreaEdit(
+                            _state.value.photographerProfile.photographerId,
+                        ),
+                    )
                 }
                 is MyPageIntent.NavigateToPhotographerKeywordEdit -> {
                     sendSideEffect(

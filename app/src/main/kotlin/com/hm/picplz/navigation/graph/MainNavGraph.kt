@@ -23,6 +23,7 @@ import com.hm.picplz.navigation.model.MyPageMyReviews
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerAddDevice
 import com.hm.picplz.navigation.model.MyPagePhotographerEquipmentSetting
 import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
@@ -45,6 +46,7 @@ import com.hm.picplz.ui.screen.my_page.FollowedPhotographersScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
 import com.hm.picplz.ui.screen.my_page.MyPagePackageEditRoute
+import com.hm.picplz.ui.screen.my_page.MyPagePhotographerActiveAreaEditRoute
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerKeywordEditRoute
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageScreen
@@ -172,6 +174,16 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
     composable<MyPagePackageEdit> {
         MyPagePackageEditRoute(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+        )
+    }
+
+    composable<MyPagePhotographerActiveAreaEdit> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePhotographerActiveAreaEdit>()
+        MyPagePhotographerActiveAreaEditRoute(
+            photographerId = args.photographerId,
             onNavigateBack = {
                 navController.popBackStack()
             },

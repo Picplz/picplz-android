@@ -9,6 +9,8 @@ import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
 import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
+import com.hm.picplz.data.model.UpdateActiveAreaRequest
+import com.hm.picplz.data.model.UpdateActiveAreaResponse
 import com.hm.picplz.data.util.safeApiCall
 import com.hm.picplz.data.util.safeApiCallUnit
 import javax.inject.Inject
@@ -19,6 +21,8 @@ interface PhotographerSource {
     suspend fun addPhotoMood(request: PhotoMoodRequest): Result<Unit>
 
     suspend fun deletePhotoMood(request: PhotoMoodRequest): Result<Unit>
+
+    suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): Result<UpdateActiveAreaResponse>
 
     suspend fun getNearbyPhotographers(
         longitude: Double,
@@ -55,6 +59,9 @@ class PhotographerSourceImpl
 
         override suspend fun deletePhotoMood(request: PhotoMoodRequest): Result<Unit> =
             safeApiCallUnit { photographerApi.deletePhotoMood(request) }
+
+        override suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): Result<UpdateActiveAreaResponse> =
+            safeApiCall { photographerApi.updateActiveAreas(request) }
 
         override suspend fun getNearbyPhotographers(
             longitude: Double,
