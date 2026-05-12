@@ -1,6 +1,7 @@
 package com.hm.picplz.data.repository
 
 import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.PhotographerRepository
@@ -54,4 +55,10 @@ class PhotographerRepositoryImpl
 
         override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
             photographerService.deletePhotoMood(photoMood)
+
+        override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+            photographerService.getActiveAreas(photographerId)
+
+        override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+            photographerService.updateActiveAreas(areas)
     }

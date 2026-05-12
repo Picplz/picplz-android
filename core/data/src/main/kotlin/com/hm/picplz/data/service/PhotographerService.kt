@@ -1,14 +1,18 @@
 package com.hm.picplz.data.service
 
+import com.hm.picplz.data.mapper.toArea
 import com.hm.picplz.data.mapper.toDomain
 import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.mapper.toReviewData
 import com.hm.picplz.data.mapper.toShootingPackage
+import com.hm.picplz.data.model.ActiveAreaRequest
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotoMoodRequest
 import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.model.UpdateActiveAreaRequest
 import com.hm.picplz.data.source.PhotographerSource
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReviewData
@@ -23,6 +27,10 @@ interface PhotographerService {
     suspend fun addPhotoMood(photoMood: String): Result<Unit>
 
     suspend fun deletePhotoMood(photoMood: String): Result<Unit>
+
+    suspend fun getActiveAreas(photographerId: Long): Result<List<Area>>
+
+    suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>>
 
     suspend fun getNearbyPhotographers(
         longitude: Double,
@@ -64,6 +72,38 @@ class PhotographerServiceImpl
 
         override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
             photographerSource.deletePhotoMood(PhotoMoodRequest(photoMood = photoMood))
+
+        override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+            photographerSource.getPhotographerInfo(photographerId).map { photographer ->
+                photographer
+                    .area
+                    .orEmpty()
+                    .filter { it.code != null && it.name != null }
+                    .sortedBy { it.priority ?: Int.MAX_VALUE }
+                    .map {
+                        Area(
+                            id = it.code ?: 0L,
+                            name = it.name.orEmpty(),
+                            dong = it.name.orEmpty(),
+                            ri = null,
+                        )
+                    }
+            }
+
+        override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+            photographerSource.updateActiveAreas(
+                UpdateActiveAreaRequest(
+                    areas =
+                        areas.mapIndexed { index, area ->
+                            ActiveAreaRequest(
+                                code = area.id,
+                                priority = index + 1,
+                            )
+                        },
+                ),
+            ).map { response ->
+                response.areas.sortedBy { it.priority }.map { it.toArea() }
+            }
 
         override suspend fun getNearbyPhotographers(
             longitude: Double,

@@ -46,6 +46,7 @@ import com.hm.picplz.navigation.model.MyPageModifyProfile
 import com.hm.picplz.navigation.model.MyPageOrderSheet
 import com.hm.picplz.navigation.model.MyPagePackageEdit
 import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
 import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
 import com.hm.picplz.navigation.model.MyPageShootingHistory
 import com.hm.picplz.navigation.model.OrderDetail
@@ -195,6 +196,9 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
             DevButton("MyPagePackageEdit (패키지 등록 placeholder)") { navController.navigate(MyPagePackageEdit) }
+            DevButton("MyPagePhotographerActiveAreaEdit") {
+                navController.navigate(MyPagePhotographerActiveAreaEdit(photographerId = 7))
+            }
             DevButton("MyPagePhotographerModifyProfile (권한 설정 → 거부 후 테스트)") {
                 context.startActivity(
                     Intent(

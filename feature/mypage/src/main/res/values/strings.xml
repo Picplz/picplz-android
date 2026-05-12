@@ -19,6 +19,25 @@
     <string name="my_page_region_edit">주 촬영지 편집</string>
     <string name="my_page_keyword_edit">키워드 편집</string>
     <string name="my_page_equipment_edit">장비 편집</string>
+    <string name="active_area_edit_title">주 촬영지 편집</string>
+    <string name="active_area_edit_description">주 촬영지를 선택해 주세요.</string>
+    <string name="active_area_edit_search_placeholder">구 단위로 검색 (ex, 마포구)</string>
+    <string name="active_area_edit_submit">수정</string>
+    <string name="active_area_edit_loading">주 촬영지를 불러오는 중이에요</string>
+    <string name="active_area_edit_searching">검색 중이에요</string>
+    <string name="active_area_edit_empty_result">검색 결과가 없어요</string>
+    <string name="active_area_edit_empty_result_image">검색 결과 없음</string>
+    <string name="active_area_edit_empty_result_suggestion">다른 지역으로
+이동해 보는 건 어때요?</string>
+    <string name="active_area_edit_nearby_title">인근 지역</string>
+    <string name="active_area_edit_search_result_suffix">검색 결과</string>
+    <string name="active_area_edit_result_marker">지역 결과</string>
+    <string name="active_area_edit_already_selected">이미 선택된 지역입니다.</string>
+    <string name="active_area_edit_max_count_error">활동 지역은 최대 5개까지 선택할 수 있습니다.</string>
+    <string name="active_area_edit_empty_error">주 촬영지를 하나 이상 선택해 주세요.</string>
+    <string name="active_area_edit_load_failed">주 촬영지를 불러오지 못했습니다.</string>
+    <string name="active_area_edit_search_failed">지역 검색에 실패했습니다.</string>
+    <string name="active_area_edit_save_failed">주 촬영지 수정에 실패했습니다.</string>
     <string name="my_page_photographer_history">지난 촬영 내역</string>
     <string name="my_page_settlement">정산 내역</string>
     <string name="my_page_package_title">촬영 패키지</string>

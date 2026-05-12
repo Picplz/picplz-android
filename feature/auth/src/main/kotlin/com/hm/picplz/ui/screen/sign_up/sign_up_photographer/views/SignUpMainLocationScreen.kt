@@ -50,6 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
 import com.hm.picplz.navigation.model.SignUpDevice
+import com.hm.picplz.ui.screen.common.ActiveAreaListItem
 import com.hm.picplz.ui.screen.common.AreaTag
 import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonSearchField
@@ -60,7 +61,6 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIn
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerSideEffect
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerViewModel
-import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.composable.AreaListItem
 import com.hm.picplz.ui.theme.MainFontFamily
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
@@ -168,29 +168,36 @@ fun SignUpMainLocationScreen(
 
                 val showIconText = currentState.searchQuery.isBlank() || currentState.hasSearchCompleted
 
-                if (showIconText) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.marker_icon),
-                            contentDescription = "아이콘",
-                            modifier = Modifier.size(16.dp),
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text =
-                                when {
-                                    currentState.searchQuery.isBlank() -> "인근 지역"
-                                    else -> "'${currentState.searchQuery}' 검색 결과"
-                                },
-                            style = MainFontFamily.buttonDefault,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MainThemeColor.Black,
-                        )
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(20.dp),
+                ) {
+                    if (showIconText) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.marker_icon),
+                                contentDescription = "아이콘",
+                                modifier = Modifier.size(16.dp),
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text =
+                                    when {
+                                        currentState.searchQuery.isBlank() -> "인근 지역"
+                                        else -> "'${currentState.searchQuery}' 검색 결과"
+                                    },
+                                style = MainFontFamily.buttonDefault,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MainThemeColor.Black,
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
                 }
+                Spacer(modifier = Modifier.height(4.dp))
                 Box(
                     modifier =
                         Modifier
@@ -217,13 +224,13 @@ fun SignUpMainLocationScreen(
                                     itemsIndexed(currentState.searchResults) { index, area ->
                                         val isSelected = currentState.selectedAreas.any { it.id == area.id }
 
-                                        AreaListItem(
-                                            area = area,
+                                        ActiveAreaListItem(
+                                            label = area.name,
                                             isSelected = isSelected,
-                                            onItemClick = { selectedArea ->
+                                            onClick = {
                                                 focusManager.clearFocus()
                                                 viewModel.handleIntent(
-                                                    SignUpPhotographerIntent.ToggleAreaSelection(selectedArea),
+                                                    SignUpPhotographerIntent.ToggleAreaSelection(area),
                                                 )
                                             },
                                         )

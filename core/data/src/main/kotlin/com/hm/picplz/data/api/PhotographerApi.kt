@@ -9,11 +9,14 @@ import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
 import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
+import com.hm.picplz.data.model.UpdateActiveAreaRequest
+import com.hm.picplz.data.model.UpdateActiveAreaResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -32,6 +35,11 @@ interface PhotographerApi {
     suspend fun deletePhotoMood(
         @Body request: PhotoMoodRequest,
     ): Response<Unit>
+
+    @PUT("api/v1/photographers/active-area")
+    suspend fun updateActiveAreas(
+        @Body request: UpdateActiveAreaRequest,
+    ): Response<UpdateActiveAreaResponse>
 
     @GET("api/v1/members/location/nearby")
     suspend fun getNearbyPhotographers(

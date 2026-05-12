@@ -76,6 +76,21 @@ class MyPageViewModelTest {
         }
 
     @Test
+    fun `navigate to photographer region edit emits dedicated navigation side effect`() =
+        runTest {
+            val viewModel = MyPageViewModel()
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+
+            viewModel.handleIntent(MyPageIntent.NavigateToPhotographerRegionEdit)
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPageSideEffect.NavigateToPhotographerActiveAreaEdit(1),
+                sideEffectDeferred.await(),
+            )
+        }
+
+    @Test
     fun `photographer preview without package emits requires package toast`() =
         runTest {
             val viewModel = MyPageViewModel()

@@ -90,6 +90,9 @@ data class MyPagePhotographerKeywordEdit(
 
 @Serializable object MyPagePackageEdit : NavigationRoute
 
+@Serializable
+data class MyPagePhotographerActiveAreaEdit(val photographerId: Int) : NavigationRoute
+
 @Serializable object MyPageMyReviews : NavigationRoute
 
 @Serializable

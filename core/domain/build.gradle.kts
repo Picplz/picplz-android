@@ -31,7 +31,4 @@ dependencies {
 
     // Inject annotation
     implementation("javax.inject:javax.inject:1")
-
-    // Kakao (for LatLng - TODO: abstract this later)
-    implementation(libs.kakao.maps)
 }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hm.picplz.core.ui.R
@@ -56,7 +57,7 @@ fun AreaTag(
         ) {
             Image(
                 painter = painterResource(R.drawable.full_close),
-                contentDescription = "삭제",
+                contentDescription = stringResource(R.string.area_tag_remove),
                 modifier = Modifier.size(14.dp),
             )
         }

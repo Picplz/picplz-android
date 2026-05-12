@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.lifecycle.SavedStateHandle
 import com.hm.picplz.common.model.PhotoReview
+import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.model.PhotographerInfo
@@ -183,6 +184,19 @@ private class FakePhotographerRepository(
         getPhotographerDetailCallCount += 1
         return detailResult
     }
+
+    override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+        Result.failure(NotImplementedError())
+
+    override suspend fun addPhotoMood(photoMood: String): Result<Unit> = Result.failure(NotImplementedError())
+
+    override suspend fun deletePhotoMood(photoMood: String): Result<Unit> = Result.failure(NotImplementedError())
+
+    override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+        Result.failure(NotImplementedError())
+
+    override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+        Result.failure(NotImplementedError())
 }
 
 private fun detailFixture() =
