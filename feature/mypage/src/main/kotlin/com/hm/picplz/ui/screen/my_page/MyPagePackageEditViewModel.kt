@@ -37,7 +37,9 @@ class MyPagePackageEditViewModel
                     loadPhotographerProducts(intent.photographerId)
                 }
                 MyPagePackageEditIntent.ClickAddPackage -> openAddForm()
-                is MyPagePackageEditIntent.ClickEditPackage -> openEditForm(intent.packageId)
+                is MyPagePackageEditIntent.ClickEditPackage -> {
+                    sendSideEffect(MyPagePackageEditSideEffect.ShowToast(R.string.package_edit_option_pending))
+                }
                 is MyPagePackageEditIntent.ChangePackageName -> {
                     updateDraft { it.copy(name = intent.value.take(MAX_PACKAGE_NAME_LENGTH)) }
                 }
@@ -59,7 +61,7 @@ class MyPagePackageEditViewModel
                 is MyPagePackageEditIntent.UploadPackageImage -> uploadPackageImage(intent.imageBytes, intent.filename)
                 MyPagePackageEditIntent.SavePackage -> savePackage()
                 is MyPagePackageEditIntent.RequestDeletePackage -> {
-                    _state.update { it.copy(pendingDeletePackageId = intent.packageId) }
+                    sendSideEffect(MyPagePackageEditSideEffect.ShowToast(R.string.package_edit_option_pending))
                 }
                 MyPagePackageEditIntent.DismissDeleteDialog -> {
                     _state.update { it.copy(pendingDeletePackageId = null) }

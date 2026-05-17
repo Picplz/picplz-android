@@ -29,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,9 +49,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -171,6 +172,8 @@ fun MyPagePackageEditScreen(
     selectedMenuItem?.let { item ->
         CommonModalBottomSheet(
             onDismissRequest = { selectedMenuItem = null },
+            sheetMaxHeight = 160.dp,
+            expandToMaxHeight = false,
         ) {
             PackageActionSheet(
                 onEdit = {
@@ -299,15 +302,15 @@ private fun PackageCard(
                     color = MainThemeColor.Black,
                     modifier = Modifier.weight(1f),
                 )
-                Text(
-                    text = stringResource(R.string.package_edit_overflow),
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_package_edit_kebab),
+                    contentDescription = overflowContentDescription,
+                    tint = MainThemeColor.Black,
                     modifier =
                         Modifier
                             .clickable(onClick = onMenuClick)
-                            .semantics { contentDescription = overflowContentDescription }
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                    style = MainThemeFont.BodyBold,
-                    color = MainThemeColor.Black,
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .size(20.dp),
                 )
             }
             if (item.imageUri.isNotBlank()) {
@@ -338,6 +341,7 @@ private fun PackageCard(
                         R.string.package_edit_shooting_time_value,
                         packageDurationLabel(item.durationMinutes),
                     ),
+                valueStyle = MainThemeFont.BodyBold,
             )
             PackageMetadataRow(
                 label = stringResource(R.string.package_edit_extra_guide_label),
@@ -388,23 +392,22 @@ private fun PackageMetadataRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
+    valueStyle: TextStyle = MainThemeFont.Body,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Text(
             text = label,
             style = MainThemeFont.Body,
             color = MainThemeColor.Gray4,
-            modifier = Modifier.weight(1f),
         )
         Text(
             text = value,
-            style = MainThemeFont.Body,
+            style = valueStyle,
             color = MainThemeColor.Black,
-            textAlign = TextAlign.End,
-            modifier = Modifier.weight(2f),
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -655,7 +658,7 @@ private fun PackageDescriptionTextArea(
                 .height(136.dp)
                 .background(MainThemeColor.Gray1, RoundedCornerShape(5.dp))
                 .border(1.dp, MainThemeColor.Gray2, RoundedCornerShape(5.dp)),
-        textStyle = MainThemeFont.Body.copy(color = MainThemeColor.Gray3),
+        textStyle = MainThemeFont.Body.copy(color = MainThemeColor.Black),
         decorationBox = { innerTextField ->
             Box(
                 modifier =

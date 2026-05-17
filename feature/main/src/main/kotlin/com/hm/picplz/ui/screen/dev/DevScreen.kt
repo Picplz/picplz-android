@@ -37,6 +37,8 @@ import com.hm.picplz.navigation.model.DetailPhotographer
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoPortfolios
 import com.hm.picplz.navigation.model.DetailPhotographerPhotoReviews
 import com.hm.picplz.navigation.model.DetailReservation
+import com.hm.picplz.navigation.model.DevMyPagePackageEdit
+import com.hm.picplz.navigation.model.DevMyPagePhotographerProfileAdded
 import com.hm.picplz.navigation.model.Feed
 import com.hm.picplz.navigation.model.Login
 import com.hm.picplz.navigation.model.Main
@@ -62,7 +64,12 @@ import com.hm.picplz.navigation.model.SignUpPhotographer
 import com.hm.picplz.ui.theme.MainThemeColor
 
 @Composable
-fun DevScreen(navController: NavHostController) {
+fun DevScreen(
+    navController: NavHostController,
+    onLoginAsDevUser: () -> Unit,
+    onLoginAsGuest: () -> Unit,
+    onLogout: () -> Unit,
+) {
     val context = LocalContext.current
     val prepareDevPhotographerSignUp = {
         context.getSharedPreferences("picplz_auth", Context.MODE_PRIVATE)
@@ -106,6 +113,18 @@ fun DevScreen(navController: NavHostController) {
 
             // === Token ===
             SectionTitle("Token")
+            DevButton("개발 유저 로그인") {
+                onLoginAsDevUser()
+                Toast.makeText(context, "개발 유저 토큰 설정됨", Toast.LENGTH_SHORT).show()
+            }
+            DevButton("게스트 로그인") {
+                onLoginAsGuest()
+                Toast.makeText(context, "게스트 토큰 설정됨", Toast.LENGTH_SHORT).show()
+            }
+            DevButton("로그아웃") {
+                onLogout()
+                Toast.makeText(context, "토큰 삭제됨", Toast.LENGTH_SHORT).show()
+            }
             DevButton("📋 현재 토큰 복사") {
                 val prefs = context.getSharedPreferences("picplz_auth", Context.MODE_PRIVATE)
                 val token = prefs.getString("access_token", null)
@@ -164,18 +183,13 @@ fun DevScreen(navController: NavHostController) {
             DevButton("Reservation (예약)") { navController.navigate(Reservation) }
             DevButton("Chat (채팅)") { navController.navigate(Chat) }
             DevButton("MyPage (마이페이지)") { navController.navigate(MyPage) }
-            DevButton("MyPage (작가 마이페이지 - 기본)") {
-                navController.navigate(MyPagePhotographer())
+            DevButton("MyPage DEV (작가 프로필 추가됨 - 기본)") {
+                navController.navigate(DevMyPagePhotographerProfileAdded())
             }
-            DevButton("MyPage (작가 마이페이지 - 패키지 있음)") {
-                navController.navigate(MyPagePhotographer(hasPackagePreview = true))
-            }
-            DevButton("MyPage (작가 마이페이지 - 포트폴리오 있음)") {
-                navController.navigate(MyPagePhotographer(hasPortfolioPreview = true))
-            }
-            DevButton("MyPage (작가 마이페이지 - 전체)") {
+            DevButton("MyPage DEV (작가 프로필 추가됨 - 전체)") {
                 navController.navigate(
-                    MyPagePhotographer(
+                    DevMyPagePhotographerProfileAdded(
+                        hasShootings = true,
                         hasPackagePreview = true,
                         hasPortfolioPreview = true,
                     ),
@@ -195,7 +209,19 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MainSearch") { navController.navigate(MainSearch) }
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
-            DevButton("MyPagePackageEdit (패키지 등록 placeholder)") {
+            DevButton("MyPagePackageEdit DEV (패키지 0개)") {
+                navController.navigate(DevMyPagePackageEdit(packageCount = 0))
+            }
+            DevButton("MyPagePackageEdit DEV (패키지 1개)") {
+                navController.navigate(DevMyPagePackageEdit(packageCount = 1))
+            }
+            DevButton("MyPagePackageEdit DEV (패키지 2개)") {
+                navController.navigate(DevMyPagePackageEdit(packageCount = 2))
+            }
+            DevButton("MyPagePackageEdit DEV (패키지 3개)") {
+                navController.navigate(DevMyPagePackageEdit(packageCount = 3))
+            }
+            DevButton("MyPagePackageEdit (실제 route)") {
                 navController.navigate(MyPagePackageEdit(photographerId = 1L))
             }
             DevButton("MyPagePhotographerActiveAreaEdit") {

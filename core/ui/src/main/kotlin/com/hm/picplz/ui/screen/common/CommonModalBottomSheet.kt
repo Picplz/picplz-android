@@ -79,6 +79,7 @@ fun CommonModalBottomSheet(
     dragHandle: @Composable (() -> Unit)? = { CustomDragHandle() },
     sheetMinHeight: Dp? = 0.dp,
     sheetMaxHeight: Dp? = Dp.Infinity,
+    expandToMaxHeight: Boolean = true,
     windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties(),
     content: @Composable ColumnScope.() -> Unit,
@@ -126,8 +127,13 @@ fun CommonModalBottomSheet(
                         .heightIn(
                             min = sheetMinHeight ?: 0.dp,
                             max = sheetMaxHeight ?: Dp.Infinity,
-                        )
-                        .fillMaxHeight(0.9f),
+                        ).then(
+                            if (expandToMaxHeight) {
+                                Modifier.fillMaxHeight(0.9f)
+                            } else {
+                                Modifier
+                            },
+                        ),
             ) {
                 // ✅ 메인 콘텐츠
                 Column(modifier = Modifier.fillMaxSize()) {

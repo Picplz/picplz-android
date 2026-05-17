@@ -140,7 +140,7 @@ class MyPagePackageEditViewModelTest {
         }
 
     @Test
-    fun `edit and delete are local only`() =
+    fun `edit option emits pending toast without changing package`() =
         runTest {
             val photographerRepository = FakePackagePhotographerRepository()
             val viewModel = createViewModel(photographerRepository = photographerRepository)
@@ -149,18 +149,46 @@ class MyPagePackageEditViewModelTest {
             viewModel.handleIntent(MyPagePackageEditIntent.SelectDuration(MyPagePackageDurationOption.MINUTES_15_TO_30))
             viewModel.handleIntent(MyPagePackageEditIntent.SavePackage)
             advanceUntilIdle()
-            photographerRepository.createdProducts.clear()
 
             val packageId = viewModel.state.value.packages.single().id
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
             viewModel.handleIntent(MyPagePackageEditIntent.ClickEditPackage(packageId))
-            viewModel.handleIntent(MyPagePackageEditIntent.ChangePackageName("Updated"))
-            viewModel.handleIntent(MyPagePackageEditIntent.SavePackage)
-            viewModel.handleIntent(MyPagePackageEditIntent.RequestDeletePackage(packageId))
-            viewModel.handleIntent(MyPagePackageEditIntent.ConfirmDeletePackage)
             advanceUntilIdle()
 
-            assertEquals(emptyList<CreateProductCommand>(), photographerRepository.createdProducts)
-            assertEquals(emptyList<MyPagePackageItem>(), viewModel.state.value.packages)
+            assertEquals(
+                MyPagePackageEditSideEffect.ShowToast(
+                    com.hm.picplz.feature.mypage.R.string.package_edit_option_pending,
+                ),
+                sideEffectDeferred.await(),
+            )
+            assertEquals(MyPagePackageEditMode.List, viewModel.state.value.editMode)
+            assertEquals("Original", viewModel.state.value.packages.single().name)
+        }
+
+    @Test
+    fun `delete option emits pending toast without deleting package`() =
+        runTest {
+            val photographerRepository = FakePackagePhotographerRepository()
+            val viewModel = createViewModel(photographerRepository = photographerRepository)
+            viewModel.handleIntent(MyPagePackageEditIntent.ClickAddPackage)
+            viewModel.handleIntent(MyPagePackageEditIntent.ChangePackageName("Original"))
+            viewModel.handleIntent(MyPagePackageEditIntent.SelectDuration(MyPagePackageDurationOption.MINUTES_15_TO_30))
+            viewModel.handleIntent(MyPagePackageEditIntent.SavePackage)
+            advanceUntilIdle()
+
+            val packageId = viewModel.state.value.packages.single().id
+            val sideEffectDeferred = async { viewModel.sideEffect.first() }
+            viewModel.handleIntent(MyPagePackageEditIntent.RequestDeletePackage(packageId))
+            advanceUntilIdle()
+
+            assertEquals(
+                MyPagePackageEditSideEffect.ShowToast(
+                    com.hm.picplz.feature.mypage.R.string.package_edit_option_pending,
+                ),
+                sideEffectDeferred.await(),
+            )
+            assertEquals(1, viewModel.state.value.packages.size)
+            assertEquals(null, viewModel.state.value.pendingDeletePackageId)
         }
 
     @Test
@@ -176,35 +204,6 @@ class MyPagePackageEditViewModelTest {
             assertEquals(true, viewModel.state.value.showUnsavedBackDialog)
 
             viewModel.handleIntent(MyPagePackageEditIntent.ConfirmDiscardChanges)
-            advanceUntilIdle()
-
-            assertEquals(false, viewModel.state.value.showUnsavedBackDialog)
-            assertEquals(MyPagePackageEditMode.List, viewModel.state.value.editMode)
-            assertEquals(MyPagePackageDraft(), viewModel.state.value.draft)
-        }
-
-    @Test
-    fun `edit back without changes returns to package list`() =
-        runTest {
-            val productRepository =
-                FakePackagePhotographerRepository(
-                    products =
-                        listOf(
-                            ShootingPackage(
-                                packageId = 7,
-                                title = "Existing Package",
-                                price = 90000,
-                                imageUri = "products/existing.jpg",
-                                shootingTime = "60분",
-                                description = "Existing description",
-                            ),
-                        ),
-                )
-            val viewModel = createViewModel(photographerRepository = productRepository)
-            advanceUntilIdle()
-
-            viewModel.handleIntent(MyPagePackageEditIntent.ClickEditPackage(7L))
-            viewModel.handleIntent(MyPagePackageEditIntent.NavigateBack)
             advanceUntilIdle()
 
             assertEquals(false, viewModel.state.value.showUnsavedBackDialog)

@@ -79,6 +79,18 @@ data class MyPagePhotographer(
     val hasPortfolioPreview: Boolean = false,
 ) : NavigationRoute
 
+@Serializable
+data class DevMyPagePhotographerProfileAdded(
+    val hasShootings: Boolean = false,
+    val hasPackagePreview: Boolean = false,
+    val hasPortfolioPreview: Boolean = false,
+) : NavigationRoute
+
+@Serializable
+data class DevMyPagePackageEdit(
+    val packageCount: Int = 0,
+) : NavigationRoute
+
 @Serializable object MyPageModifyProfile : NavigationRoute
 
 @Serializable object MyPagePhotographerModifyProfile : NavigationRoute

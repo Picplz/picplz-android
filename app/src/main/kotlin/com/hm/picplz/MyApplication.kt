@@ -19,8 +19,6 @@ class MyApplication : Application() {
         try {
             KakaoMapSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
             KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
-
-            tokenManager.setDevelopmentTokens()
         } catch (e: Exception) {
             Log.e("KakaoMapSdk", "카카오맵 SDK init 실패", e)
         }
