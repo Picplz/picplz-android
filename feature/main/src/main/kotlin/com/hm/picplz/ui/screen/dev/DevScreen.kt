@@ -195,7 +195,9 @@ fun DevScreen(navController: NavHostController) {
             DevButton("MainSearch") { navController.navigate(MainSearch) }
             DevButton("MyPageModifyProfile") { navController.navigate(MyPageModifyProfile) }
             DevButton("MyPagePhotographerModifyProfile") { navController.navigate(MyPagePhotographerModifyProfile) }
-            DevButton("MyPagePackageEdit (패키지 등록 placeholder)") { navController.navigate(MyPagePackageEdit) }
+            DevButton("MyPagePackageEdit (패키지 등록 placeholder)") {
+                navController.navigate(MyPagePackageEdit(photographerId = 1L))
+            }
             DevButton("MyPagePhotographerActiveAreaEdit") {
                 navController.navigate(MyPagePhotographerActiveAreaEdit(photographerId = 7))
             }

@@ -327,5 +327,10 @@ class MyPagePhotographerModifyProfileViewModelTest {
             } else {
                 uploadResults.removeFirst()
             }
+
+        override suspend fun uploadProductImage(
+            imageBytes: ByteArray,
+            filename: String,
+        ): Result<String> = error("unused")
     }
 }

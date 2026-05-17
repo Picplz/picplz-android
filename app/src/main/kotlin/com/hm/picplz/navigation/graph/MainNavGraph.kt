@@ -172,8 +172,10 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         )
     }
 
-    composable<MyPagePackageEdit> {
+    composable<MyPagePackageEdit> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePackageEdit>()
         MyPagePackageEditRoute(
+            photographerId = args.photographerId,
             onNavigateBack = {
                 navController.popBackStack()
             },

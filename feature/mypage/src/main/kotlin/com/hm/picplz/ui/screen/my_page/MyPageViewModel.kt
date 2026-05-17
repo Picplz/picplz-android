@@ -86,7 +86,11 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
                 }
                 is MyPageIntent.NavigateToPackageEdit -> {
-                    sendSideEffect(MyPageSideEffect.NavigateToPackageEdit)
+                    sendSideEffect(
+                        MyPageSideEffect.NavigateToPackageEdit(
+                            _state.value.photographerProfile.photographerId,
+                        ),
+                    )
                 }
                 is MyPageIntent.NavigateToPortfolioEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))

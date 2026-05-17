@@ -93,7 +93,8 @@ data class MyPagePhotographerKeywordEdit(
 @Serializable
 data class MyPagePhotographerAddDevice(val category: String = "phone") : NavigationRoute
 
-@Serializable object MyPagePackageEdit : NavigationRoute
+@Serializable
+data class MyPagePackageEdit(val photographerId: Long) : NavigationRoute
 
 @Serializable
 data class MyPagePhotographerActiveAreaEdit(val photographerId: Int) : NavigationRoute

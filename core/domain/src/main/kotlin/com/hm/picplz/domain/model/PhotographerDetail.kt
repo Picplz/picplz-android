@@ -61,12 +61,25 @@ data class PhotographerInfo(
 )
 
 data class ShootingPackage(
-    val packageId: Int,
+    val packageId: Long,
     val title: String,
     val price: Int,
     val imageUri: String,
     val shootingTime: String,
     val description: String,
+)
+
+data class CreateProductCommand(
+    val photographerId: Long,
+    val name: String,
+    val description: String,
+    val shootPrice: Int,
+    val shootDuration: Int,
+    val otherDetails: String,
+    val productPhotos: List<String>,
+    val amount: Int? = null,
+    val editedYn: String? = null,
+    val editPrice: Int? = null,
 )
 
 data class PhotographerPortfolio(

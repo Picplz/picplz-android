@@ -140,7 +140,7 @@ class MyPageScreenTest {
     }
 
     @Test
-    fun packageEditPlaceholderShowsDisabledSave() {
+    fun packageEditEmptyListShowsAddPackageCard() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         composeRule.setContent {
@@ -153,12 +153,8 @@ class MyPageScreenTest {
         }
 
         composeRule
-            .onNodeWithText(context.getString(R.string.package_edit_placeholder_title))
+            .onNodeWithText(context.getString(R.string.package_edit_add_package))
             .assertIsDisplayed()
-
-        composeRule
-            .onNodeWithText(context.getString(R.string.package_edit_save))
-            .assertIsNotEnabled()
     }
 
     private fun photographerState(packagePreview: PhotographerPackagePreview?): MyPageState {
