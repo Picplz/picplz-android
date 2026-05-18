@@ -1,5 +1,6 @@
 package com.hm.picplz.navigation.graph
 
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -160,6 +161,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
         composable<DevMyPagePackageEdit> { backStackEntry ->
             val args = backStackEntry.toRoute<DevMyPagePackageEdit>()
+            val context = LocalContext.current
             var state by remember(args.packageCount) {
                 mutableStateOf(devMyPagePackageEditState(args.packageCount))
             }
@@ -168,14 +170,33 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 onIntent = { intent ->
                     when (intent) {
                         MyPagePackageEditIntent.ClickAddPackage -> {
+                            state = state.openDevAddForm()
+                        }
+                        is MyPagePackageEditIntent.ChangePackageName -> {
+                            state = state.updateDevDraft { it.copy(name = intent.value.take(15)) }
+                        }
+                        is MyPagePackageEditIntent.ChangeDescription -> {
+                            state = state.updateDevDraft { it.copy(description = intent.value.take(300)) }
+                        }
+                        is MyPagePackageEditIntent.SelectDuration -> {
                             state =
-                                state.copy(
-                                    editMode = MyPagePackageEditMode.Add,
-                                    draft = MyPagePackageDraft(),
-                                    originalDraft = MyPagePackageDraft(),
-                                    editingPackageId = null,
-                                    isSaveEnabled = false,
-                                )
+                                state.updateDevDraft {
+                                    it.copy(
+                                        durationMinutes = intent.option.minutes,
+                                        price = intent.option.price,
+                                    )
+                                }
+                        }
+                        is MyPagePackageEditIntent.ClickEditPackage,
+                        is MyPagePackageEditIntent.RequestDeletePackage,
+                        MyPagePackageEditIntent.ClickPackageImage,
+                        MyPagePackageEditIntent.SavePackage,
+                        -> {
+                            Toast.makeText(
+                                context,
+                                context.getString(com.hm.picplz.feature.mypage.R.string.package_edit_option_pending),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                         }
                         MyPagePackageEditIntent.NavigateBack -> {
                             if (state.editMode == MyPagePackageEditMode.List) {
@@ -343,6 +364,25 @@ private fun devMyPagePackageEditState(packageCount: Int): MyPagePackageEditState
         photographerId = 1L,
         packages = DEV_PACKAGE_EDIT_ITEMS.take(packageCount.coerceIn(0, DEV_PACKAGE_EDIT_ITEMS.size)),
     )
+
+private fun MyPagePackageEditState.openDevAddForm(): MyPagePackageEditState =
+    copy(
+        editMode = MyPagePackageEditMode.Add,
+        draft = MyPagePackageDraft(),
+        originalDraft = MyPagePackageDraft(),
+        editingPackageId = null,
+        isSaveEnabled = false,
+    )
+
+private fun MyPagePackageEditState.updateDevDraft(
+    transform: (MyPagePackageDraft) -> MyPagePackageDraft,
+): MyPagePackageEditState {
+    val updatedDraft = transform(draft)
+    return copy(
+        draft = updatedDraft,
+        isSaveEnabled = updatedDraft.hasRequiredFields,
+    )
+}
 
 private val DEV_PACKAGE_EDIT_ITEMS =
     listOf(
