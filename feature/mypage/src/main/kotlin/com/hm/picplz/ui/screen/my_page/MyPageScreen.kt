@@ -158,7 +158,7 @@ fun MyPageScreen(
                     navController.navigate(MyPagePhotographerEquipmentSetting)
                 }
                 is MyPageSideEffect.NavigateToPackageEdit -> {
-                    navController.navigate(MyPagePackageEdit)
+                    navController.navigate(MyPagePackageEdit(photographerId = effect.photographerId.toLong()))
                 }
                 is MyPageSideEffect.NavigateToPhotographerActiveAreaEdit -> {
                     navController.navigate(MyPagePhotographerActiveAreaEdit(effect.photographerId))

@@ -101,7 +101,7 @@ fun ReviewListDto.toReviewData(): PhotographerReviewData {
 
 fun ProductDto.toShootingPackage(): ShootingPackage {
     return ShootingPackage(
-        packageId = productId.toInt(),
+        packageId = productId,
         title = title ?: name.orEmpty(),
         price = price ?: shootPrice ?: 0,
         imageUri = imageUrl ?: productPhotos?.firstOrNull().orEmpty(),

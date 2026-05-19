@@ -18,4 +18,14 @@ class S3RepositoryImpl
                     s3Service.uploadImage(response.uploadUrl, imageBytes, "image/jpeg").getOrThrow()
                     response.objectKey
                 }
+
+        override suspend fun uploadProductImage(
+            imageBytes: ByteArray,
+            filename: String,
+        ): Result<String> =
+            s3Service.getUploadUrl("PORTFOLIO", filename)
+                .mapCatching { response ->
+                    s3Service.uploadImage(response.uploadUrl, imageBytes, "image/jpeg").getOrThrow()
+                    response.objectKey
+                }
     }

@@ -86,7 +86,11 @@ class MyPageViewModel
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_settlement_pending))
                 }
                 is MyPageIntent.NavigateToPackageEdit -> {
-                    sendSideEffect(MyPageSideEffect.NavigateToPackageEdit)
+                    sendSideEffect(
+                        MyPageSideEffect.NavigateToPackageEdit(
+                            _state.value.photographerProfile.photographerId,
+                        ),
+                    )
                 }
                 is MyPageIntent.NavigateToPortfolioEdit -> {
                     sendSideEffect(MyPageSideEffect.ShowToast(R.string.my_page_portfolio_edit_pending))
@@ -192,7 +196,7 @@ class MyPageViewModel
                 PhotographerPackagePreview(
                     imageUrl =
                         "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1200&q=80",
-                    title = "남친 생기는 프사❤️",
+                    title = "남친 생기는 프사",
                     price = 9900,
                     meta = "15분 이내",
                     description =

@@ -311,6 +311,15 @@ object MainThemeFont {
             lineHeight = 18.sp,
         )
 
+    /** 작은 태그/캡션1 · 11/140 */
+    val SmallTagCaption =
+        TextStyle(
+            fontFamily = Pretendard,
+            fontWeight = FontWeight.Normal,
+            fontSize = 11.sp,
+            lineHeight = 16.sp,
+        )
+
     /** 태그 내부 · 12/140 */
     val InnerTag =
         TextStyle(

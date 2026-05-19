@@ -38,7 +38,7 @@ class S3SourceImpl
             runCatching {
                 val response = s3Api.getPresignedUploadUrl(imageType, filename)
                 if (response.isSuccessful) {
-                    response.body() ?: error("Get presigned upload url failed: empty body")
+                    response.body()?.data ?: error("Get presigned upload url failed: empty body")
                 } else {
                     error("Get presigned upload url failed: ${response.code()} ${response.errorBody()?.string()}")
                 }

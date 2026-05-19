@@ -1,10 +1,18 @@
 package com.hm.picplz.navigation.graph
 
+import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.hm.picplz.BuildConfig
+import com.hm.picplz.MyApplication
 import com.hm.picplz.common.model.CancelConfirmType
 import com.hm.picplz.domain.model.DeviceCategory
 import com.hm.picplz.navigation.model.CancelReservation
@@ -13,6 +21,8 @@ import com.hm.picplz.navigation.model.Chat
 import com.hm.picplz.navigation.model.ChatRoom
 import com.hm.picplz.navigation.model.DetailReservation
 import com.hm.picplz.navigation.model.Dev
+import com.hm.picplz.navigation.model.DevMyPagePackageEdit
+import com.hm.picplz.navigation.model.DevMyPagePhotographerProfileAdded
 import com.hm.picplz.navigation.model.Feed
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.MainSearch
@@ -45,7 +55,13 @@ import com.hm.picplz.ui.screen.main.MainSearchScreen
 import com.hm.picplz.ui.screen.my_page.FollowedPhotographersScreen
 import com.hm.picplz.ui.screen.my_page.MyPageModifyProfileScreen
 import com.hm.picplz.ui.screen.my_page.MyPageOrderSheetScreen
+import com.hm.picplz.ui.screen.my_page.MyPagePackageDraft
+import com.hm.picplz.ui.screen.my_page.MyPagePackageEditIntent
+import com.hm.picplz.ui.screen.my_page.MyPagePackageEditMode
 import com.hm.picplz.ui.screen.my_page.MyPagePackageEditRoute
+import com.hm.picplz.ui.screen.my_page.MyPagePackageEditScreen
+import com.hm.picplz.ui.screen.my_page.MyPagePackageEditState
+import com.hm.picplz.ui.screen.my_page.MyPagePackageItem
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerActiveAreaEditRoute
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerKeywordEditRoute
 import com.hm.picplz.ui.screen.my_page.MyPagePhotographerModifyProfileScreen
@@ -61,7 +77,15 @@ import com.hm.picplz.ui.screen.photographer_main.composable.PhotographerAddDevic
 import com.hm.picplz.ui.screen.reservation.ReservationScreen
 
 fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
-    composable<Dev> { DevScreen(navController = navController) }
+    composable<Dev> {
+        val tokenManager = (LocalContext.current.applicationContext as MyApplication).tokenManager
+        DevScreen(
+            navController = navController,
+            onLoginAsDevUser = tokenManager::setDevelopmentTokens,
+            onLoginAsGuest = tokenManager::switchToGuestToken,
+            onLogout = tokenManager::clearToken,
+        )
+    }
 
     composable<Main> { MainScreen(navController = navController) }
 
@@ -123,6 +147,71 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         )
     }
 
+    if (BuildConfig.DEBUG) {
+        composable<DevMyPagePhotographerProfileAdded> { backStackEntry ->
+            val args = backStackEntry.toRoute<DevMyPagePhotographerProfileAdded>()
+            MyPageScreen(
+                navController = navController,
+                initialHasPhotographerRole = true,
+                initialHasShootings = args.hasShootings,
+                initialHasPackagePreview = args.hasPackagePreview,
+                initialHasPortfolioPreview = args.hasPortfolioPreview,
+            )
+        }
+
+        composable<DevMyPagePackageEdit> { backStackEntry ->
+            val args = backStackEntry.toRoute<DevMyPagePackageEdit>()
+            val context = LocalContext.current
+            var state by remember(args.packageCount) {
+                mutableStateOf(devMyPagePackageEditState(args.packageCount))
+            }
+            MyPagePackageEditScreen(
+                state = state,
+                onIntent = { intent ->
+                    when (intent) {
+                        MyPagePackageEditIntent.ClickAddPackage -> {
+                            state = state.openDevAddForm()
+                        }
+                        is MyPagePackageEditIntent.ChangePackageName -> {
+                            state = state.updateDevDraft { it.copy(name = intent.value.take(15)) }
+                        }
+                        is MyPagePackageEditIntent.ChangeDescription -> {
+                            state = state.updateDevDraft { it.copy(description = intent.value.take(300)) }
+                        }
+                        is MyPagePackageEditIntent.SelectDuration -> {
+                            state =
+                                state.updateDevDraft {
+                                    it.copy(
+                                        durationMinutes = intent.option.minutes,
+                                        price = intent.option.price,
+                                    )
+                                }
+                        }
+                        is MyPagePackageEditIntent.ClickEditPackage,
+                        is MyPagePackageEditIntent.RequestDeletePackage,
+                        MyPagePackageEditIntent.ClickPackageImage,
+                        MyPagePackageEditIntent.SavePackage,
+                        -> {
+                            Toast.makeText(
+                                context,
+                                context.getString(com.hm.picplz.feature.mypage.R.string.package_edit_option_pending),
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                        MyPagePackageEditIntent.NavigateBack -> {
+                            if (state.editMode == MyPagePackageEditMode.List) {
+                                navController.popBackStack()
+                            } else {
+                                state = devMyPagePackageEditState(args.packageCount)
+                            }
+                        }
+                        else -> Unit
+                    }
+                },
+            )
+        }
+    }
+
     composable<MyPageModifyProfile> {
         MyPageModifyProfileScreen(navController = navController)
     }
@@ -172,8 +261,10 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         )
     }
 
-    composable<MyPagePackageEdit> {
+    composable<MyPagePackageEdit> { backStackEntry ->
+        val args = backStackEntry.toRoute<MyPagePackageEdit>()
         MyPagePackageEditRoute(
+            photographerId = args.photographerId,
             onNavigateBack = {
                 navController.popBackStack()
             },
@@ -267,3 +358,59 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
         )
     }
 }
+
+private fun devMyPagePackageEditState(packageCount: Int): MyPagePackageEditState =
+    MyPagePackageEditState(
+        photographerId = 1L,
+        packages = DEV_PACKAGE_EDIT_ITEMS.take(packageCount.coerceIn(0, DEV_PACKAGE_EDIT_ITEMS.size)),
+    )
+
+private fun MyPagePackageEditState.openDevAddForm(): MyPagePackageEditState =
+    copy(
+        editMode = MyPagePackageEditMode.Add,
+        draft = MyPagePackageDraft(),
+        originalDraft = MyPagePackageDraft(),
+        editingPackageId = null,
+        isSaveEnabled = false,
+    )
+
+private fun MyPagePackageEditState.updateDevDraft(
+    transform: (MyPagePackageDraft) -> MyPagePackageDraft,
+): MyPagePackageEditState {
+    val updatedDraft = transform(draft)
+    return copy(
+        draft = updatedDraft,
+        isSaveEnabled = updatedDraft.hasRequiredFields,
+    )
+}
+
+private val DEV_PACKAGE_EDIT_ITEMS =
+    listOf(
+        MyPagePackageItem(
+            id = 1L,
+            name = "남친 생기는 프사",
+            description = "카톡 프로필용 자연광 촬영 패키지입니다.",
+            durationMinutes = 15,
+            price = 12900,
+            imageUri = "https://picsum.photos/seed/package-edit-1/900/390",
+            imageObjectKey = null,
+        ),
+        MyPagePackageItem(
+            id = 2L,
+            name = "서울숲 자연광 스냅",
+            description = "서울숲 산책 코스에서 자연스럽게 촬영해요.",
+            durationMinutes = 30,
+            price = 18900,
+            imageUri = "https://picsum.photos/seed/package-edit-2/900/390",
+            imageObjectKey = null,
+        ),
+        MyPagePackageItem(
+            id = 3L,
+            name = "성수 감성 프로필",
+            description = "성수 골목과 카페 무드로 프로필을 촬영해요.",
+            durationMinutes = 60,
+            price = 22900,
+            imageUri = "https://picsum.photos/seed/package-edit-3/900/390",
+            imageObjectKey = null,
+        ),
+    )

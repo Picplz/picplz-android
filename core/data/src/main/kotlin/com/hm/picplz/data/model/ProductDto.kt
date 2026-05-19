@@ -15,6 +15,23 @@ data class ProductDto(
     val productPhotos: List<String>?,
 )
 
+data class CreateProductRequest(
+    val photographerId: Long,
+    val name: String,
+    val description: String,
+    val shootPrice: Int,
+    val shootDuration: Int,
+    val otherDetails: String,
+    val productPhotos: List<String>,
+    val amount: Int?,
+    val editedYn: String?,
+    val editPrice: Int?,
+)
+
+data class ProductIdResponse(
+    val id: Long,
+)
+
 data class PortfolioDto(
     val portfolioId: Long,
     val photos: List<PortfolioPhotoDto>?,

@@ -79,6 +79,18 @@ data class MyPagePhotographer(
     val hasPortfolioPreview: Boolean = false,
 ) : NavigationRoute
 
+@Serializable
+data class DevMyPagePhotographerProfileAdded(
+    val hasShootings: Boolean = false,
+    val hasPackagePreview: Boolean = false,
+    val hasPortfolioPreview: Boolean = false,
+) : NavigationRoute
+
+@Serializable
+data class DevMyPagePackageEdit(
+    val packageCount: Int = 0,
+) : NavigationRoute
+
 @Serializable object MyPageModifyProfile : NavigationRoute
 
 @Serializable object MyPagePhotographerModifyProfile : NavigationRoute
@@ -93,7 +105,8 @@ data class MyPagePhotographerKeywordEdit(
 @Serializable
 data class MyPagePhotographerAddDevice(val category: String = "phone") : NavigationRoute
 
-@Serializable object MyPagePackageEdit : NavigationRoute
+@Serializable
+data class MyPagePackageEdit(val photographerId: Long) : NavigationRoute
 
 @Serializable
 data class MyPagePhotographerActiveAreaEdit(val photographerId: Int) : NavigationRoute

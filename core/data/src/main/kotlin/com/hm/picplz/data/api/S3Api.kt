@@ -1,5 +1,6 @@
 package com.hm.picplz.data.api
 
+import com.hm.picplz.data.model.ApiResponse
 import com.hm.picplz.data.model.UploadUrlResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -10,5 +11,5 @@ interface S3Api {
     suspend fun getPresignedUploadUrl(
         @Query("imageType") imageType: String,
         @Query("filename") filename: String,
-    ): Response<UploadUrlResponseDto>
+    ): Response<ApiResponse<UploadUrlResponseDto>>
 }

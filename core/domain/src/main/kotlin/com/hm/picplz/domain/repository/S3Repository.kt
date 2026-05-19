@@ -5,4 +5,9 @@ interface S3Repository {
         imageBytes: ByteArray,
         filename: String,
     ): Result<String>
+
+    suspend fun uploadProductImage(
+        imageBytes: ByteArray,
+        filename: String,
+    ): Result<String>
 }

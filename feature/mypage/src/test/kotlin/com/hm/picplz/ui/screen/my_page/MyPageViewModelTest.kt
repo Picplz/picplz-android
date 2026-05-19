@@ -56,7 +56,7 @@ class MyPageViewModelTest {
             advanceUntilIdle()
 
             assertEquals(
-                MyPageSideEffect.NavigateToPackageEdit,
+                MyPageSideEffect.NavigateToPackageEdit(1),
                 sideEffectDeferred.await(),
             )
         }
