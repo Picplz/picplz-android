@@ -82,6 +82,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // TODO: prod 릴리즈 키 도입 시 교체. 현재는 Firebase Distribution용으로 debug 키 사이닝
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
