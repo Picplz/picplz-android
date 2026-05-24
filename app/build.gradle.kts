@@ -35,7 +35,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.4-dev"
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "com.google.dagger.hilt.android.testing.HiltTestRunner"
         vectorDrawables {
@@ -60,6 +60,7 @@ android {
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
             buildConfigField("boolean", "DEV_MODE", "true")
             buildConfigField("boolean", "STAGING_MODE", "false")
             resValue("string", "app_name", "[DEV] picplz")
@@ -67,6 +68,7 @@ android {
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
             buildConfigField("boolean", "DEV_MODE", "false")
             buildConfigField("boolean", "STAGING_MODE", "true")
             resValue("string", "app_name", "[STG] picplz")
