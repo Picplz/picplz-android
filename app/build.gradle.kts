@@ -60,13 +60,19 @@ android {
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
+            buildConfigField("boolean", "DEV_MODE", "true")
+            buildConfigField("boolean", "STAGING_MODE", "false")
         }
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
+            buildConfigField("boolean", "DEV_MODE", "false")
+            buildConfigField("boolean", "STAGING_MODE", "true")
         }
         create("prod") {
             dimension = "environment"
+            buildConfigField("boolean", "DEV_MODE", "false")
+            buildConfigField("boolean", "STAGING_MODE", "false")
         }
     }
 
