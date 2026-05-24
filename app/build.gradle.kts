@@ -54,6 +54,20 @@ android {
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = localProperties["kakao_native_app_key"] ?: ""
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+        }
+        create("staging") {
+            dimension = "environment"
+        }
+        create("prod") {
+            dimension = "environment"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
