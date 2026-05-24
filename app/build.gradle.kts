@@ -62,17 +62,20 @@ android {
             applicationIdSuffix = ".dev"
             buildConfigField("boolean", "DEV_MODE", "true")
             buildConfigField("boolean", "STAGING_MODE", "false")
+            resValue("string", "app_name", "[DEV] picplz")
         }
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
             buildConfigField("boolean", "DEV_MODE", "false")
             buildConfigField("boolean", "STAGING_MODE", "true")
+            resValue("string", "app_name", "[STG] picplz")
         }
         create("prod") {
             dimension = "environment"
             buildConfigField("boolean", "DEV_MODE", "false")
             buildConfigField("boolean", "STAGING_MODE", "false")
+            resValue("string", "app_name", "picplz")
         }
     }
 
