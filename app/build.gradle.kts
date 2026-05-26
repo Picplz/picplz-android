@@ -35,7 +35,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.4-dev"
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "com.google.dagger.hilt.android.testing.HiltTestRunner"
         vectorDrawables {
@@ -54,9 +54,38 @@ android {
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = localProperties["kakao_native_app_key"] ?: ""
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("boolean", "DEV_MODE", "true")
+            buildConfigField("boolean", "STAGING_MODE", "false")
+            resValue("string", "app_name", "[DEV] picplz")
+        }
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            buildConfigField("boolean", "DEV_MODE", "false")
+            buildConfigField("boolean", "STAGING_MODE", "true")
+            resValue("string", "app_name", "[STG] picplz")
+        }
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("boolean", "DEV_MODE", "false")
+            buildConfigField("boolean", "STAGING_MODE", "false")
+            resValue("string", "app_name", "picplz")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            // TODO: prod 릴리즈 키 도입 시 교체. 현재는 Firebase Distribution용으로 debug 키 사이닝
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
