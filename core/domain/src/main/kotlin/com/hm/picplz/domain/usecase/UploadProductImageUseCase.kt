@@ -1,5 +1,6 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.repository.S3Repository
 import javax.inject.Inject
 
@@ -11,5 +12,5 @@ class UploadProductImageUseCase
         suspend operator fun invoke(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> = s3Repository.uploadProductImage(imageBytes, filename)
+        ): AppResult<String> = s3Repository.uploadProductImage(imageBytes, filename)
     }

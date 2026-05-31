@@ -1,5 +1,6 @@
 package com.hm.picplz.data.service
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.model.MemberInfoResponseDto
 import com.hm.picplz.data.model.UpdateMemberInfoRequest
 import com.hm.picplz.data.model.toDomain
@@ -8,11 +9,11 @@ import com.hm.picplz.domain.model.MemberProfile
 import javax.inject.Inject
 
 interface MemberService {
-    suspend fun checkNicknameAvailable(nickname: String): Result<Boolean>
+    suspend fun checkNicknameAvailable(nickname: String): AppResult<Boolean>
 
-    suspend fun getMemberInfo(memberId: Long): Result<MemberProfile>
+    suspend fun getMemberInfo(memberId: Long): AppResult<MemberProfile>
 
-    suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): Result<Unit>
+    suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): AppResult<Unit>
 }
 
 class MemberServiceImpl
@@ -20,12 +21,12 @@ class MemberServiceImpl
     constructor(
         private val memberSource: MemberSource,
     ) : MemberService {
-        override suspend fun checkNicknameAvailable(nickname: String): Result<Boolean> =
+        override suspend fun checkNicknameAvailable(nickname: String): AppResult<Boolean> =
             memberSource.checkNickname(nickname)
 
-        override suspend fun getMemberInfo(memberId: Long): Result<MemberProfile> =
+        override suspend fun getMemberInfo(memberId: Long): AppResult<MemberProfile> =
             memberSource.getMemberInfo(memberId).map(MemberInfoResponseDto::toDomain)
 
-        override suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): Result<Unit> =
+        override suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): AppResult<Unit> =
             memberSource.updateMemberInfo(request)
     }

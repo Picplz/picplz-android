@@ -1,5 +1,6 @@
 package com.hm.picplz.data.repository
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.repository.AreaRepository
@@ -10,11 +11,11 @@ class AreaRepositoryImpl
     constructor(
         private val addressService: AddressService,
     ) : AreaRepository {
-        override suspend fun searchAreas(keyword: String): Result<List<Area>> = addressService.searchArea(keyword)
+        override suspend fun searchAreas(keyword: String): AppResult<List<Area>> = addressService.searchArea(keyword)
 
         override suspend fun getNearbyAreas(
             rad: Int,
             lat: Double,
             lng: Double,
-        ): Result<List<Area>> = addressService.getNearbyAreas(rad, lat, lng)
+        ): AppResult<List<Area>> = addressService.getNearbyAreas(rad, lat, lng)
     }

@@ -16,4 +16,6 @@ sealed interface SignUpSideEffect {
     data class Navigate(val destination: NavigationRoute) : SignUpSideEffect
 
     data object ShowFileUploadDialog : SignUpSideEffect
+
+    data class ShowToast(val messageResId: Int) : SignUpSideEffect
 }

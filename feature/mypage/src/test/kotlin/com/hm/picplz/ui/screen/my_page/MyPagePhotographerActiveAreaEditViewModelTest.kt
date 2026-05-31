@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.my_page
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.LocationCoordinate
@@ -156,25 +157,25 @@ private class FakeActiveAreaPhotographerRepository(
         longitude: Double,
         latitude: Double,
         distance: Long,
-    ): Result<FilteredPhotographers> = error("Not used")
+    ): AppResult<FilteredPhotographers> = error("Not used")
 
     override suspend fun getPhotographerDetail(
         photographerId: Long,
         reviewSort: String,
-    ): Result<PhotographerDetail> = error("Not used")
+    ): AppResult<PhotographerDetail> = error("Not used")
 
-    override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> = error("Not used")
+    override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> = error("Not used")
 
-    override suspend fun addPhotoMood(photoMood: String): Result<Unit> = error("Not used")
+    override suspend fun addPhotoMood(photoMood: String): AppResult<Unit> = error("Not used")
 
-    override suspend fun deletePhotoMood(photoMood: String): Result<Unit> = error("Not used")
+    override suspend fun deletePhotoMood(photoMood: String): AppResult<Unit> = error("Not used")
 
-    override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> {
+    override suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>> {
         requestedPhotographerId = photographerId
         return Result.success(activeAreas)
     }
 
-    override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> {
+    override suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>> {
         updatedAreas = areas
         return Result.success(areas)
     }
@@ -185,13 +186,13 @@ private class FakeAreaRepository(
 ) : AreaRepository {
     var didLoadNearbyAreas: Boolean = false
 
-    override suspend fun searchAreas(keyword: String): Result<List<Area>> = Result.success(results)
+    override suspend fun searchAreas(keyword: String): AppResult<List<Area>> = Result.success(results)
 
     override suspend fun getNearbyAreas(
         rad: Int,
         lat: Double,
         lng: Double,
-    ): Result<List<Area>> {
+    ): AppResult<List<Area>> {
         didLoadNearbyAreas = true
         return Result.success(results)
     }

@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.common.error.AppError
 import com.hm.picplz.data.model.ActiveAreaRequest
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotographerCameraRequest
@@ -205,7 +206,7 @@ class SignUpPhotographerViewModel
                             _state.update {
                                 it.copy(
                                     isSubmitting = false,
-                                    error = IllegalStateException("소셜 로그인 정보가 없습니다"),
+                                    error = AppError.Auth.SocialInfoMissing,
                                     showToast = true,
                                     toastMessage = "로그인 정보를 찾지 못했습니다. 다시 로그인해 주세요.",
                                 )
@@ -290,10 +291,11 @@ class SignUpPhotographerViewModel
                                 )
                             }
                             .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
                                 _state.update {
                                     it.copy(
                                         isSubmitting = false,
-                                        error = error,
+                                        error = appError,
                                         showToast = true,
                                         toastMessage = "가입을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.",
                                     )

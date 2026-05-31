@@ -1,11 +1,12 @@
 package com.hm.picplz.data.service
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.source.AuthSource
 import com.hm.picplz.domain.model.KaKaoLoginResponse
 import javax.inject.Inject
 
 interface AuthService {
-    suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse>
+    suspend fun loginWithKaKao(accessToken: String): AppResult<KaKaoLoginResponse>
 }
 
 class AuthServiceImpl
@@ -13,7 +14,7 @@ class AuthServiceImpl
     constructor(
         private val authSource: AuthSource,
     ) : AuthService {
-        override suspend fun loginWithKaKao(accessToken: String): Result<KaKaoLoginResponse> {
+        override suspend fun loginWithKaKao(accessToken: String): AppResult<KaKaoLoginResponse> {
             return authSource.loginWithKaKao(accessToken = accessToken)
         }
     }

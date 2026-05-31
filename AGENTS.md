@@ -190,13 +190,14 @@ main ← develop ← feat/이슈번호
 
 ### Data Layer Patterns
 
-**Simple (no domain logic)**: `Api → Source (runCatching) → Service → ViewModel`
+**Simple (no domain logic)**: `Api → Source (AppResult) → Service → ViewModel`
 - Used by: MemberApi, CameraApi, S3Api
 
 **Full (with domain logic)**: `Api → Source → Service → Repository → UseCase → ViewModel`
 - Used by: AuthApi (login flow)
 
-**Source Rule**: All Sources wrap API calls in `runCatching` returning `Result<T>`
+**Source Rule**: All Sources wrap API calls in `runCatchingAppError`/`safeApiCall` returning `AppResult<T>`.
+HTTP failures must be converted to `AppError.Network.Http` with backend error-envelope fields preserved when available.
 
 **DTO/Model Boundary Rule**:
 - `core/data/model` is for backend request/response DTOs only.

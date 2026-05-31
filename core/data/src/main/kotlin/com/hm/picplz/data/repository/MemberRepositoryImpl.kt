@@ -1,5 +1,6 @@
 package com.hm.picplz.data.repository
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.model.toRequest
 import com.hm.picplz.data.service.MemberService
 import com.hm.picplz.domain.model.MemberProfile
@@ -12,12 +13,12 @@ class MemberRepositoryImpl
     constructor(
         private val memberService: MemberService,
     ) : MemberRepository {
-        override suspend fun checkNicknameAvailable(nickname: String): Result<Boolean> =
+        override suspend fun checkNicknameAvailable(nickname: String): AppResult<Boolean> =
             memberService.checkNicknameAvailable(nickname)
 
-        override suspend fun getMemberProfile(memberId: Long): Result<MemberProfile> =
+        override suspend fun getMemberProfile(memberId: Long): AppResult<MemberProfile> =
             memberService.getMemberInfo(memberId)
 
-        override suspend fun updateMemberProfile(command: UpdateMemberProfileCommand): Result<Unit> =
+        override suspend fun updateMemberProfile(command: UpdateMemberProfileCommand): AppResult<Unit> =
             memberService.updateMemberInfo(command.toRequest())
     }

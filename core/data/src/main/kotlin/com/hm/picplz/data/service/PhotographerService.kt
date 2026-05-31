@@ -1,5 +1,6 @@
 package com.hm.picplz.data.service
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.mapper.toArea
 import com.hm.picplz.data.mapper.toDomain
 import com.hm.picplz.data.mapper.toPhotographerInfo
@@ -20,38 +21,38 @@ import com.hm.picplz.domain.model.ShootingPackage
 import javax.inject.Inject
 
 interface PhotographerService {
-    suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit>
+    suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit>
 
-    suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>>
+    suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>>
 
-    suspend fun addPhotoMood(photoMood: String): Result<Unit>
+    suspend fun addPhotoMood(photoMood: String): AppResult<Unit>
 
-    suspend fun deletePhotoMood(photoMood: String): Result<Unit>
+    suspend fun deletePhotoMood(photoMood: String): AppResult<Unit>
 
-    suspend fun getActiveAreas(photographerId: Long): Result<List<Area>>
+    suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>>
 
-    suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>>
+    suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>>
 
     suspend fun getNearbyPhotographers(
         longitude: Double,
         latitude: Double,
         distance: Long,
-    ): Result<FilteredPhotographers>
+    ): AppResult<FilteredPhotographers>
 
-    suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerInfo>
+    suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo>
 
-    suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto>
+    suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto>
 
     suspend fun getPhotographerReviews(
         photographerId: Long,
         page: Int = 0,
         size: Int = 10,
         sort: String = "RECOMMENDED",
-    ): Result<PhotographerReviewData>
+    ): AppResult<PhotographerReviewData>
 
-    suspend fun getPhotographerProducts(photographerId: Long): Result<List<ShootingPackage>>
+    suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>>
 
-    suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto>
+    suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto>
 }
 
 class PhotographerServiceImpl
@@ -59,21 +60,21 @@ class PhotographerServiceImpl
     constructor(
         private val photographerSource: PhotographerSource,
     ) : PhotographerService {
-        override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
+        override suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit> =
             photographerSource.createPhotographer(request)
 
-        override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+        override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
             photographerSource.getPhotographerInfo(photographerId).map { detail ->
                 detail.photoMoods?.mapNotNull { it?.trim() }?.filter(String::isNotEmpty) ?: emptyList()
             }
 
-        override suspend fun addPhotoMood(photoMood: String): Result<Unit> =
+        override suspend fun addPhotoMood(photoMood: String): AppResult<Unit> =
             photographerSource.addPhotoMood(PhotoMoodRequest(photoMood = photoMood))
 
-        override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
+        override suspend fun deletePhotoMood(photoMood: String): AppResult<Unit> =
             photographerSource.deletePhotoMood(PhotoMoodRequest(photoMood = photoMood))
 
-        override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+        override suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>> =
             photographerSource.getPhotographerInfo(photographerId).map { photographer ->
                 photographer
                     .area
@@ -90,7 +91,7 @@ class PhotographerServiceImpl
                     }
             }
 
-        override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+        override suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>> =
             photographerSource.updateActiveAreas(
                 UpdateActiveAreaRequest(
                     areas =
@@ -109,7 +110,7 @@ class PhotographerServiceImpl
             longitude: Double,
             latitude: Double,
             distance: Long,
-        ): Result<FilteredPhotographers> {
+        ): AppResult<FilteredPhotographers> {
             return photographerSource.getNearbyPhotographers(longitude, latitude, distance).map { cards ->
                 val photographers = cards.toDomain()
                 FilteredPhotographers(
@@ -119,10 +120,10 @@ class PhotographerServiceImpl
             }
         }
 
-        override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerInfo> =
+        override suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo> =
             photographerSource.getPhotographerInfo(photographerId).map { it.toPhotographerInfo() }
 
-        override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
+        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> =
             photographerSource.getPhotographerRating(photographerId)
 
         override suspend fun getPhotographerReviews(
@@ -130,16 +131,16 @@ class PhotographerServiceImpl
             page: Int,
             size: Int,
             sort: String,
-        ): Result<PhotographerReviewData> =
+        ): AppResult<PhotographerReviewData> =
             photographerSource.getPhotographerReviews(photographerId, page, size, sort).map {
                 it.toReviewData()
             }
 
-        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ShootingPackage>> =
+        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> =
             photographerSource.getPhotographerProducts(photographerId).map { dtos ->
                 dtos.map { it.toShootingPackage() }
             }
 
-        override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> =
+        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> =
             photographerSource.getPortfolio(portfolioId)
     }

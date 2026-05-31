@@ -1,7 +1,9 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.common.error.AppError
 import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.model.User
 import com.hm.picplz.common.model.UserType
@@ -10,6 +12,7 @@ import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.CustomerService
 import com.hm.picplz.data.service.MemberService
 import com.hm.picplz.data.service.S3Service
+import com.hm.picplz.feature.auth.R
 import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserInfoHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserTypeInfoHandler
@@ -64,7 +67,7 @@ class SignUpCommonViewModel
                                         _state.update {
                                             it.copy(
                                                 isSubmitting = false,
-                                                error = IllegalStateException("소셜 로그인 정보가 없습니다"),
+                                                error = AppError.Auth.SocialInfoMissing,
                                             )
                                         }
                                         return@launch
@@ -88,10 +91,11 @@ class SignUpCommonViewModel
                                             )
                                         }
                                         .onFailure { error ->
+                                            val appError = AppError.fromThrowable(error)
                                             _state.update {
                                                 it.copy(
                                                     isSubmitting = false,
-                                                    error = error,
+                                                    error = appError,
                                                 )
                                             }
                                         }
@@ -154,10 +158,11 @@ class SignUpCommonViewModel
                                 }
                             }
                             .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
                                 _state.update {
                                     it.copy(
                                         isCheckingNickname = false,
-                                        error = error,
+                                        error = appError,
                                     )
                                 }
                             }
@@ -174,13 +179,34 @@ class SignUpCommonViewModel
                     _state.update { SignUpCommonState.idle() }
                 }
 
+                SignUpCommonIntent.ProfileImageReadFailed -> {
+                    _state.update {
+                        it.copy(
+                            profileImageUri = null,
+                            profileImageObjectKey = null,
+                            isUploadingImage = false,
+                        )
+                    }
+                    viewModelScope.launch {
+                        _sideEffect.send(
+                            SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_read_failed),
+                        )
+                    }
+                }
+
                 is SignUpCommonIntent.UploadProfileImage -> {
                     viewModelScope.launch {
-                        _state.update { it.copy(isUploadingImage = true) }
+                        Log.d(
+                            TAG,
+                            "profile image upload start: filename=${intent.filename}, bytes=${intent.imageBytes.size}",
+                        )
+                        _state.update { it.copy(isUploadingImage = true, error = null) }
                         s3Service.getUploadUrl("PROFILE", intent.filename)
                             .onSuccess { response ->
-                                s3Service.uploadImage(response.uploadUrl, intent.imageBytes, "image/jpeg")
+                                Log.d(TAG, "profile image upload url issued: objectKey=${response.objectKey}")
+                                s3Service.uploadImage(response.uploadUrl, intent.imageBytes, intent.contentType)
                                     .onSuccess {
+                                        Log.d(TAG, "profile image upload success: objectKey=${response.objectKey}")
                                         _state.update {
                                             it.copy(
                                                 profileImageObjectKey = response.objectKey,
@@ -189,19 +215,23 @@ class SignUpCommonViewModel
                                         }
                                     }
                                     .onFailure { error ->
+                                        val appError = AppError.fromThrowable(error)
+                                        Log.e(TAG, "profile image S3 PUT failed", error)
                                         _state.update {
                                             it.copy(
                                                 isUploadingImage = false,
-                                                error = error,
+                                                error = appError,
                                             )
                                         }
                                     }
                             }
                             .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
+                                Log.e(TAG, "profile image presigned URL failed", error)
                                 _state.update {
                                     it.copy(
                                         isUploadingImage = false,
-                                        error = error,
+                                        error = appError,
                                     )
                                 }
                             }
@@ -234,5 +264,9 @@ class SignUpCommonViewModel
                     user,
                 ),
             )
+        }
+
+        companion object {
+            private const val TAG = "SignUpCommonViewModel"
         }
     }

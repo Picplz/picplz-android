@@ -35,12 +35,12 @@ domain/src/main/kotlin/com/hm/picplz/domain/
 - **Pattern:** `{Action}{Target}UseCase`
 - **Examples:** `GetKakaoUserInfoUseCase`, `LoginWithKakaoUseCase`
 - Always use `operator fun invoke()` for single-method execution
-- Return `Result<T>` for error handling
+- Return `AppResult<T>` for error handling
 
 ### Repository Interfaces
 - Define contracts only; implementations live in `core:data`
 - Use `suspend` functions for async operations
-- Return `Result<T>` to propagate errors cleanly
+- Return `AppResult<T>` to propagate errors cleanly
 
 ### Models
 - Plain `data class` with immutable properties

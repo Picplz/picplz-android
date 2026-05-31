@@ -1,31 +1,32 @@
 package com.hm.picplz.data.util
 
+import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.hm.picplz.common.error.AppError
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
+import com.hm.picplz.data.model.ApiErrorResponseDto
 import retrofit2.Response
 
-/**
- * API 호출 실패 시 발생하는 구조화된 예외.
- * HTTP 상태 코드와 에러 바디를 보존하여 호출부에서 에러 유형별 분기 가능.
- */
-class ApiException(
-    val code: Int,
-    val errorBody: String?,
-) : Exception("API failed: $code $errorBody")
+private val errorResponseGson = Gson()
+private const val TAG = "SafeApiCall"
 
 /**
- * Retrofit Response를 안전하게 처리하여 Result<T>로 반환.
+ * Retrofit Response를 안전하게 처리하여 AppResult<T>로 반환.
  *
  * 사용 예시:
  * ```
  * safeApiCall { api.getPhotographers(lat, lng, dist) }
  * ```
  */
-suspend fun <T> safeApiCall(call: suspend () -> Response<T>): Result<T> =
-    runCatching {
+suspend fun <T> safeApiCall(call: suspend () -> Response<T>): AppResult<T> =
+    runCatchingAppError {
         val response = call()
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            response.body() ?: throw AppError.Network.EmptyBody
         } else {
-            throw ApiException(response.code(), response.errorBody()?.string())
+            throw response.toHttpAppError()
         }
     }
 
@@ -41,14 +42,14 @@ suspend fun <T> safeApiCall(call: suspend () -> Response<T>): Result<T> =
 suspend fun <T, R> safeApiCall(
     call: suspend () -> Response<T>,
     transform: (T) -> R,
-): Result<R> =
-    runCatching {
+): AppResult<R> =
+    runCatchingAppError {
         val response = call()
         if (response.isSuccessful) {
-            val body = response.body() ?: error("Response body is null")
+            val body = response.body() ?: throw AppError.Network.EmptyBody
             transform(body)
         } else {
-            throw ApiException(response.code(), response.errorBody()?.string())
+            throw response.toHttpAppError()
         }
     }
 
@@ -60,10 +61,34 @@ suspend fun <T, R> safeApiCall(
  * safeApiCallUnit { api.createPhotographer(request) }
  * ```
  */
-suspend fun safeApiCallUnit(call: suspend () -> Response<*>): Result<Unit> =
-    runCatching {
+suspend fun safeApiCallUnit(call: suspend () -> Response<*>): AppResult<Unit> =
+    runCatchingAppError {
         val response = call()
         if (!response.isSuccessful) {
-            throw ApiException(response.code(), response.errorBody()?.string())
+            throw response.toHttpAppError()
         }
+    }
+
+fun Response<*>.toHttpAppError(): AppError.Network.Http {
+    val rawBody = errorBody()?.string()
+    val serverError = rawBody?.toApiErrorResponseDtoOrNull()
+    return AppError.Network.Http(
+        code = code(),
+        body = rawBody,
+        statusCode = serverError?.statusCode,
+        serverMessage = serverError?.message,
+        timestamp = serverError?.timestamp,
+        data = serverError?.data?.toString(),
+    )
+}
+
+private fun String.toApiErrorResponseDtoOrNull(): ApiErrorResponseDto? =
+    try {
+        errorResponseGson.fromJson(this, ApiErrorResponseDto::class.java)
+    } catch (error: JsonSyntaxException) {
+        Log.d(TAG, "Failed to parse API error response", error)
+        null
+    } catch (error: IllegalStateException) {
+        Log.d(TAG, "Failed to parse API error response", error)
+        null
     }

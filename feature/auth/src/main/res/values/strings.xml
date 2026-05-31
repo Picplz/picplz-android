@@ -15,6 +15,7 @@
     <string name="sign_up_profile_image_guide_required">프로필 이미지를\n설정해 주세요.</string>
     <string name="sign_up_profile_image_guide_photographer">이제 촬영지와 촬영 기기를\n선택할 거예요</string>
     <string name="sign_up_profile_image_skip">다음에 설정하기</string>
+    <string name="sign_up_profile_image_read_failed">프로필 이미지를 불러오지 못했어요. 다른 사진을 선택해 주세요.</string>
     <string name="sign_up_client_top_bar_title">고객 선택</string>
     <string name="sign_up_main_location_top_bar_title">주 촬영지 선택</string>
     <string name="sign_up_main_location_already_selected">이미 선택된 항목입니다.</string>

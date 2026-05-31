@@ -18,15 +18,28 @@ sealed interface SignUpCommonIntent {
 
     data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
 
-    data class UploadProfileImage(val imageBytes: ByteArray, val filename: String) : SignUpCommonIntent {
+    data class UploadProfileImage(
+        val imageBytes: ByteArray,
+        val filename: String,
+        val contentType: String,
+    ) : SignUpCommonIntent {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is UploadProfileImage) return false
-            return filename == other.filename && imageBytes.contentEquals(other.imageBytes)
+            return filename == other.filename &&
+                contentType == other.contentType &&
+                imageBytes.contentEquals(other.imageBytes)
         }
 
-        override fun hashCode(): Int = 31 * imageBytes.contentHashCode() + filename.hashCode()
+        override fun hashCode(): Int {
+            var result = imageBytes.contentHashCode()
+            result = 31 * result + filename.hashCode()
+            result = 31 * result + contentType.hashCode()
+            return result
+        }
     }
+
+    data object ProfileImageReadFailed : SignUpCommonIntent
 
     data class Navigate(val destination: NavigationRoute) : SignUpCommonIntent
 

@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_photographer
 
+import com.hm.picplz.common.error.AppError
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.ChipItem
 import com.hm.picplz.common.model.User
@@ -22,7 +23,7 @@ data class SignUpPhotographerState(
     val currentStep: Int? = 0,
     val isLoading: Boolean = false,
     val isSubmitting: Boolean = false,
-    val error: Throwable? = null,
+    val error: AppError? = null,
     val userInfo: User = emptyUserData,
     val hasPhotographyExperience: Boolean? = null,
     val selectedPhotographyExperienceId: String? = null,

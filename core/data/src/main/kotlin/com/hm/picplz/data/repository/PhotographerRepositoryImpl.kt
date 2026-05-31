@@ -1,5 +1,7 @@
 package com.hm.picplz.data.repository
 
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.data.service.PhotographerService
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
@@ -18,14 +20,14 @@ class PhotographerRepositoryImpl
             longitude: Double,
             latitude: Double,
             distance: Long,
-        ): Result<FilteredPhotographers> = photographerService.getNearbyPhotographers(longitude, latitude, distance)
+        ): AppResult<FilteredPhotographers> = photographerService.getNearbyPhotographers(longitude, latitude, distance)
 
         override suspend fun getPhotographerDetail(
             photographerId: Long,
             reviewSort: String,
-        ): Result<PhotographerDetail> =
+        ): AppResult<PhotographerDetail> =
             coroutineScope {
-                runCatching {
+                runCatchingAppError {
                     val profileDeferred = async { photographerService.getPhotographerInfo(photographerId) }
                     val reviewsDeferred =
                         async {
@@ -48,17 +50,18 @@ class PhotographerRepositoryImpl
                 }
             }
 
-        override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+        override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
             photographerService.getPhotographerMoodKeywords(photographerId)
 
-        override suspend fun addPhotoMood(photoMood: String): Result<Unit> = photographerService.addPhotoMood(photoMood)
+        override suspend fun addPhotoMood(photoMood: String): AppResult<Unit> =
+            photographerService.addPhotoMood(photoMood)
 
-        override suspend fun deletePhotoMood(photoMood: String): Result<Unit> =
+        override suspend fun deletePhotoMood(photoMood: String): AppResult<Unit> =
             photographerService.deletePhotoMood(photoMood)
 
-        override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+        override suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>> =
             photographerService.getActiveAreas(photographerId)
 
-        override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+        override suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>> =
             photographerService.updateActiveAreas(areas)
     }

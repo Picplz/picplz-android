@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.common.error.AppError
 import com.hm.picplz.domain.usecase.GetKakaoUserInfoUseCase
 import com.hm.picplz.domain.usecase.LoginWithKakaoUseCase
 import com.hm.picplz.domain.usecase.UnlinkKakaoUseCase
@@ -47,9 +48,10 @@ class LoginViewModel
                                 }
                             }
                             .onFailure { error ->
-                                _state.update { it.copy(isLoading = false, error = error) }
+                                val appError = AppError.fromThrowable(error)
+                                _state.update { it.copy(isLoading = false, error = appError) }
                                 Log.e(TAG, "로그인 실패", error)
-                                _sideEffect.send(LoginSideEffect.LoginFailed(error))
+                                _sideEffect.send(LoginSideEffect.LoginFailed(appError))
                             }
                     }
                 }
@@ -64,8 +66,9 @@ class LoginViewModel
                                 )
                             }
                             .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
                                 Log.e(TAG, "카카오 사용자 정보 요청 실패", error)
-                                _sideEffect.send(LoginSideEffect.LoginFailed(error))
+                                _sideEffect.send(LoginSideEffect.LoginFailed(appError))
                             }
                     }
                 }
@@ -78,8 +81,9 @@ class LoginViewModel
                                 _sideEffect.send(LoginSideEffect.UnlinkSuccess)
                             }
                             .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
                                 Log.e(TAG, "연결 끊기 실패", error)
-                                _sideEffect.send(LoginSideEffect.UnlinkFailed(error))
+                                _sideEffect.send(LoginSideEffect.UnlinkFailed(appError))
                             }
                     }
                 }

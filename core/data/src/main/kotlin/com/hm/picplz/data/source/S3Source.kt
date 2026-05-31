@@ -1,7 +1,11 @@
 package com.hm.picplz.data.source
 
+import com.hm.picplz.common.error.AppError
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.data.api.S3Api
 import com.hm.picplz.data.model.UploadUrlResponseDto
+import com.hm.picplz.data.util.toHttpAppError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,13 +19,13 @@ interface S3Source {
     suspend fun getPresignedUploadUrl(
         imageType: String,
         filename: String,
-    ): Result<UploadUrlResponseDto>
+    ): AppResult<UploadUrlResponseDto>
 
     suspend fun uploadImageToS3(
         uploadUrl: String,
         imageBytes: ByteArray,
         contentType: String,
-    ): Result<Unit>
+    ): AppResult<Unit>
 }
 
 class S3SourceImpl
@@ -34,13 +38,13 @@ class S3SourceImpl
         override suspend fun getPresignedUploadUrl(
             imageType: String,
             filename: String,
-        ): Result<UploadUrlResponseDto> =
-            runCatching {
+        ): AppResult<UploadUrlResponseDto> =
+            runCatchingAppError {
                 val response = s3Api.getPresignedUploadUrl(imageType, filename)
                 if (response.isSuccessful) {
-                    response.body()?.data ?: error("Get presigned upload url failed: empty body")
+                    response.body()?.data ?: throw AppError.Network.EmptyBody
                 } else {
-                    error("Get presigned upload url failed: ${response.code()} ${response.errorBody()?.string()}")
+                    throw response.toHttpAppError()
                 }
             }
 
@@ -48,8 +52,8 @@ class S3SourceImpl
             uploadUrl: String,
             imageBytes: ByteArray,
             contentType: String,
-        ): Result<Unit> =
-            runCatching {
+        ): AppResult<Unit> =
+            runCatchingAppError {
                 val requestBody = imageBytes.toRequestBody(contentType.toMediaType())
                 val request =
                     Request.Builder()
@@ -59,7 +63,9 @@ class S3SourceImpl
                 withContext(Dispatchers.IO) {
                     plainOkHttpClient.newCall(request).execute().use { response ->
                         if (!response.isSuccessful) {
-                            throw IOException("S3 upload failed with code: ${response.code}")
+                            throw IOException(
+                                "S3 upload failed with code: ${response.code}, body: ${response.body?.string()}",
+                            )
                         }
                     }
                 }
