@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common
 
+import com.hm.picplz.common.error.AppError
 import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.model.SelectionState
 import com.hm.picplz.common.model.UserType
@@ -8,7 +9,7 @@ data class SignUpCommonState(
     val currentStep: Int = 0,
     val selectedUserType: UserType? = null,
     val isLoading: Boolean = false,
-    val error: Throwable? = null,
+    val error: AppError? = null,
     val nickname: String = "",
     val profileImageUri: String? = null,
     val profileImageObjectKey: String? = null,

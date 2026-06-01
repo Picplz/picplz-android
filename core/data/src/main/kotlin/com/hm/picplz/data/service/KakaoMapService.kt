@@ -1,12 +1,13 @@
 package com.hm.picplz.data.service
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.model.KaKaoAddressRequest
 import com.hm.picplz.data.source.KakaoMapSource
 import com.kakao.vectormap.LatLng
 import javax.inject.Inject
 
 interface KakaoMapService {
-    suspend fun getAddressFromCoordinates(coords: LatLng): Result<String>
+    suspend fun getAddressFromCoordinates(coords: LatLng): AppResult<String>
 }
 
 class KakaoMapServiceImpl
@@ -14,7 +15,7 @@ class KakaoMapServiceImpl
     constructor(
         private val kakaoMapSource: KakaoMapSource,
     ) : KakaoMapService {
-        override suspend fun getAddressFromCoordinates(coords: LatLng): Result<String> {
+        override suspend fun getAddressFromCoordinates(coords: LatLng): AppResult<String> {
             return kakaoMapSource.getAddressFromCoords(
                 KaKaoAddressRequest(coords.longitude.toString(), coords.latitude.toString()),
             ).map { response ->

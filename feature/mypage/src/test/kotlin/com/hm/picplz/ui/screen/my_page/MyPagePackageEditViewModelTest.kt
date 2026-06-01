@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.my_page
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.CreateProductCommand
 import com.hm.picplz.domain.model.ShootingPackage
 import com.hm.picplz.domain.repository.ProductRepository
@@ -259,12 +260,12 @@ class MyPagePackageEditViewModelTest {
         val createdProducts = mutableListOf<CreateProductCommand>()
         var requestedPhotographerId: Long? = null
 
-        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ShootingPackage>> {
+        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> {
             requestedPhotographerId = photographerId
             return Result.success(products)
         }
 
-        override suspend fun createProduct(command: CreateProductCommand): Result<Long> {
+        override suspend fun createProduct(command: CreateProductCommand): AppResult<Long> {
             createdProducts += command
             return Result.success(101L)
         }
@@ -277,12 +278,12 @@ class MyPagePackageEditViewModelTest {
         override suspend fun uploadProfileImage(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> = error("Not needed")
+        ): AppResult<String> = error("Not needed")
 
         override suspend fun uploadProductImage(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> =
+        ): AppResult<String> =
             if (shouldFail) {
                 Result.failure(IllegalStateException("upload failed"))
             } else {

@@ -1,18 +1,21 @@
 package com.hm.picplz.data.source
 
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.data.api.MemberApi
 import com.hm.picplz.data.model.MemberInfoResponseDto
 import com.hm.picplz.data.model.UpdateMemberInfoRequest
 import com.hm.picplz.data.util.safeApiCall
 import com.hm.picplz.data.util.safeApiCallUnit
+import com.hm.picplz.data.util.toHttpAppError
 import javax.inject.Inject
 
 interface MemberSource {
-    suspend fun checkNickname(nickname: String): Result<Boolean>
+    suspend fun checkNickname(nickname: String): AppResult<Boolean>
 
-    suspend fun getMemberInfo(memberId: Long): Result<MemberInfoResponseDto>
+    suspend fun getMemberInfo(memberId: Long): AppResult<MemberInfoResponseDto>
 
-    suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): Result<Unit>
+    suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): AppResult<Unit>
 }
 
 class MemberSourceImpl
@@ -20,19 +23,19 @@ class MemberSourceImpl
     constructor(
         private val memberApi: MemberApi,
     ) : MemberSource {
-        override suspend fun checkNickname(nickname: String): Result<Boolean> =
-            runCatching {
+        override suspend fun checkNickname(nickname: String): AppResult<Boolean> =
+            runCatchingAppError {
                 val response = memberApi.checkNickname(nickname)
                 when {
                     response.isSuccessful -> true
                     response.code() == 409 -> false
-                    else -> error("Nickname check failed: ${response.code()} ${response.errorBody()?.string()}")
+                    else -> throw response.toHttpAppError()
                 }
             }
 
-        override suspend fun getMemberInfo(memberId: Long): Result<MemberInfoResponseDto> =
+        override suspend fun getMemberInfo(memberId: Long): AppResult<MemberInfoResponseDto> =
             safeApiCall { memberApi.getMemberInfo(memberId) }
 
-        override suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): Result<Unit> =
+        override suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): AppResult<Unit> =
             safeApiCallUnit { memberApi.updateMemberInfo(request) }
     }

@@ -1,5 +1,6 @@
 package com.hm.picplz.data.repository
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.mapper.toRequest
 import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.service.ProductService
@@ -13,11 +14,11 @@ class ProductRepositoryImpl
     constructor(
         private val productService: ProductService,
     ) : ProductRepository {
-        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ShootingPackage>> =
+        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> =
             productService.getPhotographerProducts(photographerId).map { products ->
                 products.map { it.toShootingPackage() }
             }
 
-        override suspend fun createProduct(command: CreateProductCommand): Result<Long> =
+        override suspend fun createProduct(command: CreateProductCommand): AppResult<Long> =
             productService.createProduct(command.toRequest()).map { it.id }
     }

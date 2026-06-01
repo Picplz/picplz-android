@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.my_page
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
@@ -224,7 +225,7 @@ private class FakePhotographerRepository(
         longitude: Double,
         latitude: Double,
         distance: Long,
-    ): Result<FilteredPhotographers> =
+    ): AppResult<FilteredPhotographers> =
         Result.success(
             FilteredPhotographers(active = emptyList(), inactive = emptyList()),
         )
@@ -232,9 +233,9 @@ private class FakePhotographerRepository(
     override suspend fun getPhotographerDetail(
         photographerId: Long,
         reviewSort: String,
-    ): Result<PhotographerDetail> = Result.failure(UnsupportedOperationException())
+    ): AppResult<PhotographerDetail> = Result.failure(UnsupportedOperationException())
 
-    override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+    override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
         if (failsOnGet || (failsOnSecondGet && getCallCount++ > 0)) {
             Result.failure(IllegalStateException("get failed"))
         } else {
@@ -242,7 +243,7 @@ private class FakePhotographerRepository(
             Result.success(keywords)
         }
 
-    override suspend fun addPhotoMood(photoMood: String): Result<Unit> =
+    override suspend fun addPhotoMood(photoMood: String): AppResult<Unit> =
         if (failsOnAdd) {
             Result.failure(IllegalStateException("add failed"))
         } else {
@@ -250,12 +251,12 @@ private class FakePhotographerRepository(
             Result.success(Unit)
         }
 
-    override suspend fun deletePhotoMood(photoMood: String): Result<Unit> {
+    override suspend fun deletePhotoMood(photoMood: String): AppResult<Unit> {
         deletedKeywords.add(photoMood)
         return Result.success(Unit)
     }
 
-    override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> = error("Not used")
+    override suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>> = error("Not used")
 
-    override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> = error("Not used")
+    override suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>> = error("Not used")
 }

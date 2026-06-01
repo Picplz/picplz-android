@@ -1,12 +1,16 @@
 package com.hm.picplz.data.source
 
+import com.hm.picplz.common.error.AppError
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.data.api.CameraApi
 import com.hm.picplz.data.model.CameraListData
 import com.hm.picplz.data.model.DeviceBrand
+import com.hm.picplz.data.util.toHttpAppError
 import javax.inject.Inject
 
 interface CameraSource {
-    suspend fun getCameraList(): Result<CameraListData>
+    suspend fun getCameraList(): AppResult<CameraListData>
 }
 
 class CameraSourceImpl
@@ -14,13 +18,13 @@ class CameraSourceImpl
     constructor(
         private val cameraApi: CameraApi,
     ) : CameraSource {
-        override suspend fun getCameraList(): Result<CameraListData> =
-            runCatching {
+        override suspend fun getCameraList(): AppResult<CameraListData> =
+            runCatchingAppError {
                 val response = cameraApi.getAllCameras()
                 if (!response.isSuccessful) {
-                    error("Get cameras failed: ${response.code()} ${response.errorBody()?.string()}")
+                    throw response.toHttpAppError()
                 }
-                val cameras = response.body()?.data ?: error("Get cameras failed: empty body")
+                val cameras = response.body()?.data ?: throw AppError.Network.EmptyBody
                 val brands =
                     cameras
                         .groupBy { it.brand }

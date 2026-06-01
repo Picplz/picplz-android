@@ -1,6 +1,8 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common.views
 
 import android.net.Uri
+import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -46,6 +48,7 @@ import com.hm.picplz.ui.screen.common.CommonBottomButton
 import com.hm.picplz.ui.screen.common.CommonTopBar
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToPrev
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.NavigateToSelected
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ProfileImageReadFailed
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.SetProfileImageUri
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.ShowFileUploadDialog
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent.UploadProfileImage
@@ -77,8 +80,11 @@ fun SignUpProfileImageScreen(
                 viewModel.handleIntent(SetProfileImageUri(uri.toString()))
                 val imageBytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
                 if (imageBytes != null) {
-                    val filename = uri.lastPathSegment ?: "profile.jpg"
-                    viewModel.handleIntent(UploadProfileImage(imageBytes, filename))
+                    val contentType = context.contentResolver.getType(uri) ?: "image/jpeg"
+                    val filename = uri.toProfileImageFilename(contentType)
+                    viewModel.handleIntent(UploadProfileImage(imageBytes, filename, contentType))
+                } else {
+                    viewModel.handleIntent(ProfileImageReadFailed)
                 }
             }
         }
@@ -225,9 +231,18 @@ fun SignUpProfileImageScreen(
                 is SignUpSideEffect.ShowFileUploadDialog -> {
                     filePickerLauncher.launch("image/*")
                 }
+                is SignUpSideEffect.ShowToast -> {
+                    Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+}
+
+private fun Uri.toProfileImageFilename(contentType: String): String {
+    val rawFilename = lastPathSegment?.substringAfterLast('/')?.takeIf { it.isNotBlank() } ?: "profile"
+    val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentType) ?: "jpg"
+    return if (rawFilename.contains('.')) rawFilename else "$rawFilename.$extension"
 }
 
 @Preview

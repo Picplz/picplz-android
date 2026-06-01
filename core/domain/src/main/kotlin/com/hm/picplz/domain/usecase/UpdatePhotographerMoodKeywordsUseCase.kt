@@ -1,5 +1,7 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.domain.repository.PhotographerRepository
 import javax.inject.Inject
 
@@ -11,8 +13,8 @@ class UpdatePhotographerMoodKeywordsUseCase
         suspend operator fun invoke(
             originalKeywords: List<String>,
             selectedKeywords: List<String>,
-        ): Result<Unit> =
-            runCatching {
+        ): AppResult<Unit> =
+            runCatchingAppError {
                 val original =
                     originalKeywords
                         .map(String::trim)

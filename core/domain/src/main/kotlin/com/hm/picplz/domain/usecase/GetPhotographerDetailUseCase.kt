@@ -1,5 +1,6 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.PhotographerDetail
 import com.hm.picplz.domain.repository.PhotographerRepository
 import javax.inject.Inject
@@ -12,5 +13,5 @@ class GetPhotographerDetailUseCase
         suspend operator fun invoke(
             photographerId: Long,
             reviewSort: String = "RECOMMENDED",
-        ): Result<PhotographerDetail> = photographerRepository.getPhotographerDetail(photographerId, reviewSort)
+        ): AppResult<PhotographerDetail> = photographerRepository.getPhotographerDetail(photographerId, reviewSort)
     }

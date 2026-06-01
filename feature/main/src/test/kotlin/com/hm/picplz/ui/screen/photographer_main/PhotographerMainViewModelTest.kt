@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.photographer_main
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.CameraBrand
 import com.hm.picplz.domain.model.CameraCatalog
 import com.hm.picplz.domain.model.Device
@@ -141,7 +142,7 @@ class PhotographerMainViewModelTest {
     }
 
     private class FakeCameraRepository : CameraRepository {
-        override suspend fun getCameraCatalog(): Result<CameraCatalog> =
+        override suspend fun getCameraCatalog(): AppResult<CameraCatalog> =
             Result.success(
                 CameraCatalog(
                     brands = listOf(CameraBrand("소니", listOf("a7m4"))),

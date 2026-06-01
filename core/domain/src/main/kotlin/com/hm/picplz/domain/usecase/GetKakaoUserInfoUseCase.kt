@@ -1,5 +1,6 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.KakaoUserInfo
 import com.hm.picplz.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -9,7 +10,7 @@ class GetKakaoUserInfoUseCase
     constructor(
         private val authRepository: AuthRepository,
     ) {
-        suspend operator fun invoke(): Result<KakaoUserInfo> {
+        suspend operator fun invoke(): AppResult<KakaoUserInfo> {
             return authRepository.getKakaoUserInfo()
         }
     }

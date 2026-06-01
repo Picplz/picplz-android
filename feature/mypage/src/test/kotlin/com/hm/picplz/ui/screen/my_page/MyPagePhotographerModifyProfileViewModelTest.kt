@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.my_page
 
 import android.content.Context
 import com.hm.picplz.common.model.NicknameFieldError
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.MemberProfile
 import com.hm.picplz.domain.model.UpdateMemberProfileCommand
 import com.hm.picplz.domain.repository.AuthRepository
@@ -269,12 +270,12 @@ class MyPagePhotographerModifyProfileViewModelTest {
         val requestedNicknames = mutableListOf<String>()
         var updatedCommand: UpdateMemberProfileCommand? = null
 
-        override suspend fun checkNicknameAvailable(nickname: String): Result<Boolean> {
+        override suspend fun checkNicknameAvailable(nickname: String): AppResult<Boolean> {
             requestedNicknames += nickname
             return Result.success(isAvailable)
         }
 
-        override suspend fun getMemberProfile(memberId: Long): Result<MemberProfile> =
+        override suspend fun getMemberProfile(memberId: Long): AppResult<MemberProfile> =
             if (loadShouldFail) {
                 Result.failure(IllegalStateException("load failed"))
             } else {
@@ -289,7 +290,7 @@ class MyPagePhotographerModifyProfileViewModelTest {
                 )
             }
 
-        override suspend fun updateMemberProfile(command: UpdateMemberProfileCommand): Result<Unit> {
+        override suspend fun updateMemberProfile(command: UpdateMemberProfileCommand): AppResult<Unit> {
             updatedCommand = command
             return Result.success(Unit)
         }
@@ -310,10 +311,10 @@ class MyPagePhotographerModifyProfileViewModelTest {
     }
 
     private class FakeS3Repository : S3Repository {
-        private val uploadResults = ArrayDeque<Result<String>>()
+        private val uploadResults = ArrayDeque<AppResult<String>>()
 
         constructor(
-            uploadResults: List<Result<String>> = listOf(Result.success("profile/object-key.jpg")),
+            uploadResults: List<AppResult<String>> = listOf(Result.success("profile/object-key.jpg")),
         ) {
             this.uploadResults.addAll(uploadResults)
         }
@@ -321,7 +322,7 @@ class MyPagePhotographerModifyProfileViewModelTest {
         override suspend fun uploadProfileImage(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> =
+        ): AppResult<String> =
             if (uploadResults.isEmpty()) {
                 Result.success("profile/object-key.jpg")
             } else {
@@ -331,6 +332,6 @@ class MyPagePhotographerModifyProfileViewModelTest {
         override suspend fun uploadProductImage(
             imageBytes: ByteArray,
             filename: String,
-        ): Result<String> = error("unused")
+        ): AppResult<String> = error("unused")
     }
 }

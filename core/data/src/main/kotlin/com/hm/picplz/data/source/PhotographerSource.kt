@@ -1,5 +1,6 @@
 package com.hm.picplz.data.source
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.api.PhotographerApi
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
@@ -16,34 +17,34 @@ import com.hm.picplz.data.util.safeApiCallUnit
 import javax.inject.Inject
 
 interface PhotographerSource {
-    suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit>
+    suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit>
 
-    suspend fun addPhotoMood(request: PhotoMoodRequest): Result<Unit>
+    suspend fun addPhotoMood(request: PhotoMoodRequest): AppResult<Unit>
 
-    suspend fun deletePhotoMood(request: PhotoMoodRequest): Result<Unit>
+    suspend fun deletePhotoMood(request: PhotoMoodRequest): AppResult<Unit>
 
-    suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): Result<UpdateActiveAreaResponse>
+    suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): AppResult<UpdateActiveAreaResponse>
 
     suspend fun getNearbyPhotographers(
         longitude: Double,
         latitude: Double,
         distance: Long,
-    ): Result<List<NearbyPhotographerCard>>
+    ): AppResult<List<NearbyPhotographerCard>>
 
-    suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerDetailDto>
+    suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerDetailDto>
 
-    suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto>
+    suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto>
 
     suspend fun getPhotographerReviews(
         photographerId: Long,
         page: Int = 0,
         size: Int = 10,
         sort: String = "RECOMMENDED",
-    ): Result<ReviewListDto>
+    ): AppResult<ReviewListDto>
 
-    suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>>
+    suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ProductDto>>
 
-    suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto>
+    suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto>
 }
 
 class PhotographerSourceImpl
@@ -51,29 +52,29 @@ class PhotographerSourceImpl
     constructor(
         private val photographerApi: PhotographerApi,
     ) : PhotographerSource {
-        override suspend fun createPhotographer(request: CreatePhotographerRequest): Result<Unit> =
+        override suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit> =
             safeApiCallUnit { photographerApi.createPhotographer(request) }
 
-        override suspend fun addPhotoMood(request: PhotoMoodRequest): Result<Unit> =
+        override suspend fun addPhotoMood(request: PhotoMoodRequest): AppResult<Unit> =
             safeApiCallUnit { photographerApi.addPhotoMood(request) }
 
-        override suspend fun deletePhotoMood(request: PhotoMoodRequest): Result<Unit> =
+        override suspend fun deletePhotoMood(request: PhotoMoodRequest): AppResult<Unit> =
             safeApiCallUnit { photographerApi.deletePhotoMood(request) }
 
-        override suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): Result<UpdateActiveAreaResponse> =
+        override suspend fun updateActiveAreas(request: UpdateActiveAreaRequest): AppResult<UpdateActiveAreaResponse> =
             safeApiCall { photographerApi.updateActiveAreas(request) }
 
         override suspend fun getNearbyPhotographers(
             longitude: Double,
             latitude: Double,
             distance: Long,
-        ): Result<List<NearbyPhotographerCard>> =
+        ): AppResult<List<NearbyPhotographerCard>> =
             safeApiCall { photographerApi.getNearbyPhotographers(longitude, latitude, distance) }
 
-        override suspend fun getPhotographerInfo(photographerId: Long): Result<PhotographerDetailDto> =
+        override suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerDetailDto> =
             safeApiCall({ photographerApi.getPhotographerInfo(photographerId) }) { it.data }
 
-        override suspend fun getPhotographerRating(photographerId: Long): Result<PhotographerRatingDto> =
+        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> =
             safeApiCall({ photographerApi.getPhotographerRating(photographerId) }) { it.data }
 
         override suspend fun getPhotographerReviews(
@@ -81,12 +82,12 @@ class PhotographerSourceImpl
             page: Int,
             size: Int,
             sort: String,
-        ): Result<ReviewListDto> =
+        ): AppResult<ReviewListDto> =
             safeApiCall({ photographerApi.getPhotographerReviews(photographerId, page, size, sort) }) { it.data }
 
-        override suspend fun getPhotographerProducts(photographerId: Long): Result<List<ProductDto>> =
+        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ProductDto>> =
             safeApiCall({ photographerApi.getPhotographerProducts(photographerId) }) { it.data }
 
-        override suspend fun getPortfolio(portfolioId: Long): Result<PortfolioDto> =
+        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> =
             safeApiCall({ photographerApi.getPortfolio(portfolioId) }) { it.data }
     }

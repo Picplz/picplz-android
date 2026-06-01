@@ -1,11 +1,14 @@
 package com.hm.picplz.data.source
 
+import com.hm.picplz.common.result.AppResult
+import com.hm.picplz.common.result.runCatchingAppError
 import com.hm.picplz.data.api.CustomerApi
 import com.hm.picplz.data.model.CreateCustomerRequest
+import com.hm.picplz.data.util.toHttpAppError
 import javax.inject.Inject
 
 interface CustomerSource {
-    suspend fun createCustomer(request: CreateCustomerRequest): Result<Unit>
+    suspend fun createCustomer(request: CreateCustomerRequest): AppResult<Unit>
 }
 
 class CustomerSourceImpl
@@ -13,13 +16,13 @@ class CustomerSourceImpl
     constructor(
         private val customerApi: CustomerApi,
     ) : CustomerSource {
-        override suspend fun createCustomer(request: CreateCustomerRequest): Result<Unit> =
-            runCatching {
+        override suspend fun createCustomer(request: CreateCustomerRequest): AppResult<Unit> =
+            runCatchingAppError {
                 val response = customerApi.createCustomer(request)
                 if (response.isSuccessful) {
                     Unit
                 } else {
-                    error("Create customer failed: ${response.code()} ${response.errorBody()?.string()}")
+                    throw response.toHttpAppError()
                 }
             }
     }

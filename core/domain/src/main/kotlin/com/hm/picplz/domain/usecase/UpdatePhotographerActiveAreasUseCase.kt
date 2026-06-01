@@ -1,5 +1,6 @@
 package com.hm.picplz.domain.usecase
 
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.repository.PhotographerRepository
 import javax.inject.Inject
@@ -9,6 +10,6 @@ class UpdatePhotographerActiveAreasUseCase
     constructor(
         private val photographerRepository: PhotographerRepository,
     ) {
-        suspend operator fun invoke(areas: List<Area>): Result<List<Area>> =
+        suspend operator fun invoke(areas: List<Area>): AppResult<List<Area>> =
             photographerRepository.updateActiveAreas(areas)
     }

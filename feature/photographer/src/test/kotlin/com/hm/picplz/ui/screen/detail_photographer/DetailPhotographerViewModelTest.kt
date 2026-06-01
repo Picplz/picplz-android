@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.detail_photographer
 
 import androidx.lifecycle.SavedStateHandle
 import com.hm.picplz.common.model.PhotoReview
+import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
@@ -166,7 +167,7 @@ class DetailPhotographerViewModelTest {
 }
 
 private class FakePhotographerRepository(
-    private val detailResult: Result<PhotographerDetail> = Result.failure(NotImplementedError()),
+    private val detailResult: AppResult<PhotographerDetail> = Result.failure(NotImplementedError()),
 ) : PhotographerRepository {
     var getPhotographerDetailCallCount = 0
         private set
@@ -175,27 +176,27 @@ private class FakePhotographerRepository(
         longitude: Double,
         latitude: Double,
         distance: Long,
-    ): Result<FilteredPhotographers> = Result.failure(NotImplementedError())
+    ): AppResult<FilteredPhotographers> = Result.failure(NotImplementedError())
 
     override suspend fun getPhotographerDetail(
         photographerId: Long,
         reviewSort: String,
-    ): Result<PhotographerDetail> {
+    ): AppResult<PhotographerDetail> {
         getPhotographerDetailCallCount += 1
         return detailResult
     }
 
-    override suspend fun getPhotographerMoodKeywords(photographerId: Long): Result<List<String>> =
+    override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
         Result.failure(NotImplementedError())
 
-    override suspend fun addPhotoMood(photoMood: String): Result<Unit> = Result.failure(NotImplementedError())
+    override suspend fun addPhotoMood(photoMood: String): AppResult<Unit> = Result.failure(NotImplementedError())
 
-    override suspend fun deletePhotoMood(photoMood: String): Result<Unit> = Result.failure(NotImplementedError())
+    override suspend fun deletePhotoMood(photoMood: String): AppResult<Unit> = Result.failure(NotImplementedError())
 
-    override suspend fun getActiveAreas(photographerId: Long): Result<List<Area>> =
+    override suspend fun getActiveAreas(photographerId: Long): AppResult<List<Area>> =
         Result.failure(NotImplementedError())
 
-    override suspend fun updateActiveAreas(areas: List<Area>): Result<List<Area>> =
+    override suspend fun updateActiveAreas(areas: List<Area>): AppResult<List<Area>> =
         Result.failure(NotImplementedError())
 }
 
