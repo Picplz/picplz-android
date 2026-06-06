@@ -5,13 +5,10 @@ import com.hm.picplz.data.mapper.toArea
 import com.hm.picplz.data.mapper.toDomain
 import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.mapper.toReviewData
-import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.model.ActiveAreaRequest
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotoMoodRequest
 import com.hm.picplz.data.model.PhotographerCameraRequest
-import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PortfolioDto
 import com.hm.picplz.data.model.UpdateActiveAreaRequest
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.Area
@@ -19,10 +16,8 @@ import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReviewData
 import com.hm.picplz.domain.model.PhotographerSignup
-import com.hm.picplz.domain.model.ShootingPackage
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
 interface PhotographerService {
     suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit>
 
@@ -44,18 +39,12 @@ interface PhotographerService {
 
     suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo>
 
-    suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto>
-
     suspend fun getPhotographerReviews(
         photographerId: Long,
         page: Int = 0,
         size: Int = 10,
         sort: String = "RECOMMENDED",
     ): AppResult<PhotographerReviewData>
-
-    suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>>
-
-    suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto>
 }
 
 class PhotographerServiceImpl
@@ -126,9 +115,6 @@ class PhotographerServiceImpl
         override suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo> =
             photographerSource.getPhotographerInfo(photographerId).map { it.toPhotographerInfo() }
 
-        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> =
-            photographerSource.getPhotographerRating(photographerId)
-
         override suspend fun getPhotographerReviews(
             photographerId: Long,
             page: Int,
@@ -138,14 +124,6 @@ class PhotographerServiceImpl
             photographerSource.getPhotographerReviews(photographerId, page, size, sort).map {
                 it.toReviewData()
             }
-
-        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> =
-            photographerSource.getPhotographerProducts(photographerId).map { dtos ->
-                dtos.map { it.toShootingPackage() }
-            }
-
-        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> =
-            photographerSource.getPortfolio(portfolioId)
     }
 
 private fun PhotographerSignup.toCreatePhotographerRequest(): CreatePhotographerRequest =

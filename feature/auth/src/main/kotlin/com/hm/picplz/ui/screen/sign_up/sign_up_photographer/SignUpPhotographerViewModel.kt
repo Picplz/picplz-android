@@ -202,8 +202,9 @@ class SignUpPhotographerViewModel
 
                         _state.update { it.copy(isSubmitting = true, error = null) }
 
-                        val socialCode = tokenManager.getSocialCode()
-                        if (socialCode == null) {
+                        val socialInfo = tokenManager.getSocialInfo()
+                        val socialCode = socialInfo.code
+                        if (socialCode.isNullOrBlank()) {
                             _state.update {
                                 it.copy(
                                     isSubmitting = false,
@@ -252,8 +253,8 @@ class SignUpPhotographerViewModel
                         val signup =
                             PhotographerSignup(
                                 nickname = currentState.userInfo.nickname.orEmpty(),
-                                socialEmail = tokenManager.getSocialEmail(),
-                                socialProvider = tokenManager.getSocialProvider(),
+                                socialEmail = socialInfo.email,
+                                socialProvider = socialInfo.provider,
                                 socialCode = socialCode,
                                 profileImage = currentState.userInfo.profileImageObjectKey,
                                 photoMoods = currentState.selectedVibeChipList.map { it.label },

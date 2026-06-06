@@ -2,7 +2,9 @@ package com.hm.picplz.data.repository
 
 import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.common.result.runCatchingAppError
+import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.data.service.ProductService
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerDetail
@@ -15,6 +17,7 @@ class PhotographerRepositoryImpl
     @Inject
     constructor(
         private val photographerService: PhotographerService,
+        private val productService: ProductService,
     ) : PhotographerRepository {
         override suspend fun getNearbyPhotographers(
             longitude: Double,
@@ -36,11 +39,11 @@ class PhotographerRepositoryImpl
                                 sort = reviewSort,
                             )
                         }
-                    val productsDeferred = async { photographerService.getPhotographerProducts(photographerId) }
+                    val productsDeferred = async { productService.getPhotographerProducts(photographerId) }
 
                     val profileInfo = profileDeferred.await().getOrThrow()
                     val reviewData = reviewsDeferred.await().getOrThrow()
-                    val shootingPackages = productsDeferred.await().getOrThrow()
+                    val shootingPackages = productsDeferred.await().getOrThrow().map { it.toShootingPackage() }
 
                     PhotographerDetail(
                         profileInfo = profileInfo,

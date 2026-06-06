@@ -6,9 +6,6 @@ import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.NearbyPhotographerCard
 import com.hm.picplz.data.model.PhotoMoodRequest
 import com.hm.picplz.data.model.PhotographerDetailDto
-import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PortfolioDto
-import com.hm.picplz.data.model.ProductDto
 import com.hm.picplz.data.model.ReviewListDto
 import com.hm.picplz.data.model.UpdateActiveAreaRequest
 import com.hm.picplz.data.model.UpdateActiveAreaResponse
@@ -151,24 +148,12 @@ class SignupServiceMappingTest {
             throw NotImplementedError("Not used in test")
         }
 
-        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> {
-            throw NotImplementedError("Not used in test")
-        }
-
         override suspend fun getPhotographerReviews(
             photographerId: Long,
             page: Int,
             size: Int,
             sort: String,
         ): AppResult<ReviewListDto> {
-            throw NotImplementedError("Not used in test")
-        }
-
-        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ProductDto>> {
-            throw NotImplementedError("Not used in test")
-        }
-
-        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> {
             throw NotImplementedError("Not used in test")
         }
     }

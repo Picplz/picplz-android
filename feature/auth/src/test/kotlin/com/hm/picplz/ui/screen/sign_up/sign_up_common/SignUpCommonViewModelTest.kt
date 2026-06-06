@@ -6,6 +6,7 @@ import com.hm.picplz.common.model.UserType
 import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.model.UpdateMemberInfoRequest
 import com.hm.picplz.data.model.UploadUrlResponseDto
+import com.hm.picplz.data.provider.SocialInfo
 import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.CustomerService
 import com.hm.picplz.data.service.MemberService
@@ -291,9 +292,13 @@ class SignUpCommonViewModelTest {
         socialProvider: String?,
     ): TokenManager {
         val tokenManager = mock(TokenManager::class.java)
-        `when`(tokenManager.getSocialCode()).thenReturn(socialCode)
-        `when`(tokenManager.getSocialEmail()).thenReturn(socialEmail)
-        `when`(tokenManager.getSocialProvider()).thenReturn(socialProvider)
+        `when`(tokenManager.getSocialInfo()).thenReturn(
+            SocialInfo(
+                code = socialCode,
+                email = socialEmail,
+                provider = socialProvider,
+            ),
+        )
         return tokenManager
     }
 

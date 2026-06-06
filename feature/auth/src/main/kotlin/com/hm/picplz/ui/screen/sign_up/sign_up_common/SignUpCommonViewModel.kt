@@ -78,7 +78,8 @@ class SignUpCommonViewModel
                             when (selectedUserType) {
                                 UserType.User -> {
                                     val currentState = _state.value
-                                    val socialCode = tokenManager.getSocialCode()
+                                    val socialInfo = tokenManager.getSocialInfo()
+                                    val socialCode = socialInfo.code
                                     if (socialCode.isNullOrBlank()) {
                                         _state.update {
                                             it.copy(
@@ -97,8 +98,8 @@ class SignUpCommonViewModel
                                     val signup =
                                         CustomerSignup(
                                             nickname = currentState.nickname,
-                                            socialEmail = tokenManager.getSocialEmail(),
-                                            socialProvider = tokenManager.getSocialProvider(),
+                                            socialEmail = socialInfo.email,
+                                            socialProvider = socialInfo.provider,
                                             socialCode = socialCode,
                                             profileImage = currentState.profileImageObjectKey,
                                         )

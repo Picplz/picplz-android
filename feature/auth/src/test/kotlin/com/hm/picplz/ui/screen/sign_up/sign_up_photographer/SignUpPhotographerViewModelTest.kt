@@ -5,8 +5,7 @@ import com.hm.picplz.common.model.User
 import com.hm.picplz.common.result.AppResult
 import com.hm.picplz.data.model.CameraListData
 import com.hm.picplz.data.model.DeviceBrand
-import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.provider.SocialInfo
 import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.CameraService
@@ -19,7 +18,6 @@ import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReviewData
 import com.hm.picplz.domain.model.PhotographerSignup
 import com.hm.picplz.domain.model.PhotographerSignupCameraType
-import com.hm.picplz.domain.model.ShootingPackage
 import com.hm.picplz.ui.screen.login.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -133,9 +131,13 @@ class SignUpPhotographerViewModelTest {
         socialProvider: String?,
     ): TokenManager {
         val tokenManager = mock(TokenManager::class.java)
-        `when`(tokenManager.getSocialCode()).thenReturn(socialCode)
-        `when`(tokenManager.getSocialEmail()).thenReturn(socialEmail)
-        `when`(tokenManager.getSocialProvider()).thenReturn(socialProvider)
+        `when`(tokenManager.getSocialInfo()).thenReturn(
+            SocialInfo(
+                code = socialCode,
+                email = socialEmail,
+                provider = socialProvider,
+            ),
+        )
         return tokenManager
     }
 
@@ -205,24 +207,12 @@ class SignUpPhotographerViewModelTest {
             throw NotImplementedError("Not used in test")
         }
 
-        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> {
-            throw NotImplementedError("Not used in test")
-        }
-
         override suspend fun getPhotographerReviews(
             photographerId: Long,
             page: Int,
             size: Int,
             sort: String,
         ): AppResult<PhotographerReviewData> {
-            throw NotImplementedError("Not used in test")
-        }
-
-        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> {
-            throw NotImplementedError("Not used in test")
-        }
-
-        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> {
             throw NotImplementedError("Not used in test")
         }
     }
