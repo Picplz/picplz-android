@@ -50,7 +50,7 @@ class OrderDetailViewModel @Inject constructor(
             try {
                 _state.value =
                     OrderDetailState(
-                        orderNumber = "nnnnmmdd123456",
+                        orderNumber = bookingId,
                         orderTime = "2025-03-09 19:09:14",
                         customerName = "가나다",
                         phoneNumber = "01023293185",

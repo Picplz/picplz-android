@@ -109,28 +109,6 @@ class MyPagePackageEditViewModel
             }
         }
 
-        private fun openEditForm(packageId: Long) {
-            val item = _state.value.packages.firstOrNull { it.id == packageId } ?: return
-            val draft =
-                MyPagePackageDraft(
-                    name = item.name,
-                    description = item.description,
-                    durationMinutes = item.durationMinutes,
-                    price = item.price,
-                    imageUri = item.imageUri,
-                    imageObjectKey = item.imageObjectKey,
-                )
-            _state.update {
-                it.copy(
-                    editMode = MyPagePackageEditMode.Edit,
-                    editingPackageId = packageId,
-                    draft = draft,
-                    originalDraft = draft,
-                    isSaveEnabled = true,
-                )
-            }
-        }
-
         private fun updateDraft(transform: (MyPagePackageDraft) -> MyPagePackageDraft) {
             _state.update {
                 val draft = transform(it.draft)

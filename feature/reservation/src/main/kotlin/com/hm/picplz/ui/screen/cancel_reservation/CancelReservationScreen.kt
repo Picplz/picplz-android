@@ -92,6 +92,7 @@ fun CancelReservationScreen(
 }
 
 @Composable
+@Suppress("LongParameterList")
 private fun CancelReservationScreenContent(
     state: CancelReservationState,
     pagerState: PagerState,

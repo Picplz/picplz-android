@@ -22,6 +22,7 @@ import com.hm.picplz.domain.model.PhotographerSignup
 import com.hm.picplz.domain.model.ShootingPackage
 import javax.inject.Inject
 
+@Suppress("TooManyFunctions")
 interface PhotographerService {
     suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit>
 

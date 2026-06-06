@@ -144,7 +144,7 @@ style:
     max: 4
   UnusedPrivateMember:
     active: true
-    allowedNames: "(_|ignored|expected|serialVersionUID)"
+    allowedNames: "(_|ignored|expected|serialVersionUID|.*Preview.*)"
   UseCheckOrError:
     active: true
   WildcardImport:

@@ -16,6 +16,7 @@ import com.hm.picplz.data.util.safeApiCall
 import com.hm.picplz.data.util.safeApiCallUnit
 import javax.inject.Inject
 
+@Suppress("TooManyFunctions")
 interface PhotographerSource {
     suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit>
 
