@@ -20,7 +20,12 @@ fun SignUpScreen(
 
     LaunchedEffect(profileImageUri) {
         profileImageUri?.let { uriString ->
-            viewModel.handleIntent(SignUpCommonIntent.SetProfileImageUri(uriString))
+            viewModel.handleIntent(
+                SignUpCommonIntent.SetProfileImageUri(
+                    newProfileImageUri = uriString,
+                    isUserSelected = false,
+                ),
+            )
         }
     }
 

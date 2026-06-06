@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common
 
+import android.content.Context
 import com.hm.picplz.common.model.UserType
 import com.hm.picplz.navigation.model.NavigationRoute
 
@@ -16,7 +17,10 @@ sealed interface SignUpCommonIntent {
 
     data object CheckNicknameDuplicate : SignUpCommonIntent
 
-    data class SetProfileImageUri(val newProfileImageUri: String?) : SignUpCommonIntent
+    data class SetProfileImageUri(
+        val newProfileImageUri: String?,
+        val isUserSelected: Boolean,
+    ) : SignUpCommonIntent
 
     data class UploadProfileImage(
         val imageBytes: ByteArray,
@@ -42,6 +46,8 @@ sealed interface SignUpCommonIntent {
     data object ProfileImageReadFailed : SignUpCommonIntent
 
     data class Navigate(val destination: NavigationRoute) : SignUpCommonIntent
+
+    data class CompleteSignup(val context: Context) : SignUpCommonIntent
 
     data object ShowFileUploadDialog : SignUpCommonIntent
 

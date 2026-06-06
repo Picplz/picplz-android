@@ -34,7 +34,7 @@ class MemberSourceImpl
             }
 
         override suspend fun getMemberInfo(memberId: Long): AppResult<MemberInfoResponseDto> =
-            safeApiCall { memberApi.getMemberInfo(memberId) }
+            safeApiCall({ memberApi.getMemberInfo(memberId) }) { it.data }
 
         override suspend fun updateMemberInfo(request: UpdateMemberInfoRequest): AppResult<Unit> =
             safeApiCallUnit { memberApi.updateMemberInfo(request) }

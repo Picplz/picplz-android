@@ -39,7 +39,7 @@ class LoginViewModel
                         loginWithKakaoUseCase(intent.context)
                             .onSuccess { response ->
                                 _state.update { it.copy(isLoading = false) }
-                                Log.d(TAG, "로그인 성공: $response")
+                                Log.d(TAG, "로그인 성공: registered=${response.registered}")
 
                                 if (response.registered) {
                                     _sideEffect.send(LoginSideEffect.LoginSuccess)
@@ -67,6 +67,7 @@ class LoginViewModel
                             }
                             .onFailure { error ->
                                 val appError = AppError.fromThrowable(error)
+                                _state.update { it.copy(isLoading = false, error = appError) }
                                 Log.e(TAG, "카카오 사용자 정보 요청 실패", error)
                                 _sideEffect.send(LoginSideEffect.LoginFailed(appError))
                             }

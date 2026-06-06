@@ -42,4 +42,8 @@ dependencies {
     // Kakao
     implementation(libs.kakao.user)
     implementation(libs.kakao.maps)
+
+    testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
 }

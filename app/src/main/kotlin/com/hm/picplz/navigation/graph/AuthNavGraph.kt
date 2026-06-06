@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
+import com.hm.picplz.BuildConfig
 import com.hm.picplz.navigation.UserTypeMap
 import com.hm.picplz.navigation.model.Login
 import com.hm.picplz.navigation.model.SignUpCompletion
@@ -15,8 +16,16 @@ import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.views.SignUpCompletionScreen
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.SignUpPhotographerScreen
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
-    composable<Login> { LoginIntroScreen(navController = navController) }
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    onSignupCompleted: () -> Unit,
+) {
+    composable<Login> {
+        LoginIntroScreen(
+            navController = navController,
+            enableDevEntry = BuildConfig.DEBUG,
+        )
+    }
 
     composable<SignUpIntro>(
         deepLinks =
@@ -56,6 +65,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         SignUpCompletionScreen(
             mainNavController = navController,
             userInfo = args.userInfo,
+            onSignupCompleted = onSignupCompleted,
         )
     }
 }

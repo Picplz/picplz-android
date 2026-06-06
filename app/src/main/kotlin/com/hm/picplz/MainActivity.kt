@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
                 MainNavHost(
                     navController = navController,
                     uiState = uiState,
+                    refreshUserData = { viewModel.refreshUserData() },
                 )
             }
         }

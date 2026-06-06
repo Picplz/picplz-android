@@ -26,6 +26,7 @@ class UserInfoHandler {
                 state.copy(
                     profileImageUri = intent.newProfileImageUri,
                     profileImageObjectKey = null,
+                    isUserSelectedProfileImage = intent.isUserSelected,
                     error = null,
                 )
             }

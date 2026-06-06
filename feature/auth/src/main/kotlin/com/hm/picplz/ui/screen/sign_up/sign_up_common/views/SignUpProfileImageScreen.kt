@@ -77,7 +77,12 @@ fun SignUpProfileImageScreen(
             contract = ActivityResultContracts.GetContent(),
         ) { uri: Uri? ->
             if (uri != null) {
-                viewModel.handleIntent(SetProfileImageUri(uri.toString()))
+                viewModel.handleIntent(
+                    SetProfileImageUri(
+                        newProfileImageUri = uri.toString(),
+                        isUserSelected = true,
+                    ),
+                )
                 val imageBytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
                 if (imageBytes != null) {
                     val contentType = context.contentResolver.getType(uri) ?: "image/jpeg"
@@ -236,6 +241,7 @@ fun SignUpProfileImageScreen(
                 is SignUpSideEffect.ShowToast -> {
                     Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }

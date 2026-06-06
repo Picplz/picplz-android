@@ -68,6 +68,7 @@ private val authRequiredRoutes: List<KClass<out Any>> =
 fun MainNavHost(
     navController: NavHostController,
     uiState: MainActivityUiState,
+    refreshUserData: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     if (uiState is MainActivityUiState.Loading) return
@@ -93,7 +94,10 @@ fun MainNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        authNavGraph(navController)
+        authNavGraph(
+            navController = navController,
+            onSignupCompleted = refreshUserData,
+        )
         mainNavGraph(navController)
         photographerNavGraph(navController)
     }

@@ -1,5 +1,6 @@
 package com.hm.picplz.data.api
 
+import com.hm.picplz.data.model.ApiResponse
 import com.hm.picplz.data.model.MemberInfoResponseDto
 import com.hm.picplz.data.model.UpdateMemberInfoRequest
 import retrofit2.Response
@@ -18,7 +19,7 @@ interface MemberApi {
     @GET("api/v1/members/{memberId}/info")
     suspend fun getMemberInfo(
         @Path("memberId") memberId: Long,
-    ): Response<MemberInfoResponseDto>
+    ): Response<ApiResponse<MemberInfoResponseDto>>
 
     @PATCH("api/v1/members/info")
     suspend fun updateMemberInfo(

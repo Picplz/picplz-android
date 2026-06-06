@@ -88,6 +88,15 @@ fun DevScreen(
             profileImageUri = null,
             profileImageObjectKey = null,
         )
+    val devCustomerCompletionUserInfo =
+        User(
+            id = "dev-customer",
+            nickname = "유가영",
+            email = "dev-customer@picplz.com",
+            userType = UserType.User,
+            profileImageUri = null,
+            profileImageObjectKey = null,
+        )
 
     Scaffold(
         containerColor = MainThemeColor.White,
@@ -172,8 +181,8 @@ fun DevScreen(
                     ),
                 )
             }
-            DevButton("SignUpCompletion") {
-                navController.navigate(SignUpCompletion(userInfo = devPhotographerUserInfo))
+            DevButton("SignUpCompletion (고객/기본 이미지)") {
+                navController.navigate(SignUpCompletion(userInfo = devCustomerCompletionUserInfo))
             }
 
             // === Main Tabs ===

@@ -15,7 +15,7 @@ data class UpdateMemberInfoRequest(
 data class MemberInfoResponseDto(
     val id: Long,
     val nickname: String,
-    val role: String,
+    val role: String?,
     val socialEmail: String?,
     val profileImage: String?,
     val socialProvider: String?,
@@ -43,8 +43,8 @@ fun MemberInfoResponseDto.toDomain() =
         userType = role.toUserType(),
     )
 
-private fun String.toUserType(): UserType =
-    when (uppercase()) {
+private fun String?.toUserType(): UserType =
+    when (this?.uppercase()) {
         "ROLE_PHOTOGRAPHER", "PHOTOGRAPHER" -> UserType.Photographer
         else -> UserType.User
     }

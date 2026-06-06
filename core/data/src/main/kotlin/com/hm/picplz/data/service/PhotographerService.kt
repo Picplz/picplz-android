@@ -9,6 +9,7 @@ import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.model.ActiveAreaRequest
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotoMoodRequest
+import com.hm.picplz.data.model.PhotographerCameraRequest
 import com.hm.picplz.data.model.PhotographerRatingDto
 import com.hm.picplz.data.model.PortfolioDto
 import com.hm.picplz.data.model.UpdateActiveAreaRequest
@@ -17,11 +18,12 @@ import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReviewData
+import com.hm.picplz.domain.model.PhotographerSignup
 import com.hm.picplz.domain.model.ShootingPackage
 import javax.inject.Inject
 
 interface PhotographerService {
-    suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit>
+    suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit>
 
     suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>>
 
@@ -60,8 +62,8 @@ class PhotographerServiceImpl
     constructor(
         private val photographerSource: PhotographerSource,
     ) : PhotographerService {
-        override suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit> =
-            photographerSource.createPhotographer(request)
+        override suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit> =
+            photographerSource.createPhotographer(signup.toCreatePhotographerRequest())
 
         override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
             photographerSource.getPhotographerInfo(photographerId).map { detail ->
@@ -144,3 +146,29 @@ class PhotographerServiceImpl
         override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> =
             photographerSource.getPortfolio(portfolioId)
     }
+
+private fun PhotographerSignup.toCreatePhotographerRequest(): CreatePhotographerRequest =
+    CreatePhotographerRequest(
+        nickname = nickname,
+        socialEmail = socialEmail,
+        socialProvider = socialProvider,
+        socialCode = socialCode,
+        profileImage = profileImage,
+        photoMoods = photoMoods,
+        activeAreas =
+            activeAreas.map {
+                ActiveAreaRequest(
+                    code = it.code,
+                    priority = it.priority,
+                )
+            },
+        cameras =
+            cameras.map {
+                PhotographerCameraRequest(
+                    type = it.type.name,
+                    brand = it.brand,
+                    name = it.name,
+                    cameraType = it.cameraType,
+                )
+            },
+    )

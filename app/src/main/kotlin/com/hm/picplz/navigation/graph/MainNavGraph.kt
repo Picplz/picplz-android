@@ -362,7 +362,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 private fun devMyPagePackageEditState(packageCount: Int): MyPagePackageEditState =
     MyPagePackageEditState(
         photographerId = 1L,
-        packages = DEV_PACKAGE_EDIT_ITEMS.take(packageCount.coerceIn(0, DEV_PACKAGE_EDIT_ITEMS.size)),
+        packages = devPackageEditItems.take(packageCount.coerceIn(0, devPackageEditItems.size)),
     )
 
 private fun MyPagePackageEditState.openDevAddForm(): MyPagePackageEditState =
@@ -384,7 +384,7 @@ private fun MyPagePackageEditState.updateDevDraft(
     )
 }
 
-private val DEV_PACKAGE_EDIT_ITEMS =
+private val devPackageEditItems =
     listOf(
         MyPagePackageItem(
             id = 1L,
