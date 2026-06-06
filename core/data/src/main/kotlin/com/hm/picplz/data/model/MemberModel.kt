@@ -1,5 +1,6 @@
 package com.hm.picplz.data.model
 
+import com.hm.picplz.common.model.UserType
 import com.hm.picplz.domain.model.MemberProfile
 import com.hm.picplz.domain.model.UpdateMemberProfileCommand
 
@@ -39,4 +40,11 @@ fun MemberInfoResponseDto.toDomain() =
         profileImage = profileImage,
         introduction = introduction,
         instagram = instagram,
+        userType = role.toUserType(),
     )
+
+private fun String.toUserType(): UserType =
+    when (uppercase()) {
+        "ROLE_PHOTOGRAPHER", "PHOTOGRAPHER" -> UserType.Photographer
+        else -> UserType.User
+    }

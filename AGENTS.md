@@ -204,6 +204,8 @@ HTTP failures must be converted to `AppError.Network.Http` with backend error-en
 - Client-facing models used by ViewModels or Composables belong in `core/domain/model` or the owning feature module.
 - Convert backend DTOs through mapper files before exposing them outside `core:data`.
 - Code review must flag feature imports of `com.hm.picplz.data.model.*` unless the file is a DTO-specific test fixture.
+- Feature ViewModels and Composables must not construct backend request DTOs directly. If a feature needs to submit data, define a domain/feature command model and let `core:data` map it to the backend DTO.
+- Before integrating or changing an API, verify the Swagger/OpenAPI schema first. Match wrapping shape exactly (`T` vs `ApiResponse<T>`), then keep that DTO shape inside `core:data`.
 
 ## DATA LAYER FILES
 

@@ -15,7 +15,15 @@
     <string name="sign_up_profile_image_guide_required">프로필 이미지를\n설정해 주세요.</string>
     <string name="sign_up_profile_image_guide_photographer">이제 촬영지와 촬영 기기를\n선택할 거예요</string>
     <string name="sign_up_profile_image_skip">다음에 설정하기</string>
+    <string name="sign_up_profile_image_uploading">업로드 중...</string>
+    <string name="sign_up_profile_image_upload_failed">프로필 이미지 업로드에 실패했어요. 다시 시도해 주세요.</string>
     <string name="sign_up_profile_image_read_failed">프로필 이미지를 불러오지 못했어요. 다른 사진을 선택해 주세요.</string>
+    <string name="sign_up_profile_image_url_failed">이미지 업로드 URL을 발급받지 못했어요.</string>
+    <string name="sign_up_profile_image_s3_failed">이미지를 저장하지 못했어요.</string>
+    <string name="sign_up_profile_image_wait_upload">프로필 이미지 업로드가 끝난 뒤 다시 시도해 주세요.</string>
+    <string name="sign_up_social_info_missing">소셜 로그인 정보가 없어요. 다시 로그인해 주세요.</string>
+    <string name="sign_up_user_type_missing">가입 유형을 다시 선택해 주세요.</string>
+    <string name="sign_up_submit_failed">회원가입에 실패했어요. 잠시 후 다시 시도해 주세요.</string>
     <string name="sign_up_client_top_bar_title">고객 선택</string>
     <string name="sign_up_main_location_top_bar_title">주 촬영지 선택</string>
     <string name="sign_up_main_location_already_selected">이미 선택된 항목입니다.</string>

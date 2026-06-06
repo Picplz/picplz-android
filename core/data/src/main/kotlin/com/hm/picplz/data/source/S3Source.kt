@@ -58,6 +58,7 @@ class S3SourceImpl
                 val request =
                     Request.Builder()
                         .url(uploadUrl)
+                        .header("Content-Type", contentType)
                         .put(requestBody)
                         .build()
                 withContext(Dispatchers.IO) {

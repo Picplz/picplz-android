@@ -82,6 +82,12 @@ SignUpPhotographerViewModel
 └── TokenManager → social info for signup requests
 ```
 
+### DTO Boundary Reminder
+- `feature:auth` must not import or construct `com.hm.picplz.data.model.*` DTOs in ViewModels or Composables.
+- Signup screens should own UI state only. Submit data through domain/feature command models, then map to backend request DTOs inside `core:data` service/repository/mapper code.
+- Always verify Swagger/OpenAPI before wiring auth/signup APIs, especially response wrapping (`T` vs `ApiResponse<T>`).
+- Existing direct DTO imports in signup code are legacy debt and should be removed when touching those flows.
+
 ### SideEffect Channel Status
 | ViewModel | Status |
 |-----------|--------|

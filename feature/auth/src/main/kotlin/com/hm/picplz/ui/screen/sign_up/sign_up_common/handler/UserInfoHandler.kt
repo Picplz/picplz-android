@@ -23,7 +23,11 @@ class UserInfoHandler {
             }
 
             is SetProfileImageUri -> {
-                state.copy(profileImageUri = intent.newProfileImageUri)
+                state.copy(
+                    profileImageUri = intent.newProfileImageUri,
+                    profileImageObjectKey = null,
+                    error = null,
+                )
             }
 
             else -> null

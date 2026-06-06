@@ -57,6 +57,17 @@ class SignUpCommonViewModel
                         if (_state.value.isSubmitting) {
                             return@launch
                         }
+
+                        if (_state.value.isUploadingImage) {
+                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_wait_upload))
+                            return@launch
+                        }
+
+                        if (_state.value.profileImageUri != null && _state.value.profileImageObjectKey == null) {
+                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_upload_failed))
+                            return@launch
+                        }
+
                         _state.value.selectedUserType?.let { selectedUserType ->
                             when (selectedUserType) {
                                 UserType.User -> {
@@ -70,6 +81,9 @@ class SignUpCommonViewModel
                                                 error = AppError.Auth.SocialInfoMissing,
                                             )
                                         }
+                                        _sideEffect.send(
+                                            SignUpSideEffect.ShowToast(R.string.sign_up_social_info_missing),
+                                        )
                                         return@launch
                                     }
 
@@ -98,6 +112,7 @@ class SignUpCommonViewModel
                                                     error = appError,
                                                 )
                                             }
+                                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_submit_failed))
                                         }
                                 }
 
@@ -107,7 +122,7 @@ class SignUpCommonViewModel
                                     )
                                 }
                             }
-                        }
+                        } ?: _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_user_type_missing))
                     }
                 }
 
@@ -223,6 +238,9 @@ class SignUpCommonViewModel
                                                 error = appError,
                                             )
                                         }
+                                        _sideEffect.send(
+                                            SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_s3_failed),
+                                        )
                                     }
                             }
                             .onFailure { error ->
@@ -234,6 +252,9 @@ class SignUpCommonViewModel
                                         error = appError,
                                     )
                                 }
+                                _sideEffect.send(
+                                    SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_url_failed),
+                                )
                             }
                     }
                 }

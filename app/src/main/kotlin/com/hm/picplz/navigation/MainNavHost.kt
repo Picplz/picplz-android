@@ -1,24 +1,92 @@
 package com.hm.picplz.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.hm.picplz.BuildConfig
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hm.picplz.navigation.graph.authNavGraph
 import com.hm.picplz.navigation.graph.mainNavGraph
 import com.hm.picplz.navigation.graph.photographerNavGraph
-import com.hm.picplz.navigation.model.Dev
+import com.hm.picplz.navigation.model.CancelReservation
+import com.hm.picplz.navigation.model.CancelReservationConfirm
+import com.hm.picplz.navigation.model.Chat
+import com.hm.picplz.navigation.model.ChatRoom
+import com.hm.picplz.navigation.model.DetailReservation
+import com.hm.picplz.navigation.model.Login
 import com.hm.picplz.navigation.model.Main
+import com.hm.picplz.navigation.model.MyPage
+import com.hm.picplz.navigation.model.MyPageFollowedPhotographers
+import com.hm.picplz.navigation.model.MyPageModifyProfile
+import com.hm.picplz.navigation.model.MyPageMyReviews
+import com.hm.picplz.navigation.model.MyPageOrderSheet
+import com.hm.picplz.navigation.model.MyPagePackageEdit
+import com.hm.picplz.navigation.model.MyPagePhotographer
+import com.hm.picplz.navigation.model.MyPagePhotographerActiveAreaEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerAddDevice
+import com.hm.picplz.navigation.model.MyPagePhotographerEquipmentSetting
+import com.hm.picplz.navigation.model.MyPagePhotographerKeywordEdit
+import com.hm.picplz.navigation.model.MyPagePhotographerModifyProfile
+import com.hm.picplz.navigation.model.MyPageShootingHistory
+import com.hm.picplz.navigation.model.OrderDetail
+import com.hm.picplz.navigation.model.PhotographerChatRoom
+import com.hm.picplz.navigation.model.PhotographerDetailReservation
+import com.hm.picplz.navigation.model.Reservation
 import com.hm.picplz.ui.main.MainActivityUiState
+import kotlin.reflect.KClass
+
+private val authRequiredRoutes: List<KClass<out Any>> =
+    listOf(
+        Reservation::class,
+        Chat::class,
+        ChatRoom::class,
+        PhotographerChatRoom::class,
+        MyPage::class,
+        MyPageFollowedPhotographers::class,
+        MyPagePhotographer::class,
+        MyPageModifyProfile::class,
+        MyPagePhotographerModifyProfile::class,
+        MyPagePhotographerKeywordEdit::class,
+        MyPagePhotographerEquipmentSetting::class,
+        MyPagePhotographerAddDevice::class,
+        MyPagePackageEdit::class,
+        MyPagePhotographerActiveAreaEdit::class,
+        MyPageMyReviews::class,
+        MyPageShootingHistory::class,
+        MyPageOrderSheet::class,
+        DetailReservation::class,
+        PhotographerDetailReservation::class,
+        CancelReservationConfirm::class,
+        OrderDetail::class,
+        CancelReservation::class,
+    )
 
 @Composable
 fun MainNavHost(
     navController: NavHostController,
-    @Suppress("UNUSED_PARAMETER") _uiState: MainActivityUiState,
+    uiState: MainActivityUiState,
     modifier: Modifier = Modifier,
 ) {
-    val startDestination: Any = if (BuildConfig.DEV_MODE) Dev else Main
+    if (uiState is MainActivityUiState.Loading) return
+
+    val startDestination: Any =
+        when (uiState) {
+            is MainActivityUiState.Success -> Main
+            MainActivityUiState.Unauthenticated -> Login
+            MainActivityUiState.Loading -> Main
+        }
+    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+
+    LaunchedEffect(uiState, currentDestination) {
+        if (uiState == MainActivityUiState.Unauthenticated && currentDestination.requiresAuth()) {
+            navController.navigate(Login) {
+                launchSingleTop = true
+            }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -29,4 +97,10 @@ fun MainNavHost(
         mainNavGraph(navController)
         photographerNavGraph(navController)
     }
+}
+
+private fun NavDestination?.requiresAuth(): Boolean {
+    if (this == null) return false
+
+    return authRequiredRoutes.any { hasRoute(it) }
 }
