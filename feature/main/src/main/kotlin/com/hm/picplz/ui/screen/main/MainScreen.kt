@@ -2,6 +2,7 @@ package com.hm.picplz.ui.screen.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,8 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.feature.main.BuildConfig
+import com.hm.picplz.navigation.model.Dev
 import com.hm.picplz.navigation.model.MainSearch
 import com.hm.picplz.ui.navigation.BottomNavigationBar
 import com.hm.picplz.ui.screen.common.PhotographerStatus
@@ -59,6 +62,7 @@ private val DISTRICTS =
         "논현동", "잠실동",
     )
 private val TodayDistrict: String by lazy { DISTRICTS.random() }
+private const val DEV_ENTRY_TAP_COUNT = 5
 
 @Composable
 fun SearchBanner(navController: NavHostController) {
@@ -270,6 +274,7 @@ fun MainScreen(
     var visibleDeviceMood by remember { mutableStateOf(false) }
     var visibleSortFilter by remember { mutableStateOf(false) }
     var selectedSortType by remember { mutableStateOf(SortType.POPULAR) }
+    var devEntryTapCount by remember { mutableStateOf(0) }
 
     Scaffold(
         containerColor = MainThemeColor.White,
@@ -279,6 +284,17 @@ fun MainScreen(
                     Modifier
                         .fillMaxWidth()
                         .background(MainThemeColor.Black)
+                        .clickable(
+                            enabled = BuildConfig.DEBUG,
+                            indication = null,
+                            interactionSource = null,
+                        ) {
+                            devEntryTapCount += 1
+                            if (devEntryTapCount >= DEV_ENTRY_TAP_COUNT) {
+                                devEntryTapCount = 0
+                                navController.navigate(Dev)
+                            }
+                        }
                         .padding(16.dp, 11.dp),
             ) {
                 Text(

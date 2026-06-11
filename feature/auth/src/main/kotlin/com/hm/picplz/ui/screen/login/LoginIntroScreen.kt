@@ -3,6 +3,7 @@ package com.hm.picplz.ui.screen.login
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.Dev
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.navigation.model.SignUpIntro
 import com.hm.picplz.ui.screen.common.CommonHorizontalPager
@@ -56,15 +62,28 @@ object LoginIntroPageConfig {
     const val IMAGE_HEIGHT_FACTOR = 0.6f
 }
 
+private const val DEV_ENTRY_TAP_COUNT = 5
+
 @Composable
 fun LoginIntroScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
+    enableDevEntry: Boolean = false,
 ) {
     val context = LocalContext.current
+    var devEntryTapCount by remember { mutableStateOf(0) }
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val imageHeight = screenHeight * LoginIntroPageConfig.IMAGE_HEIGHT_FACTOR
+    val onDevEntryTap = {
+        if (enableDevEntry) {
+            devEntryTapCount += 1
+            if (devEntryTapCount >= DEV_ENTRY_TAP_COUNT) {
+                devEntryTapCount = 0
+                navController.navigate(Dev)
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -90,6 +109,8 @@ fun LoginIntroScreen(
                         onLogoutClick = {
                             viewModel.handleIntent(LoginIntent.UnlinkKakao)
                         },
+                        onDevEntryTap = onDevEntryTap,
+                        enableDevEntry = enableDevEntry,
                     )
                 },
                 isIndicatorPositionAbsolute = true,
@@ -138,6 +159,8 @@ fun LoginIntroPage(
     imageHeight: Dp,
     onLoginClick: () -> Unit,
     onLogoutClick: () -> Unit,
+    onDevEntryTap: () -> Unit,
+    enableDevEntry: Boolean,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -170,6 +193,12 @@ fun LoginIntroPage(
                 Modifier
                     .fillMaxWidth()
                     .height(68.dp)
+                    .clickable(
+                        enabled = enableDevEntry,
+                        indication = null,
+                        interactionSource = null,
+                        onClick = onDevEntryTap,
+                    )
                     .wrapContentHeight(Alignment.CenterVertically),
         )
 

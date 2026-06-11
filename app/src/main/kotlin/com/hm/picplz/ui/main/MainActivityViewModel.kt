@@ -38,6 +38,12 @@ class MainActivityViewModel
             }
         }
 
+        fun refreshUserData() {
+            viewModelScope.launch {
+                fetchUserData()
+            }
+        }
+
         private suspend fun fetchUserData() {
             try {
                 mainRepository.fetchUserData()

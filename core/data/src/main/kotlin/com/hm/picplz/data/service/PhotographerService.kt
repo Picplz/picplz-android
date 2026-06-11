@@ -5,23 +5,21 @@ import com.hm.picplz.data.mapper.toArea
 import com.hm.picplz.data.mapper.toDomain
 import com.hm.picplz.data.mapper.toPhotographerInfo
 import com.hm.picplz.data.mapper.toReviewData
-import com.hm.picplz.data.mapper.toShootingPackage
 import com.hm.picplz.data.model.ActiveAreaRequest
 import com.hm.picplz.data.model.CreatePhotographerRequest
 import com.hm.picplz.data.model.PhotoMoodRequest
-import com.hm.picplz.data.model.PhotographerRatingDto
-import com.hm.picplz.data.model.PortfolioDto
+import com.hm.picplz.data.model.PhotographerCameraRequest
 import com.hm.picplz.data.model.UpdateActiveAreaRequest
 import com.hm.picplz.data.source.PhotographerSource
 import com.hm.picplz.domain.model.Area
 import com.hm.picplz.domain.model.FilteredPhotographers
 import com.hm.picplz.domain.model.PhotographerInfo
 import com.hm.picplz.domain.model.PhotographerReviewData
-import com.hm.picplz.domain.model.ShootingPackage
+import com.hm.picplz.domain.model.PhotographerSignup
 import javax.inject.Inject
 
 interface PhotographerService {
-    suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit>
+    suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit>
 
     suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>>
 
@@ -41,18 +39,12 @@ interface PhotographerService {
 
     suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo>
 
-    suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto>
-
     suspend fun getPhotographerReviews(
         photographerId: Long,
         page: Int = 0,
         size: Int = 10,
         sort: String = "RECOMMENDED",
     ): AppResult<PhotographerReviewData>
-
-    suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>>
-
-    suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto>
 }
 
 class PhotographerServiceImpl
@@ -60,8 +52,8 @@ class PhotographerServiceImpl
     constructor(
         private val photographerSource: PhotographerSource,
     ) : PhotographerService {
-        override suspend fun createPhotographer(request: CreatePhotographerRequest): AppResult<Unit> =
-            photographerSource.createPhotographer(request)
+        override suspend fun createPhotographer(signup: PhotographerSignup): AppResult<Unit> =
+            photographerSource.createPhotographer(signup.toCreatePhotographerRequest())
 
         override suspend fun getPhotographerMoodKeywords(photographerId: Long): AppResult<List<String>> =
             photographerSource.getPhotographerInfo(photographerId).map { detail ->
@@ -123,9 +115,6 @@ class PhotographerServiceImpl
         override suspend fun getPhotographerInfo(photographerId: Long): AppResult<PhotographerInfo> =
             photographerSource.getPhotographerInfo(photographerId).map { it.toPhotographerInfo() }
 
-        override suspend fun getPhotographerRating(photographerId: Long): AppResult<PhotographerRatingDto> =
-            photographerSource.getPhotographerRating(photographerId)
-
         override suspend fun getPhotographerReviews(
             photographerId: Long,
             page: Int,
@@ -135,12 +124,30 @@ class PhotographerServiceImpl
             photographerSource.getPhotographerReviews(photographerId, page, size, sort).map {
                 it.toReviewData()
             }
-
-        override suspend fun getPhotographerProducts(photographerId: Long): AppResult<List<ShootingPackage>> =
-            photographerSource.getPhotographerProducts(photographerId).map { dtos ->
-                dtos.map { it.toShootingPackage() }
-            }
-
-        override suspend fun getPortfolio(portfolioId: Long): AppResult<PortfolioDto> =
-            photographerSource.getPortfolio(portfolioId)
     }
+
+private fun PhotographerSignup.toCreatePhotographerRequest(): CreatePhotographerRequest =
+    CreatePhotographerRequest(
+        nickname = nickname,
+        socialEmail = socialEmail,
+        socialProvider = socialProvider,
+        socialCode = socialCode,
+        profileImage = profileImage,
+        photoMoods = photoMoods,
+        activeAreas =
+            activeAreas.map {
+                ActiveAreaRequest(
+                    code = it.code,
+                    priority = it.priority,
+                )
+            },
+        cameras =
+            cameras.map {
+                PhotographerCameraRequest(
+                    type = it.type.name,
+                    brand = it.brand,
+                    name = it.name,
+                    cameraType = it.cameraType,
+                )
+            },
+    )

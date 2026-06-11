@@ -346,9 +346,9 @@ val dummyChatMessages =
         ),
     )
 
-val reservationCustomerName = "애니프사"
-val reservationProductName = "자연스러운프사"
-val reservationProfileUri = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
+const val RESERVATION_CUSTOMER_NAME = "애니프사"
+const val RESERVATION_PRODUCT_NAME = "자연스러운프사"
+const val RESERVATION_PROFILE_URI = "https://pbs.twimg.com/media/GlRFZh2akAA6KLR?format=jpg&name=large"
 
 val dummyReservationChatMessages =
     listOf(
@@ -358,8 +358,8 @@ val dummyReservationChatMessages =
             sender =
                 User(
                     id = "2",
-                    nickname = reservationCustomerName,
-                    profileImageUri = reservationProfileUri,
+                    nickname = RESERVATION_CUSTOMER_NAME,
+                    profileImageUri = RESERVATION_PROFILE_URI,
                 ),
             receiver =
                 User(
@@ -369,9 +369,9 @@ val dummyReservationChatMessages =
                 ),
             content =
                 MessageContent.Notification(
-                    title = "[$reservationProductName] 상품",
+                    title = "[$RESERVATION_PRODUCT_NAME] 상품",
                     subtitle = "예약 신청이 도착했어요",
-                    content = "$reservationCustomerName 님으로부터 [$reservationProductName] 예약이 도착했습니다.",
+                    content = "$RESERVATION_CUSTOMER_NAME 님으로부터 [$RESERVATION_PRODUCT_NAME] 예약이 도착했습니다.",
                     type = NotificationType.POSITIVE,
                     button =
                         MessageButton(

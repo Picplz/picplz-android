@@ -77,7 +77,12 @@ fun SignUpProfileImageScreen(
             contract = ActivityResultContracts.GetContent(),
         ) { uri: Uri? ->
             if (uri != null) {
-                viewModel.handleIntent(SetProfileImageUri(uri.toString()))
+                viewModel.handleIntent(
+                    SetProfileImageUri(
+                        newProfileImageUri = uri.toString(),
+                        isUserSelected = true,
+                    ),
+                )
                 val imageBytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
                 if (imageBytes != null) {
                     val contentType = context.contentResolver.getType(uri) ?: "image/jpeg"
@@ -166,8 +171,7 @@ fun SignUpProfileImageScreen(
                                     stringResource(R.string.sign_up_profile_image_upload_content_description),
                                 modifier =
                                     Modifier
-                                        .size(33.dp)
-                                        .background(Color.Gray, CircleShape),
+                                        .size(33.dp),
                             )
                         }
                     }
@@ -200,13 +204,16 @@ fun SignUpProfileImageScreen(
             ) {
                 CommonBottomButton(
                     text =
-                        if (currentState.profileImageUri == null) {
-                            stringResource(R.string.sign_up_profile_image_skip)
-                        } else {
-                            stringResource(R.string.sign_up_next)
+                        when {
+                            currentState.isUploadingImage -> stringResource(R.string.sign_up_profile_image_uploading)
+                            currentState.profileImageUri == null -> stringResource(R.string.sign_up_profile_image_skip)
+                            else -> stringResource(R.string.sign_up_next)
                         },
                     onClick = { viewModel.handleIntent(NavigateToSelected) },
-                    enabled = currentState.nickname.isNotEmpty(),
+                    enabled =
+                        currentState.nickname.isNotEmpty() &&
+                            !currentState.isUploadingImage &&
+                            !currentState.isSubmitting,
                 )
             }
         }
@@ -234,6 +241,7 @@ fun SignUpProfileImageScreen(
                 is SignUpSideEffect.ShowToast -> {
                     Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }

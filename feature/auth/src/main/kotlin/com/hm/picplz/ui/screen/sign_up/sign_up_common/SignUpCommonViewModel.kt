@@ -7,11 +7,12 @@ import com.hm.picplz.common.error.AppError
 import com.hm.picplz.common.model.NicknameFieldError
 import com.hm.picplz.common.model.User
 import com.hm.picplz.common.model.UserType
-import com.hm.picplz.data.model.CreateCustomerRequest
 import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.CustomerService
 import com.hm.picplz.data.service.MemberService
 import com.hm.picplz.data.service.S3Service
+import com.hm.picplz.domain.model.CustomerSignup
+import com.hm.picplz.domain.usecase.LoginWithKakaoUseCase
 import com.hm.picplz.feature.auth.R
 import com.hm.picplz.navigation.model.SignUpProfile
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.handler.UserInfoHandler
@@ -34,6 +35,7 @@ class SignUpCommonViewModel
         private val memberService: MemberService,
         private val s3Service: S3Service,
         private val tokenManager: TokenManager,
+        private val loginWithKakaoUseCase: LoginWithKakaoUseCase,
     ) : ViewModel() {
         private val _state = MutableStateFlow<SignUpCommonState>(SignUpCommonState.idle())
         val state: StateFlow<SignUpCommonState> get() = _state
@@ -57,33 +59,52 @@ class SignUpCommonViewModel
                         if (_state.value.isSubmitting) {
                             return@launch
                         }
+
+                        if (_state.value.isUploadingImage) {
+                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_wait_upload))
+                            return@launch
+                        }
+
+                        if (
+                            _state.value.profileImageUri != null &&
+                            _state.value.profileImageObjectKey == null &&
+                            _state.value.isUserSelectedProfileImage
+                        ) {
+                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_upload_failed))
+                            return@launch
+                        }
+
                         _state.value.selectedUserType?.let { selectedUserType ->
                             when (selectedUserType) {
                                 UserType.User -> {
-                                    _state.update { it.copy(isSubmitting = true, error = null) }
-
-                                    val socialCode = tokenManager.getSocialCode()
-                                    if (socialCode == null) {
+                                    val currentState = _state.value
+                                    val socialInfo = tokenManager.getSocialInfo()
+                                    val socialCode = socialInfo.code
+                                    if (socialCode.isNullOrBlank()) {
                                         _state.update {
                                             it.copy(
                                                 isSubmitting = false,
                                                 error = AppError.Auth.SocialInfoMissing,
                                             )
                                         }
+                                        _sideEffect.send(
+                                            SignUpSideEffect.ShowToast(R.string.sign_up_social_info_missing),
+                                        )
                                         return@launch
                                     }
 
-                                    val currentState = _state.value
-                                    val request =
-                                        CreateCustomerRequest(
+                                    _state.update { it.copy(isSubmitting = true, error = null) }
+
+                                    val signup =
+                                        CustomerSignup(
                                             nickname = currentState.nickname,
-                                            socialEmail = tokenManager.getSocialEmail(),
-                                            socialProvider = tokenManager.getSocialProvider(),
+                                            socialEmail = socialInfo.email,
+                                            socialProvider = socialInfo.provider,
                                             socialCode = socialCode,
                                             profileImage = currentState.profileImageObjectKey,
                                         )
 
-                                    customerService.createCustomer(request)
+                                    customerService.createCustomer(signup)
                                         .onSuccess {
                                             _state.update { it.copy(isSubmitting = false) }
                                             sendNavigateToSelectedSideEffect(
@@ -98,6 +119,7 @@ class SignUpCommonViewModel
                                                     error = appError,
                                                 )
                                             }
+                                            _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_submit_failed))
                                         }
                                 }
 
@@ -107,13 +129,46 @@ class SignUpCommonViewModel
                                     )
                                 }
                             }
-                        }
+                        } ?: _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_user_type_missing))
                     }
                 }
 
                 is SignUpCommonIntent.Navigate -> {
                     viewModelScope.launch {
                         _sideEffect.send(SignUpSideEffect.Navigate(intent.destination))
+                    }
+                }
+
+                is SignUpCommonIntent.CompleteSignup -> {
+                    viewModelScope.launch {
+                        if (_state.value.isSubmitting) {
+                            return@launch
+                        }
+
+                        _state.update { it.copy(isSubmitting = true, error = null) }
+
+                        loginWithKakaoUseCase(intent.context)
+                            .onSuccess { response ->
+                                _state.update { it.copy(isSubmitting = false) }
+                                if (response.registered && response.accessToken != null) {
+                                    _sideEffect.send(SignUpSideEffect.SignupCompleted)
+                                } else {
+                                    _state.update {
+                                        it.copy(error = AppError.Auth.SocialInfoMissing)
+                                    }
+                                    _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_social_info_missing))
+                                }
+                            }
+                            .onFailure { error ->
+                                val appError = AppError.fromThrowable(error)
+                                _state.update {
+                                    it.copy(
+                                        isSubmitting = false,
+                                        error = appError,
+                                    )
+                                }
+                                _sideEffect.send(SignUpSideEffect.ShowToast(R.string.sign_up_submit_failed))
+                            }
                     }
                 }
 
@@ -184,6 +239,7 @@ class SignUpCommonViewModel
                         it.copy(
                             profileImageUri = null,
                             profileImageObjectKey = null,
+                            isUserSelectedProfileImage = false,
                             isUploadingImage = false,
                         )
                     }
@@ -223,6 +279,9 @@ class SignUpCommonViewModel
                                                 error = appError,
                                             )
                                         }
+                                        _sideEffect.send(
+                                            SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_s3_failed),
+                                        )
                                     }
                             }
                             .onFailure { error ->
@@ -234,6 +293,9 @@ class SignUpCommonViewModel
                                         error = appError,
                                     )
                                 }
+                                _sideEffect.send(
+                                    SignUpSideEffect.ShowToast(R.string.sign_up_profile_image_url_failed),
+                                )
                             }
                     }
                 }

@@ -4,14 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hm.picplz.common.error.AppError
-import com.hm.picplz.data.model.ActiveAreaRequest
-import com.hm.picplz.data.model.CreatePhotographerRequest
-import com.hm.picplz.data.model.PhotographerCameraRequest
 import com.hm.picplz.data.provider.TokenManager
 import com.hm.picplz.data.service.AddressService
 import com.hm.picplz.data.service.CameraService
 import com.hm.picplz.data.service.LocationService
 import com.hm.picplz.data.service.PhotographerService
+import com.hm.picplz.domain.model.PhotographerSignup
+import com.hm.picplz.domain.model.PhotographerSignupActiveArea
+import com.hm.picplz.domain.model.PhotographerSignupCamera
+import com.hm.picplz.domain.model.PhotographerSignupCameraType
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.AreaSearchHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.CareerHandler
 import com.hm.picplz.ui.screen.sign_up.sign_up_photographer.handler.DeviceHandler
@@ -201,8 +202,9 @@ class SignUpPhotographerViewModel
 
                         _state.update { it.copy(isSubmitting = true, error = null) }
 
-                        val socialCode = tokenManager.getSocialCode()
-                        if (socialCode == null) {
+                        val socialInfo = tokenManager.getSocialInfo()
+                        val socialCode = socialInfo.code
+                        if (socialCode.isNullOrBlank()) {
                             _state.update {
                                 it.copy(
                                     isSubmitting = false,
@@ -248,33 +250,33 @@ class SignUpPhotographerViewModel
                             return@launch
                         }
 
-                        val request =
-                            CreatePhotographerRequest(
+                        val signup =
+                            PhotographerSignup(
                                 nickname = currentState.userInfo.nickname.orEmpty(),
-                                socialEmail = tokenManager.getSocialEmail(),
-                                socialProvider = tokenManager.getSocialProvider(),
+                                socialEmail = socialInfo.email,
+                                socialProvider = socialInfo.provider,
                                 socialCode = socialCode,
                                 profileImage = currentState.userInfo.profileImageObjectKey,
                                 photoMoods = currentState.selectedVibeChipList.map { it.label },
                                 activeAreas =
                                     currentState.selectedAreas.mapIndexed { index, area ->
-                                        ActiveAreaRequest(
+                                        PhotographerSignupActiveArea(
                                             code = area.id,
                                             priority = index + 1,
                                         )
                                     },
                                 cameras =
                                     currentState.phoneDevices.map {
-                                        PhotographerCameraRequest(
-                                            type = "PHONE",
+                                        PhotographerSignupCamera(
+                                            type = PhotographerSignupCameraType.PHONE,
                                             brand = it.companyName,
                                             name = it.modelName,
                                             cameraType = null,
                                         )
                                     } +
                                         currentState.cameraDevices.map {
-                                            PhotographerCameraRequest(
-                                                type = "CAMERA",
+                                            PhotographerSignupCamera(
+                                                type = PhotographerSignupCameraType.CAMERA,
                                                 brand = it.companyName,
                                                 name = it.modelName,
                                                 cameraType = it.cameraType,
@@ -282,7 +284,7 @@ class SignUpPhotographerViewModel
                                         },
                             )
 
-                        photographerService.createPhotographer(request)
+                        photographerService.createPhotographer(signup)
                             .onSuccess {
                                 val user = currentState.userInfo
                                 _state.update { it.copy(isSubmitting = false) }

@@ -576,28 +576,6 @@ private fun PackageNameFieldGroup(
 }
 
 @Composable
-private fun RequiredFormLabel(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = text,
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Black,
-        )
-        Text(
-            text = stringResource(R.string.package_edit_required_mark),
-            style = MainThemeFont.Body,
-            color = MainThemeColor.Red,
-        )
-    }
-}
-
-@Composable
 private fun PackageNameTextField(
     value: String,
     onValueChange: (String) -> Unit,

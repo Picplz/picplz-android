@@ -66,7 +66,8 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 MainNavHost(
                     navController = navController,
-                    _uiState = uiState,
+                    uiState = uiState,
+                    refreshUserData = { viewModel.refreshUserData() },
                 )
             }
         }

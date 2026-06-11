@@ -2,6 +2,9 @@ package com.hm.picplz.ui.screen.my_page
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hm.picplz.common.model.UserType
+import com.hm.picplz.domain.usecase.GetCurrentMemberIdUseCase
+import com.hm.picplz.domain.usecase.GetMemberProfileUseCase
 import com.hm.picplz.feature.mypage.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -15,12 +18,19 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel
     @Inject
-    constructor() : ViewModel() {
-        private val _state = MutableStateFlow(DEV_MOCK_STATE)
+    constructor(
+        private val getCurrentMemberIdUseCase: GetCurrentMemberIdUseCase,
+        private val getMemberProfileUseCase: GetMemberProfileUseCase,
+    ) : ViewModel() {
+        private val _state = MutableStateFlow(MyPageState.idle())
         val state: StateFlow<MyPageState> get() = _state
 
         private val _sideEffect = Channel<MyPageSideEffect>(Channel.BUFFERED)
         val sideEffect = _sideEffect.receiveAsFlow()
+
+        init {
+            loadMemberProfile()
+        }
 
         fun handleIntent(intent: MyPageIntent) {
             when (intent) {
@@ -111,6 +121,7 @@ class MyPageViewModel
                             ongoingShootings = if (intent.hasShootings) DEV_MOCK_SHOOTINGS else emptyList(),
                             photographerProfile =
                                 it.photographerProfile.copy(
+                                    photographerId = 1,
                                     packageCount = if (intent.hasPackagePreview) 1 else 0,
                                     portfolioCount =
                                         if (intent.hasPortfolioPreview) {
@@ -139,6 +150,28 @@ class MyPageViewModel
             }
         }
 
+        private fun loadMemberProfile() {
+            val memberId = getCurrentMemberIdUseCase() ?: return
+
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true) }
+                getMemberProfileUseCase(memberId)
+                    .onSuccess { memberProfile ->
+                        _state.update {
+                            it.copy(
+                                nickname = memberProfile.nickname,
+                                profileImageUri = memberProfile.profileImage.orEmpty(),
+                                hasPhotographerRole = memberProfile.userType == UserType.Photographer,
+                                isLoading = false,
+                            )
+                        }
+                    }
+                    .onFailure {
+                        _state.update { it.copy(isLoading = false) }
+                    }
+            }
+        }
+
         companion object {
             private val DEV_MOCK_SHOOTINGS =
                 listOf(
@@ -158,38 +191,6 @@ class MyPageViewModel
                         shootingDate = "25.04.15",
                         shootingLocation = "성동구 서울숲길 17",
                     ),
-                )
-
-            private val DEV_MOCK_STATE =
-                MyPageState(
-                    nickname = "임두현",
-                    profileImageUri = "",
-                    hasPhotographerRole = false,
-                    ongoingShootings = emptyList(),
-                    photographerProfile =
-                        PhotographerProfile(
-                            photographerId = 1,
-                            displayName = "유가영 작가",
-                            profileImageUri = "",
-                            followerCount = 128,
-                            packageCount = 0,
-                            portfolioCount = 0,
-                            instagramId = "imdooring",
-                            isInstagramRegistered = true,
-                            introduction = "안녕하세요, 유가영 작가입니다.",
-                            regionSummary = "서울 마포구, 서울 용산구 외 16개 지역",
-                            keywordSummary = "#캐주얼, #심플, #공주감성 외 3개 키워드",
-                            equipmentSummary = "아이폰 16 PRO, 아이폰 X 외 3개 장비",
-                            hasPackages = false,
-                            packagePreview = null,
-                            portfolioPreviewImageUrls = emptyList(),
-                            satisfactionSummary =
-                                PhotographerSatisfactionSummary(
-                                    averageRating = "4.9",
-                                    reviewCount = 48,
-                                    repeatBookingRate = 82,
-                                ),
-                        ),
                 )
 
             private val DEV_MOCK_PACKAGE =

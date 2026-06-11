@@ -8,6 +8,12 @@ import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
+data class SocialInfo(
+    val code: String?,
+    val email: String?,
+    val provider: String?,
+)
+
 @Singleton
 class TokenManager
     @Inject
@@ -81,11 +87,12 @@ class TokenManager
                 .apply()
         }
 
-        fun getSocialCode(): String? = prefs.getString(KEY_SOCIAL_CODE, null)
-
-        fun getSocialEmail(): String? = prefs.getString(KEY_SOCIAL_EMAIL, null)
-
-        fun getSocialProvider(): String? = prefs.getString(KEY_SOCIAL_PROVIDER, null)
+        fun getSocialInfo(): SocialInfo =
+            SocialInfo(
+                code = prefs.getString(KEY_SOCIAL_CODE, null),
+                email = prefs.getString(KEY_SOCIAL_EMAIL, null),
+                provider = prefs.getString(KEY_SOCIAL_PROVIDER, null),
+            )
 
         fun getMemberId(): Long? {
             val token = getToken() ?: return null

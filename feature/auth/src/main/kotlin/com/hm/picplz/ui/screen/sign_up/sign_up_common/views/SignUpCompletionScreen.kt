@@ -1,5 +1,6 @@
 package com.hm.picplz.ui.screen.sign_up.sign_up_common.views
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,12 +18,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,15 +36,18 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.hm.picplz.common.mockdata.emptyUserData
 import com.hm.picplz.common.model.User
-import com.hm.picplz.core.ui.R
+import com.hm.picplz.navigation.model.Login
 import com.hm.picplz.navigation.model.Main
 import com.hm.picplz.ui.screen.common.CommonBottomButton
+import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonIntent
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpCommonViewModel
 import com.hm.picplz.ui.screen.sign_up.sign_up_common.SignUpSideEffect
 import com.hm.picplz.ui.theme.MainThemeColor
 import com.hm.picplz.ui.theme.PicplzTheme
 import com.hm.picplz.ui.util.SetStatusBarStyle
 import kotlinx.coroutines.flow.collectLatest
+import com.hm.picplz.core.ui.R as CoreUiR
+import com.hm.picplz.feature.auth.R as AuthR
 
 @Composable
 fun SignUpCompletionScreen(
@@ -48,8 +55,11 @@ fun SignUpCompletionScreen(
     viewModel: SignUpCommonViewModel = hiltViewModel(),
     mainNavController: NavController,
     userInfo: User,
+    onSignupCompleted: () -> Unit,
 ) {
     SetStatusBarStyle()
+    val context = LocalContext.current
+    val state by viewModel.state.collectAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -79,15 +89,13 @@ fun SignUpCompletionScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    val painter =
-                        if (userInfo.profileImageUri != null) {
-                            rememberAsyncImagePainter(model = userInfo.profileImageUri)
-                        } else {
-                            painterResource(id = R.drawable.default_profile_large)
-                        }
                     Text(
-                        text = "안녕하세요 ${userInfo.nickname}님!",
-                        style = MaterialTheme.typography.titleLarge,
+                        text =
+                            stringResource(
+                                AuthR.string.sign_up_completion_greeting,
+                                userInfo.nickname.orEmpty(),
+                            ),
+                        style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -96,24 +104,15 @@ fun SignUpCompletionScreen(
                             Modifier
                                 .height(27.dp),
                     )
-                    Image(
-                        painter = painter,
-                        contentDescription = "프로필 이미지",
-                        contentScale = ContentScale.Crop,
-                        modifier =
-                            Modifier
-                                .size(160.dp)
-                                .clip(CircleShape)
-                                .background(Color.Gray),
-                    )
+                    CompletionProfileImage(profileImageUri = userInfo.profileImageUri)
                     Spacer(
                         modifier =
                             Modifier
                                 .height(74.dp),
                     )
                     Text(
-                        text = "가입을 축하드려요.\n함께 사진 촬영하러 가볼까요?",
-                        style = MaterialTheme.typography.titleLarge,
+                        text = stringResource(AuthR.string.sign_up_completion_message),
+                        style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -129,10 +128,15 @@ fun SignUpCompletionScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 CommonBottomButton(
-                    text = "픽플즈 시작하기",
+                    text =
+                        if (state.isSubmitting) {
+                            stringResource(AuthR.string.sign_up_completion_logging_in)
+                        } else {
+                            stringResource(AuthR.string.sign_up_completion_start)
+                        },
+                    enabled = !state.isSubmitting,
                     onClick = {
-                        // TODO: 뒤로가기에 대한 처리 필요
-                        mainNavController.navigate(Main)
+                        viewModel.handleIntent(SignUpCommonIntent.CompleteSignup(context))
                     },
                 )
             }
@@ -150,8 +154,56 @@ fun SignUpCompletionScreen(
                     mainNavController.navigate(sideEffect.destination)
                 }
 
+                is SignUpSideEffect.SignupCompleted -> {
+                    onSignupCompleted()
+                    mainNavController.navigate(Main) {
+                        popUpTo(Login) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+
+                is SignUpSideEffect.ShowToast -> {
+                    Toast.makeText(context, sideEffect.messageResId, Toast.LENGTH_SHORT).show()
+                }
+
                 else -> {}
             }
+        }
+    }
+}
+
+@Composable
+private fun CompletionProfileImage(profileImageUri: String?) {
+    if (profileImageUri != null) {
+        Image(
+            painter = rememberAsyncImagePainter(model = profileImageUri),
+            contentDescription =
+                stringResource(
+                    AuthR.string.sign_up_completion_profile_image_content_description,
+                ),
+            contentScale = ContentScale.Crop,
+            modifier =
+                Modifier
+                    .size(160.dp)
+                    .clip(CircleShape),
+        )
+    } else {
+        Box(
+            modifier =
+                Modifier
+                    .size(160.dp)
+                    .clip(CircleShape)
+                    .background(MainThemeColor.Gray2),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = painterResource(id = CoreUiR.drawable.signup_completion_default_profile),
+                contentDescription =
+                    stringResource(
+                        AuthR.string.sign_up_completion_default_profile_image_content_description,
+                    ),
+                modifier = Modifier.size(width = 102.dp, height = 116.dp),
+            )
         }
     }
 }
@@ -165,6 +217,7 @@ fun SignUpCompletionScreenPreview() {
         SignUpCompletionScreen(
             mainNavController = mainNavController,
             userInfo = emptyUserData,
+            onSignupCompleted = {},
         )
     }
 }
